@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools — CivicByte</title>
+    <meta name="description" content="Browse free, open-source civic tech tools on CivicByte. Search by category, status, or location.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0e27; --surface: #101535; --surface2: #161b42;
+            --border: #1e2558; --border-light: #2a3170;
+            --teal: #0ef6cc; --teal-dim: #0bbf9e; --teal-glow: rgba(14,246,204,0.15);
+            --coral: #ff6b6b; --coral-glow: rgba(255,107,107,0.15);
+            --lavender: #a78bfa; --lavender-glow: rgba(167,139,250,0.15);
+            --text: #e2e8f0; --muted: #7a82a6; --white: #f8fafc;
+        }
+        body { font-family: "DM Sans", sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        h1, h2, h3, .logo, .stat-num { font-family: "Space Grotesk", sans-serif; }
+        a { text-decoration: none; color: inherit; }
+        .nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem; }
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.04em; }
+        .logo .cb { color: var(--teal); }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--muted); transition: color 0.2s; }
+        .nav-links a:hover { color: var(--teal); }
+        .nav-links a.active { color: var(--teal); }
+        .nav-gh { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--surface2); padding: 0.5rem 1.1rem; border-radius: 8px; border: 1px solid var(--border); font-size: 0.85rem; font-weight: 500; transition: all 0.2s; }
+        .nav-gh:hover { border-color: var(--teal); color: var(--teal); }
+        .mobile-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+        /* PAGE HEADER */
+        .page-header { max-width: 1200px; margin: 0 auto; padding: 5rem 2rem 2rem; }
+        .page-header .label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal); margin-bottom: 0.8rem; }
+        .page-header h1 { font-size: clamp(2.4rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -0.04em; margin-bottom: 1.2rem; line-height: 1.1; }
+        .page-header h1 .grad { background: linear-gradient(135deg, var(--teal), var(--lavender)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .page-header p { color: var(--muted); font-size: 1.15rem; max-width: 640px; line-height: 1.7; }
+        .section { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        /* SEARCH & FILTERS */
+        .search-bar { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .search-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .search-input { flex: 1; min-width: 280px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0.8rem 1.2rem; color: var(--text); font-size: 0.95rem; font-family: "DM Sans", sans-serif; outline: none; transition: border-color 0.2s; }
+        .search-input:focus { border-color: var(--teal); }
+        .search-input::placeholder { color: var(--muted); }
+        .filter-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+        .pill { padding: 0.5rem 1.1rem; border-radius: 100px; font-size: 0.82rem; font-weight: 500; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.2s; }
+        .pill:hover, .pill.active { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); }
+        /* TOOL CARDS */
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
+        .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: all 0.3s; position: relative; overflow: hidden; }
+        .tool-card:hover { border-color: var(--border-light); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+        .tool-card .num { position: absolute; top: -10px; right: 16px; font-size: 5rem; font-weight: 700; color: rgba(255,255,255,0.03); line-height: 1; pointer-events: none; }
+        .tool-meta { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .tool-status { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.3rem 0.8rem; border-radius: 100px; }
+        .tool-status.live { color: var(--teal); border: 1px solid var(--teal); background: var(--teal-glow); }
+        .tool-status.dev { color: var(--coral); border: 1px solid var(--coral); background: var(--coral-glow); }
+        .tool-status.planned { color: var(--lavender); border: 1px solid var(--lavender); background: var(--lavender-glow); }
+        .tool-category { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+        .tool-card h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.6rem; letter-spacing: -0.02em; }
+        .tool-card p { color: var(--muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.2rem; }
+        .tool-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .tool-tag { font-size: 0.72rem; background: var(--surface2); border: 1px solid var(--border); padding: 0.25rem 0.7rem; border-radius: 6px; color: var(--muted); }
+        .tool-card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .tool-author { display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: var(--muted); }
+        .tool-author img { width: 24px; height: 24px; border-radius: 50%; }
+        .tool-link { font-size: 0.85rem; font-weight: 600; color: var(--teal); transition: opacity 0.2s; }
+        .tool-link:hover { opacity: 0.8; }
+        .no-results { text-align: center; padding: 4rem 2rem; color: var(--muted); }
+        .no-results h3 { font-family: "Space Grotesk", sans-serif; font-size: 1.5rem; color: var(--text); margin-bottom: 0.5rem; }
+        .results-count { font-size: 0.88rem; color: var(--muted); margin-bottom: 2rem; }
+        /* CTA */
+        .cta-box { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 3rem; text-align: center; margin-top: 3rem; position: relative; overflow: hidden; }
+        .cta-box::before { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 400px; background: radial-gradient(circle, var(--teal-glow) 0%, transparent 70%); pointer-events: none; }
+        .cta-box * { position: relative; }
+        .cta-box h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .cta-box p { color: var(--muted); margin-bottom: 1.5rem; }
+        .btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--teal); color: var(--bg); font-weight: 600; font-size: 1rem; padding: 0.9rem 2rem; border-radius: 12px; transition: all 0.2s; }
+        .btn-primary:hover { background: #0bbf9e; transform: translateY(-1px); box-shadow: 0 8px 30px var(--teal-glow); }
+        footer { border-top: 1px solid var(--border); max-width: 1200px; margin: 0 auto; padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        footer .f-left { font-size: 0.85rem; color: var(--muted); }
+        footer .f-left a { color: var(--teal); }
+        footer .f-right { display: flex; gap: 1.5rem; }
+        footer .f-right a { font-size: 0.85rem; color: var(--muted); transition: color 0.2s; }
+        footer .f-right a:hover { color: var(--teal); }
+        @media (max-width: 768px) {
+            .mobile-toggle { display: block; }
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--surface); border-bottom: 1px solid var(--border); flex-direction: column; padding: 1.5rem 2rem; gap: 1rem; z-index: 100; }
+            .nav-links.open { display: flex; }
+            .nav { position: relative; }
+            .tools-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="logo">civic<span class="cb">byte</span></a>
+        <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+        <div class="nav-links">
+            <a href="/tools.html" class="active">Tools</a>
+            <a href="/about.html">About</a>
+            <a href="/submit.html">Submit a Tool</a>
+            <a href="https://github.com/civicbytedev" target="_blank" class="nav-gh">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                GitHub
+            </a>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="label">Tool Directory</div>
+        <h1>Browse <span class="grad">civic tech tools</span></h1>
+        <p>Every tool on CivicByte is free, open-source, and built to serve communities. Search, filter, and find tools that address real civic needs.</p>
+    </header>
+
+    <div class="search-bar">
+        <div class="search-row">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search tools by name, category, or location..." oninput="filterTools()">
+        </div>
+        <div class="filter-pills">
+            <button class="pill active" onclick="setFilter('all', this)">All</button>
+            <button class="pill" onclick="setFilter('education', this)">Education</button>
+            <button class="pill" onclick="setFilter('services', this)">Social Services</button>
+            <button class="pill" onclick="setFilter('municipal', this)">Municipal Data</button>
+            <button class="pill" onclick="setFilter('housing', this)">Housing</button>
+            <button class="pill" onclick="setFilter('health', this)">Health</button>
+            <button class="pill" onclick="setFilter('transit', this)">Transit</button>
+        </div>
+        <div class="results-count" id="resultsCount">Showing 3 tools</div>
+    </div>
+
+    <section class="section" id="toolsContainer">
+        <div class="tools-grid" id="toolsGrid">
+            <!-- Tool 1 -->
+            <div class="tool-card" data-category="education" data-name="NYC School Budget Tracker" data-status="live">
+                <div class="num">01</div>
+                <div class="tool-meta">
+                    <span class="tool-status live">Live</span>
+                    <span class="tool-category">Education</span>
+                </div>
+                <h3>NYC School Budget Tracker</h3>
+                <p>Interactive dashboard mapping per-pupil spending, Title I funding, and PTA contributions across 1,800+ NYC public schools. Search, filter, and compare school budgets.</p>
+                <div class="tool-tags">
+                    <span class="tool-tag">NYC</span>
+                    <span class="tool-tag">Education</span>
+                    <span class="tool-tag">Budget Data</span>
+                    <span class="tool-tag">Dashboard</span>
+                </div>
+                <div class="tool-card-footer">
+                    <div class="tool-author">
+                        <img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&font-size=0.4&bold=true" alt="CivicByte">
+                        CivicByte Team
+                    </div>
+                    <a href="/nyc-school-budget-tracker/" class="tool-link">View Tool &rarr;</a>
+                </div>
+            </div>
+            <!-- Tool 2 -->
+            <div class="tool-card" data-category="services" data-name="Community Resource Finder" data-status="dev">
+                <div class="num">02</div>
+                <div class="tool-meta">
+                    <span class="tool-status dev">In Dev</span>
+                    <span class="tool-category">Social Services</span>
+                </div>
+                <h3>Community Resource Finder</h3>
+                <p>Searchable directory of free and low-cost services — food pantries, legal aid, after-school programs — organized by neighborhood and borough.</p>
+                <div class="tool-tags">
+                    <span class="tool-tag">NYC</span>
+                    <span class="tool-tag">Services</span>
+                    <span class="tool-tag">Directory</span>
+                    <span class="tool-tag">Search</span>
+                </div>
+                <div class="tool-card-footer">
+                    <div class="tool-author">
+                        <img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&font-size=0.4&bold=true" alt="CivicByte">
+                        CivicByte Team
+                    </div>
+                    <span class="tool-link" style="color:var(--coral)">Coming Soon</span>
+                </div>
+            </div>
+            <!-- Tool 3 -->
+            <div class="tool-card" data-category="municipal" data-name="311 Complaint Analyzer" data-status="planned">
+                <div class="num">03</div>
+                <div class="tool-meta">
+                    <span class="tool-status planned">Planned</span>
+                    <span class="tool-category">Municipal Data</span>
+                </div>
+                <h3>311 Complaint Analyzer</h3>
+                <p>Visualization tool mapping NYC 311 complaint data to reveal patterns in municipal service gaps across boroughs and council districts.</p>
+                <div class="tool-tags">
+                    <span class="tool-tag">NYC</span>
+                    <span class="tool-tag">311 Data</span>
+                    <span class="tool-tag">Visualization</span>
+                    <span class="tool-tag">Maps</span>
+                </div>
+                <div class="tool-card-footer">
+                    <div class="tool-author">
+                        <img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&font-size=0.4&bold=true" alt="CivicByte">
+                        CivicByte Team
+                    </div>
+                    <span class="tool-link" style="color:var(--lavender)">Planned</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-results" id="noResults" style="display:none;">
+            <h3>No tools found</h3>
+            <p>Try a different search term or category filter.</p>
+        </div>
+
+        <div class="cta-box">
+            <h3>Have a civic tech tool?</h3>
+            <p>Submit your free, open-source tool to the CivicByte directory and help communities find it.</p>
+            <a href="/submit.html" class="btn-primary">Submit Your Tool &rarr;</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="f-left">&copy; 2025 CivicByte. Open source under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>.</div>
+        <div class="f-right">
+            <a href="/tools.html">Tools</a>
+            <a href="/about.html">About</a>
+            <a href="/submit.html">Submit</a>
+            <a href="https://github.com/civicbytedev" target="_blank">GitHub</a>
+        </div>
+    </footer>
+
+    <script>
+        let currentFilter = 'all';
+
+        function setFilter(cat, btn) {
+            currentFilter = cat;
+            document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            filterTools();
+        }
+
+        function filterTools() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.tool-card');
+            let visible = 0;
+            cards.forEach(card => {
+                const name = card.dataset.name.toLowerCase();
+                const category = card.dataset.category;
+                const text = card.textContent.toLowerCase();
+                const matchesFilter = currentFilter === 'all' || category === currentFilter;
+                const matchesSearch = !query || text.includes(query);
+                if (matchesFilter && matchesSearch) {
+                    card.style.display = '';
+                    visible++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            document.getElementById('resultsCount').textContent = 'Showing ' + visible + ' tool' + (visible !== 1 ? 's' : '');
+            document.getElementById('noResults').style.display = visible === 0 ? '' : 'none';
+        }
+
+        // Check URL params for category filter
+        const params = new URLSearchParams(window.location.search);
+        const catParam = params.get('cat');
+        if (catParam) {
+            const pill = document.querySelector('.pill[onclick*="' + catParam + '"]');
+            if (pill) {
+                setFilter(catParam, pill);
+            }
+        }
+    </script>
+</body>
+</html>
