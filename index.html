@@ -30,7 +30,6 @@
             background: rgba(10,14,39,0.7);
             border-bottom: 1px solid rgba(30,37,88,0.5);
             position: sticky; top: 0; z-index: 1000;
-            transition: all 0.3s ease;
         }
         .nav::after {
             content: ''; position: absolute; bottom: -1px; left: 10%; right: 10%; height: 1px;
@@ -39,67 +38,32 @@
         .nav-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; width: 100%; }
         .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.04em; display: inline-flex; align-items: center; }
         .logo .cb { color: var(--teal); }
-        .logo svg { margin-right: 8px; flex-shrink: 0; filter: drop-shadow(0 0 8px rgba(14,246,204,0.3)); transition: filter 0.3s ease; }
-        .logo:hover svg { filter: drop-shadow(0 0 15px rgba(14,246,204,0.5)); }
+        .logo svg { margin-right: 8px; flex-shrink: 0; filter: drop-shadow(0 0 8px rgba(14,246,204,0.3)); }
         .nav-links { display: flex; gap: 2rem; align-items: center; }
         .nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--muted); transition: color 0.2s; }
         .nav-links a:hover { color: var(--teal); }
         .nav-links a.active { color: var(--teal); }
-        .nav-gh { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--surface2); padding: 0.5rem 1.1rem; border-radius: 8px; border: 1px solid var(--border); font-size: 0.85rem; font-weight: 500; transition: all 0.2s; }
+        .nav-gh { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--surface2); padding: 0.5rem 1.1rem; border-radius: 8px; border: 1px solid var(--border); font-size: 0.85rem; font-weight: 500; transition: border-color 0.2s, color 0.2s; }
         .nav-gh:hover { border-color: var(--teal); color: var(--teal); }
 
-        /* HERO — optimized for performance */
+        /* HERO — lightweight */
         .hero {
             position: relative; overflow: hidden; max-width: 100%;
             padding: 8rem 2rem 5rem; text-align: center;
-        }
-        .hero::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(ellipse at 20% 50%, rgba(14,246,204,0.12) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 20%, rgba(167,139,250,0.10) 0%, transparent 50%),
-                        radial-gradient(ellipse at 50% 80%, rgba(255,107,107,0.06) 0%, transparent 50%);
-            animation: heroMesh 12s ease-in-out infinite alternate;
-            z-index: 0; will-change: transform; transform: translateZ(0);
-        }
-        @keyframes heroMesh {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(1%, -1%) scale(1.01); }
-        }
-        .hero::after {
-            content: ''; position: absolute; inset: 0;
-            background-image: linear-gradient(rgba(14,246,204,0.03) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(14,246,204,0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
-            -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
-            z-index: 0; opacity: 0.7;
+            background: radial-gradient(ellipse at 20% 50%, rgba(14,246,204,0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 20%, rgba(167,139,250,0.07) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 80%, rgba(255,107,107,0.04) 0%, transparent 50%);
         }
         .hero > * { position: relative; z-index: 2; }
 
-        /* Floating orbs — GPU accelerated */
+        /* Static orbs — no blur filter, use pre-blurred radial gradients */
         .hero-orb {
-            position: absolute; border-radius: 50%; filter: blur(40px); z-index: 0;
-            pointer-events: none; will-change: transform; transform: translateZ(0);
-            animation: orbFloat 14s ease-in-out infinite alternate;
+            position: absolute; border-radius: 50%; z-index: 0;
+            pointer-events: none; opacity: 0.7;
         }
-        .hero-orb-1 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(14,246,204,0.15), transparent); top: 10%; left: 5%; }
-        .hero-orb-2 { width: 250px; height: 250px; background: radial-gradient(circle, rgba(167,139,250,0.12), transparent); top: 20%; right: 10%; animation-delay: -3s; animation-duration: 16s; }
-        .hero-orb-3 { width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,107,107,0.08), transparent); bottom: 15%; left: 50%; animation-delay: -5s; animation-duration: 18s; }
-        @keyframes orbFloat {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-20px, 30px) scale(0.95); }
-            100% { transform: translate(-10px, -25px) scale(1); }
-        }
-
-        /* Particles — shared keyframes, fewer particles */
-        .hero-particles { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
-        .hero-particle {
-            position: absolute; border-radius: 50%; pointer-events: none;
-            will-change: transform; transform: translateZ(0);
-        }
-        @keyframes pFloatA { 0%{transform:translate(0,0);opacity:.3} 50%{transform:translate(15px,-20px);opacity:.7} 100%{transform:translate(-10px,15px);opacity:.4} }
-        @keyframes pFloatB { 0%{transform:translate(0,0);opacity:.4} 50%{transform:translate(-20px,10px);opacity:.8} 100%{transform:translate(12px,-18px);opacity:.3} }
-        @keyframes pFloatC { 0%{transform:translate(0,0);opacity:.3} 50%{transform:translate(10px,25px);opacity:.6} 100%{transform:translate(-15px,-10px);opacity:.5} }
+        .hero-orb-1 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(14,246,204,0.10) 0%, transparent 70%); top: 5%; left: 0%; }
+        .hero-orb-2 { width: 350px; height: 350px; background: radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%); top: 15%; right: 5%; }
+        .hero-orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,107,107,0.06) 0%, transparent 70%); bottom: 10%; left: 45%; }
 
         /* Bottom glow line */
         .hero-bottom-glow {
@@ -108,16 +72,13 @@
             background-size: 200% 100%; animation: glowLineMove 4s linear infinite; will-change: background-position;
         }
         @keyframes glowLineMove { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
-        .hero-bottom-glow::after {
-            content: ''; position: absolute; inset: -4px 0 -4px 0; background: inherit; filter: blur(6px); opacity: 0.5;
-        }
 
         /* Mouse glow */
         .hero-glow {
             position: absolute; width: 500px; height: 500px; border-radius: 50%;
             background: radial-gradient(circle, rgba(14,246,204,0.08), transparent 70%);
-            pointer-events: none; z-index: 1; transition: transform 0.3s ease-out, opacity 0.3s;
-            transform: translate(-50%, -50%); opacity: 0; will-change: left, top, opacity;
+            pointer-events: none; z-index: 1; transition: opacity 0.3s;
+            transform: translate(-50%, -50%); opacity: 0;
         }
 
         /* Hero badge */
@@ -126,13 +87,13 @@
             background: linear-gradient(135deg, rgba(14,246,204,0.1), rgba(167,139,250,0.1));
             border: 1px solid rgba(14,246,204,0.3); border-radius: 100px;
             padding: 0.5rem 1.2rem; font-size: 0.82rem; font-weight: 500; color: var(--muted);
-            margin-bottom: 2rem; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            animation: fadeSlideUp 0.8s ease-out both;
+            margin-bottom: 2rem;
             box-shadow: 0 0 20px rgba(14,246,204,0.1), inset 0 0 20px rgba(14,246,204,0.05);
+            animation: fadeSlideUp 0.8s ease-out both;
         }
         .hero-badge .dot {
             width: 8px; height: 8px; background: var(--teal); border-radius: 50%;
-            animation: pulse 2s infinite; box-shadow: 0 0 10px var(--teal), 0 0 20px var(--teal);
+            animation: pulse 2s infinite; box-shadow: 0 0 10px var(--teal);
         }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
@@ -140,16 +101,13 @@
         .hero h1 {
             font-size: clamp(3rem, 7vw, 5.2rem); font-weight: 700; line-height: 1.05;
             letter-spacing: -0.05em; margin-bottom: 2rem;
-            text-shadow: 0 0 80px rgba(14,246,204,0.15);
             animation: fadeSlideUp 0.8s ease-out 0.2s both;
         }
         .hero h1 .grad {
-            background: linear-gradient(135deg, #0ef6cc 0%, #a78bfa 40%, #ff6b6b 70%, #0ef6cc 100%);
-            background-size: 300% 300%; -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent; animation: gradientShift 6s ease-in-out infinite;
-            filter: drop-shadow(0 0 30px rgba(14,246,204,0.3));
+            background: linear-gradient(135deg, #0ef6cc 0%, #a78bfa 50%, #ff6b6b 100%);
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .hero p {
             font-size: 1.25rem; color: rgba(226,232,240,0.7); max-width: 680px;
             margin: 0 auto 2.5rem; line-height: 1.7; animation: fadeSlideUp 0.8s ease-out 0.4s both;
@@ -159,23 +117,17 @@
 
         /* Buttons */
         .btn-primary {
-            display: inline-flex; align-items: center; gap: 0.5rem; position: relative; overflow: hidden;
+            display: inline-flex; align-items: center; gap: 0.5rem;
             background: linear-gradient(135deg, #0ef6cc, #0bbf9e); color: var(--bg);
             font-weight: 700; font-size: 1rem; padding: 1rem 2.2rem; border-radius: 14px;
-            transition: all 0.3s ease;
+            transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 25px rgba(14,246,204,0.3), 0 0 60px rgba(14,246,204,0.1);
         }
-        .btn-primary::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
-            background-size: 200% 100%; animation: btnShine 3s ease-in-out infinite;
-        }
-        @keyframes btnShine { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         .btn-primary:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 35px rgba(14,246,204,0.4), 0 0 80px rgba(14,246,204,0.15); }
         .btn-secondary {
             display: inline-flex; align-items: center; gap: 0.5rem; border: 1.5px solid rgba(167,139,250,0.4);
             color: var(--lavender); font-weight: 600; font-size: 1rem; padding: 1rem 2.2rem;
-            border-radius: 14px; transition: all 0.3s ease; backdrop-filter: blur(5px);
+            border-radius: 14px; transition: all 0.2s;
         }
         .btn-secondary:hover { border-color: var(--lavender); background: rgba(167,139,250,0.1); transform: translateY(-2px); box-shadow: 0 4px 25px rgba(167,139,250,0.2); }
 
@@ -183,15 +135,14 @@
         .hero-divider { width: 100%; max-width: 600px; height: 1px; margin: 3rem auto 0; background: linear-gradient(90deg, transparent, rgba(14,246,204,0.5), rgba(167,139,250,0.5), transparent); position: relative; z-index: 2; }
 
         /* STATS BAR */
-        .stats-bar { display: flex; justify-content: center; gap: 3rem; padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; position: relative; }
-        .stats-bar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 80px; background: linear-gradient(to bottom, rgba(14,246,204,0.02), transparent); pointer-events: none; }
+        .stats-bar { display: flex; justify-content: center; gap: 3rem; padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; }
         .stat { text-align: center; }
         .stat-num { font-size: 2rem; font-weight: 700; color: var(--teal); }
         .stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.08em; }
 
         /* TICKER */
-        .ticker-wrap { overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 0; margin: 0 auto; }
-        .ticker { display: flex; animation: scroll 30s linear infinite; width: max-content; will-change: transform; transform: translateZ(0); }
+        .ticker-wrap { overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 0; }
+        .ticker { display: flex; animation: scroll 30s linear infinite; width: max-content; will-change: transform; }
         .ticker span { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0 2rem; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); white-space: nowrap; }
         .ticker .d { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -204,7 +155,7 @@
 
         /* TOOL CARDS */
         .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
-        .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: all 0.3s; position: relative; overflow: hidden; }
+        .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; position: relative; overflow: hidden; }
         .tool-card:hover { border-color: var(--border-light); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
         .tool-card .num { position: absolute; top: -10px; right: 16px; font-size: 5rem; font-weight: 700; color: rgba(255,255,255,0.03); line-height: 1; pointer-events: none; }
         .tool-meta { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap; }
@@ -225,7 +176,7 @@
 
         /* HOW IT WORKS */
         .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-        .how-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem 2rem; text-align: center; transition: all 0.3s; }
+        .how-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem 2rem; text-align: center; transition: transform 0.3s, border-color 0.3s; }
         .how-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
         .how-num { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-family: "Space Grotesk", sans-serif; font-size: 1.4rem; font-weight: 700; margin: 0 auto 1.5rem; }
         .how-num.n1 { background: var(--teal-glow); color: var(--teal); border: 1px solid rgba(14,246,204,0.25); }
@@ -236,7 +187,7 @@
 
         /* CATEGORIES */
         .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
-        .cat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.3s; cursor: pointer; }
+        .cat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: transform 0.3s, border-color 0.3s; cursor: pointer; }
         .cat-card:hover { border-color: var(--teal); transform: translateY(-2px); }
         .cat-icon { font-size: 2rem; margin-bottom: 0.8rem; }
         .cat-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.3rem; }
@@ -258,13 +209,12 @@
         footer .f-right a { font-size: 0.85rem; color: var(--muted); transition: color 0.2s; }
         footer .f-right a:hover { color: var(--teal); }
 
-        /* MOBILE NAV */
+        /* MOBILE */
         .mobile-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
         @media (max-width: 768px) {
             .mobile-toggle { display: block; }
             .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--surface); border-bottom: 1px solid var(--border); flex-direction: column; padding: 1.5rem 2rem; gap: 1rem; z-index: 100; }
             .nav-links.open { display: flex; }
-            .nav { position: sticky; }
             .hero h1 { font-size: 2.5rem !important; }
             .hero p { font-size: 1rem; }
             .hero-orb { display: none; }
@@ -273,8 +223,6 @@
             .cat-grid { grid-template-columns: repeat(2, 1fr); }
             .stats-bar { gap: 1.5rem; }
         }
-
-        /* Reduced motion preference */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
         }
@@ -292,14 +240,13 @@
                         <stop offset="0%" stop-color="#0ef6cc"/>
                         <stop offset="100%" stop-color="#a78bfa"/>
                     </linearGradient>
-                    <filter id="gA"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
                 </defs>
-                <rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(14,246,204,0.08)" stroke="url(#lgA)" stroke-width="1.5" filter="url(#gA)"/>
+                <rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(14,246,204,0.08)" stroke="url(#lgA)" stroke-width="1.5"/>
                 <rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lgA)" opacity="0.9"/>
                 <rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lgA)" opacity="0.7"/>
                 <rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lgA)" opacity="0.5"/>
                 <path d="M10.75 16 L17 11 L23.25 6.5" stroke="#0ef6cc" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
-                <circle cx="23.25" cy="6.5" r="2" fill="#0ef6cc" opacity="0.9"><animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite"/></circle>
+                <circle cx="23.25" cy="6.5" r="2" fill="#0ef6cc" opacity="0.9"/>
             </svg>
             civic<span class="cb">byte</span>
         </a>
@@ -319,7 +266,6 @@
 
 <!-- HERO -->
 <section class="hero" id="hero">
-    <div class="hero-particles" id="heroParticles"></div>
     <div class="hero-orb hero-orb-1"></div>
     <div class="hero-orb hero-orb-2"></div>
     <div class="hero-orb hero-orb-3"></div>
@@ -372,69 +318,36 @@
     <div class="section-title">Built by students. Used by communities.</div>
     <div class="section-desc">Every tool on CivicByte is free, open-source, and designed to solve a real problem for real people.</div>
     <div class="tools-grid">
-        <!-- Tool 1 -->
         <div class="tool-card">
             <div class="num">01</div>
-            <div class="tool-meta">
-                <span class="tool-status live">Live</span>
-                <span class="tool-category">Education</span>
-            </div>
+            <div class="tool-meta"><span class="tool-status live">Live</span><span class="tool-category">Education</span></div>
             <h3>NYC School Budget Tracker</h3>
             <p>Interactive dashboard mapping per-pupil spending, Title I funding, and PTA contributions across 1,800+ NYC public schools.</p>
-            <div class="tool-tags">
-                <span class="tool-tag">NYC</span>
-                <span class="tool-tag">Education</span>
-                <span class="tool-tag">Budget Data</span>
-            </div>
+            <div class="tool-tags"><span class="tool-tag">NYC</span><span class="tool-tag">Education</span><span class="tool-tag">Budget Data</span></div>
             <div class="tool-card-footer">
-                <div class="tool-author">
-                    <img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&font-size=0.4&bold=true" alt="CivicByte">
-                    CivicByte Team
-                </div>
+                <div class="tool-author"><img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&font-size=0.4&bold=true" alt="CivicByte"> CivicByte Team</div>
                 <a href="/nyc-school-budget-tracker/" class="tool-link">View Tool &rarr;</a>
             </div>
         </div>
-        <!-- Tool 2 -->
         <div class="tool-card">
             <div class="num">02</div>
-            <div class="tool-meta">
-                <span class="tool-status dev">In Dev</span>
-                <span class="tool-category">Social Services</span>
-            </div>
+            <div class="tool-meta"><span class="tool-status dev">In Dev</span><span class="tool-category">Social Services</span></div>
             <h3>Community Resource Finder</h3>
             <p>Searchable directory of free and low-cost services — food pantries, legal aid, after-school programs — organized by neighborhood.</p>
-            <div class="tool-tags">
-                <span class="tool-tag">NYC</span>
-                <span class="tool-tag">Services</span>
-                <span class="tool-tag">Directory</span>
-            </div>
+            <div class="tool-tags"><span class="tool-tag">NYC</span><span class="tool-tag">Services</span><span class="tool-tag">Directory</span></div>
             <div class="tool-card-footer">
-                <div class="tool-author">
-                    <img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&font-size=0.4&bold=true" alt="CivicByte">
-                    CivicByte Team
-                </div>
+                <div class="tool-author"><img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&font-size=0.4&bold=true" alt="CivicByte"> CivicByte Team</div>
                 <span class="tool-link" style="color:var(--coral)">Coming Soon</span>
             </div>
         </div>
-        <!-- Tool 3 -->
         <div class="tool-card">
             <div class="num">03</div>
-            <div class="tool-meta">
-                <span class="tool-status planned">Planned</span>
-                <span class="tool-category">Municipal Data</span>
-            </div>
+            <div class="tool-meta"><span class="tool-status planned">Planned</span><span class="tool-category">Municipal Data</span></div>
             <h3>311 Complaint Analyzer</h3>
             <p>Visualization tool mapping NYC 311 complaint data to reveal patterns in municipal service gaps across boroughs and council districts.</p>
-            <div class="tool-tags">
-                <span class="tool-tag">NYC</span>
-                <span class="tool-tag">311 Data</span>
-                <span class="tool-tag">Visualization</span>
-            </div>
+            <div class="tool-tags"><span class="tool-tag">NYC</span><span class="tool-tag">311 Data</span><span class="tool-tag">Visualization</span></div>
             <div class="tool-card-footer">
-                <div class="tool-author">
-                    <img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&font-size=0.4&bold=true" alt="CivicByte">
-                    CivicByte Team
-                </div>
+                <div class="tool-author"><img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&font-size=0.4&bold=true" alt="CivicByte"> CivicByte Team</div>
                 <span class="tool-link" style="color:var(--lavender)">Planned</span>
             </div>
         </div>
@@ -447,36 +360,12 @@
     <div class="section-title">Tools for every civic need</div>
     <div class="section-desc">Browse by category to find tools that address specific community challenges.</div>
     <div class="cat-grid">
-        <a href="/tools.html?cat=education" class="cat-card">
-            <div class="cat-icon">&#127891;</div>
-            <h4>Education</h4>
-            <div class="cat-count">1 tool</div>
-        </a>
-        <a href="/tools.html?cat=housing" class="cat-card">
-            <div class="cat-icon">&#127968;</div>
-            <h4>Housing</h4>
-            <div class="cat-count">0 tools</div>
-        </a>
-        <a href="/tools.html?cat=health" class="cat-card">
-            <div class="cat-icon">&#129657;</div>
-            <h4>Health</h4>
-            <div class="cat-count">0 tools</div>
-        </a>
-        <a href="/tools.html?cat=transit" class="cat-card">
-            <div class="cat-icon">&#128652;</div>
-            <h4>Transit</h4>
-            <div class="cat-count">0 tools</div>
-        </a>
-        <a href="/tools.html?cat=services" class="cat-card">
-            <div class="cat-icon">&#129309;</div>
-            <h4>Social Services</h4>
-            <div class="cat-count">1 tool</div>
-        </a>
-        <a href="/tools.html?cat=municipal" class="cat-card">
-            <div class="cat-icon">&#127963;</div>
-            <h4>Municipal Data</h4>
-            <div class="cat-count">1 tool</div>
-        </a>
+        <a href="/tools.html?cat=education" class="cat-card"><div class="cat-icon">&#127891;</div><h4>Education</h4><div class="cat-count">1 tool</div></a>
+        <a href="/tools.html?cat=housing" class="cat-card"><div class="cat-icon">&#127968;</div><h4>Housing</h4><div class="cat-count">0 tools</div></a>
+        <a href="/tools.html?cat=health" class="cat-card"><div class="cat-icon">&#129657;</div><h4>Health</h4><div class="cat-count">0 tools</div></a>
+        <a href="/tools.html?cat=transit" class="cat-card"><div class="cat-icon">&#128652;</div><h4>Transit</h4><div class="cat-count">0 tools</div></a>
+        <a href="/tools.html?cat=services" class="cat-card"><div class="cat-icon">&#129309;</div><h4>Social Services</h4><div class="cat-count">1 tool</div></a>
+        <a href="/tools.html?cat=municipal" class="cat-card"><div class="cat-icon">&#127963;</div><h4>Municipal Data</h4><div class="cat-count">1 tool</div></a>
     </div>
 </section>
 
@@ -486,21 +375,9 @@
     <div class="section-title">Three ways to get involved</div>
     <div class="section-desc">Whether you build tools, use them, or partner with us — there's a place for you on CivicByte.</div>
     <div class="how-grid">
-        <div class="how-card">
-            <div class="how-num n1">1</div>
-            <h3>Build</h3>
-            <p>Develop a civic tech tool that solves a real community problem. Use any stack — we care about impact, not frameworks.</p>
-        </div>
-        <div class="how-card">
-            <div class="how-num n2">2</div>
-            <h3>Submit</h3>
-            <p>Submit your tool to CivicByte through our GitHub-based process. We review for quality, accessibility, and community value.</p>
-        </div>
-        <div class="how-card">
-            <div class="how-num n3">3</div>
-            <h3>Impact</h3>
-            <p>Your tool gets listed on the platform, discoverable by communities, advocates, and organizations who need it most.</p>
-        </div>
+        <div class="how-card"><div class="how-num n1">1</div><h3>Build</h3><p>Develop a civic tech tool that solves a real community problem. Use any stack — we care about impact, not frameworks.</p></div>
+        <div class="how-card"><div class="how-num n2">2</div><h3>Submit</h3><p>Submit your tool to CivicByte through our GitHub-based process. We review for quality, accessibility, and community value.</p></div>
+        <div class="how-card"><div class="how-num n3">3</div><h3>Impact</h3><p>Your tool gets listed on the platform, discoverable by communities, advocates, and organizations who need it most.</p></div>
     </div>
 </section>
 
@@ -529,29 +406,12 @@
     </div>
 </footer>
 
-<!-- Optimized hero particles & mouse glow JS -->
+<!-- Mouse glow JS only -->
 <script>
-    // Generate 8 particles with 3 shared keyframe animations (instead of 30 with individual ones)
-    const container = document.getElementById('heroParticles');
-    const colors = ['rgba(14,246,204,0.6)', 'rgba(167,139,250,0.5)', 'rgba(255,107,107,0.4)', 'rgba(14,246,204,0.3)'];
-    const anims = ['pFloatA', 'pFloatB', 'pFloatC'];
-    for (let i = 0; i < 8; i++) {
-        const p = document.createElement('div');
-        p.className = 'hero-particle';
-        const size = Math.random() * 4 + 1;
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        const dur = Math.random() * 8 + 10;
-        const del = Math.random() * -10;
-        const anim = anims[i % 3];
-        p.style.cssText = 'width:' + size + 'px;height:' + size + 'px;background:' + color + ';left:' + (Math.random()*100) + '%;top:' + (Math.random()*100) + '%;box-shadow:0 0 ' + (size*3) + 'px ' + color + ';animation:' + anim + ' ' + dur + 's ease-in-out ' + del + 's infinite alternate;';
-        container.appendChild(p);
-    }
-
-    // Mouse-follow glow
-    const hero = document.getElementById('hero');
-    const glow = document.getElementById('heroGlow');
+    var hero = document.getElementById('hero');
+    var glow = document.getElementById('heroGlow');
     hero.addEventListener('mousemove', function(e) {
-        const rect = hero.getBoundingClientRect();
+        var rect = hero.getBoundingClientRect();
         glow.style.left = (e.clientX - rect.left) + 'px';
         glow.style.top = (e.clientY - rect.top) + 'px';
         glow.style.opacity = '1';
