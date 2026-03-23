@@ -307,8 +307,14 @@
             .how-grid { grid-template-columns: 1fr; }
         }
     </style>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="/auth.js"></script>
 </head>
 <body>
+    <script>requireAuth();</script>
 
     <!-- NAVIGATION -->
     <header class="site-nav">

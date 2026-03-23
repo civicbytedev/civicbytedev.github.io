@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0e27">
+    <title>Sign In — CivicByte</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%230a0e27' stroke='%230ef6cc' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%230ef6cc'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%230ef6cc' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%230ef6cc' opacity='.5'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body { min-height: 100vh; display: flex; flex-direction: column; }
+
+        .auth-bg {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
+        .auth-bg::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(30,37,88,0.22) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30,37,88,0.22) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+            mask-image: radial-gradient(ellipse at 50% 40%, black 0%, transparent 65%);
+            -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 0%, transparent 65%);
+        }
+
+        .auth-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 440px;
+            background: var(--surface);
+            border: 1px solid rgba(14,246,204,0.18);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+        }
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--teal), var(--lavender));
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.75rem;
+            text-decoration: none;
+            color: var(--white);
+        }
+        .auth-logo .cb { color: var(--teal); }
+
+        .auth-tabs {
+            display: flex;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 3px;
+            margin-bottom: 1.75rem;
+            gap: 3px;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 0.55rem;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            font-family: "DM Sans", sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .auth-tab.active {
+            background: var(--bg);
+            color: var(--white);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+        }
+
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+
+        .form-group { margin-bottom: 1.1rem; }
+        .form-label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.01em;
+        }
+        .form-input {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1rem;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-family: "DM Sans", sans-serif;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-input:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(14,246,204,0.08);
+        }
+        .form-input::placeholder { color: var(--muted); }
+
+        .auth-submit {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .auth-error {
+            display: none;
+            background: var(--coral-glow);
+            border: 1px solid var(--coral);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1rem;
+            color: var(--coral);
+            font-size: 0.88rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        .auth-error.visible { display: block; }
+
+        .auth-success {
+            display: none;
+            background: var(--teal-glow);
+            border: 1px solid var(--teal);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1rem;
+            color: var(--teal);
+            font-size: 0.88rem;
+            margin-bottom: 1rem;
+        }
+        .auth-success.visible { display: block; }
+
+        .auth-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 1.25rem 0;
+        }
+
+        .auth-footer-text {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-align: center;
+            line-height: 1.6;
+        }
+        .auth-footer-text a { color: var(--teal); }
+
+        .auth-loading {
+            display: none;
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-bg">
+        <div class="auth-card">
+
+            <a href="/" class="auth-logo">
+                <svg width="28" height="28" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs><linearGradient id="lgL" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#0ef6cc"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient></defs>
+                    <rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(14,246,204,0.08)" stroke="url(#lgL)" stroke-width="1.5"/>
+                    <rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lgL)" opacity="0.9"/>
+                    <rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lgL)" opacity="0.7"/>
+                    <rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lgL)" opacity="0.5"/>
+                </svg>
+                civic<span class="cb">byte</span>
+            </a>
+
+            <!-- Auth state loading -->
+            <div class="auth-loading" id="authLoading">Checking session…</div>
+
+            <div id="authUI">
+                <!-- Tab toggle -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tabSignIn" onclick="switchTab('signin')">Sign In</button>
+                    <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Create Account</button>
+                </div>
+
+                <!-- Sign In form -->
+                <form class="auth-form active" id="formSignIn" onsubmit="handleSignIn(event)">
+                    <div class="auth-error" id="errSignIn"></div>
+                    <div class="form-group">
+                        <label class="form-label" for="siEmail">Email address</label>
+                        <input class="form-input" type="email" id="siEmail" placeholder="you@example.com" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="siPassword">Password</label>
+                        <input class="form-input" type="password" id="siPassword" placeholder="••••••••" required autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn-primary auth-submit" id="btnSignIn">Sign In →</button>
+                    <hr class="auth-divider">
+                    <p class="auth-footer-text">
+                        Forgot your password?
+                        <a href="#" onclick="handleReset(event)">Send reset email</a>
+                    </p>
+                </form>
+
+                <!-- Create Account form -->
+                <form class="auth-form" id="formRegister" onsubmit="handleRegister(event)">
+                    <div class="auth-error" id="errRegister"></div>
+                    <div class="auth-success" id="successRegister"></div>
+                    <div class="form-group">
+                        <label class="form-label" for="regName">Your name</label>
+                        <input class="form-input" type="text" id="regName" placeholder="Jane Smith" required autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="regEmail">Email address</label>
+                        <input class="form-input" type="email" id="regEmail" placeholder="you@example.com" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="regPassword">Password <span style="color:var(--muted);font-weight:400">(min. 8 characters)</span></label>
+                        <input class="form-input" type="password" id="regPassword" placeholder="••••••••" minlength="8" required autocomplete="new-password">
+                    </div>
+                    <button type="submit" class="btn-primary auth-submit" id="btnRegister">Create Account →</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Firebase compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="/auth.js"></script>
+    <script>
+        // If already signed in, skip the login page
+        document.getElementById('authLoading').style.display = 'block';
+        document.getElementById('authUI').style.display = 'none';
+
+        auth.onAuthStateChanged(function (user) {
+            if (user) {
+                var dest = sessionStorage.getItem('cb_redirect') || '/index.html';
+                sessionStorage.removeItem('cb_redirect');
+                window.location.replace(dest);
+            } else {
+                document.getElementById('authLoading').style.display = 'none';
+                document.getElementById('authUI').style.display = 'block';
+            }
+        });
+
+        function switchTab(tab) {
+            var isSignIn = tab === 'signin';
+            document.getElementById('tabSignIn').classList.toggle('active', isSignIn);
+            document.getElementById('tabRegister').classList.toggle('active', !isSignIn);
+            document.getElementById('formSignIn').classList.toggle('active', isSignIn);
+            document.getElementById('formRegister').classList.toggle('active', !isSignIn);
+        }
+
+        function setLoading(btnId, loading) {
+            var btn = document.getElementById(btnId);
+            btn.disabled = loading;
+            btn.style.opacity = loading ? '0.65' : '1';
+        }
+
+        function showError(id, msg) {
+            var el = document.getElementById(id);
+            el.textContent = msg;
+            el.classList.add('visible');
+        }
+
+        function clearError(id) {
+            var el = document.getElementById(id);
+            el.textContent = '';
+            el.classList.remove('visible');
+        }
+
+        function handleSignIn(e) {
+            e.preventDefault();
+            clearError('errSignIn');
+            setLoading('btnSignIn', true);
+
+            var email    = document.getElementById('siEmail').value.trim();
+            var password = document.getElementById('siPassword').value;
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then(function () {
+                    var dest = sessionStorage.getItem('cb_redirect') || '/index.html';
+                    sessionStorage.removeItem('cb_redirect');
+                    window.location.replace(dest);
+                })
+                .catch(function (err) {
+                    setLoading('btnSignIn', false);
+                    showError('errSignIn', _authMsg(err.code));
+                });
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            clearError('errRegister');
+            document.getElementById('successRegister').classList.remove('visible');
+            setLoading('btnRegister', true);
+
+            var name     = document.getElementById('regName').value.trim();
+            var email    = document.getElementById('regEmail').value.trim();
+            var password = document.getElementById('regPassword').value;
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(function (cred) {
+                    return cred.user.updateProfile({ displayName: name })
+                        .then(function () {
+                            return createUserProfile(cred.user, name);
+                        });
+                })
+                .then(function () {
+                    var dest = sessionStorage.getItem('cb_redirect') || '/index.html';
+                    sessionStorage.removeItem('cb_redirect');
+                    window.location.replace(dest);
+                })
+                .catch(function (err) {
+                    setLoading('btnRegister', false);
+                    showError('errRegister', _authMsg(err.code));
+                });
+        }
+
+        function handleReset(e) {
+            e.preventDefault();
+            var email = document.getElementById('siEmail').value.trim();
+            if (!email) {
+                showError('errSignIn', 'Enter your email address above, then click this link.');
+                return;
+            }
+            auth.sendPasswordResetEmail(email)
+                .then(function () {
+                    clearError('errSignIn');
+                    document.getElementById('siEmail').insertAdjacentHTML('afterend',
+                        '<p style="color:var(--teal);font-size:0.82rem;margin-top:0.4rem">Reset email sent — check your inbox.</p>'
+                    );
+                })
+                .catch(function (err) {
+                    showError('errSignIn', _authMsg(err.code));
+                });
+        }
+
+        // Human-readable error messages
+        function _authMsg(code) {
+            var map = {
+                'auth/user-not-found':       'No account found with that email.',
+                'auth/wrong-password':        'Incorrect password.',
+                'auth/email-already-in-use':  'An account with this email already exists.',
+                'auth/weak-password':         'Password must be at least 8 characters.',
+                'auth/invalid-email':         'Please enter a valid email address.',
+                'auth/too-many-requests':     'Too many attempts. Please wait a moment and try again.',
+                'auth/network-request-failed':'Network error. Check your connection and try again.',
+                'auth/invalid-credential':    'Incorrect email or password.'
+            };
+            return map[code] || 'Something went wrong. Please try again.';
+        }
+    </script>
+</body>
+</html>

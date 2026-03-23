@@ -125,8 +125,14 @@
             .submit-cta { padding: 3rem 1.5rem; }
         }
     </style>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="/auth.js"></script>
 </head>
 <body>
+    <script>requireAuth();</script>
 
     <header class="site-nav">
         <nav class="nav">
