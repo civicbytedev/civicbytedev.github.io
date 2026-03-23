@@ -11,7 +11,7 @@
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --bg: #0a0e27; --surface: #101535; --surface2: #161b42;
+            --bg: #0a0e27; --surface: #101535; --surface2: #16b42;
             --border: #1e2558; --border-light: #2a3170;
             --teal: #0ef6cc; --teal-dim: #0bbf9e; --teal-glow: rgba(14,246,204,0.15);
             --coral: #ff6b6b; --coral-glow: rgba(255,107,107,0.15);
@@ -22,8 +22,8 @@
         h1, h2, h3, .logo, .stat-num { font-family: "Space Grotesk", sans-serif; }
         a { text-decoration: none; color: inherit; }
         .nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem; }
-        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.04em; }
-        .logo .cb { color: var(--teal); }
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.04em; display: inline-flex; align-items: center; }
+        .logo .cb { color: var(--teal); }         .logo svg { margin-right: 8px; flex-shrink: 0; filter: drop-shadow(0 0 8px rgba(14,246,204,0.3)); }
         .nav-links { display: flex; gap: 2rem; align-items: center; }
         .nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--muted); transition: color 0.2s; }
         .nav-links a:hover { color: var(--teal); }
@@ -109,7 +109,7 @@
 </head>
 <body>
     <nav class="nav">
-        <a href="/" class="logo">civic<span class="cb">byte</span></a>
+        <a href="/" class="logo">             <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lgA" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#0ef6cc"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient></defs><rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(14,246,204,0.08)" stroke="url(#lgA)" stroke-width="1.5"/><rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lgA)" opacity="0.9"/><rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lgA)" opacity="0.7"/><rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lgA)" opacity="0.5"/><path d="M10.75 16 L17 11 L23.25 6.5" stroke="#0ef6cc" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/><circle cx="23.25" cy="6.5" r="2" fill="#0ef6cc" opacity="0.9"/></svg>             civic<span class="cb">byte</span>         </a>
         <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
         <div class="nav-links">
             <a href="/tools.html">Tools</a>
