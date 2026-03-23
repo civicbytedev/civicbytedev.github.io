@@ -3,1054 +3,511 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0e27">
     <title>CivicByte — Open Platform for Civic Tech Tools</title>
-    <meta name="description" content="CivicByte is an open platform where developers and students publish free civic tech tools that help underserved communities access, understand, and act on public data.">
+    <meta name="description" content="CivicByte is an open platform where developers and students publish free civic tech tools that help communities access, understand, and act on public data.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
     <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg: #0a0e27; --surface: #101535; --surface2: #161b42;
-            --border: #1e2558; --border-light: #2a3170;
-            --teal: #0ef6cc; --teal-dim: #0bbf9e; --teal-glow: rgba(14,246,204,0.15);
-            --coral: #ff6b6b; --coral-glow: rgba(255,107,107,0.15);
-            --lavender: #a78bfa; --lavender-glow: rgba(167,139,250,0.15);
-            --text: #e2e8f0; --muted: #7a82a6; --white: #f8fafc;
-        }
-        body { font-family: "DM Sans", sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
-        h1, h2, h3, .logo, .stat-num, .value-num { font-family: "Space Grotesk", sans-serif; }
-        a { text-decoration: none; color: inherit; }
-
-        /* NAV — glassmorphism sticky */
-        .nav {
-            display: flex; justify-content: space-between; align-items: center;
-            max-width: 100%; padding: 1rem 2rem;
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            background: rgba(10,14,39,0.7);
-            border-bottom: 1px solid rgba(30,37,88,0.5);
-            position: sticky; top: 0; z-index: 1000;
-        }
-        .nav::after {
-            content: ''; position: absolute; bottom: -1px; left: 10%; right: 10%; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(14,246,204,0.3), rgba(167,139,250,0.3), transparent);
-        }
-        .nav-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; width: 100%; }
-        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.04em; display: inline-flex; align-items: center; }
-        .logo .cb { color: var(--teal); }
-        .logo svg { margin-right: 8px; flex-shrink: 0; filter: drop-shadow(0 0 8px rgba(14,246,204,0.3)); }
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
-        .nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--muted); transition: color 0.2s; }
-        .nav-links a:hover { color: var(--teal); }
-        .nav-links a.active { color: var(--teal); }
-        .nav-gh { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--surface2); padding: 0.5rem 1.1rem; border-radius: 8px; border: 1px solid var(--border); font-size: 0.85rem; font-weight: 500; transition: border-color 0.2s, color 0.2s; }
-        .nav-gh:hover { border-color: var(--teal); color: var(--teal); }
-
-        /* HERO — lightweight */
-        .hero {
-            position: relative; overflow: hidden; max-width: 100%;
-            padding: 8rem 2rem 5rem; text-align: center;
-            background: radial-gradient(ellipse at 20% 50%, rgba(14,246,204,0.08) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 20%, rgba(167,139,250,0.07) 0%, transparent 50%),
-                        radial-gradient(ellipse at 50% 80%, rgba(255,107,107,0.04) 0%, transparent 50%);
-        }
-        .hero > * { position: relative; z-index: 2; }
-
-        /* Static orbs — no blur filter, use pre-blurred radial gradients */
-        .hero-orb {
-            position: absolute; border-radius: 50%; z-index: 0;
-            pointer-events: none; opacity: 0.7;
-        }
-        .hero-orb-1 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(14,246,204,0.10) 0%, transparent 70%); top: 5%; left: 0%; }
-        .hero-orb-2 { width: 350px; height: 350px; background: radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%); top: 15%; right: 5%; }
-        .hero-orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,107,107,0.06) 0%, transparent 70%); bottom: 10%; left: 45%; }
-
-        /* Bottom glow line */
-        .hero-bottom-glow {
-            position: absolute; bottom: 0; left: 0; right: 0; height: 2px; z-index: 3;
-            background: linear-gradient(90deg, transparent 0%, rgba(14,246,204,0.6) 20%, rgba(167,139,250,0.6) 50%, rgba(255,107,107,0.4) 80%, transparent 100%);
-            background-size: 200% 100%; animation: glowLineMove 4s linear infinite; will-change: background-position;
-        }
-        @keyframes glowLineMove { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
-
-        /* Mouse glow */
-        .hero-glow {
-            position: absolute; width: 500px; height: 500px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(14,246,204,0.08), transparent 70%);
-            pointer-events: none; z-index: 1; transition: opacity 0.3s;
-            transform: translate(-50%, -50%); opacity: 0;
-        }
-
-        /* Hero badge */
-        .hero-badge {
-            display: inline-flex; align-items: center; gap: 0.6rem;
-            background: linear-gradient(135deg, rgba(14,246,204,0.1), rgba(167,139,250,0.1));
-            border: 1px solid rgba(14,246,204,0.3); border-radius: 100px;
-            padding: 0.5rem 1.2rem; font-size: 0.82rem; font-weight: 500; color: var(--muted);
-            margin-bottom: 2rem;
-            box-shadow: 0 0 20px rgba(14,246,204,0.1), inset 0 0 20px rgba(14,246,204,0.05);
-            animation: fadeSlideUp 0.8s ease-out both;
-        }
-        .hero-badge .dot {
-            width: 8px; height: 8px; background: var(--teal); border-radius: 50%;
-            animation: pulse 2s infinite; box-shadow: 0 0 10px var(--teal);
-        }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
-        /* Hero heading */
-        .hero h1 {
-            font-size: clamp(3rem, 7vw, 5.2rem); font-weight: 700; line-height: 1.05;
-            letter-spacing: -0.05em; margin-bottom: 2rem;
-            animation: fadeSlideUp 0.8s ease-out 0.2s both;
-        }
-        .hero h1 .grad {
-            background: linear-gradient(135deg, #0ef6cc 0%, #a78bfa 50%, #ff6b6b 100%);
-            -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero p {
-            font-size: 1.25rem; color: rgba(226,232,240,0.7); max-width: 680px;
-            margin: 0 auto 2.5rem; line-height: 1.7; animation: fadeSlideUp 0.8s ease-out 0.4s both;
-        }
-        .hero-actions { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; animation: fadeSlideUp 0.8s ease-out 0.6s both; }
-        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Buttons */
-        .btn-primary {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            background: linear-gradient(135deg, #0ef6cc, #0bbf9e); color: var(--bg);
-            font-weight: 700; font-size: 1rem; padding: 1rem 2.2rem; border-radius: 14px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 25px rgba(14,246,204,0.3), 0 0 60px rgba(14,246,204,0.1);
-        }
-        .btn-primary:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 35px rgba(14,246,204,0.4), 0 0 80px rgba(14,246,204,0.15); }
-        .btn-secondary {
-            display: inline-flex; align-items: center; gap: 0.5rem; border: 1.5px solid rgba(167,139,250,0.4);
-            color: var(--lavender); font-weight: 600; font-size: 1rem; padding: 1rem 2.2rem;
-            border-radius: 14px; transition: all 0.2s;
-        }
-        .btn-secondary:hover { border-color: var(--lavender); background: rgba(167,139,250,0.1); transform: translateY(-2px); box-shadow: 0 4px 25px rgba(167,139,250,0.2); }
-
-        /* Divider line */
-        .hero-divider { width: 100%; max-width: 600px; height: 1px; margin: 3rem auto 0; background: linear-gradient(90deg, transparent, rgba(14,246,204,0.5), rgba(167,139,250,0.5), transparent); position: relative; z-index: 2; }
-
-        /* STATS BAR */
-        .stats-bar { display: flex; justify-content: center; gap: 3rem; padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; }
-        .stat { text-align: center; }
-        .stat-num { font-size: 2rem; font-weight: 700; color: var(--teal); }
-        .stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.08em; }
-
-        /* TICKER */
-        .ticker-wrap { overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 0; }
-        .ticker { display: flex; animation: scroll 30s linear infinite; width: max-content; will-change: transform; }
-        .ticker span { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0 2rem; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); white-space: nowrap; }
-        .ticker .d { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* SECTION */
-        .section { max-width: 1200px; margin: 0 auto; padding: 5rem 2rem; }
-        .section-label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal); margin-bottom: 0.8rem; }
-        .section-title { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.8rem; }
-        .section-desc { color: var(--muted); font-size: 1.1rem; max-width: 560px; margin-bottom: 3rem; }
-
-        /* TOOL CARDS */
-        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
-        .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; position: relative; overflow: hidden; }
-        .tool-card:hover { border-color: var(--border-light); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
-        .tool-card .num { position: absolute; top: -10px; right: 16px; font-size: 5rem; font-weight: 700; color: rgba(255,255,255,0.03); line-height: 1; pointer-events: none; }
-        .tool-meta { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap; }
-        .tool-status { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.3rem 0.8rem; border-radius: 100px; }
-        .tool-status.live { color: var(--teal); border: 1px solid var(--teal); background: var(--teal-glow); }
-        .tool-status.dev { color: var(--coral); border: 1px solid var(--coral); background: var(--coral-glow); }
-        .tool-status.planned { color: var(--lavender); border: 1px solid var(--lavender); background: var(--lavender-glow); }
-        .tool-category { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-        .tool-card h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.6rem; letter-spacing: -0.02em; }
-        .tool-card p { color: var(--muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.2rem; }
-        .tool-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
-        .tool-tag { font-size: 0.72rem; background: var(--surface2); border: 1px solid var(--border); padding: 0.25rem 0.7rem; border-radius: 6px; color: var(--muted); }
-        .tool-card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border); }
-        .tool-author { display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: var(--muted); }
-        .tool-author img { width: 24px; height: 24px; border-radius: 50%; }
-        .tool-link { font-size: 0.85rem; font-weight: 600; color: var(--teal); transition: opacity 0.2s; }
-        .tool-link:hover { opacity: 0.8; }
-
-        /* HOW IT WORKS */
-        .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-        .how-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem 2rem; text-align: center; transition: transform 0.3s, border-color 0.3s; }
-        .how-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
-        .how-num { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-family: "Space Grotesk", sans-serif; font-size: 1.4rem; font-weight: 700; margin: 0 auto 1.5rem; }
-        .how-num.n1 { background: var(--teal-glow); color: var(--teal); border: 1px solid rgba(14,246,204,0.25); }
-        .how-num.n2 { background: var(--coral-glow); color: var(--coral); border: 1px solid rgba(255,107,107,0.25); }
-        .how-num.n3 { background: var(--lavender-glow); color: var(--lavender); border: 1px solid rgba(167,139,250,0.25); }
-        .how-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.6rem; }
-        .how-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
-
-        /* CATEGORIES */
-        .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
-        .cat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: transform 0.3s, border-color 0.3s; cursor: pointer; }
-        .cat-card:hover { border-color: var(--teal); transform: translateY(-2px); }
-        .cat-icon { font-size: 2rem; margin-bottom: 0.8rem; }
-        .cat-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.3rem; }
-        .cat-count { font-size: 0.78rem; color: var(--muted); }
-
-        /* CTA */
-        .cta-section { text-align: center; padding: 5rem 2rem; position: relative; }
-        .cta-section::before { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background: radial-gradient(circle, var(--teal-glow) 0%, transparent 70%); pointer-events: none; z-index: 0; }
-        .cta-section * { position: relative; z-index: 1; }
-        .cta-section h2 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: 1rem; letter-spacing: -0.03em; }
-        .cta-section p { color: var(--muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto 2rem; }
-        .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-
-        /* FOOTER */
-        footer { border-top: 1px solid var(--border); max-width: 1200px; margin: 0 auto; padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-        footer .f-left { font-size: 0.85rem; color: var(--muted); }
-        footer .f-left a { color: var(--teal); }
-        footer .f-right { display: flex; gap: 1.5rem; }
-        footer .f-right a { font-size: 0.85rem; color: var(--muted); transition: color 0.2s; }
-        footer .f-right a:hover { color: var(--teal); }
-
-        /* MOBILE */
-        .mobile-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
-        @media (max-width: 768px) {
-            .mobile-toggle { display: block; }
-            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--surface); border-bottom: 1px solid var(--border); flex-direction: column; padding: 1.5rem 2rem; gap: 1rem; z-index: 100; }
-            .nav-links.open { display: flex; }
-            .hero h1 { font-size: 2.5rem !important; }
-            .hero p { font-size: 1rem; }
-            .hero-orb { display: none; }
-            .tools-grid { grid-template-columns: 1fr; }
-            .how-grid { grid-template-columns: 1fr; }
-            .cat-grid { grid-template-columns: repeat(2, 1fr); }
-            .stats-bar { gap: 1.5rem; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-        }
-
-        /* ============================================
-           AUTHKIT-INSPIRED ANIMATIONS & ENHANCEMENTS
-           ============================================ */
-
-        /* Background grid pattern */
+        /* Subtle dot grid — homepage only */
         body::before {
             content: '';
             position: fixed;
             inset: 0;
-            background-image: 
-                linear-gradient(rgba(30, 37, 88, 0.3) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(30, 37, 88, 0.3) 1px, transparent 1px);
+            background-image:
+                linear-gradient(rgba(30,37,88,0.22) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30,37,88,0.22) 1px, transparent 1px);
             background-size: 60px 60px;
             pointer-events: none;
             z-index: 0;
-            mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 70%);
-            -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 70%);
+            mask-image: radial-gradient(ellipse at 50% 15%, black 0%, transparent 60%);
+            -webkit-mask-image: radial-gradient(ellipse at 50% 15%, black 0%, transparent 60%);
         }
+        .site-nav, .hero, .pillars-wrap, section, footer { position: relative; z-index: 1; }
 
-        /* Grid dot intersections */
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: radial-gradient(circle, rgba(42, 49, 112, 0.5) 1px, transparent 1px);
-            background-size: 60px 60px;
+        /* ── HERO ── */
+        .hero {
+            padding: 7rem 2rem 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
             pointer-events: none;
             z-index: 0;
-            mask-image: radial-gradient(ellipse at 50% 30%, black 10%, transparent 60%);
-            -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 10%, transparent 60%);
         }
+        .hero-orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(14,246,204,0.07) 0%, transparent 70%); top: -5%; left: -8%; }
+        .hero-orb-2 { width: 420px; height: 420px; background: radial-gradient(circle, rgba(167,139,250,0.06) 0%, transparent 70%); top: 5%; right: -8%; }
+        .hero-orb-3 { width: 320px; height: 320px; background: radial-gradient(circle, rgba(255,107,107,0.04) 0%, transparent 70%); bottom: 0; left: 38%; }
 
-        /* Content z-index above grid */
-        nav, section, .stats-bar, .ticker-wrap, .cta-section, footer, .hero {
-            position: relative;
-            z-index: 1;
-        }
+        .hero-content { position: relative; z-index: 2; }
 
-        /* Hero light beam */
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -200px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 600px;
-            height: 600px;
-            background: conic-gradient(from 180deg at 50% 50%, 
-                transparent 0deg,
-                rgba(14, 246, 204, 0.06) 60deg,
-                rgba(167, 139, 250, 0.08) 120deg,
-                rgba(14, 246, 204, 0.04) 180deg,
-                transparent 240deg,
-                rgba(167, 139, 250, 0.06) 300deg,
-                transparent 360deg
-            );
-            animation: heroBeamRotate 20s linear infinite;
-            z-index: 0;
-            pointer-events: none;
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(14,246,204,0.06);
+            border: 1px solid rgba(14,246,204,0.22);
+            border-radius: 100px;
+            padding: 0.45rem 1.1rem;
+            font-size: 0.79rem;
+            font-weight: 500;
+            color: var(--muted);
+            margin-bottom: 2rem;
+            animation: fadeUp 0.6s ease-out both;
         }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 300px;
-            background: linear-gradient(to bottom, transparent, rgba(14, 246, 204, 0.4), rgba(167, 139, 250, 0.2), transparent);
-            z-index: 0;
-            pointer-events: none;
-            animation: beamPulse 3s ease-in-out infinite;
-        }
-
-        @keyframes heroBeamRotate {
-            from { transform: translateX(-50%) rotate(0deg); }
-            to { transform: translateX(-50%) rotate(360deg); }
-        }
-
-        @keyframes beamPulse {
-            0%, 100% { opacity: 0.4; height: 300px; }
-            50% { opacity: 0.8; height: 350px; }
-        }
-
-        /* Shimmer gradient text */
-        .hero h1 .grad {
-            background: linear-gradient(135deg, var(--teal) 0%, var(--lavender) 50%, var(--teal) 100%) !important;
-            background-size: 200% auto !important;
-            -webkit-background-clip: text !important;
-            -webkit-text-fill-color: transparent !important;
-            background-clip: text !important;
-            animation: shimmerGrad 4s ease-in-out infinite !important;
-        }
-
-        @keyframes shimmerGrad {
-            0% { background-position: 0% center; }
-            50% { background-position: 100% center; }
-            100% { background-position: 0% center; }
-        }
-
-        /* Scroll-triggered reveal animations */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
-                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal.revealed { opacity: 1; transform: translateY(0); }
-
-        .reveal-left {
-            opacity: 0;
-            transform: translateX(-40px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal-left.revealed { opacity: 1; transform: translateX(0); }
-
-        .reveal-scale {
-            opacity: 0;
-            transform: scale(0.9);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal-scale.revealed { opacity: 1; transform: scale(1); }
-
-        /* Stagger delays */
-        .stagger-1 { transition-delay: 0.1s !important; }
-        .stagger-2 { transition-delay: 0.2s !important; }
-        .stagger-3 { transition-delay: 0.3s !important; }
-        .stagger-4 { transition-delay: 0.4s !important; }
-        .stagger-5 { transition-delay: 0.5s !important; }
-        .stagger-6 { transition-delay: 0.6s !important; }
-
-        /* Tool cards glow border on hover */
-        .tool-card {
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-                        box-shadow 0.4s ease,
-                        border-color 0.4s ease !important;
-        }
-        .tool-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            padding: 1px;
-            background: linear-gradient(135deg, transparent, rgba(14, 246, 204, 0.3), transparent, rgba(167, 139, 250, 0.3), transparent);
-            background-size: 300% 300%;
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            animation: borderGlow 4s ease-in-out infinite;
-            z-index: 1;
-            pointer-events: none;
-        }
-        .tool-card:hover::before { opacity: 1; }
-        .tool-card:hover {
-            transform: translateY(-8px) scale(1.02) !important;
-            box-shadow: 0 20px 60px rgba(14, 246, 204, 0.1), 0 8px 30px rgba(0, 0, 0, 0.3) !important;
-        }
-        .tool-card .num {
-            transition: opacity 0.4s ease, transform 0.4s ease !important;
-        }
-        .tool-card:hover .num {
-            opacity: 0.15 !important;
-            transform: scale(1.05);
-        }
-
-        @keyframes borderGlow {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
-        }
-
-
-        /* Category cards enhanced */
-        .cat-card {
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                        box-shadow 0.4s ease,
-                        border-color 0.4s ease,
-                        background 0.4s ease !important;
-            position: relative;
-            overflow: hidden;
-        }
-        .cat-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 50% 0%, rgba(14, 246, 204, 0.08) 0%, transparent 60%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-        }
-        .cat-card:hover::after { opacity: 1; }
-        .cat-card:hover {
-            transform: translateY(-6px) !important;
-            border-color: rgba(14, 246, 204, 0.4) !important;
-            box-shadow: 0 12px 40px rgba(14, 246, 204, 0.1) !important;
-        }
-        .cat-card:hover .cat-icon {
-            transform: scale(1.15);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            animation: iconBounce 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes iconBounce {
-            0% { transform: scale(1); }
-            40% { transform: scale(1.2); }
-            60% { transform: scale(0.95); }
-            100% { transform: scale(1.1); }
-        }
-
-        /* How-it-works cards */
-        .how-card {
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                        box-shadow 0.4s ease,
-                        border-color 0.4s ease !important;
-            position: relative;
-            overflow: hidden;
-        }
-        .how-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--teal), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease, width 0.4s ease;
-        }
-        .how-card:hover::before { opacity: 1; width: 100%; }
-        .how-card:hover {
-            transform: translateY(-6px) !important;
-            border-color: rgba(14, 246, 204, 0.3) !important;
-        }
-        .how-card:hover .how-num {
-            transform: scale(1.1);
-            box-shadow: 0 0 30px rgba(14, 246, 204, 0.3);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
-        }
-
-        /* Enhanced buttons */
-        .btn-primary {
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-        }
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .btn-primary:hover::after { opacity: 1; }
-        .btn-primary:hover {
-            transform: translateY(-2px) scale(1.02) !important;
-            box-shadow: 0 8px 30px rgba(14, 246, 204, 0.4), 0 0 60px rgba(14, 246, 204, 0.15) !important;
-        }
-        .btn-secondary {
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
-        }
-        .btn-secondary:hover {
-            transform: translateY(-2px) !important;
-            border-color: rgba(167, 139, 250, 0.6) !important;
-            box-shadow: 0 8px 30px rgba(167, 139, 250, 0.2) !important;
-        }
-
-        /* Stats hover glow */
-        .stat:hover .stat-num {
-            text-shadow: 0 0 20px rgba(14, 246, 204, 0.5), 0 0 40px rgba(14, 246, 204, 0.2);
-        }
-
-        /* Nav scroll state */
-        .nav {
-            transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease !important;
-        }
-        .nav.scrolled {
-            background: rgba(10, 14, 39, 0.85) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            box-shadow: 0 1px 0 rgba(30, 37, 88, 0.5), 0 4px 20px rgba(0, 0, 0, 0.3) !important;
-        }
-
-        /* Nav link underlines */
-        .nav-links a {
-            position: relative;
-            transition: color 0.3s ease !important;
-        }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            width: 0;
-            height: 2px;
+        .hero-badge .dot {
+            width: 7px;
+            height: 7px;
             background: var(--teal);
-            transition: width 0.3s ease, left 0.3s ease;
-            border-radius: 1px;
-            box-shadow: 0 0 8px rgba(14, 246, 204, 0.5);
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(14,246,204,0.8);
+            animation: pulse 2.5s ease-in-out infinite;
+            flex-shrink: 0;
         }
-        .nav-links a:hover::after,
-        .nav-links a.active::after {
-            width: 100%;
-            left: 0;
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .hero h1 {
+            font-size: clamp(2.8rem, 6.5vw, 5rem);
+            font-weight: 700;
+            line-height: 1.06;
+            letter-spacing: -0.05em;
+            margin-bottom: 1.5rem;
+            animation: fadeUp 0.6s ease-out 0.12s both;
+        }
+        .hero h1 .grad {
+            background: linear-gradient(135deg, #0ef6cc 0%, #a78bfa 55%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-sub {
+            font-size: 1.15rem;
+            color: var(--muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.75;
+            animation: fadeUp 0.6s ease-out 0.24s both;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeUp 0.6s ease-out 0.36s both;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* CTA section glow */
+        /* ── PLATFORM PILLARS ── */
+        .pillars-wrap {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+        }
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .pillar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem 2rem;
+            border-right: 1px solid var(--border);
+        }
+        .pillar:last-child { border-right: none; }
+        .pillar-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface2);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        .pillar-title {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 0.15rem;
+            white-space: nowrap;
+        }
+        .pillar-desc {
+            font-size: 0.77rem;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        /* ── FEATURED TOOLS ── */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+        .tool-card-featured {
+            background: var(--surface);
+            border: 1px solid rgba(14,246,204,0.18);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+        }
+        .tool-card-featured::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--teal), var(--lavender));
+        }
+        .tool-card-featured:hover {
+            border-color: rgba(14,246,204,0.35);
+            transform: translateY(-3px);
+            box-shadow: 0 18px 50px rgba(0,0,0,0.35), 0 0 60px rgba(14,246,204,0.05);
+        }
+        .tool-card-featured h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.7rem;
+            letter-spacing: -0.025em;
+        }
+        .tool-card-featured p {
+            color: var(--muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-card-pipeline {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.25s, opacity 0.25s;
+            opacity: 0.7;
+        }
+        .tool-card-pipeline:hover { border-color: var(--border-light); opacity: 1; }
+        .tool-card-pipeline h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 0.45rem;
+            letter-spacing: -0.02em;
+        }
+        .tool-card-pipeline p {
+            color: var(--muted);
+            font-size: 0.86rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* ── HOW IT WORKS ── */
+        .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .how-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.25s, transform 0.25s;
+        }
+        .how-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
+        .how-num {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        .how-num.n1 { background: var(--teal-glow); color: var(--teal); border: 1px solid rgba(14,246,204,0.2); }
+        .how-num.n2 { background: var(--coral-glow); color: var(--coral); border: 1px solid rgba(255,107,107,0.2); }
+        .how-num.n3 { background: var(--lavender-glow); color: var(--lavender); border: 1px solid rgba(167,139,250,0.2); }
+        .how-card h3 { font-size: 1.08rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .how-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.65; }
+        .how-bg-num {
+            position: absolute;
+            top: -10px; right: 14px;
+            font-size: 4.5rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.025);
+            line-height: 1;
+            font-family: "Space Grotesk", sans-serif;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* ── CTA ── */
         .cta-section {
             position: relative;
+            text-align: center;
+            padding: 6rem 2rem;
             overflow: hidden;
         }
         .cta-section::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(14, 246, 204, 0.06) 0%, transparent 60%);
-            animation: ctaGlow 6s ease-in-out infinite;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px; height: 500px;
+            background: radial-gradient(ellipse, rgba(14,246,204,0.055) 0%, transparent 70%);
             pointer-events: none;
         }
+        .cta-section > * { position: relative; z-index: 1; }
+        .cta-section h2 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+        }
+        .cta-section p {
+            color: var(--muted);
+            font-size: 1.05rem;
+            max-width: 480px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.75;
+        }
+        .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 
-        @keyframes ctaGlow {
-            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.5; }
-            50% { transform: translateX(-50%) scale(1.2); opacity: 1; }
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .featured-grid { grid-template-columns: 1fr 1fr; }
+            .tool-card-featured { grid-column: 1 / -1; }
         }
-
-        /* Floating particles */
-        .particle {
-            position: fixed;
-            width: 3px;
-            height: 3px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0;
-            animation: floatParticle 15s linear infinite;
+        @media (max-width: 768px) {
+            .hero { padding: 5rem 1.5rem 3.5rem; }
+            .hero h1 { font-size: 2.6rem; letter-spacing: -0.04em; }
+            .hero-sub { font-size: 1rem; }
+            .pillars { grid-template-columns: 1fr 1fr; }
+            .pillar { border-right: none; border-bottom: 1px solid var(--border); }
+            .pillar:nth-child(odd) { border-right: 1px solid var(--border); }
+            .pillar:last-child { border-bottom: none; }
+            .featured-grid { grid-template-columns: 1fr; }
+            .tool-card-featured { grid-column: auto; }
+            .how-grid { grid-template-columns: 1fr; }
         }
-
-        @keyframes floatParticle {
-            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-100px) translateX(50px); opacity: 0; }
-        }
-
-        /* Section label dot */
-        .section-label { position: relative; display: inline-block; }
-        .section-label::before {
-            content: '';
-            position: absolute;
-            left: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--teal);
-            box-shadow: 0 0 10px var(--teal), 0 0 20px rgba(14, 246, 204, 0.3);
-            animation: pulse 2s infinite;
-        }
-
-        /* Hero badge float */
-        .hero-badge {
-            animation: fadeSlideUp 0.8s ease-out both, badgeFloat 4s ease-in-out infinite 1s !important;
-        }
-        @keyframes badgeFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        /* Live status pulse */
-        .tool-status.live {
-            animation: liveStatusPulse 2s infinite;
-        }
-        @keyframes liveStatusPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(14, 246, 204, 0.4); }
-            50% { box-shadow: 0 0 0 6px rgba(14, 246, 204, 0); }
-        }
-
-        /* Enhanced cursor glow */
-        .hero-glow {
-            width: 400px !important;
-            height: 400px !important;
-            background: radial-gradient(circle, rgba(14, 246, 204, 0.08) 0%, rgba(167, 139, 250, 0.04) 30%, transparent 70%) !important;
-            transition: opacity 0.5s ease !important;
-        }
-
-        /* Ticker fade edges */
-        .ticker-wrap {
-            mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent) !important;
-            -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent) !important;
-        }
-
-        /* Hero actions entrance */
-        .hero-actions { animation: fadeSlideUp 0.8s ease-out 0.6s both; }
-
-        /* Tool tags hover */
-        .tool-tag {
-            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
-        }
-        .tool-tag:hover {
-            background: rgba(14, 246, 204, 0.1) !important;
-            border-color: rgba(14, 246, 204, 0.3) !important;
-            color: var(--teal) !important;
-        }
-
-        /* Logo hover glow */
-        .logo:hover {
-            filter: drop-shadow(0 0 8px rgba(14, 246, 204, 0.3));
-            transition: filter 0.3s ease;
-        }
-
-        /* GitHub button hover */
-        .nav-gh {
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
-        }
-        .nav-gh:hover {
-            border-color: rgba(14, 246, 204, 0.4) !important;
-            box-shadow: 0 0 20px rgba(14, 246, 204, 0.15) !important;
-        }
-
-        /* Divider glow pulse */
-        .hero-bottom-glow { position: relative; overflow: visible; }
-        .hero-bottom-glow::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--teal), transparent);
-            border-radius: 2px;
-            animation: glowPulseWidth 3s ease-in-out infinite;
-            box-shadow: 0 0 15px rgba(14, 246, 204, 0.5), 0 0 30px rgba(14, 246, 204, 0.2);
-        }
-        @keyframes glowPulseWidth {
-            0%, 100% { width: 150px; opacity: 0.6; }
-            50% { width: 250px; opacity: 1; }
-        }
-
-        /* Smooth scroll */
-        html { scroll-behavior: smooth; }
-
-        /* Enhanced reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-            .reveal, .reveal-left, .reveal-scale {
-                opacity: 1 !important;
-                transform: none !important;
-            }
-        }
-
     </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav class="nav">
-    <div class="nav-inner">
-        <a href="/" class="logo">
-            <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="lgA" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse">
-                        <stop offset="0%" stop-color="#0ef6cc"/>
-                        <stop offset="100%" stop-color="#a78bfa"/>
-                    </linearGradient>
-                </defs>
-                <rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(14,246,204,0.08)" stroke="url(#lgA)" stroke-width="1.5"/>
-                <rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lgA)" opacity="0.9"/>
-                <rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lgA)" opacity="0.7"/>
-                <rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lgA)" opacity="0.5"/>
-                <path d="M10.75 16 L17 11 L23.25 6.5" stroke="#0ef6cc" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
-                <circle cx="23.25" cy="6.5" r="2" fill="#0ef6cc" opacity="0.9"/>
-            </svg>
-            civic<span class="cb">byte</span>
-        </a>
-        <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
-        <div class="nav-links">
-            <a href="/" class="active">Home</a>
+    <!-- NAVIGATION -->
+    <header class="site-nav">
+        <nav class="nav">
+            <a href="/" class="logo">
+                <svg width="30" height="30" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs><linearGradient id="lg0" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#0ef6cc"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient></defs>
+                    <rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(14,246,204,0.08)" stroke="url(#lg0)" stroke-width="1.5"/>
+                    <rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lg0)" opacity="0.9"/>
+                    <rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lg0)" opacity="0.7"/>
+                    <rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lg0)" opacity="0.5"/>
+                    <path d="M10.75 16 L17 11 L23.25 6.5" stroke="#0ef6cc" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+                    <circle cx="23.25" cy="6.5" r="2" fill="#0ef6cc" opacity="0.9"/>
+                </svg>
+                civic<span class="cb">byte</span>
+            </a>
+            <button class="mobile-toggle" onclick="this.closest('.site-nav').querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">&#9776;</button>
+            <div class="nav-links">
+                <a href="/tools.html">Tools</a>
+                <a href="/about.html">About</a>
+                <a href="/submit.html">Submit a Tool</a>
+                <a href="https://github.com/civicbytedev" target="_blank" class="nav-gh">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <div class="dot"></div>
+                Open platform &middot; MIT Licensed &middot; Student founded
+            </div>
+            <h1>
+                Free tools that make<br>
+                <span class="grad">public data work</span><br>
+                for everyone
+            </h1>
+            <p class="hero-sub">
+                An open platform where developers and students publish civic tech tools — free, open-source, and built for the communities that need them most.
+            </p>
+            <div class="hero-actions">
+                <a href="/tools.html" class="btn-primary">Browse Tools &rarr;</a>
+                <a href="/submit.html" class="btn-secondary">Submit a Tool</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- PLATFORM PILLARS -->
+    <div class="pillars-wrap">
+        <div class="pillars">
+            <div class="pillar">
+                <div class="pillar-icon">🔓</div>
+                <div>
+                    <div class="pillar-title">Free Forever</div>
+                    <div class="pillar-desc">No paywalls, no accounts, no exceptions.</div>
+                </div>
+            </div>
+            <div class="pillar">
+                <div class="pillar-icon">📖</div>
+                <div>
+                    <div class="pillar-title">Open Source</div>
+                    <div class="pillar-desc">All code public under MIT license.</div>
+                </div>
+            </div>
+            <div class="pillar">
+                <div class="pillar-icon">🏘️</div>
+                <div>
+                    <div class="pillar-title">Community Built</div>
+                    <div class="pillar-desc">By developers and students, for communities.</div>
+                </div>
+            </div>
+            <div class="pillar">
+                <div class="pillar-icon">✓</div>
+                <div>
+                    <div class="pillar-title">Curated Quality</div>
+                    <div class="pillar-desc">Reviewed for real civic impact before listing.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FEATURED TOOLS -->
+    <section class="section">
+        <div class="section-label">Tools</div>
+        <div class="section-title">Civic tech that actually reaches people</div>
+        <div class="section-desc">Every tool on CivicByte is free, open-source, and designed to be usable by anyone — not just other developers.</div>
+        <div class="featured-grid">
+
+            <!-- Primary: Live tool -->
+            <div class="tool-card-featured">
+                <div class="tool-meta">
+                    <span class="tool-status live">Live</span>
+                    <span class="tool-category">Education</span>
+                </div>
+                <h3>NYC School Budget Tracker</h3>
+                <p>Interactive dashboard mapping per-pupil spending, Title I funding, and PTA contributions across 1,800+ NYC public schools. Search, filter, and compare any school.</p>
+                <div class="tool-tags" style="margin-bottom: 1.5rem;">
+                    <span class="tool-tag">NYC</span>
+                    <span class="tool-tag">Education</span>
+                    <span class="tool-tag">Budget Data</span>
+                    <span class="tool-tag">Dashboard</span>
+                </div>
+                <a href="/nyc-school-budget-tracker/" class="btn-primary" style="font-size: 0.88rem; padding: 0.75rem 1.4rem;">View Tool &rarr;</a>
+            </div>
+
+            <!-- Pipeline tools -->
+            <div class="tool-card-pipeline">
+                <div class="tool-meta">
+                    <span class="tool-status dev">In Dev</span>
+                    <span class="tool-category">Social Services</span>
+                </div>
+                <h3>Community Resource Finder</h3>
+                <p>Searchable directory of free services — food pantries, legal aid, after-school programs — organized by neighborhood and borough.</p>
+                <div class="tool-tags">
+                    <span class="tool-tag">NYC</span>
+                    <span class="tool-tag">Services</span>
+                    <span class="tool-tag">Directory</span>
+                </div>
+            </div>
+
+            <div class="tool-card-pipeline">
+                <div class="tool-meta">
+                    <span class="tool-status planned">Planned</span>
+                    <span class="tool-category">Municipal Data</span>
+                </div>
+                <h3>311 Complaint Analyzer</h3>
+                <p>Visualization mapping NYC 311 complaint data to reveal service gap patterns across boroughs and council districts.</p>
+                <div class="tool-tags">
+                    <span class="tool-tag">NYC</span>
+                    <span class="tool-tag">311 Data</span>
+                    <span class="tool-tag">Visualization</span>
+                </div>
+            </div>
+
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="/tools.html" class="btn-secondary">Browse all tools &rarr;</a>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- HOW IT WORKS -->
+    <section class="section">
+        <div class="section-label">How It Works</div>
+        <div class="section-title">Built by developers. Used by communities.</div>
+        <div class="section-desc">CivicByte is an open platform. Anyone can submit a civic tech tool — and every community can discover and use them.</div>
+        <div class="how-grid">
+            <div class="how-card">
+                <div class="how-bg-num">1</div>
+                <div class="how-num n1">1</div>
+                <h3>Build a civic tool</h3>
+                <p>Identify a real community need. Build a free, open-source tool that addresses it — and deploy it publicly on the web.</p>
+            </div>
+            <div class="how-card">
+                <div class="how-bg-num">2</div>
+                <div class="how-num n2">2</div>
+                <h3>Submit to CivicByte</h3>
+                <p>Open a GitHub issue with your tool's details. We review it against our platform standards and get it listed in the directory.</p>
+            </div>
+            <div class="how-card">
+                <div class="how-bg-num">3</div>
+                <div class="how-num n3">3</div>
+                <h3>Communities find it</h3>
+                <p>Your tool is discoverable by the organizers, advocates, parents, and community members who need it most.</p>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- CTA -->
+    <div class="cta-section">
+        <h2>Have a civic tech tool?</h2>
+        <p>CivicByte is open to developers, students, nonprofits, and community organizations. If you've built something that serves the public good, list it here.</p>
+        <div class="cta-actions">
+            <a href="/submit.html" class="btn-primary">Submit Your Tool &rarr;</a>
+            <a href="/tools.html" class="btn-secondary">Browse the Directory</a>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="f-left">
+            &copy; 2025 CivicByte &mdash; Open source under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>.
+        </div>
+        <div class="f-right">
             <a href="/tools.html">Tools</a>
             <a href="/about.html">About</a>
-            <a href="/submit.html">Submit a Tool</a>
-            <a href="https://github.com/civicbytedev" target="_blank" class="nav-gh">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                GitHub
-            </a>
+            <a href="/submit.html">Submit</a>
+            <a href="https://github.com/civicbytedev" target="_blank">GitHub</a>
         </div>
-    </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="hero">
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
-    <div class="hero-orb hero-orb-3"></div>
-    <div class="hero-glow" id="heroGlow"></div>
-
-    <div class="hero-badge"><span class="dot"></span> Open platform for civic tech</div>
-    <h1>Free tools that make<br>public data <span class="grad">work for everyone</span></h1>
-    <p>CivicByte is an open platform where developers and students publish free civic tech tools that help underserved communities access, understand, and act on public data.</p>
-    <div class="hero-actions">
-        <a href="/tools.html" class="btn-primary">Browse Tools &rarr;</a>
-        <a href="/submit.html" class="btn-secondary">Submit Your Tool</a>
-    </div>
-    <div class="hero-divider"></div>
-    <div class="hero-bottom-glow"></div>
-</section>
-
-<!-- STATS -->
-<div class="stats-bar">
-    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Tools</div></div>
-    <div class="stat"><div class="stat-num">5</div><div class="stat-label">Contributors</div></div>
-    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Open Source</div></div>
-    <div class="stat"><div class="stat-num">$0</div><div class="stat-label">Cost to Users</div></div>
-</div>
-
-<!-- TICKER -->
-<div class="ticker-wrap">
-    <div class="ticker">
-        <span><i class="d" style="background:var(--teal)"></i> Open Source</span>
-        <span><i class="d" style="background:var(--coral)"></i> Community Driven</span>
-        <span><i class="d" style="background:var(--lavender)"></i> Student Built</span>
-        <span><i class="d" style="background:var(--teal)"></i> Free Forever</span>
-        <span><i class="d" style="background:var(--coral)"></i> MIT Licensed</span>
-        <span><i class="d" style="background:var(--lavender)"></i> Civic Technology</span>
-        <span><i class="d" style="background:var(--teal)"></i> Data Transparency</span>
-        <span><i class="d" style="background:var(--coral)"></i> Open Platform</span>
-        <span><i class="d" style="background:var(--teal)"></i> Open Source</span>
-        <span><i class="d" style="background:var(--coral)"></i> Community Driven</span>
-        <span><i class="d" style="background:var(--lavender)"></i> Student Built</span>
-        <span><i class="d" style="background:var(--teal)"></i> Free Forever</span>
-        <span><i class="d" style="background:var(--coral)"></i> MIT Licensed</span>
-        <span><i class="d" style="background:var(--lavender)"></i> Civic Technology</span>
-        <span><i class="d" style="background:var(--teal)"></i> Data Transparency</span>
-        <span><i class="d" style="background:var(--coral)"></i> Open Platform</span>
-    </div>
-</div>
-
-<!-- FEATURED TOOLS -->
-<section class="section">
-    <div class="section-label">Featured Tools</div>
-    <div class="section-title">Built by students. Used by communities.</div>
-    <div class="section-desc">Every tool on CivicByte is free, open-source, and designed to solve a real problem for real people.</div>
-    <div class="tools-grid">
-        <div class="tool-card">
-            <div class="num">01</div>
-            <div class="tool-meta"><span class="tool-status live">Live</span><span class="tool-category">Education</span></div>
-            <h3>NYC School Budget Tracker</h3>
-            <p>Interactive dashboard mapping per-pupil spending, Title I funding, and PTA contributions across 1,800+ NYC public schools.</p>
-            <div class="tool-tags"><span class="tool-tag">NYC</span><span class="tool-tag">Education</span><span class="tool-tag">Budget Data</span></div>
-            <div class="tool-card-footer">
-                <div class="tool-author"><img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&font-size=0.4&bold=true" alt="CivicByte"> CivicByte Team</div>
-                <a href="/nyc-school-budget-tracker/" class="tool-link">View Tool &rarr;</a>
-            </div>
-        </div>
-        <div class="tool-card">
-            <div class="num">02</div>
-            <div class="tool-meta"><span class="tool-status dev">In Dev</span><span class="tool-category">Social Services</span></div>
-            <h3>Community Resource Finder</h3>
-            <p>Searchable directory of free and low-cost services — food pantries, legal aid, after-school programs — organized by neighborhood.</p>
-            <div class="tool-tags"><span class="tool-tag">NYC</span><span class="tool-tag">Services</span><span class="tool-tag">Directory</span></div>
-            <div class="tool-card-footer">
-                <div class="tool-author"><img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&font-size=0.4&bold=true" alt="CivicByte"> CivicByte Team</div>
-                <span class="tool-link" style="color:var(--coral)">Coming Soon</span>
-            </div>
-        </div>
-        <div class="tool-card">
-            <div class="num">03</div>
-            <div class="tool-meta"><span class="tool-status planned">Planned</span><span class="tool-category">Municipal Data</span></div>
-            <h3>311 Complaint Analyzer</h3>
-            <p>Visualization tool mapping NYC 311 complaint data to reveal patterns in municipal service gaps across boroughs and council districts.</p>
-            <div class="tool-tags"><span class="tool-tag">NYC</span><span class="tool-tag">311 Data</span><span class="tool-tag">Visualization</span></div>
-            <div class="tool-card-footer">
-                <div class="tool-author"><img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&font-size=0.4&bold=true" alt="CivicByte"> CivicByte Team</div>
-                <span class="tool-link" style="color:var(--lavender)">Planned</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- CATEGORIES -->
-<section class="section">
-    <div class="section-label">Categories</div>
-    <div class="section-title">Tools for every civic need</div>
-    <div class="section-desc">Browse by category to find tools that address specific community challenges.</div>
-    <div class="cat-grid">
-        <a href="/tools.html?cat=education" class="cat-card"><div class="cat-icon">&#127891;</div><h4>Education</h4><div class="cat-count">1 tool</div></a>
-        <a href="/tools.html?cat=housing" class="cat-card"><div class="cat-icon">&#127968;</div><h4>Housing</h4><div class="cat-count">0 tools</div></a>
-        <a href="/tools.html?cat=health" class="cat-card"><div class="cat-icon">&#129657;</div><h4>Health</h4><div class="cat-count">0 tools</div></a>
-        <a href="/tools.html?cat=transit" class="cat-card"><div class="cat-icon">&#128652;</div><h4>Transit</h4><div class="cat-count">0 tools</div></a>
-        <a href="/tools.html?cat=services" class="cat-card"><div class="cat-icon">&#129309;</div><h4>Social Services</h4><div class="cat-count">1 tool</div></a>
-        <a href="/tools.html?cat=municipal" class="cat-card"><div class="cat-icon">&#127963;</div><h4>Municipal Data</h4><div class="cat-count">1 tool</div></a>
-    </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="section">
-    <div class="section-label">How It Works</div>
-    <div class="section-title">Three ways to get involved</div>
-    <div class="section-desc">Whether you build tools, use them, or partner with us — there's a place for you on CivicByte.</div>
-    <div class="how-grid">
-        <div class="how-card"><div class="how-num n1">1</div><h3>Build</h3><p>Develop a civic tech tool that solves a real community problem. Use any stack — we care about impact, not frameworks.</p></div>
-        <div class="how-card"><div class="how-num n2">2</div><h3>Submit</h3><p>Submit your tool to CivicByte through our GitHub-based process. We review for quality, accessibility, and community value.</p></div>
-        <div class="how-card"><div class="how-num n3">3</div><h3>Impact</h3><p>Your tool gets listed on the platform, discoverable by communities, advocates, and organizations who need it most.</p></div>
-    </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-section">
-    <h2>Have a tool that helps<br>your community?</h2>
-    <p>CivicByte is open to developers, students, and civic organizations. Publish your tool and reach the communities that need it.</p>
-    <div class="cta-actions">
-        <a href="/submit.html" class="btn-primary">Submit a Tool &rarr;</a>
-        <a href="https://github.com/civicbytedev" target="_blank" class="btn-secondary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-            View on GitHub
-        </a>
-    </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-    <div class="f-left">&copy; 2026 CivicByte. Open source under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>.</div>
-    <div class="f-right">
-        <a href="/">Home</a>
-        <a href="/tools.html">Tools</a>
-        <a href="/about.html">About</a>
-        <a href="/submit.html">Submit</a>
-        <a href="https://github.com/civicbytedev" target="_blank">GitHub</a>
-    </div>
-</footer>
-
-<!-- Mouse glow JS only -->
-
-    <script>
-        // Hero glow follow
-        var hero = document.getElementById('hero');
-        var glow = document.getElementById('heroGlow');
-        hero.addEventListener('mousemove', function(e) {
-            var rect = hero.getBoundingClientRect();
-            glow.style.left = (e.clientX - rect.left) + 'px';
-            glow.style.top = (e.clientY - rect.top) + 'px';
-            glow.style.opacity = '1';
-        });
-        hero.addEventListener('mouseleave', function() {
-            glow.style.opacity = '0';
-        });
-
-        // Scroll reveal observer
-        var revealObserver = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('revealed');
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-        // Add reveal classes
-        document.querySelectorAll('.section-label, .section-title, .section-desc').forEach(function(el, i) {
-            el.classList.add('reveal');
-            el.classList.add('stagger-' + Math.min(i % 3 + 1, 3));
-            revealObserver.observe(el);
-        });
-        document.querySelectorAll('.tool-card').forEach(function(card, i) {
-            card.classList.add('reveal');
-            card.classList.add('stagger-' + (i + 1));
-            revealObserver.observe(card);
-        });
-        document.querySelectorAll('.cat-card').forEach(function(card, i) {
-            card.classList.add('reveal-scale');
-            card.classList.add('stagger-' + Math.min(i + 1, 6));
-            revealObserver.observe(card);
-        });
-        document.querySelectorAll('.how-card').forEach(function(card, i) {
-            card.classList.add('reveal');
-            card.classList.add('stagger-' + (i + 1));
-            revealObserver.observe(card);
-        });
-        var statsBar = document.querySelector('.stats-bar');
-        if (statsBar) { statsBar.classList.add('reveal-scale'); revealObserver.observe(statsBar); }
-
-        var cta = document.querySelector('.cta-section');
-        if (cta) {
-            var ctaH2 = cta.querySelector('h2');
-            var ctaP = cta.querySelector('p');
-            var ctaActions = cta.querySelector('.cta-actions');
-            if (ctaH2) { ctaH2.classList.add('reveal'); revealObserver.observe(ctaH2); }
-            if (ctaP) { ctaP.classList.add('reveal'); ctaP.classList.add('stagger-1'); revealObserver.observe(ctaP); }
-            if (ctaActions) { ctaActions.classList.add('reveal'); ctaActions.classList.add('stagger-2'); revealObserver.observe(ctaActions); }
-        }
-
-        // Animated counters
-        var counterObserver = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
-                if (entry.isIntersecting && !entry.target.dataset.animated) {
-                    entry.target.dataset.animated = 'true';
-                    var text = entry.target.textContent.trim();
-                    var prefix = text.match(/^[^\d]*/)[0] || '';
-                    var suffix = text.match(/[^\d]*$/)[0] || '';
-                    var numStr = text.replace(/[^\d.]/g, '');
-                    var target = parseFloat(numStr);
-                    if (isNaN(target)) return;
-                    var duration = 2000;
-                    var startTime = performance.now();
-                    var el = entry.target;
-                    function updateCounter(currentTime) {
-                        var elapsed = currentTime - startTime;
-                        var progress = Math.min(elapsed / duration, 1);
-                        var eased = 1 - Math.pow(1 - progress, 3);
-                        var current = Math.round(eased * target);
-                        el.textContent = prefix + current + suffix;
-                        if (progress < 1) {
-                            requestAnimationFrame(updateCounter);
-                        } else {
-                            el.textContent = text;
-                        }
-                    }
-                    el.textContent = prefix + '0' + suffix;
-                    requestAnimationFrame(updateCounter);
-                }
-            });
-        }, { threshold: 0.5 });
-        document.querySelectorAll('.stat-num').forEach(function(num) { counterObserver.observe(num); });
-
-        // Nav scroll effect
-        var nav = document.querySelector('.nav');
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) { nav.classList.add('scrolled'); }
-            else { nav.classList.remove('scrolled'); }
-        }, { passive: true });
-
-        // Floating particles
-        var colors = ['rgba(14, 246, 204, 0.5)', 'rgba(167, 139, 250, 0.4)', 'rgba(255, 107, 107, 0.3)'];
-        for (var i = 0; i < 15; i++) {
-            var particle = document.createElement('div');
-            particle.classList.add('particle');
-            particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-            particle.style.animationDelay = Math.random() * 15 + 's';
-            particle.style.animationDuration = (10 + Math.random() * 10) + 's';
-            particle.style.width = (2 + Math.random() * 3) + 'px';
-            particle.style.height = particle.style.width;
-            document.body.appendChild(particle);
-        }
-
-        // Parallax on hero orbs
-        var orbs = document.querySelectorAll('.hero-orb');
-        window.addEventListener('scroll', function() {
-            var scroll = window.scrollY;
-            orbs.forEach(function(orb, i) {
-                var speed = 0.1 + (i * 0.05);
-                orb.style.transform = 'translateY(' + (scroll * speed) + 'px)';
-            });
-        }, { passive: true });
-
-        // 3D tilt on cards
-        document.querySelectorAll('.tool-card, .cat-card, .how-card').forEach(function(card) {
-            card.addEventListener('mousemove', function(e) {
-                var rect = card.getBoundingClientRect();
-                var x = e.clientX - rect.left;
-                var y = e.clientY - rect.top;
-                var centerX = rect.width / 2;
-                var centerY = rect.height / 2;
-                var rotateX = (y - centerY) / centerY * -3;
-                var rotateY = (x - centerX) / centerX * 3;
-                card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-4px)';
-            });
-            card.addEventListener('mouseleave', function() {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-                card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
-            });
-            card.addEventListener('mouseenter', function() {
-                card.style.transition = 'transform 0.1s ease';
-            });
-        });
-
-        // Card mouse-follow glow
-        document.querySelectorAll('.tool-card').forEach(function(card) {
-            var glowEl = document.createElement('div');
-            glowEl.style.cssText = 'position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(14,246,204,0.08) 0%,transparent 70%);pointer-events:none;z-index:0;opacity:0;transition:opacity 0.3s ease;transform:translate(-50%,-50%);';
-            card.style.position = 'relative';
-            card.style.overflow = 'hidden';
-            card.appendChild(glowEl);
-            card.addEventListener('mousemove', function(e) {
-                var rect = card.getBoundingClientRect();
-                glowEl.style.left = (e.clientX - rect.left) + 'px';
-                glowEl.style.top = (e.clientY - rect.top) + 'px';
-                glowEl.style.opacity = '1';
-            });
-            card.addEventListener('mouseleave', function() { glowEl.style.opacity = '0'; });
-        });
-
-        // Magnetic buttons
-        document.querySelectorAll('.btn-primary, .btn-secondary').forEach(function(btn) {
-            btn.addEventListener('mousemove', function(e) {
-                var rect = btn.getBoundingClientRect();
-                var x = e.clientX - rect.left - rect.width / 2;
-                var y = e.clientY - rect.top - rect.height / 2;
-                btn.style.transform = 'translate(' + (x * 0.15) + 'px, ' + (y * 0.15) + 'px)';
-            });
-            btn.addEventListener('mouseleave', function() {
-                btn.style.transform = 'translate(0, 0)';
-                btn.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
-            });
-            btn.addEventListener('mouseenter', function() {
-                btn.style.transition = 'transform 0.1s ease';
-            });
-        });
-    </script>
+    </footer>
 
 </body>
 </html>

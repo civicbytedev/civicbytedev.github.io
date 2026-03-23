@@ -3,124 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0e27">
     <title>About — CivicByte</title>
     <meta name="description" content="CivicByte is a student-led open platform for civic technology. Learn about our mission, values, and the team behind the platform.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
     <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg: #0a0e27; --surface: #101535; --surface2: #16b42;
-            --border: #1e2558; --border-light: #2a3170;
-            --teal: #0ef6cc; --teal-dim: #0bbf9e; --teal-glow: rgba(14,246,204,0.15);
-            --coral: #ff6b6b; --coral-glow: rgba(255,107,107,0.15);
-            --lavender: #a78bfa; --lavender-glow: rgba(167,139,250,0.15);
-            --text: #e2e8f0; --muted: #7a82a6; --white: #f8fafc;
+        /* ── Mission ── */
+        .mission-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
         }
-        body { font-family: "DM Sans", sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
-        h1, h2, h3, .logo, .stat-num { font-family: "Space Grotesk", sans-serif; }
-        a { text-decoration: none; color: inherit; }
-        .nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem; }
-        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.04em; display: inline-flex; align-items: center; }
-        .logo .cb { color: var(--teal); }         .logo svg { margin-right: 8px; flex-shrink: 0; filter: drop-shadow(0 0 8px rgba(14,246,204,0.3)); }
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
-        .nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--muted); transition: color 0.2s; }
-        .nav-links a:hover { color: var(--teal); }
-        .nav-links a.active { color: var(--teal); }
-        .nav-gh { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--surface2); padding: 0.5rem 1.1rem; border-radius: 8px; border: 1px solid var(--border); font-size: 0.85rem; font-weight: 500; transition: all 0.2s; }
-        .nav-gh:hover { border-color: var(--teal); color: var(--teal); }
-        .mobile-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
-        /* PAGE HEADER */
-        .page-header { max-width: 1200px; margin: 0 auto; padding: 5rem 2rem 3rem; }
-        .page-header .label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal); margin-bottom: 0.8rem; }
-        .page-header h1 { font-size: clamp(2.4rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -0.04em; margin-bottom: 1.2rem; line-height: 1.1; }
-        .page-header h1 .grad { background: linear-gradient(135deg, var(--teal), var(--lavender)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .page-header p { color: var(--muted); font-size: 1.15rem; max-width: 640px; line-height: 1.7; }
-        /* SECTIONS */
-        .section { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
-        .section-label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal); margin-bottom: 0.8rem; }
-        .section-title { font-size: clamp(1.8rem, 3.5vw, 2.4rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.8rem; }
-        .section-desc { color: var(--muted); font-size: 1.05rem; max-width: 600px; margin-bottom: 2.5rem; line-height: 1.7; }
-        .divider { border: none; border-top: 1px solid var(--border); max-width: 1200px; margin: 0 auto; }
-        /* MISSION BLOCK */
-        .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-        .mission-text h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: -0.02em; }
-        .mission-text p { color: var(--muted); font-size: 1rem; line-height: 1.8; margin-bottom: 1rem; }
-        .mission-visual { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 3rem; text-align: center; position: relative; overflow: hidden; }
-        .mission-visual::before { content: ""; position: absolute; top: -50%; right: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 70% 30%, var(--teal-glow) 0%, transparent 50%); pointer-events: none; }
-        .mission-visual .big-quote { font-family: "Space Grotesk", sans-serif; font-size: 4rem; font-weight: 700; color: var(--teal); opacity: 0.3; line-height: 1; margin-bottom: 1rem; position: relative; }
-        .mission-visual blockquote { font-size: 1.2rem; font-style: italic; color: var(--text); line-height: 1.7; position: relative; }
-        /* VALUES */
-        .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-        .value-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: all 0.3s; position: relative; overflow: hidden; }
+        .mission-text h2 {
+            font-size: clamp(1.6rem, 3vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+        .mission-text p {
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .mission-text p:last-child { margin-bottom: 0; }
+        .mission-quote {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .mission-quote::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at 70% 30%, rgba(14,246,204,0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .mission-quote .quote-mark {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--teal);
+            opacity: 0.2;
+            line-height: 1;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .mission-quote blockquote {
+            font-size: 1.15rem;
+            font-style: italic;
+            color: var(--text);
+            line-height: 1.75;
+            position: relative;
+        }
+
+        /* ── Platform pillars ── */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+        .pillar-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+        .pillar-card .p-val {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 0.3rem;
+        }
+        .pillar-card .p-lbl {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+
+        /* ── Values ── */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .value-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            transition: border-color 0.25s, transform 0.25s;
+        }
         .value-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
-        .value-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.2rem; }
+        .value-icon {
+            width: 46px; height: 46px;
+            border-radius: 11px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 1.1rem;
+        }
         .value-icon.t { background: var(--teal-glow); border: 1px solid rgba(14,246,204,0.2); }
         .value-icon.c { background: var(--coral-glow); border: 1px solid rgba(255,107,107,0.2); }
         .value-icon.l { background: var(--lavender-glow); border: 1px solid rgba(167,139,250,0.2); }
-        .value-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
-        .value-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
-        /* TIMELINE */
-        .timeline { position: relative; padding-left: 3rem; }
-        .timeline::before { content: ""; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border); }
-        .tl-item { position: relative; margin-bottom: 2.5rem; }
-        .tl-item:last-child { margin-bottom: 0; }
-        .tl-dot { position: absolute; left: -3rem; top: 0.3rem; width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--teal); background: var(--bg); z-index: 1; }
-        .tl-item.future .tl-dot { border-color: var(--lavender); }
-        .tl-date { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--teal); margin-bottom: 0.3rem; }
-        .tl-item.future .tl-date { color: var(--lavender); }
-        .tl-item h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.3rem; }
-        .tl-item p { color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
-        /* STATS ROW */
-        .about-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
-        .about-stat { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; text-align: center; }
-        .about-stat .num { font-family: "Space Grotesk", sans-serif; font-size: 2.5rem; font-weight: 700; color: var(--teal); }
-        .about-stat .lbl { font-size: 0.82rem; color: var(--muted); margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.06em; }
-        /* PRINCIPLES */
+        .value-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.45rem; }
+        .value-card p { color: var(--muted); font-size: 0.88rem; line-height: 1.65; }
+
+        /* ── Principles ── */
         .principles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-        .principle { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; display: flex; gap: 1.2rem; transition: all 0.3s; }
+        .principle {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            display: flex;
+            gap: 1.25rem;
+            transition: border-color 0.25s;
+        }
         .principle:hover { border-color: var(--border-light); }
-        .principle-num { font-family: "Space Grotesk", sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--teal); opacity: 0.4; flex-shrink: 0; line-height: 1; }
-        .principle h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
-        .principle p { color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
-        /* FOOTER */
-        footer { border-top: 1px solid var(--border); max-width: 1200px; margin: 0 auto; padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-        footer .f-left { font-size: 0.85rem; color: var(--muted); }
-        footer .f-left a { color: var(--teal); }
-        footer .f-right { display: flex; gap: 1.5rem; }
-        footer .f-right a { font-size: 0.85rem; color: var(--muted); transition: color 0.2s; }
-        footer .f-right a:hover { color: var(--teal); }
-        .btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--teal); color: var(--bg); font-weight: 600; font-size: 1rem; padding: 0.9rem 2rem; border-radius: 12px; transition: all 0.2s; }
-        .btn-primary:hover { background: #0bbf9e; transform: translateY(-1px); box-shadow: 0 8px 30px var(--teal-glow); }
-        .btn-secondary { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); font-weight: 600; font-size: 1rem; padding: 0.9rem 2rem; border-radius: 12px; transition: all 0.2s; }
-        .btn-secondary:hover { border-color: var(--teal); color: var(--teal); }
-        @media (max-width: 768px) {
-            .mobile-toggle { display: block; }
-            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--surface); border-bottom: 1px solid var(--border); flex-direction: column; padding: 1.5rem 2rem; gap: 1rem; z-index: 100; }
-            .nav-links.open { display: flex; }
-            .nav { position: relative; }
+        .principle-num {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--teal);
+            opacity: 0.35;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+        .principle h3 { font-size: 0.98rem; font-weight: 600; margin-bottom: 0.35rem; }
+        .principle p { color: var(--muted); font-size: 0.87rem; line-height: 1.55; }
+
+        /* ── Our story ── */
+        .story-text p {
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.85;
+            margin-bottom: 1.1rem;
+            max-width: 720px;
+        }
+        .story-text p:last-child { margin-bottom: 0; }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
             .mission-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+            .values-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
             .values-grid { grid-template-columns: 1fr; }
-            .about-stats { grid-template-columns: repeat(2, 1fr); }
             .principles-grid { grid-template-columns: 1fr; }
+            .pillars-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
-    <nav class="nav">
-        <a href="/" class="logo">             <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lgA" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#0ef6cc"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient></defs><rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(14,246,204,0.08)" stroke="url(#lgA)" stroke-width="1.5"/><rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lgA)" opacity="0.9"/><rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lgA)" opacity="0.7"/><rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lgA)" opacity="0.5"/><path d="M10.75 16 L17 11 L23.25 6.5" stroke="#0ef6cc" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/><circle cx="23.25" cy="6.5" r="2" fill="#0ef6cc" opacity="0.9"/></svg>             civic<span class="cb">byte</span>         </a>
-        <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
-        <div class="nav-links">
-            <a href="/tools.html">Tools</a>
-            <a href="/about.html" class="active">About</a>
-            <a href="/submit.html">Submit a Tool</a>
-            <a href="https://github.com/civicbytedev" target="_blank" class="nav-gh">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                GitHub
+
+    <header class="site-nav">
+        <nav class="nav">
+            <a href="/" class="logo">
+                <svg width="30" height="30" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs><linearGradient id="lgA" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#0ef6cc"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient></defs>
+                    <rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(14,246,204,0.08)" stroke="url(#lgA)" stroke-width="1.5"/>
+                    <rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lgA)" opacity="0.9"/>
+                    <rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lgA)" opacity="0.7"/>
+                    <rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lgA)" opacity="0.5"/>
+                    <path d="M10.75 16 L17 11 L23.25 6.5" stroke="#0ef6cc" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+                    <circle cx="23.25" cy="6.5" r="2" fill="#0ef6cc" opacity="0.9"/>
+                </svg>
+                civic<span class="cb">byte</span>
             </a>
-        </div>
-    </nav>
+            <button class="mobile-toggle" onclick="this.closest('.site-nav').querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">&#9776;</button>
+            <div class="nav-links">
+                <a href="/tools.html">Tools</a>
+                <a href="/about.html" class="active">About</a>
+                <a href="/submit.html">Submit a Tool</a>
+                <a href="https://github.com/civicbytedev" target="_blank" class="nav-gh">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+        </nav>
+    </header>
 
     <!-- PAGE HEADER -->
     <header class="page-header">
@@ -137,26 +211,38 @@
             <div class="mission-text">
                 <div class="section-label">Our Mission</div>
                 <h2>Making public data work for everyone</h2>
-                <p>Governments collect enormous amounts of data about schools, housing, public services, and infrastructure. But that data is often locked in formats that are inaccessible to the communities it's supposed to serve.</p>
+                <p>Governments collect enormous amounts of data about schools, housing, public services, and infrastructure. But that data is often locked in formats inaccessible to the communities it's supposed to serve.</p>
                 <p>CivicByte exists to close that gap. We're an open platform where developers and students build free tools that translate complex public data into resources anyone can use — regardless of their technical background.</p>
-                <p>Every tool on our platform is open-source, free to use, and designed with input from the communities it serves.</p>
+                <p>Every tool on our platform is open-source, free to use, and designed with the communities it serves in mind.</p>
             </div>
-            <div class="mission-visual">
-                <div class="big-quote">&ldquo;</div>
-                <blockquote>Public data should serve the public. The communities that need transparency the most often have the least access to it. We're here to change that.</blockquote>
+            <div class="mission-quote">
+                <div class="quote-mark">&ldquo;</div>
+                <blockquote>Public data should serve the public. The communities that need transparency the most often have the least access to it. We&rsquo;re here to change that.</blockquote>
             </div>
         </div>
     </section>
 
     <hr class="divider">
 
-    <!-- STATS -->
-    <section class="section">
-        <div class="about-stats">
-            <div class="about-stat"><div class="num">3</div><div class="lbl">Tools Built</div></div>
-            <div class="about-stat"><div class="num">100%</div><div class="lbl">Open Source</div></div>
-            <div class="about-stat"><div class="num">$0</div><div class="lbl">Cost to Users</div></div>
-            <div class="about-stat"><div class="num">MIT</div><div class="lbl">Licensed</div></div>
+    <!-- PLATFORM FACTS -->
+    <section class="section" style="padding: 3rem 2rem;">
+        <div class="pillars-grid">
+            <div class="pillar-card">
+                <div class="p-val">Free</div>
+                <div class="p-lbl">Always, to everyone</div>
+            </div>
+            <div class="pillar-card">
+                <div class="p-val">Open</div>
+                <div class="p-lbl">Source under MIT License</div>
+            </div>
+            <div class="pillar-card">
+                <div class="p-val">$0</div>
+                <div class="p-lbl">Cost to communities</div>
+            </div>
+            <div class="pillar-card">
+                <div class="p-val">Zero</div>
+                <div class="p-lbl">Paywalls or data collection</div>
+            </div>
         </div>
     </section>
 
@@ -166,7 +252,7 @@
     <section class="section">
         <div class="section-label">Our Values</div>
         <div class="section-title">What guides everything we build</div>
-        <div class="section-desc">These aren't platitudes. They're design constraints that shape every decision we make.</div>
+        <div class="section-desc">These aren't platitudes — they're design constraints that shape every decision we make.</div>
         <div class="values-grid">
             <div class="value-card">
                 <div class="value-icon t">&#128275;</div>
@@ -203,31 +289,31 @@
 
     <hr class="divider">
 
-    <!-- PRINCIPLES -->
+    <!-- PLATFORM PRINCIPLES -->
     <section class="section">
-        <div class="section-label">Platform Principles</div>
+        <div class="section-label">Platform Standards</div>
         <div class="section-title">What we expect from every tool</div>
-        <div class="section-desc">Tools submitted to CivicByte are reviewed against these standards before being listed.</div>
+        <div class="section-desc">Tools submitted to CivicByte are reviewed against these standards before being listed in the directory.</div>
         <div class="principles-grid">
             <div class="principle">
                 <div class="principle-num">01</div>
                 <div>
-                    <h3>Solves a real problem</h3>
-                    <p>Every tool must address a specific, documented civic need identified by or validated with a community.</p>
+                    <h3>Solves a real civic problem</h3>
+                    <p>Every tool must address a specific, documented need identified by or validated with a community.</p>
                 </div>
             </div>
             <div class="principle">
                 <div class="principle-num">02</div>
                 <div>
                     <h3>Free and open source</h3>
-                    <p>All tools must be freely accessible with no paywalls, sign-ups, or data collection. Source code must be public.</p>
+                    <p>Freely accessible with no paywalls or sign-ups. Source code must be public under an open license.</p>
                 </div>
             </div>
             <div class="principle">
                 <div class="principle-num">03</div>
                 <div>
                     <h3>Usable by non-technical users</h3>
-                    <p>Tools are designed for community members, not developers. Clear interfaces, plain language, mobile-friendly.</p>
+                    <p>Tools are for community members, not developers. Clear interfaces, plain language, mobile-friendly.</p>
                 </div>
             </div>
             <div class="principle">
@@ -242,63 +328,40 @@
 
     <hr class="divider">
 
-    <!-- TIMELINE -->
+    <!-- OUR STORY -->
     <section class="section">
-        <div class="section-label">Our Journey</div>
-        <div class="section-title">Building in public since 2025</div>
-        <div class="section-desc">CivicByte started as a single project and grew into an open platform. Here's the story so far.</div>
-        <div class="timeline">
-            <div class="tl-item">
-                <div class="tl-dot"></div>
-                <div class="tl-date">March 2025</div>
-                <h3>CivicByte Founded</h3>
-                <p>Started as a student initiative to build civic tech tools for underserved NYC communities. Launched civicbyte.dev and the GitHub organization.</p>
-            </div>
-            <div class="tl-item">
-                <div class="tl-dot"></div>
-                <div class="tl-date">March 2025</div>
-                <h3>NYC School Budget Tracker Launched</h3>
-                <p>Our first tool — an interactive dashboard mapping per-pupil spending across 1,800+ NYC public schools — went live.</p>
-            </div>
-            <div class="tl-item">
-                <div class="tl-dot"></div>
-                <div class="tl-date">April 2025</div>
-                <h3>Platform Pivot</h3>
-                <p>Expanded from a single-team project to an open platform where any developer or student can submit civic tech tools.</p>
-            </div>
-            <div class="tl-item future">
-                <div class="tl-dot"></div>
-                <div class="tl-date">Summer 2025</div>
-                <h3>Community Resource Finder</h3>
-                <p>Searchable directory of free services — food pantries, legal aid, after-school programs — organized by neighborhood.</p>
-            </div>
-            <div class="tl-item future">
-                <div class="tl-dot"></div>
-                <div class="tl-date">Fall 2025</div>
-                <h3>National Expansion</h3>
-                <p>Opening the platform to tools serving communities beyond NYC. Any city, any public dataset, any civic need.</p>
-            </div>
+        <div class="section-label">Our Story</div>
+        <div class="section-title">Built in public, from day one</div>
+        <div class="story-text">
+            <p>CivicByte started as a student initiative to make public data actually useful to the communities it's supposed to serve. We noticed that governments collect enormous amounts of data — about schools, housing, public services, infrastructure — but that data almost never reaches the people it affects in any usable form.</p>
+            <p>Our first tool, the NYC School Budget Tracker, was built to change that for one specific problem: helping parents, advocates, and community members understand how money flows through NYC public schools. We heard from PTAs, teachers, and journalists who used it to find answers they couldn't get from official documents.</p>
+            <p>That experience showed us the model. The problem isn't data availability — most of it is technically public. The problem is usability. CivicByte exists to close that gap, tool by tool, community by community.</p>
+        </div>
+        <div style="margin-top: 2rem;">
+            <a href="https://github.com/civicbytedev" target="_blank" class="btn-secondary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                Follow our progress on GitHub &rarr;
+            </a>
         </div>
     </section>
 
     <hr class="divider">
 
     <!-- CTA -->
-    <section class="section" style="text-align:center; padding: 5rem 2rem;">
+    <section class="section" style="text-align: center; padding: 5rem 2rem;">
         <div class="section-title">Want to contribute?</div>
-        <p style="color:var(--muted); font-size:1.1rem; max-width:500px; margin: 0.8rem auto 2rem;">CivicByte is open to developers, students, nonprofits, and community organizations. There are many ways to get involved.</p>
-        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+        <p style="color: var(--muted); font-size: 1.05rem; max-width: 500px; margin: 0.75rem auto 2rem; line-height: 1.75;">CivicByte is open to developers, students, nonprofits, and community organizations. There are many ways to get involved.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
             <a href="/submit.html" class="btn-primary">Submit a Tool &rarr;</a>
             <a href="https://github.com/civicbytedev" target="_blank" class="btn-secondary">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                 View on GitHub
             </a>
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
-        <div class="f-left">&copy; 2025 CivicByte. Open source under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>.</div>
+        <div class="f-left">&copy; 2025 CivicByte &mdash; Open source under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>.</div>
         <div class="f-right">
             <a href="/tools.html">Tools</a>
             <a href="/about.html">About</a>
@@ -306,5 +369,6 @@
             <a href="https://github.com/civicbytedev" target="_blank">GitHub</a>
         </div>
     </footer>
+
 </body>
 </html>
