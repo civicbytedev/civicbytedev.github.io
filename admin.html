@@ -1,333 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0a0e27">
-    <title>Admin — CivicByte</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%230a0e27' stroke='%230ef6cc' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%230ef6cc'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%230ef6cc' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%230ef6cc' opacity='.5'/%3E%3C/svg%3E">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css">
-    <style>
-        /* ── Stats row ── */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.25rem;
-            margin-bottom: 2.5rem;
-        }
-        .stat-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.75rem 2rem;
-            transition: border-color 0.2s;
-        }
-        .stat-card:first-child { border-color: rgba(14,246,204,0.2); }
-        .stat-val {
-            font-family: "Space Grotesk", sans-serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--teal);
-            line-height: 1;
-            margin-bottom: 0.35rem;
-        }
-        .stat-lbl {
-            font-size: 0.8rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        /* ── Users table ── */
-        .users-table-wrap {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-        .users-table th {
-            text-align: left;
-            padding: 0.9rem 1.25rem;
-            font-size: 0.72rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--muted);
-            border-bottom: 1px solid var(--border);
-            background: var(--surface2);
-        }
-        .users-table td {
-            padding: 0.9rem 1.25rem;
-            border-bottom: 1px solid var(--border);
-            color: var(--text);
-            vertical-align: middle;
-        }
-        .users-table tr:last-child td { border-bottom: none; }
-        .users-table tr:hover td { background: var(--surface2); }
-        .user-email { color: var(--muted); font-size: 0.85rem; }
-        .user-date  { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
-        .badge-admin {
-            font-size: 0.65rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--teal);
-            border: 1px solid var(--teal);
-            background: var(--teal-glow);
-            border-radius: 100px;
-            padding: 0.15rem 0.5rem;
-            margin-left: 0.5rem;
-            vertical-align: middle;
-        }
-
-        /* ── Search ── */
-        .admin-search {
-            width: 100%;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 0.75rem 1rem;
-            color: var(--text);
-            font-size: 0.9rem;
-            font-family: "DM Sans", sans-serif;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            margin-bottom: 1.25rem;
-        }
-        .admin-search:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(14,246,204,0.08); }
-        .admin-search::placeholder { color: var(--muted); }
-
-        /* ── State messages ── */
-        .admin-loading, .admin-empty {
-            text-align: center;
-            padding: 3rem;
-            color: var(--muted);
-        }
-
-        @media (max-width: 700px) {
-            .stats-row { grid-template-columns: 1fr 1fr; }
-            .users-table th:nth-child(4),
-            .users-table td:nth-child(4) { display: none; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b1a">
+<title>Admin — CivicByte</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%23080b1a' stroke='%2300f5c4' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%2300f5c4'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%2300f5c4' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%2300f5c4' opacity='.5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/auth.js"></script>
+<script>
+var ADMIN_UID = 'pRz5mecfTtfMZCeSzdy4OTH2cxx2';
+</script>
 
-    <!-- Firebase compat SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    <script src="/auth.js"></script>
-    <script>
-        // ── IMPORTANT: paste your own Firebase UID here ──────────
-        // Find it in Firebase Console → Authentication → Users → your account row
-        var ADMIN_UID = 'YOUR_ADMIN_UID';
-        // ─────────────────────────────────────────────────────────
-    </script>
+<header class="site-nav">
+  <nav class="nav">
+    <a href="/" class="logo">
+      <svg width="28" height="28" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="lgA" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00f5c4"/><stop offset="100%" stop-color="#b197fc"/></linearGradient></defs>
+        <rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(0,245,196,0.07)" stroke="url(#lgA)" stroke-width="1.5"/>
+        <rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lgA)"/>
+        <rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lgA)" opacity="0.75"/>
+        <rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lgA)" opacity="0.5"/>
+        <path d="M10.75 16.5 L17 11.5 L23.25 7" stroke="#00f5c4" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+        <circle cx="23.25" cy="7" r="1.8" fill="#00f5c4"/>
+      </svg>
+      civic<span class="cb">byte</span>
+    </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/tools.html">Tools</a>
+      <a href="/about.html">About</a>
+    </div>
+  </nav>
+</header>
 
-    <header class="site-nav">
-        <nav class="nav">
-            <a href="/" class="logo">
-                <svg width="30" height="30" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs><linearGradient id="lgA" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#0ef6cc"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient></defs>
-                    <rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(14,246,204,0.08)" stroke="url(#lgA)" stroke-width="1.5"/>
-                    <rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lgA)" opacity="0.9"/>
-                    <rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lgA)" opacity="0.7"/>
-                    <rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lgA)" opacity="0.5"/>
-                    <path d="M10.75 16 L17 11 L23.25 6.5" stroke="#0ef6cc" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
-                    <circle cx="23.25" cy="6.5" r="2" fill="#0ef6cc" opacity="0.9"/>
-                </svg>
-                civic<span class="cb">byte</span>
-            </a>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/tools.html">Tools</a>
-                <a href="/about.html">About</a>
-            </div>
-        </nav>
-    </header>
+<header class="page-header">
+  <div class="label">Admin</div>
+  <h1>Account <span class="grad">Dashboard</span></h1>
+  <p>All registered CivicByte accounts. Visible only to you.</p>
+</header>
+<hr class="divider">
 
-    <header class="page-header">
-        <div class="label">Admin</div>
-        <h1>Account <span class="grad">Dashboard</span></h1>
-        <p>All registered CivicByte accounts. Visible only to you.</p>
-    </header>
+<section class="section" style="padding-top:2.5rem">
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-val" id="statTotal">—</div>
+      <div class="stat-lbl">Total accounts</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="statToday">—</div>
+      <div class="stat-lbl">Joined today</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="statWeek">—</div>
+      <div class="stat-lbl">Joined this week</div>
+    </div>
+  </div>
 
-    <hr class="divider">
+  <!-- Search -->
+  <div class="admin-search-wrap">
+    <svg class="admin-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" class="admin-search" id="adminSearch" placeholder="Filter by name or email…" oninput="filterTable()" aria-label="Search users">
+  </div>
 
-    <section class="section" style="padding-top: 2.5rem;">
+  <!-- Table -->
+  <div class="users-table-wrap">
+    <div class="admin-loading" id="adminLoading">Loading accounts…</div>
+    <div class="admin-empty" id="adminEmpty" style="display:none">No accounts found.</div>
+    <table class="users-table" id="usersTable" style="display:none">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Joined</th>
+          <th>Last Login</th>
+        </tr>
+      </thead>
+      <tbody id="usersTableBody"></tbody>
+    </table>
+  </div>
+</section>
 
-        <!-- Stats -->
-        <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-val" id="statTotal">—</div>
-                <div class="stat-lbl">Total accounts</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-val" id="statToday">—</div>
-                <div class="stat-lbl">Joined today</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-val" id="statWeek">—</div>
-                <div class="stat-lbl">Joined this week</div>
-            </div>
-        </div>
+<footer>
+  <div class="f-left">&copy; 2025 CivicByte &mdash; Admin panel</div>
+  <div class="f-right">
+    <a href="#" onclick="firebase.auth().signOut().then(function(){window.location.replace('/login.html')})">Sign Out</a>
+  </div>
+</footer>
 
-        <!-- Search -->
-        <input type="text" class="admin-search" id="adminSearch"
-               placeholder="Filter by name or email…" oninput="filterTable()" aria-label="Search users">
-
-        <!-- Table -->
-        <div class="users-table-wrap">
-            <div class="admin-loading" id="adminLoading">Loading accounts…</div>
-            <div class="admin-empty" id="adminEmpty" style="display:none">No accounts found.</div>
-            <table class="users-table" id="usersTable" style="display:none">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Joined</th>
-                        <th>Last Login</th>
-                    </tr>
-                </thead>
-                <tbody id="usersTableBody"></tbody>
-            </table>
-        </div>
-
-    </section>
-
-    <footer>
-        <div class="f-left">&copy; 2025 CivicByte — Admin panel</div>
-        <div class="f-right">
-            <a href="#" onclick="firebase.auth().signOut().then(()=>window.location.replace('/login.html'))">Sign Out</a>
-        </div>
-    </footer>
-
-    <script>
-        var allRows = []; // cache for client-side filtering
-
-        // Auth guard + admin check
-        document.documentElement.style.visibility = 'hidden';
-
-        auth.onAuthStateChanged(function (user) {
-            if (!user) {
-                sessionStorage.setItem('cb_redirect', window.location.href);
-                window.location.replace('/login.html');
-                return;
-            }
-            if (user.uid !== ADMIN_UID) {
-                window.location.replace('/index.html');
-                return;
-            }
-            document.documentElement.style.visibility = 'visible';
-            loadUsers(user.uid);
-        });
-
-        function loadUsers(adminUid) {
-            db.collection('users')
-              .orderBy('createdAt', 'desc')
-              .get()
-              .then(function (snap) {
-                  document.getElementById('adminLoading').style.display = 'none';
-
-                  if (snap.empty) {
-                      document.getElementById('adminEmpty').style.display = 'block';
-                      document.getElementById('statTotal').textContent = '0';
-                      document.getElementById('statToday').textContent = '0';
-                      document.getElementById('statWeek').textContent = '0';
-                      return;
-                  }
-
-                  var now      = new Date();
-                  var todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                  var weekStart  = new Date(todayStart - 6 * 86400000);
-                  var countToday = 0, countWeek = 0;
-
-                  allRows = snap.docs.map(function (doc, i) {
-                      var d = doc.data();
-                      var created   = d.createdAt ? d.createdAt.toDate() : null;
-                      var lastLogin = d.lastLogin  ? d.lastLogin.toDate()  : null;
-
-                      if (created) {
-                          if (created >= todayStart) countToday++;
-                          if (created >= weekStart)  countWeek++;
-                      }
-
-                      return {
-                          num:         i + 1,
-                          name:        d.displayName || '—',
-                          email:       d.email || '—',
-                          isAdmin:     doc.id === adminUid,
-                          createdStr:  created   ? _fmtDate(created)   : '—',
-                          lastStr:     lastLogin  ? _fmtDate(lastLogin)  : '—',
-                          searchText:  ((d.displayName || '') + ' ' + (d.email || '')).toLowerCase()
-                      };
-                  });
-
-                  document.getElementById('statTotal').textContent = allRows.length;
-                  document.getElementById('statToday').textContent = countToday;
-                  document.getElementById('statWeek').textContent  = countWeek;
-
-                  renderTable(allRows);
-              })
-              .catch(function (err) {
-                  document.getElementById('adminLoading').textContent =
-                      'Error loading users: ' + err.message +
-                      '. Make sure Firestore security rules allow admin read access.';
-              });
-        }
-
-        function renderTable(rows) {
-            var tbody = document.getElementById('usersTableBody');
-            tbody.innerHTML = '';
-
-            if (rows.length === 0) {
-                document.getElementById('usersTable').style.display = 'none';
-                document.getElementById('adminEmpty').style.display = 'block';
-                return;
-            }
-
-            document.getElementById('adminEmpty').style.display = 'none';
-            document.getElementById('usersTable').style.display = 'table';
-
-            rows.forEach(function (r) {
-                var tr = document.createElement('tr');
-                tr.innerHTML =
-                    '<td style="color:var(--muted);font-size:0.8rem">' + r.num + '</td>' +
-                    '<td>' + _esc(r.name) + (r.isAdmin ? '<span class="badge-admin">You</span>' : '') + '</td>' +
-                    '<td class="user-email">' + _esc(r.email) + '</td>' +
-                    '<td class="user-date">'  + r.createdStr + '</td>' +
-                    '<td class="user-date">'  + r.lastStr    + '</td>';
-                tbody.appendChild(tr);
-            });
-        }
-
-        function filterTable() {
-            var q = document.getElementById('adminSearch').value.toLowerCase().trim();
-            if (!q) { renderTable(allRows); return; }
-            renderTable(allRows.filter(function (r) { return r.searchText.includes(q); }));
-        }
-
-        function _fmtDate(d) {
-            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
-                   ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-        }
-
-        function _esc(s) {
-            return String(s)
-                .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-                .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-        }
-    </script>
-
+<script>
+var allRows = [];
+document.documentElement.style.visibility = 'hidden';
+auth.onAuthStateChanged(function(user) {
+  if (!user) { sessionStorage.setItem('cb_redirect', window.location.href); window.location.replace('/login.html'); return; }
+  if (user.uid !== ADMIN_UID) { window.location.replace('/index.html'); return; }
+  document.documentElement.style.visibility = 'visible';
+  loadUsers(user.uid);
+});
+function loadUsers(adminUid) {
+  db.collection('users').orderBy('createdAt','desc').get()
+    .then(function(snap) {
+      document.getElementById('adminLoading').style.display = 'none';
+      if (snap.empty) {
+        document.getElementById('adminEmpty').style.display = 'block';
+        document.getElementById('statTotal').textContent = '0';
+        document.getElementById('statToday').textContent = '0';
+        document.getElementById('statWeek').textContent = '0';
+        return;
+      }
+      var now = new Date();
+      var todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      var weekStart  = new Date(todayStart - 6*86400000);
+      var ct = 0, cw = 0;
+      allRows = snap.docs.map(function(doc, i) {
+        var d = doc.data();
+        var created = d.createdAt ? d.createdAt.toDate() : null;
+        var lastLogin = d.lastLogin ? d.lastLogin.toDate() : null;
+        if (created) { if (created >= todayStart) ct++; if (created >= weekStart) cw++; }
+        return { num:i+1, name:d.displayName||'—', email:d.email||'—', isAdmin:doc.id===adminUid,
+                 createdStr:created?_fmtDate(created):'—', lastStr:lastLogin?_fmtDate(lastLogin):'—',
+                 searchText:((d.displayName||'')+' '+(d.email||'')).toLowerCase() };
+      });
+      document.getElementById('statTotal').textContent = allRows.length;
+      document.getElementById('statToday').textContent = ct;
+      document.getElementById('statWeek').textContent  = cw;
+      renderTable(allRows);
+    })
+    .catch(function(err) {
+      document.getElementById('adminLoading').textContent = 'Error: ' + err.message;
+    });
+}
+function renderTable(rows) {
+  var tbody = document.getElementById('usersTableBody');
+  tbody.innerHTML = '';
+  if (!rows.length) {
+    document.getElementById('usersTable').style.display = 'none';
+    document.getElementById('adminEmpty').style.display = 'block';
+    return;
+  }
+  document.getElementById('adminEmpty').style.display = 'none';
+  document.getElementById('usersTable').style.display = 'table';
+  rows.forEach(function(r) {
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td style="color:var(--text-dim);font-size:.8rem">'+r.num+'</td>'
+      +'<td>'+_esc(r.name)+(r.isAdmin?'<span class="badge-admin">You</span>':'')+'</td>'
+      +'<td class="user-email">'+_esc(r.email)+'</td>'
+      +'<td class="user-date">'+r.createdStr+'</td>'
+      +'<td class="user-date">'+r.lastStr+'</td>';
+    tbody.appendChild(tr);
+  });
+}
+function filterTable() {
+  var q = document.getElementById('adminSearch').value.toLowerCase().trim();
+  renderTable(q ? allRows.filter(function(r){return r.searchText.includes(q);}) : allRows);
+}
+function _fmtDate(d) {
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+function _esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
 </body>
 </html>
