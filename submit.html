@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit a Tool — CivicByte</title>
+    <meta name="description" content="Submit your free, open-source civic tech tool to the CivicByte platform. Help communities discover and use tools that serve the public good.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0e27; --surface: #101535; --surface2: #161b42;
+            --border: #1e2558; --border-light: #2a3170;
+            --teal: #0ef6cc; --teal-dim: #0bbf9e; --teal-glow: rgba(14,246,204,0.15);
+            --coral: #ff6b6b; --coral-glow: rgba(255,107,107,0.15);
+            --lavender: #a78bfa; --lavender-glow: rgba(167,139,250,0.15);
+            --text: #e2e8f0; --muted: #7a82a6; --white: #f8fafc;
+        }
+        body { font-family: "DM Sans", sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        h1, h2, h3, .logo, .step-num { font-family: "Space Grotesk", sans-serif; }
+        a { text-decoration: none; color: inherit; }
+        .nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem; }
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.04em; }
+        .logo .cb { color: var(--teal); }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--muted); transition: color 0.2s; }
+        .nav-links a:hover { color: var(--teal); }
+        .nav-links a.active { color: var(--teal); }
+        .nav-gh { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--surface2); padding: 0.5rem 1.1rem; border-radius: 8px; border: 1px solid var(--border); font-size: 0.85rem; font-weight: 500; transition: all 0.2s; }
+        .nav-gh:hover { border-color: var(--teal); color: var(--teal); }
+        .mobile-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+        .page-header { max-width: 1200px; margin: 0 auto; padding: 5rem 2rem 3rem; }
+        .page-header .label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal); margin-bottom: 0.8rem; }
+        .page-header h1 { font-size: clamp(2.4rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -0.04em; margin-bottom: 1.2rem; line-height: 1.1; }
+        .page-header h1 .grad { background: linear-gradient(135deg, var(--teal), var(--lavender)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .page-header p { color: var(--muted); font-size: 1.15rem; max-width: 640px; line-height: 1.7; }
+        .section { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
+        .section-label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal); margin-bottom: 0.8rem; }
+        .section-title { font-size: clamp(1.8rem, 3.5vw, 2.2rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.8rem; }
+        .section-desc { color: var(--muted); font-size: 1.05rem; max-width: 600px; margin-bottom: 2.5rem; line-height: 1.7; }
+        .divider { border: none; border-top: 1px solid var(--border); max-width: 1200px; margin: 0 auto; }
+        /* STEPS */
+        .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 3rem; }
+        .step-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem 2rem; position: relative; overflow: hidden; transition: all 0.3s; }
+        .step-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
+        .step-num { font-size: 4rem; font-weight: 700; opacity: 0.08; position: absolute; top: -5px; right: 16px; line-height: 1; }
+        .step-icon { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.5rem; }
+        .step-icon.t { background: var(--teal-glow); border: 1px solid rgba(14,246,204,0.25); }
+        .step-icon.c { background: var(--coral-glow); border: 1px solid rgba(255,107,107,0.25); }
+        .step-icon.l { background: var(--lavender-glow); border: 1px solid rgba(167,139,250,0.25); }
+        .step-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.6rem; }
+        .step-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+        /* REQUIREMENTS */
+        .req-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .req-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; display: flex; gap: 1rem; align-items: flex-start; transition: all 0.3s; }
+        .req-card:hover { border-color: var(--border-light); }
+        .req-check { width: 32px; height: 32px; border-radius: 8px; background: var(--teal-glow); border: 1px solid rgba(14,246,204,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--teal); font-size: 1.1rem; }
+        .req-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .req-card p { color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+        /* FAQ */
+        .faq-list { max-width: 800px; }
+        .faq-item { border-bottom: 1px solid var(--border); }
+        .faq-q { padding: 1.5rem 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.05rem; transition: color 0.2s; }
+        .faq-q:hover { color: var(--teal); }
+        .faq-q .arrow { transition: transform 0.3s; font-size: 1.2rem; color: var(--muted); }
+        .faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+        .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+        .faq-item.open .faq-a { max-height: 300px; padding-bottom: 1.5rem; }
+        .faq-a p { color: var(--muted); font-size: 0.95rem; line-height: 1.7; }
+        /* CTA BOX */
+        .cta-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 4rem 3rem; text-align: center; position: relative; overflow: hidden; margin-top: 2rem; }
+        .cta-box::before { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 500px; background: radial-gradient(circle, var(--teal-glow) 0%, transparent 70%); pointer-events: none; }
+        .cta-box * { position: relative; }
+        .cta-box h2 { font-size: 2rem; font-weight: 700; margin-bottom: 0.8rem; letter-spacing: -0.02em; }
+        .cta-box p { color: var(--muted); font-size: 1.05rem; max-width: 500px; margin: 0 auto 2rem; }
+        .btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--teal); color: var(--bg); font-weight: 600; font-size: 1rem; padding: 0.9rem 2rem; border-radius: 12px; transition: all 0.2s; }
+        .btn-primary:hover { background: #0bbf9e; transform: translateY(-1px); box-shadow: 0 8px 30px var(--teal-glow); }
+        .btn-secondary { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); font-weight: 600; font-size: 1rem; padding: 0.9rem 2rem; border-radius: 12px; transition: all 0.2s; }
+        .btn-secondary:hover { border-color: var(--teal); color: var(--teal); }
+        footer { border-top: 1px solid var(--border); max-width: 1200px; margin: 0 auto; padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        footer .f-left { font-size: 0.85rem; color: var(--muted); }
+        footer .f-left a { color: var(--teal); }
+        footer .f-right { display: flex; gap: 1.5rem; }
+        footer .f-right a { font-size: 0.85rem; color: var(--muted); transition: color 0.2s; }
+        footer .f-right a:hover { color: var(--teal); }
+        @media (max-width: 768px) {
+            .mobile-toggle { display: block; }
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--surface); border-bottom: 1px solid var(--border); flex-direction: column; padding: 1.5rem 2rem; gap: 1rem; z-index: 100; }
+            .nav-links.open { display: flex; }
+            .nav { position: relative; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .req-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="logo">civic<span class="cb">byte</span></a>
+        <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+        <div class="nav-links">
+            <a href="/tools.html">Tools</a>
+            <a href="/about.html">About</a>
+            <a href="/submit.html" class="active">Submit a Tool</a>
+            <a href="https://github.com/civicbytedev" target="_blank" class="nav-gh">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                GitHub
+            </a>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="label">Contribute</div>
+        <h1>Submit a tool to <span class="grad">CivicByte</span></h1>
+        <p>Built a free civic tech tool? List it on CivicByte so communities can find and use it. Our platform amplifies tools that serve the public good.</p>
+    </header>
+
+    <hr class="divider">
+
+    <!-- HOW TO SUBMIT -->
+    <section class="section">
+        <div class="section-label">How It Works</div>
+        <div class="section-title">Three steps to get listed</div>
+        <div class="section-desc">Submitting a tool to CivicByte is a simple, GitHub-based process. No accounts to create, no forms to fill out.</div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <div class="step-icon t">&#128230;</div>
+                <h3>Prepare your tool</h3>
+                <p>Make sure your tool is publicly accessible, open-source, and solves a real civic problem. It should be usable by non-technical community members.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <div class="step-icon c">&#128221;</div>
+                <h3>Open a GitHub Issue</h3>
+                <p>Go to our GitHub repository and open a new issue using the "Submit a Tool" template. Include your tool's name, description, URL, category, and source code link.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <div class="step-icon l">&#9989;</div>
+                <h3>Review & listing</h3>
+                <p>Our team reviews your submission against our platform standards. Approved tools get listed in the directory with full attribution to you as the creator.</p>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- REQUIREMENTS -->
+    <section class="section">
+        <div class="section-label">Requirements</div>
+        <div class="section-title">What we look for</div>
+        <div class="section-desc">Every tool on CivicByte must meet these standards. They exist to protect communities and ensure quality.</div>
+        <div class="req-grid">
+            <div class="req-card">
+                <div class="req-check">&#10003;</div>
+                <div>
+                    <h4>Free to use</h4>
+                    <p>No paywalls, no premium tiers, no required sign-ups. The tool must be freely accessible to everyone.</p>
+                </div>
+            </div>
+            <div class="req-card">
+                <div class="req-check">&#10003;</div>
+                <div>
+                    <h4>Open source</h4>
+                    <p>Source code must be publicly available on GitHub or a similar platform under an open-source license (MIT, GPL, Apache, etc.).</p>
+                </div>
+            </div>
+            <div class="req-card">
+                <div class="req-check">&#10003;</div>
+                <div>
+                    <h4>Solves a civic problem</h4>
+                    <p>The tool must address a specific community need — education, housing, public health, transit, municipal services, etc.</p>
+                </div>
+            </div>
+            <div class="req-card">
+                <div class="req-check">&#10003;</div>
+                <div>
+                    <h4>Usable by non-developers</h4>
+                    <p>The tool should have a clear, accessible interface. It's built for community members, parents, advocates — not just other programmers.</p>
+                </div>
+            </div>
+            <div class="req-card">
+                <div class="req-check">&#10003;</div>
+                <div>
+                    <h4>Deployed and accessible</h4>
+                    <p>The tool must be live on the web with a public URL. We don't list tools that require local installation or command-line usage.</p>
+                </div>
+            </div>
+            <div class="req-card">
+                <div class="req-check">&#10003;</div>
+                <div>
+                    <h4>Maintained</h4>
+                    <p>You commit to keeping the tool functional. If data sources change or links break, you'll update them. Abandoned tools are archived.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- FAQ -->
+    <section class="section">
+        <div class="section-label">FAQ</div>
+        <div class="section-title">Common questions</div>
+        <div class="section-desc">Everything you need to know about submitting a tool to CivicByte.</div>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Does my tool have to be NYC-focused?
+                    <span class="arrow">&#9660;</span>
+                </div>
+                <div class="faq-a"><p>No. CivicByte started in NYC, but we accept tools serving any community, city, or region. Civic needs are universal — if your tool helps a community understand or act on public data, it belongs here.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Do I need to be a student to submit?
+                    <span class="arrow">&#9660;</span>
+                </div>
+                <div class="faq-a"><p>No. While CivicByte is student-founded, we welcome submissions from developers, civic hackers, nonprofits, and organizations of all kinds. Good civic technology has no age requirement.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    What tech stack should I use?
+                    <span class="arrow">&#9660;</span>
+                </div>
+                <div class="faq-a"><p>Whatever works best for your tool. We have no framework or language requirements. Static HTML, React, Python, R Shiny — we care about impact and accessibility, not what's under the hood.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    How long does the review process take?
+                    <span class="arrow">&#9660;</span>
+                </div>
+                <div class="faq-a"><p>We aim to review submissions within one week. We'll communicate through the GitHub issue thread if we have questions or suggestions before listing your tool.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Can I submit a tool that's still in development?
+                    <span class="arrow">&#9660;</span>
+                </div>
+                <div class="faq-a"><p>Yes, but it must have a functional prototype that's publicly accessible. We'll list it with an "In Development" status tag so users know it's a work in progress.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Who gets credit for the tool?
+                    <span class="arrow">&#9660;</span>
+                </div>
+                <div class="faq-a"><p>You do. Every tool listing shows the creator or team name with a link to the source repository. CivicByte is a platform, not a publisher — your work stays yours.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- CTA -->
+    <section class="section">
+        <div class="cta-box">
+            <h2>Ready to submit?</h2>
+            <p>Open a GitHub issue using our submission template. Include your tool's name, URL, description, and source code link.</p>
+            <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+                <a href="https://github.com/civicbytedev/civicbytedev.github.io/issues/new?template=submit-tool.md&title=[Tool Submission]" target="_blank" class="btn-primary">Open Submission Issue &rarr;</a>
+                <a href="https://github.com/civicbytedev" target="_blank" class="btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="f-left">&copy; 2025 CivicByte. Open source under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>.</div>
+        <div class="f-right">
+            <a href="/tools.html">Tools</a>
+            <a href="/about.html">About</a>
+            <a href="/submit.html">Submit</a>
+            <a href="https://github.com/civicbytedev" target="_blank">GitHub</a>
+        </div>
+    </footer>
+</body>
+</html>
