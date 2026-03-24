@@ -1,269 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0a0e27">
-    <title>Tools — CivicByte</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%230a0e27' stroke='%230ef6cc' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%230ef6cc'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%230ef6cc' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%230ef6cc' opacity='.5'/%3E%3C/svg%3E">
-    <meta name="description" content="Browse free, open-source civic tech tools on CivicByte. Search by category, status, or location.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css">
-    <style>
-        .search-bar { max-width: 1200px; margin: 0 auto; padding: 0 2rem 2rem; }
-        .search-input {
-            width: 100%;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 0.85rem 1.2rem;
-            color: var(--text);
-            font-size: 0.95rem;
-            font-family: "DM Sans", sans-serif;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            margin-bottom: 1rem;
-        }
-        .search-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(14,246,204,0.08); }
-        .search-input::placeholder { color: var(--muted); }
-        .filter-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
-        .pill {
-            padding: 0.42rem 1rem;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            color: var(--muted);
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: "DM Sans", sans-serif;
-        }
-        .pill:hover { border-color: var(--border-light); color: var(--text); }
-        .pill.active { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); }
-        .results-count { font-size: 0.82rem; color: var(--muted); }
-        .no-results { text-align: center; padding: 4rem 2rem; color: var(--muted); }
-        .no-results h3 { font-size: 1.4rem; color: var(--text); margin-bottom: 0.5rem; }
-        .cta-box {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 3rem;
-            text-align: center;
-            margin-top: 3rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .cta-box::before {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, var(--teal-glow) 0%, transparent 70%);
-            pointer-events: none;
-        }
-        .cta-box > * { position: relative; }
-        .cta-box h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .cta-box p { color: var(--muted); font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.65; }
-        @media (max-width: 768px) {
-            .search-bar { padding: 0 1.5rem 1.5rem; }
-            .section { padding-top: 0; }
-        }
-    </style>
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    <script src="/auth.js"></script>
-</head>
-<body>
-    <script>requireAuth();</script>
+    <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <meta name="theme-color" content="#0a0e27">
+          <title>Tools &mdash; CivicByte</title>
+      <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%230a0e27' stroke='%230ef6cc' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%230ef6cc'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%230ef6cc' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%230ef6cc' opacity='.5'/%3E%3C/svg%3E">
+      <meta name="description" content="Browse free, open-source civic tech tools on CivicByte. Search by category, status, or location.">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="/styles.css">
+      <style>
+              .search-bar { max-width: 1200px; margin: 0 auto; padding: 0 2rem 2rem; }
+              .search-input {
+                        width: 100%;
+                        background: var(--surface);
+                        border: 1px solid var(--border);
+                        border-radius: 12px;
+                        padding: 0.85rem 1.2rem;
+                        color: var(--text);
+                        font-size: 0.95rem;
+                        font-family: "DM Sans", sans-serif;
+                        outline: none;
+                        transition: border-color 0.2s, box-shadow 0.2s;
+                        margin-bottom: 1rem;
+              }
+              .search-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(14,246,204,0.08); }
+              .search-input::placeholder { color: var(--text-dim); }
+              .filter-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+              .pill {
+                        padding: 0.42rem 1rem;
+                        border-radius: 100px;
+                        font-size: 0.8rem;
+                        font-weight: 500;
+                        border: 1px solid var(--border);
+                        background: var(--surface);
+                        color: var(--text-secondary);
+                        cursor: pointer;
+                        transition: all 0.2s;
+                        font-family: "DM Sans", sans-serif;
+              }
+              .pill:hover { border-color: var(--border-light); color: var(--text); }
+              .pill.active { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); }
+              .results-count { font-size: 0.82rem; color: var(--text-secondary); }
+              .no-results { text-align: center; padding: 4rem 2rem; color: var(--text-secondary); }
+              .no-results h3 { font-size: 1.4rem; color: var(--text); margin-bottom: 0.5rem; }
+              .cta-box {
+                        background: var(--surface);
+                        border: 1px solid var(--border);
+                        border-radius: var(--radius-lg);
+                        padding: 3rem;
+                        text-align: center;
+                        margin-top: 3rem;
+                        position: relative;
+                        overflow: hidden;
+              }
+              .cta-box::before {
+                        content: '';
+                        position: absolute;
+                        top: 50%; left: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 400px; height: 400px;
+                        background: radial-gradient(circle, var(--teal-glow) 0%, transparent 70%);
+                        pointer-events: none;
+              }
+              .cta-box > * { position: relative; }
+              .cta-box h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
+              .cta-box p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.65; }
+              @media (max-width: 768px) {
+                        .search-bar { padding: 0 1.5rem 1.5rem; }
+                        .section { padding-top: 0; }
+              }
+            </style>
+          <!-- Firebase -->
+          <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+          <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+          <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+          <script src="/auth.js"></script>
+    </head>
+    <body>
+          <script>requireAuth();</script>
+    
+      <header class="site-nav">
+          <nav class="nav">
+                <a href="/" class="logo">
+                        <svg width="30" height="30" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <defs><linearGradient id="lgA" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#0ef6cc"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>linearGradient></defs>
+                                  <rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(14,246,204,0.08)" stroke="url(#lgA)" stroke-width="1.5"/>
+                                  <rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lgA)" opacity="0.9"/>
+                                  <rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lgA)" opacity="0.7"/>
+                                  <rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lgA)" opacity="0.5"/>
+                                  <path d="M10.75 16 L17 11 L23.25 6.5" stroke="#0ef6cc" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+                                  <circle cx="23.25" cy="6.5" r="2" fill="#0ef6cc" opacity="0.9"/>
+                        </svg>svg><span class="logo-wordmark">civic<span class="cb">byte</span>span></span>span>
+                </a>a>
+                <button class="mobile-toggle" onclick="this.closest('.site-nav').querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="17" y2="6"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="14" x2="17" y2="14"/></svg>svg>
+                </button>button>
+                <div class="nav-links">
+                        <a href="/">Home</a>a>
+                        <a href="/tools.html" class="active">Tools</a>a>
+                        <a href="/about.html">About</a>a>
+                        <a href="/submit.html">Submit a Tool</a>a>
+                        <a href="https://github.com/civicbytedev" target="_blank" class="nav-gh">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>svg>
+                                  GitHub
+                        </a>a>
+                </div>div>
+          </nav>nav>
+      </header>header>
+    
+      <header class="page-header">
+          <div class="label">Tool Directory</div>div>
+          <h1>Browse <span class="grad">civic tech tools</span>span></h1>
+          <p>Every tool on CivicByte is free, open-source, and built to serve communities. Search, filter, and find tools that address real civic needs.</p>
+      </header>header>
+    
+      <div class="search-bar">
+          <input type="text" class="search-input" id="searchInput" placeholder="Search by name, category, or location..." oninput="filterTools()" aria-label="Search tools">
+          <div class="filter-pills">
+                <button class="pill active" onclick="setFilter('all', this)">All</button>button>
+                <button class="pill" onclick="setFilter('education', this)">Education</button>button>
+                <button class="pill" onclick="setFilter('services', this)">Social Services</button>button>
+                <button class="pill" onclick="setFilter('municipal', this)">Municipal Data</button>button>
+                <button class="pill" onclick="setFilter('housing', this)">Housing</button>button>
+                <button class="pill" onclick="setFilter('health', this)">Health</button>button>
+                <button class="pill" onclick="setFilter('transit', this)">Transit</button>button>
+          </div>div>
+          <div class="results-count" id="resultsCount">Showing 3 tools</div>div>
+      </div>div>
+    
+      <section class="section" style="padding-top: 0;">
+          <div class="tools-grid" id="toolsGrid">
+          
+                <div class="tool-card" data-category="education" data-name="NYC School Budget Tracker" data-status="live">
+                        <div class="tool-meta">
+                                  <span class="tool-status live">Live</span>span>
+                                  <span class="tool-category">Education</span>span>
+                        </div>div>
+                        <h3>NYC School Budget Tracker</h3>
+                        <p>Interactive dashboard mapping per-pupil spending, Title I funding, and PTA contributions across 1,800+ NYC public schools. Search, filter, and compare school budgets.</p>
+                        <div class="tool-tags">
+                                  <span class="tool-tag">NYC</span>span>
+                                  <span class="tool-tag">Education</span>span>
+                                  <span class="tool-tag">Budget Data</span>span>
+                                  <span class="tool-tag">Dashboard</span>span>
+                        </div>div>
+                        <div class="tool-card-footer">
+                                  <a href="/nyc-school-budget-tracker/" class="tool-link">View Tool &rarr;</a>a>
+                        </div>div>
+                </div>div>
+          
+                <div class="tool-card" data-category="services" data-name="Community Resource Finder" data-status="dev">
+                        <div class="tool-meta">
+                                  <span class="tool-status dev">In Dev</span>span>
+                                  <span class="tool-category">Social Services</span>span>
+                        </div>div>
+                        <h3>Community Resource Finder</h3>
+                        <p>Searchable directory of free and low-cost services &mdash; food pantries, legal aid, after-school programs &mdash; organized by neighborhood and borough.</p>
+                        <div class="tool-tags">
+                                  <span class="tool-tag">NYC</span>span>
+                                  <span class="tool-tag">Services</span>span>
+                                  <span class="tool-tag">Directory</span>span>
+                                  <span class="tool-tag">Search</span>span>
+                        </div>div>
+                        <div class="tool-card-footer">
+                                  <span class="tool-link" style="color: var(--amber); cursor: default;">Coming Soon</span>span>
+                        </div>div>
+                </div>div>
+          
+                <div class="tool-card" data-category="municipal" data-name="311 Complaint Analyzer" data-status="planned">
+                        <div class="tool-meta">
+                                  <span class="tool-status planned">Planned</span>span>
+                                  <span class="tool-category">Municipal Data</span>span>
+                        </div>div>
+                        <h3>311 Complaint Analyzer</h3>
+                        <p>Visualization tool mapping NYC 311 complaint data to reveal patterns in municipal service gaps across boroughs and council districts.</p>
+                        <div class="tool-tags">
+                                  <span class="tool-tag">NYC</span>span>
+                                  <span class="tool-tag">311 Data</span>span>
+                                  <span class="tool-tag">Visualization</span>span>
+                                  <span class="tool-tag">Maps</span>span>
+                        </div>div>
+                        <div class="tool-card-footer">
+                                  <span class="tool-link" style="color: var(--purple); cursor: default;">On the roadmap</span>span>
+                        </div>div>
+                </div>div>
+          
+          </div>div>
+      
+          <div class="no-results" id="noResults" style="display: none;">
+                <h3>No tools found</h3>
+                <p>Try a different search term or filter.</p>
+          </div>div>
+      
+          <div class="cta-box">
+                <h3>Have a civic tech tool?</h3>
+                <p>Submit your free, open-source tool to the CivicByte directory and help communities find it.</p>
+                <a href="/submit.html" class="btn-primary">Submit Your Tool &rarr;</a>a>
+          </div>div>
+      </section>section>
+    
+      <footer>
+              <div class="f-left">&copy; 2025 CivicByte &mdash; Open source under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>a>.</div>div>
+              <div class="f-right">
+                        <a href="/tools.html">Tools</a>a>
+                        <a href="/about.html">About</a>a>
+                        <a href="/submit.html">Submit</a>a>
+                        <a href="https://github.com/civicbytedev" target="_blank">GitHub</a>a>
+              </div>div>
+      </footer>
 
-    <header class="site-nav">
-        <nav class="nav">
-            <a href="/" class="logo">
-                <svg width="30" height="30" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs><linearGradient id="lgA" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#0ef6cc"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient></defs>
-                    <rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(14,246,204,0.08)" stroke="url(#lgA)" stroke-width="1.5"/>
-                    <rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lgA)" opacity="0.9"/>
-                    <rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lgA)" opacity="0.7"/>
-                    <rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lgA)" opacity="0.5"/>
-                    <path d="M10.75 16 L17 11 L23.25 6.5" stroke="#0ef6cc" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
-                    <circle cx="23.25" cy="6.5" r="2" fill="#0ef6cc" opacity="0.9"/>
-                </svg>
-                civic<span class="cb">byte</span>
-            </a>
-            <button class="mobile-toggle" onclick="this.closest('.site-nav').querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="17" y2="6"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="14" x2="17" y2="14"/></svg>
-            </button>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/tools.html" class="active">Tools</a>
-                <a href="/about.html">About</a>
-                <a href="/submit.html">Submit a Tool</a>
-                <a href="https://github.com/civicbytedev" target="_blank" class="nav-gh">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                    GitHub
-                </a>
-            </div>
-        </nav>
-    </header>
-
-    <header class="page-header">
-        <div class="label">Tool Directory</div>
-        <h1>Browse <span class="grad">civic tech tools</span></h1>
-        <p>Every tool on CivicByte is free, open-source, and built to serve communities. Search, filter, and find tools that address real civic needs.</p>
-    </header>
-
-    <div class="search-bar">
-        <input type="text" class="search-input" id="searchInput" placeholder="Search by name, category, or location..." oninput="filterTools()" aria-label="Search tools">
-        <div class="filter-pills">
-            <button class="pill active" onclick="setFilter('all', this)">All</button>
-            <button class="pill" onclick="setFilter('education', this)">Education</button>
-            <button class="pill" onclick="setFilter('services', this)">Social Services</button>
-            <button class="pill" onclick="setFilter('municipal', this)">Municipal Data</button>
-            <button class="pill" onclick="setFilter('housing', this)">Housing</button>
-            <button class="pill" onclick="setFilter('health', this)">Health</button>
-            <button class="pill" onclick="setFilter('transit', this)">Transit</button>
-        </div>
-        <div class="results-count" id="resultsCount">Showing 3 tools</div>
-    </div>
-
-    <section class="section" style="padding-top: 0;">
-        <div class="tools-grid" id="toolsGrid">
-
-            <div class="tool-card" data-category="education" data-name="NYC School Budget Tracker" data-status="live">
-                <div class="num">01</div>
-                <div class="tool-meta">
-                    <span class="tool-status live">Live</span>
-                    <span class="tool-category">Education</span>
-                </div>
-                <h3>NYC School Budget Tracker</h3>
-                <p>Interactive dashboard mapping per-pupil spending, Title I funding, and PTA contributions across 1,800+ NYC public schools. Search, filter, and compare school budgets.</p>
-                <div class="tool-tags">
-                    <span class="tool-tag">NYC</span>
-                    <span class="tool-tag">Education</span>
-                    <span class="tool-tag">Budget Data</span>
-                    <span class="tool-tag">Dashboard</span>
-                </div>
-                <div class="tool-card-footer">
-                    <div class="tool-author">
-                        <img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&bold=true" alt="CivicByte">
-                        CivicByte Team
-                    </div>
-                    <a href="/nyc-school-budget-tracker/" class="tool-link">View Tool &rarr;</a>
-                </div>
-            </div>
-
-            <div class="tool-card" data-category="services" data-name="Community Resource Finder" data-status="dev">
-                <div class="num">02</div>
-                <div class="tool-meta">
-                    <span class="tool-status dev">In Dev</span>
-                    <span class="tool-category">Social Services</span>
-                </div>
-                <h3>Community Resource Finder</h3>
-                <p>Searchable directory of free and low-cost services — food pantries, legal aid, after-school programs — organized by neighborhood and borough.</p>
-                <div class="tool-tags">
-                    <span class="tool-tag">NYC</span>
-                    <span class="tool-tag">Services</span>
-                    <span class="tool-tag">Directory</span>
-                    <span class="tool-tag">Search</span>
-                </div>
-                <div class="tool-card-footer">
-                    <div class="tool-author">
-                        <img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&bold=true" alt="CivicByte">
-                        CivicByte Team
-                    </div>
-                    <span class="tool-link" style="color: var(--coral); cursor: default;">Coming Soon</span>
-                </div>
-            </div>
-
-            <div class="tool-card" data-category="municipal" data-name="311 Complaint Analyzer" data-status="planned">
-                <div class="num">03</div>
-                <div class="tool-meta">
-                    <span class="tool-status planned">Planned</span>
-                    <span class="tool-category">Municipal Data</span>
-                </div>
-                <h3>311 Complaint Analyzer</h3>
-                <p>Visualization tool mapping NYC 311 complaint data to reveal patterns in municipal service gaps across boroughs and council districts.</p>
-                <div class="tool-tags">
-                    <span class="tool-tag">NYC</span>
-                    <span class="tool-tag">311 Data</span>
-                    <span class="tool-tag">Visualization</span>
-                    <span class="tool-tag">Maps</span>
-                </div>
-                <div class="tool-card-footer">
-                    <div class="tool-author">
-                        <img src="https://ui-avatars.com/api/?name=CB&background=0ef6cc&color=0a0e27&size=48&bold=true" alt="CivicByte">
-                        CivicByte Team
-                    </div>
-                    <span class="tool-link" style="color: var(--lavender); cursor: default;">On the roadmap</span>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="no-results" id="noResults" style="display: none;">
-            <h3>No tools found</h3>
-            <p>Try a different search term or filter.</p>
-        </div>
-
-        <div class="cta-box">
-            <h3>Have a civic tech tool?</h3>
-            <p>Submit your free, open-source tool to the CivicByte directory and help communities find it.</p>
-            <a href="/submit.html" class="btn-primary">Submit Your Tool &rarr;</a>
-        </div>
-    </section>
-
-    <footer>
-        <div class="f-left">&copy; 2025 CivicByte &mdash; Open source under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>.</div>
-        <div class="f-right">
-            <a href="/tools.html">Tools</a>
-            <a href="/about.html">About</a>
-            <a href="/submit.html">Submit</a>
-            <a href="https://github.com/civicbytedev" target="_blank">GitHub</a>
-        </div>
-    </footer>
-
-    <script>
-        let currentFilter = 'all';
-
-        function setFilter(cat, btn) {
-            currentFilter = cat;
-            document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-            btn.classList.add('active');
-            filterTools();
-        }
-
-        function filterTools() {
-            const query = document.getElementById('searchInput').value.toLowerCase().trim();
-            const cards = document.querySelectorAll('.tool-card');
-            let visible = 0;
-            cards.forEach(card => {
-                const category = card.dataset.category;
-                const text = card.textContent.toLowerCase();
-                const matchesFilter = currentFilter === 'all' || category === currentFilter;
-                const matchesSearch = !query || text.includes(query);
-                if (matchesFilter && matchesSearch) {
-                    card.style.display = '';
-                    visible++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-            document.getElementById('resultsCount').textContent = `Showing ${visible} tool${visible !== 1 ? 's' : ''}`;
-            document.getElementById('noResults').style.display = visible === 0 ? '' : 'none';
-        }
-
-        const params = new URLSearchParams(window.location.search);
-        const catParam = params.get('cat');
-        if (catParam) {
-            const pill = document.querySelector(`.pill[onclick*="${catParam}"]`);
-            if (pill) setFilter(catParam, pill);
-        }
-    </script>
-</body>
-</html>
+          <script>
+                  let currentFilter = 'all';
+                  function setFilter(cat, btn) {
+                            currentFilter = cat;
+                            document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+                            btn.classList.add('active');
+                            filterTools();
+                  }
+                  function filterTools() {
+                            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+                            const cards = document.querySelectorAll('.tool-card');
+                            let visible = 0;
+                            cards.forEach(card => {
+                                        const category = card.dataset.category;
+                                        const text = card.textContent.toLowerCase();
+                                        const matchesFilter = currentFilter === 'all' || category === currentFilter;
+                                        const matchesSearch = !query || text.includes(query);
+                                        if (matchesFilter && matchesSearch) { card.style.display = ''; visible++; }
+                                                    else { card.style.display = 'none'; }
+                            });
+                            document.getElementById('resultsCount').textContent = `Showing ${visible} tool${visible !== 1 ? 's' : ''}`;
+                            document.getElementById('noResults').style.display = visible === 0 ? '' : 'none';
+                  }
+                  const params = new URLSearchParams(window.location.search);
+                  const catParam = params.get('cat');
+                  if (catParam) {
+                            const pill = document.querySelector(`.pill[onclick*="${catParam}"]`);
+                            if (pill) setFilter(catParam, pill);
+                  }
+                      </script>
+    </body>
+</html>html>
+      </footer></p></p></h1></defs></script>
+    </body>
+      </style></title>
+    </head>
