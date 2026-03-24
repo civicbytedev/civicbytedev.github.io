@@ -284,6 +284,10 @@
       <script src="/auth.js"></script>
   </head>
   <body>
+  <!-- Visual upgrade: animated floating orbs (civicbyte-upgrade) -->
+  <div class="cb-orb cb-orb-1" aria-hidden="true"></div>
+  <div class="cb-orb cb-orb-2" aria-hidden="true"></div>
+  <div class="cb-orb cb-orb-3" aria-hidden="true"></div>
       <script>requireAuth();</script>
   
     <!-- NAV -->
@@ -439,6 +443,40 @@
 </html>
     </footer></p></p></h3>
         </div></div></h1></defs></script>
-  </body>
+  
+  <!-- Visual upgrade: scroll animations + mouse parallax (civicbyte-upgrade) -->
+  <script>
+    (function() {
+      // Scroll-triggered section entrances
+      var animSections = [
+        ['.section-eyebrow', false], ['.section-title', false], ['.section-desc', false],
+        ['.pillar', true], ['.tool-card-featured', false], ['.tool-card-pipeline', true],
+        ['.how-card', true], ['.cta-band h2', false], ['.cta-band p', false], ['.cta-actions', false]
+      ];
+      animSections.forEach(function(item) {
+        var sel = item[0], stagger = item[1];
+        document.querySelectorAll(sel).forEach(function(el, i) {
+          if (el.closest && el.closest('.hero')) return;
+          el.classList.add('cb-animate-in');
+          if (stagger) el.classList.add('cb-animate-stagger-' + ((i % 4) + 1));
+        });
+      });
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.cb-animate-in').forEach(function(el) { observer.observe(el); });
+      // Mouse parallax on hero orbs
+      document.addEventListener('mousemove', function(e) {
+        if (window.scrollY > 800) return;
+        var x = (e.clientX / window.innerWidth - 0.5) * 2;
+        var y = (e.clientY / window.innerHeight - 0.5) * 2;
+        var o1 = document.querySelector('.cb-orb-1');
+        var o2 = document.querySelector('.cb-orb-2');
+        if (o1) o1.style.transform = 'translateX(calc(-50% + ' + (x * 20) + 'px)) translateY(' + (y * 15) + 'px)';
+        if (o2) o2.style.transform = 'translateX(' + (x * -15) + 'px) translateY(' + (y * -10) + 'px)';
+      }, { passive: true });
+    })();
+  <\/script>
+</body>
     </style></title>
   </head>
