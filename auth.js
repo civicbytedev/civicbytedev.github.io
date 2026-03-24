@@ -52,6 +52,12 @@ function _injectNavUser(user) {
   var navLinks = document.querySelector('.nav-links');
   if (!nav || !navLinks) return;
 
+    // Clean up any existing user elements (prevent duplicates)
+    var existing = nav.querySelector('.nav-user-menu');
+    if (existing) existing.remove();
+    var existingMobile = navLinks.querySelector('.nav-mobile-user');
+    if (existingMobile) existingMobile.remove();
+
   var name    = user.displayName || user.email.split('@')[0];
   var escaped = _esc(name);
 
