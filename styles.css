@@ -689,6 +689,23 @@ footer {
 .admin-search-icon { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--text-dim); pointer-events: none; }
 .admin-loading, .admin-empty { text-align: center; padding: 3.5rem; color: var(--text-secondary); font-size: 0.9rem; }
 
+
+/* ── Full-width background effect fix ── */
+.site-nav,
+.hero,
+.pillars-wrap,
+.cta-band {
+    width: 100%;
+    max-width: none;
+}
+
+.hero::before,
+.hero::after {
+    width: 100vw;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 /* ═══════════════════════════════
    RESPONSIVE
    ═══════════════════════════════ */
