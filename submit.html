@@ -12,6 +12,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css">
     <style>
+        
+        /* ── Sticky floating CTA ── */
+        .submit-sticky-cta {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 999;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--teal);
+            color: var(--bg);
+            font-family: "DM Sans", sans-serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            padding: 0.85rem 1.5rem;
+            border-radius: 100px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 28px rgba(0,245,196,0.35), 0 2px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
+            text-decoration: none;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+        }
+        .submit-sticky-cta.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .submit-sticky-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 36px rgba(0,245,196,0.45), 0 4px 12px rgba(0,0,0,0.3);
+        }
+        @media (max-width: 768px) {
+            .submit-sticky-cta {
+                bottom: 1.25rem;
+                right: 1.25rem;
+                font-size: 0.82rem;
+                padding: 0.75rem 1.25rem;
+            }
+        }
         /* ── Steps ── */
         .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
         .step-card {
@@ -145,8 +188,7 @@
                     <rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lgA)" opacity="0.5"/>
                     <path d="M10.75 16 L17 11 L23.25 6.5" stroke="#0ef6cc" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
                     <circle cx="23.25" cy="6.5" r="2" fill="#0ef6cc" opacity="0.9"/>
-                </svg>
-                civic<span class="cb">byte</span>
+                </svg><span class="logo-wordmark">civic<span class="cb">byte</span></span>
             </a>
             <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="cb-nav-links">
             <span class="cb-ham" aria-hidden="true">
@@ -168,17 +210,22 @@
         </nav>
     </header>
 
-    <header class="page-header">
-        <div class="label">Contribute</div>
-        <h1>Submit a tool to <span class="grad">CivicByte</span></h1>
-        <p>Built a free civic tech tool? List it on CivicByte so communities can find and use it. Our platform amplifies tools that serve the public good.</p>
-    </header>
+    <!-- HERO CTA — above the fold -->
+    <section class="submit-hero" style="text-align:center; padding:5rem 2rem 3rem; max-width:760px; margin:0 auto; position:relative; z-index:1;">
+        <div class="section-eyebrow">Contribute to CivicByte</div>
+        <h1 style="font-size:clamp(2.2rem,5vw,3.4rem); font-weight:700; line-height:1.08; margin-bottom:1.25rem; letter-spacing:-0.03em;">Share your tool with<br><span class="grad">communities that need it</span></h1>
+        <p style="color:var(--text-secondary); font-size:1.1rem; max-width:540px; margin:0 auto 2rem; line-height:1.75;">Built a free, open-source civic tech tool? Submit it in 2 minutes via GitHub. We’ll review it and list it for the people who need it most.</p>
+        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+            <a href="https://github.com/civicbytedev/civicbytedev.github.io/issues/new?template=submit-tool.md&title=[Tool Submission]" target="_blank" class="btn-primary" style="font-size:1rem; padding:0.9rem 2rem;">Submit Your Tool &rarr;</a>
+            <a href="#how-it-works" class="btn-secondary" style="font-size:1rem; padding:0.9rem 2rem;">See How It Works</a>
+        </div>
+    </section>
 
     <hr class="divider">
 
     <!-- HOW TO SUBMIT -->
-    <section class="section">
-        <div class="section-label">How It Works</div>
+    <section class="section" id="how-it-works">
+        <div class="section-eyebrow">How It Works</div>
         <div class="section-title">Three steps to get listed</div>
         <div class="section-desc">Submitting a tool is a simple, GitHub-based process. No accounts to create, no forms to fill out.</div>
         <div class="steps-grid">
@@ -207,7 +254,7 @@
 
     <!-- REQUIREMENTS -->
     <section class="section">
-        <div class="section-label">Requirements</div>
+        <div class="section-eyebrow">Requirements</div>
         <div class="section-title">What we look for</div>
         <div class="section-desc">Every tool on CivicByte must meet these standards. They exist to protect communities and ensure quality.</div>
         <div class="req-grid">
@@ -256,11 +303,17 @@
         </div>
     </section>
 
+    <!-- MID-PAGE CTA -->
+    <section style="text-align:center; padding:3.5rem 2rem; position:relative; z-index:1;">
+        <p style="color:var(--text-secondary); font-size:1rem; margin-bottom:1.25rem;">Meet the requirements? You’re ready.</p>
+        <a href="https://github.com/civicbytedev/civicbytedev.github.io/issues/new?template=submit-tool.md&title=[Tool Submission]" target="_blank" class="btn-primary">Submit Your Tool Now &rarr;</a>
+    </section>
+
     <hr class="divider">
 
     <!-- FAQ -->
     <section class="section">
-        <div class="section-label">FAQ</div>
+        <div class="section-eyebrow">FAQ</div>
         <div class="section-title">Common questions</div>
         <div class="section-desc">Everything you need to know about submitting a tool to CivicByte.</div>
         <div class="faq-list">
