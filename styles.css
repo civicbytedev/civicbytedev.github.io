@@ -246,6 +246,49 @@ a { text-decoration: none; color: inherit; }
 .nav-user-name  { display: none !important; }
 .nav-user-avatar{ display: none !important; }
 
+/* ── Hide mobile-only user section on desktop ── */
+.nav-mobile-user {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .nav-mobile-user {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        border-top: 1px solid var(--border);
+        margin-top: 0.25rem;
+    }
+    .nav-mobile-user-name {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-secondary);
+        font-size: 0.88rem;
+        font-weight: 500;
+    }
+    .nav-mobile-signout {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: none;
+        border: 1px solid rgba(255,124,124,0.25);
+        color: var(--coral);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--radius-xs);
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s;
+    }
+    .nav-mobile-signout:hover {
+        background: rgba(255,124,124,0.08);
+        border-color: rgba(255,124,124,0.4);
+    }
+}
+
 /* ═══════════════════════════════
    BUTTONS
    ═══════════════════════════════ */
