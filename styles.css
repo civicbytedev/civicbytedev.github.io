@@ -692,30 +692,306 @@ footer {
 /* ═══════════════════════════════
    RESPONSIVE
    ═══════════════════════════════ */
-@media (max-width: 768px) {
-     .mobile-toggle { display: block; }
-     .nav-links {
-            display: none;
-            width: 100%;
-            flex-direction: column;
-            gap: 0.2rem;
-            padding: 0.75rem 0 1rem;
-            border-top: 1px solid var(--border);
-            position: absolute;
-            top: 60px; left: 0; right: 0;
-            background: rgba(8,11,26,0.97);
-            backdrop-filter: blur(20px);
-            padding: 1rem 1.5rem;
-            z-index: 100;
-     }
-     .nav-links.open { display: flex; }
-     .tools-grid { grid-template-columns: 1fr; }
-     .section { padding: 3.5rem 1.5rem; }
-     .page-header { padding: 3rem 1.5rem 2rem; }
-     .stats-row { grid-template-columns: 1fr 1fr; }
-     .users-table th:nth-child(4),
-     .users-table td:nth-child(4) { display: none; }
+
+/* ═══════════════════════════════════════════════════════
+   CivicByte — Mobile Navbar + iPhone Optimization v1
+   ═══════════════════════════════════════════════════════ */
+
+/* ── 1. iOS Safari global fixes ── */
+html {
+  background: var(--bg);
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
+body {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* ── 2. Sticky nav with correct z-index ── */
+.site-nav {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+  padding-top: env(safe-area-inset-top, 0px);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
+}
+.nav {
+  padding-left: max(2rem, env(safe-area-inset-left, 0px)) !important;
+  padding-right: max(2rem, env(safe-area-inset-right, 0px)) !important;
+}
+
+/* ── 3. Hamburger button: always 44x44 touch target ── */
+.mobile-toggle {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  border-radius: var(--radius-xs);
+  transition: background 0.18s, color 0.18s;
+  cursor: pointer;
+  position: relative;
+  z-index: 1001;
+  flex-shrink: 0;
+}
+.mobile-toggle:hover,
+.mobile-toggle:focus-visible {
+  background: var(--surface2);
+  color: var(--teal);
+  outline: none;
+}
+
+/* ── 4. Animated hamburger icon: 3-bar to X ── */
+.cb-ham {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+.cb-ham span {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+  position: absolute;
+  transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1),
+              opacity 0.2s ease,
+              top 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transform-origin: center;
+}
+.cb-ham span:nth-child(1) { top: 4px; }
+.cb-ham span:nth-child(2) { top: 9px; }
+.cb-ham span:nth-child(3) { top: 14px; }
+.mobile-toggle[aria-expanded="true"] .cb-ham span:nth-child(1) {
+  top: 9px;
+  transform: rotate(45deg);
+}
+.mobile-toggle[aria-expanded="true"] .cb-ham span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.mobile-toggle[aria-expanded="true"] .cb-ham span:nth-child(3) {
+  top: 9px;
+  transform: rotate(-45deg);
+}
+
+/* ── 5. Mobile menu styles ── */
+@media (max-width: 768px) {
+  .mobile-toggle { display: flex !important; order: 3; }
+  .nav > .nav-gh { display: none !important; }
+  .nav-user-menu { display: none !important; }
+  .nav { position: relative; gap: 0; height: 60px; }
+  .logo { order: 1; flex-shrink: 0; margin-right: auto; }
+  .mobile-toggle { order: 2; margin-left: 0.5rem; }
+
+  .nav-links {
+    display: flex !important;
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+    position: fixed !important;
+    top: 60px !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: #0a0e1f !important;
+    border-bottom: 1px solid rgba(0,245,196,0.12) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6) !important;
+    flex-direction: column !important;
+    padding: 0.5rem 0 calc(0.75rem + env(safe-area-inset-bottom, 0px)) !important;
+    gap: 0 !important;
+    transform: translateY(-6px) !important;
+    transition:
+      opacity 0.22s cubic-bezier(0.22, 0.61, 0.36, 1),
+      transform 0.22s cubic-bezier(0.22, 0.61, 0.36, 1),
+      visibility 0s linear 0.22s !important;
+    z-index: 999 !important;
+    width: 100% !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(100vh - 60px - env(safe-area-inset-top, 0px));
+  }
+  .nav-links.open {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+    transition:
+      opacity 0.22s cubic-bezier(0.22, 0.61, 0.36, 1),
+      transform 0.22s cubic-bezier(0.22, 0.61, 0.36, 1),
+      visibility 0s linear 0s !important;
+  }
+
+  .nav-links a {
+    display: flex !important;
+    align-items: center !important;
+    min-height: 52px !important;
+    padding: 0 1.5rem !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    color: var(--text-secondary) !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid rgba(30,45,82,0.4) !important;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: background 0.15s, color 0.15s !important;
+    position: relative;
+  }
+  .nav-links a:last-child { border-bottom: none !important; }
+  .nav-links a:hover,
+  .nav-links a:active {
+    background: rgba(0,245,196,0.05) !important;
+    color: var(--teal) !important;
+  }
+  .nav-links a.active {
+    color: var(--teal) !important;
+    background: rgba(0,245,196,0.04) !important;
+  }
+  .nav-links a.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 3px; height: 20px;
+    background: var(--teal);
+    border-radius: 0 2px 2px 0;
+  }
+  .nav-links .nav-gh {
+    margin: 0.5rem 1rem 0 !important;
+    min-height: 48px !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid rgba(0,245,196,0.2) !important;
+    border-bottom: 1px solid rgba(0,245,196,0.2) !important;
+    justify-content: center !important;
+    font-weight: 600 !important;
+    color: var(--text) !important;
+    gap: 0.5rem !important;
+    background: rgba(0,245,196,0.04) !important;
+  }
+  .nav-links .nav-gh:hover,
+  .nav-links .nav-gh:active {
+    background: rgba(0,245,196,0.08) !important;
+    color: var(--teal) !important;
+    border-color: rgba(0,245,196,0.35) !important;
+  }
+
+  body.nav-open {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+  }
+
+  /* ── Hero mobile ── */
+  .hero { padding: 5rem 1.25rem 3.5rem !important; }
+  .hero h1 { font-size: clamp(2.1rem, 9vw, 3.5rem) !important; letter-spacing: -0.03em !important; }
+  .hero-sub { font-size: 0.95rem !important; padding: 0 0.25rem !important; }
+  .hero-badge { font-size: 0.72rem !important; padding: 0.35rem 0.85rem !important; }
+  .hero-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+    padding: 0 1rem !important;
+  }
+  .hero-actions .btn-primary,
+  .hero-actions .btn-secondary {
+    min-height: 52px !important;
+    justify-content: center !important;
+    font-size: 1rem !important;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .hero-stats {
+    gap: 1.5rem !important;
+    margin-top: 2.5rem !important;
+    flex-wrap: wrap !important;
+  }
+  .hero-stat-num { font-size: 1.6rem !important; }
+
+  /* ── Pillars 2x2 grid ── */
+  .pillars-wrap { overflow: hidden; }
+  .pillars { display: grid !important; grid-template-columns: 1fr 1fr !important; padding: 0 !important; }
+  .pillar {
+    padding: 1rem 1.25rem !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+    min-height: 80px !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(30,45,82,0.6) !important;
+  }
+  .pillar:nth-child(odd) { border-right: 1px solid rgba(30,45,82,0.6) !important; }
+  .pillar:nth-child(3), .pillar:nth-child(4) { border-bottom: none !important; }
+
+  /* ── Cards ── */
+  .featured-grid { grid-template-columns: 1fr !important; }
+  .tool-card-featured, .tool-card-pipeline { width: 100%; overflow: hidden; }
+  .how-grid { grid-template-columns: 1fr !important; gap: 1rem !important; }
+  .how-card { padding: 1.75rem !important; }
+
+  /* ── CTA band ── */
+  .cta-band { padding: 3.5rem 1.25rem !important; }
+  .cta-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+  }
+  .cta-actions .btn-primary,
+  .cta-actions .btn-secondary {
+    min-height: 52px !important;
+    justify-content: center !important;
+    font-size: 1rem !important;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* ── Section & footer ── */
+  .section { padding: 3rem 1.25rem !important; }
+  .section-title { font-size: clamp(1.6rem, 6vw, 2.4rem) !important; }
+  footer {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    padding: 1.5rem 1.25rem !important;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)) !important;
+    text-align: center;
+  }
+  .f-right { gap: 1rem !important; flex-wrap: wrap !important; justify-content: center !important; }
+}
+
+/* ── Small phones ── */
+@media (max-width: 389px) {
+  .hero h1 { font-size: clamp(1.9rem, 8vw, 2.8rem) !important; }
+  .hero-stats { gap: 1rem !important; }
+  .hero-stat-num { font-size: 1.4rem !important; }
+  .nav-links a { font-size: 0.95rem !important; }
+}
+
+/* ── Tablet ── */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .nav-links a { font-size: 0.82rem !important; padding: 0.4rem 0.55rem !important; }
+  .hero h1 { font-size: clamp(2.4rem, 5vw, 3.8rem) !important; }
+  .how-grid { grid-template-columns: 1fr 1fr !important; }
+  .how-card:last-child { grid-column: 1 / -1; max-width: 400px; margin: 0 auto; }
+}
+
+/* ── Touch device improvements ── */
+@media (hover: none) and (pointer: coarse) {
+  .btn-primary:hover, .btn-secondary:hover { transform: none !important; }
+  .btn-primary:active, .btn-secondary:active { transform: scale(0.98) !important; transition: transform 0.1s !important; }
+  .tool-card-featured:hover, .tool-card-pipeline:hover, .how-card:hover { transform: none !important; box-shadow: initial !important; }
+}
+
 
 @media (prefers-reduced-motion: reduce) {
      *, *::before, *::after {
