@@ -441,5 +441,26 @@
       }
     })();
   </script>
+
+    <!-- Sticky floating CTA -->
+    <a href="https://github.com/civicbytedev/civicbytedev.github.io/issues/new?template=submit-tool.yml" class="submit-sticky-cta" id="stickyCta">
+        Submit Your Tool →
+    </a>
+
+
+    <script>
+    (function() {
+        var cta = document.getElementById('stickyCta');
+        if (!cta) return;
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 600) {
+                cta.classList.add('visible');
+            } else {
+                cta.classList.remove('visible');
+            }
+        });
+    })();
+    </script>
+
 </body>
 </html>
