@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0e27">
     <title>Submit a Tool — CivicByte</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%230a0e27' stroke='%230ef6cc' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%230ef6cc'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%230ef6cc' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%230ef6cc' opacity='.5'/%3E%3C/svg%3E">
@@ -148,9 +148,13 @@
                 </svg>
                 civic<span class="cb">byte</span>
             </a>
-            <button class="mobile-toggle" onclick="this.closest('.site-nav').querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="17" y2="6"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="14" x2="17" y2="14"/></svg>
-            </button>
+            <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="cb-nav-links">
+            <span class="cb-ham" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+        </button>
             <div class="nav-links">
                 <a href="/">Home</a>
                 <a href="/tools.html">Tools</a>
@@ -332,5 +336,57 @@
         </div>
     </footer>
 
+
+  <!-- Mobile nav: hamburger toggle + body lock + close handlers -->
+  <script>
+    (function() {
+      'use strict';
+      function initMobileNav() {
+        var toggle = document.querySelector('.mobile-toggle');
+        var navLinks = document.querySelector('.nav-links');
+        var siteNav = document.querySelector('.site-nav');
+        if (!toggle || !navLinks) return;
+        var isOpen = false;
+        var savedScrollY = 0;
+        function openMenu() {
+          isOpen = true;
+          toggle.setAttribute('aria-expanded', 'true');
+          navLinks.classList.add('open');
+          savedScrollY = window.scrollY;
+          document.body.style.top = '-' + savedScrollY + 'px';
+          document.body.classList.add('nav-open');
+        }
+        function closeMenu() {
+          isOpen = false;
+          toggle.setAttribute('aria-expanded', 'false');
+          navLinks.classList.remove('open');
+          document.body.classList.remove('nav-open');
+          document.body.style.top = '';
+          window.scrollTo(0, savedScrollY);
+        }
+        function toggleMenu() { if (isOpen) closeMenu(); else openMenu(); }
+        navLinks.id = 'cb-nav-links';
+        toggle.setAttribute('aria-controls', 'cb-nav-links');
+        toggle.addEventListener('click', function(e) { e.stopPropagation(); toggleMenu(); });
+        navLinks.querySelectorAll('a').forEach(function(a) {
+          a.addEventListener('click', function() { if (isOpen) closeMenu(); });
+        });
+        document.addEventListener('click', function(e) {
+          if (isOpen && !siteNav.contains(e.target)) closeMenu();
+        });
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && isOpen) { closeMenu(); toggle.focus(); }
+        });
+        window.addEventListener('resize', function() {
+          if (window.innerWidth > 768 && isOpen) closeMenu();
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMobileNav);
+      } else {
+        initMobileNav();
+      }
+    })();
+  </script>
 </body>
 </html>
