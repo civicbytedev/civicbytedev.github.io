@@ -642,16 +642,29 @@
 </footer>
 
 <script>
+  // ── APIs ──────────────────────────────────────────────────────────────────
+  const HPD_VIOLATIONS = 'https://data.cityofnewyork.us/resource/wvxf-dwi5.json';
+  const HPD_REG        = 'https://data.cityofnewyork.us/resource/tesw-yqqr.json';
+  const GEO_API        = 'https://geosearch.planninglabs.nyc/v2/search';
+
+  const BORO_CODES = {
+    'manhattan': '1', 'new york county': '1',
+    'bronx': '2', 'bronx county': '2',
+    'brooklyn': '3', 'kings county': '3', 'kings': '3',
+    'queens': '4', 'queens county': '4',
+    'staten island': '5', 'richmond county': '5', 'richmond': '5'
+  };
+
+  // ── State ─────────────────────────────────────────────────────────────────
   let allViolations = [], currentFilter = 'open', visibleCount = 20;
 
-  function show(id) { document.getElementById(id).classList.remove('hidden'); }
-  function hide(id) { document.getElementById(id).classList.add('hidden'); }
+  // ── UI helpers ────────────────────────────────────────────────────────────
   function setText(id, val) { document.getElementById(id).textContent = val; }
-  function setStep(msg) { document.getElementById('loading-step').textContent = msg; }
+  function setStep(msg)     { document.getElementById('loading-step').textContent = msg; }
 
-  function showState(state) {
-    ['state-idle','state-loading','state-error','state-results'].forEach(s => {
-      document.getElementById(s).classList.toggle('hidden', s !== state);
+  function showState(s) {
+    ['state-idle','state-loading','state-error','state-results'].forEach(id => {
+      document.getElementById(id).classList.toggle('hidden', id !== s);
     });
   }
 
@@ -669,47 +682,147 @@
     if (e.key === 'Enter') lookupAddress();
   });
 
+  // ── Address helpers ───────────────────────────────────────────────────────
+  function getBoroCode(props) {
+    const candidates = [props.borough, props.localadmin, props.county, props.label].filter(Boolean);
+    for (const c of candidates) {
+      const l = c.toLowerCase();
+      for (const [name, code] of Object.entries(BORO_CODES)) {
+        if (l.includes(name)) return code;
+      }
+    }
+    return null;
+  }
+
+  // Extract BBL from GeoSearch response (API changed: now nested in addendum.pad.bbl)
+  function getBBL(props) {
+    return props?.addendum?.pad?.bbl
+      || props?.pad_bbl          // old format fallback
+      || props?.['pad:bbl']      // alternative format
+      || null;
+  }
+
+  function normalizeStreetName(s) {
+    // HPD stores full words in uppercase — expand common abbreviations
+    const ABBREVS = {
+      '\\bST\\b': 'STREET', '\\bAVE\\b': 'AVENUE', '\\bBLVD\\b': 'BOULEVARD',
+      '\\bDR\\b': 'DRIVE', '\\bRD\\b': 'ROAD', '\\bPL\\b': 'PLACE',
+      '\\bCT\\b': 'COURT', '\\bLN\\b': 'LANE', '\\bPKWY\\b': 'PARKWAY',
+      '\\bTER\\b': 'TERRACE', '\\bHWY\\b': 'HIGHWAY', '\\bCIR\\b': 'CIRCLE'
+    };
+    let out = s.toUpperCase().trim();
+    for (const [pattern, replacement] of Object.entries(ABBREVS)) {
+      out = out.replace(new RegExp(pattern, 'g'), replacement);
+    }
+    return out;
+  }
+
+  // ── Fetch with timeout ────────────────────────────────────────────────────
+  async function fetchTimeout(url, ms = 10000) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), ms);
+    try {
+      const r = await fetch(url, { signal: ctrl.signal });
+      clearTimeout(timer);
+      return r;
+    } catch (e) {
+      clearTimeout(timer);
+      if (e.name === 'AbortError') throw new Error('Request timed out — please try again.');
+      throw e;
+    }
+  }
+
+  // ── HPD queries ───────────────────────────────────────────────────────────
+  async function fetchViolationsByBBL(bbl) {
+    const url = `${HPD_VIOLATIONS}?bbl=${encodeURIComponent(bbl)}&$limit=2000&$order=inspectiondate%20DESC`;
+    const r = await fetchTimeout(url);
+    return r.ok ? r.json() : [];
+  }
+
+  async function fetchViolationsByAddress(housenumber, streetname, boroid) {
+    const hn = housenumber.trim().toUpperCase().replace(/'/g, "''");
+    const sn = normalizeStreetName(streetname).replace(/'/g, "''");
+    const where = `upper(housenumber)='${hn}' AND upper(streetname)='${sn}' AND boroid='${boroid}'`;
+    const url = `${HPD_VIOLATIONS}?$where=${encodeURIComponent(where)}&$limit=2000&$order=inspectiondate%20DESC`;
+    const r = await fetchTimeout(url);
+    return r.ok ? r.json() : [];
+  }
+
+  async function fetchRegistration(bbl) {
+    try {
+      const r = await fetchTimeout(`${HPD_REG}?bbl=${encodeURIComponent(bbl)}&$limit=1`, 6000);
+      if (!r.ok) return null;
+      const d = await r.json();
+      return d[0] || null;
+    } catch { return null; }
+  }
+
+  // ── Main search ───────────────────────────────────────────────────────────
   async function lookupAddress() {
     const raw = document.getElementById('address-input').value.trim();
     if (!raw) return;
+
+    // Auto-append NYC context if no borough hint present
+    const hasNYC = /\b(nyc|new york|brooklyn|manhattan|bronx|queens|staten island)\b/i.test(raw);
+    const query  = hasNYC ? raw : raw + ', New York City';
+
     document.getElementById('search-btn').disabled = true;
     showState('state-loading');
     setStep('Geocoding address…');
 
     try {
-      const geoRes = await fetch(`https://geosearch.planninglabs.nyc/v2/search?text=${encodeURIComponent(raw)}&size=1`);
-      if (!geoRes.ok) throw new Error('Geocoder unavailable. Please try again.');
+      // ── 1. Geocode ────────────────────────────────────────────────────────
+      const geoRes = await fetchTimeout(`${GEO_API}?text=${encodeURIComponent(query)}&size=5`);
+      if (!geoRes.ok) throw new Error('Geocoder unavailable — please try again shortly.');
       const geoData = await geoRes.json();
 
       if (!geoData.features || geoData.features.length === 0) {
-        showError('Address not found', `We couldn't geocode "${raw}". Try including the borough — e.g. "123 Main St, Brooklyn".`);
-        return;
+        throw new Error(`Address not found. Try adding a borough — e.g. "${raw}, Brooklyn"`);
       }
 
-      const props = geoData.features[0].properties;
-      const bbl   = props.pad_bbl;
+      // Prefer features that have a BBL; otherwise take the first result
+      const features = geoData.features;
+      const best = features.find(f => getBBL(f.properties)) || features[0];
+      const props = best.properties;
       const displayAddr = props.label || raw;
 
-      if (!bbl) {
-        showError('No building data', 'We found the address but couldn't match it to an NYC building lot.');
-        return;
+      const bbl        = getBBL(props);
+      const housenumber= props.housenumber || null;
+      const streetname = props.street      || null;
+      const boroCode   = getBoroCode(props);
+
+      setStep('Fetching HPD violation records…');
+
+      // ── 2. Query violations: BBL first, address fallback ──────────────────
+      let violations = [];
+      let resolvedBBL = bbl;
+
+      if (bbl) {
+        violations = await fetchViolationsByBBL(bbl);
       }
 
-      setStep('Fetching HPD violations…');
+      // If nothing by BBL (or no BBL), try address-based query
+      if (violations.length === 0 && housenumber && streetname && boroCode) {
+        setStep('Trying address-based lookup…');
+        violations = await fetchViolationsByAddress(housenumber, streetname, boroCode);
+        // Extract BBL from first result for registration lookup
+        if (violations.length > 0 && violations[0].bbl) {
+          resolvedBBL = violations[0].bbl;
+        }
+      }
 
-      const [violRes, regRes] = await Promise.all([
-        fetch(`https://data.cityofnewyork.us/resource/wvxf-dwi5.json?bbl=${bbl}&$limit=2000&$order=inspectiondate%20DESC`),
-        fetch(`https://data.cityofnewyork.us/resource/tesw-yqqr.json?bbl=${bbl}&$limit=1`)
-      ]);
+      // ── 3. Registration (best-effort, non-blocking) ───────────────────────
+      let reg = null;
+      if (resolvedBBL) {
+        setStep('Fetching building registration…');
+        reg = await fetchRegistration(resolvedBBL);
+      }
 
-      const violations = violRes.ok ? await violRes.json() : [];
-      const regData    = regRes.ok  ? await regRes.json()  : [];
-
-      setStep('Rendering results…');
-      renderResults(displayAddr, bbl, violations, regData[0] || null);
+      setStep('Rendering…');
+      renderResults(displayAddr, resolvedBBL, violations, reg);
 
     } catch (err) {
-      showError('Something went wrong', err.message || 'An unexpected error occurred. Please try again.');
+      showError('Could not load data', err.message || 'An unexpected error occurred. Please try again.');
     } finally {
       document.getElementById('search-btn').disabled = false;
     }
