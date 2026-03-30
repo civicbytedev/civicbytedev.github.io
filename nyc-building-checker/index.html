@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#080b1a" />
+  <title>NYC Building Report — CivicByte</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%23080b1a' stroke='%2300f5c4' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%2300f5c4'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%2300f5c4' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%2300f5c4' opacity='.5'/%3E%3C/svg%3E">
+  <meta name="description" content="Look up HPD housing maintenance violations for any NYC building. Free, open-source tenant tool by CivicByte." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    /* ── page background ── */
+    body { background: var(--bg); }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(30,45,82,0.16) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,45,82,0.16) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none; z-index: 0;
+    }
+    .site-nav, .tool-hero, .tool-main, footer { position: relative; z-index: 1; }
+
+    /* ── hero ── */
+    .tool-hero {
+      padding: 5.5rem 2rem 4rem;
+      text-align: center;
+      max-width: 780px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .tool-hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 420px;
+      background: radial-gradient(ellipse, rgba(0,245,196,0.07) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
+    }
+    .tool-hero > * { position: relative; z-index: 1; }
+    .tool-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(0,245,196,0.06);
+      border: 1px solid rgba(0,245,196,0.2);
+      border-radius: 100px;
+      padding: 0.35rem 1rem 0.35rem 0.75rem;
+      font-size: 0.78rem; font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.45s ease-out both;
+    }
+    .tool-eyebrow .dot {
+      width: 6px; height: 6px;
+      background: var(--teal); border-radius: 50%;
+      box-shadow: 0 0 7px var(--teal);
+      flex-shrink: 0;
+    }
+    .tool-hero h1 {
+      font-size: clamp(2.2rem, 5.5vw, 3.5rem);
+      font-weight: 700; line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin-bottom: 1rem;
+      animation: fadeUp 0.45s ease-out 0.08s both;
+    }
+    .tool-hero .hero-sub {
+      font-size: 1.05rem; color: var(--text-secondary);
+      max-width: 560px; margin: 0 auto 2.5rem;
+      line-height: 1.75;
+      animation: fadeUp 0.45s ease-out 0.16s both;
+    }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ── search card ── */
+    .search-card {
+      background: var(--surface);
+      border: 1px solid rgba(0,245,196,0.18);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: 0 0 0 1px rgba(0,245,196,0.04), 0 20px 60px rgba(0,0,0,0.45);
+      animation: fadeUp 0.45s ease-out 0.22s both;
+    }
+    .search-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .input-wrap { flex: 1; min-width: 200px; position: relative; }
+    .input-wrap svg {
+      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+      color: var(--text-dim); width: 17px; height: 17px; pointer-events: none;
+    }
+    .addr-input {
+      width: 100%;
+      padding: 0.875rem 1rem 0.875rem 2.75rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .addr-input::placeholder { color: var(--text-dim); }
+    .addr-input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(0,245,196,0.08);
+    }
+    .search-hint {
+      margin-top: 0.85rem;
+      font-size: 0.8rem; color: var(--text-dim);
+    }
+    .search-hint span {
+      color: var(--text-secondary); cursor: pointer;
+      text-decoration: underline; text-underline-offset: 2px;
+    }
+    .search-hint span:hover { color: var(--teal); }
+
+    /* ── main ── */
+    .tool-main {
+      max-width: 960px; margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+
+    /* ── states ── */
+    .hidden { display: none !important; }
+
+    #state-loading { text-align: center; padding: 4rem 1rem; }
+    .spinner {
+      width: 38px; height: 38px;
+      border: 3px solid var(--border);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 1.25rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { color: var(--text-secondary); font-size: 0.95rem; }
+    .loading-step-text { margin-top: 0.4rem; font-size: 0.82rem; color: var(--text-dim); min-height: 1.2em; }
+
+    #state-error {
+      background: rgba(255,124,124,0.05);
+      border: 1px solid rgba(255,124,124,0.18);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem; text-align: center;
+      margin-top: 2rem;
+    }
+    .err-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .err-title { font-weight: 700; font-size: 1.1rem; color: var(--coral); margin-bottom: 0.5rem; }
+    .err-msg { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.65; }
+    .err-retry {
+      margin-top: 1.25rem;
+      padding: 0.6rem 1.5rem;
+      background: transparent;
+      border: 1px solid rgba(255,124,124,0.3);
+      border-radius: var(--radius);
+      color: var(--coral);
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.875rem; font-weight: 600;
+      cursor: pointer; transition: background 0.18s;
+    }
+    .err-retry:hover { background: rgba(255,124,124,0.08); }
+
+    /* ── results ── */
+    #state-results { margin-top: 2.5rem; }
+
+    .building-header {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 1rem;
+      flex-wrap: wrap; margin-bottom: 1.5rem;
+    }
+    .building-addr-label {
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 0.3rem;
+    }
+    .building-addr { font-size: 1.3rem; font-weight: 700; line-height: 1.3; }
+    .building-bbl { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.2rem; }
+
+    .reg-badge {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.5rem 1rem; border-radius: var(--radius);
+      font-size: 0.82rem; font-weight: 600; flex-shrink: 0;
+    }
+    .reg-badge .dot-sm { width: 6px; height: 6px; border-radius: 50%; }
+    .reg-badge.reg-active  { background: rgba(14,246,204,0.07); border: 1px solid rgba(14,246,204,0.2); color: var(--teal); }
+    .reg-badge.reg-active .dot-sm  { background: var(--teal); box-shadow: 0 0 6px var(--teal); }
+    .reg-badge.reg-expired { background: rgba(255,124,124,0.07); border: 1px solid rgba(255,124,124,0.2); color: var(--coral); }
+    .reg-badge.reg-expired .dot-sm { background: var(--coral); }
+    .reg-badge.reg-unknown { background: var(--surface2); border: 1px solid var(--border); color: var(--text-secondary); }
+    .reg-badge.reg-unknown .dot-sm { background: var(--text-secondary); }
+
+    .owner-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1.5rem;
+    }
+    .owner-field-label {
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.07em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 0.25rem;
+    }
+    .owner-field-value { font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; }
+
+    /* severity grid */
+    .severity-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1rem; margin-bottom: 1.5rem;
+    }
+    .sev-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.25rem;
+      text-align: center; position: relative; overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .sev-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
+    .sev-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+    .sev-card.c-class::before { background: var(--coral); }
+    .sev-card.b-class::before { background: var(--amber, #fbbf24); }
+    .sev-card.a-class::before { background: var(--teal); }
+    .sev-label {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 0.4rem;
+    }
+    .sev-card.c-class .sev-label { color: var(--coral); }
+    .sev-card.b-class .sev-label { color: var(--amber, #fbbf24); }
+    .sev-card.a-class .sev-label { color: var(--teal); }
+    .sev-total { font-size: 2rem; font-weight: 700; line-height: 1; margin-bottom: 0.15rem; }
+    .sev-card.c-class .sev-total { color: var(--coral); }
+    .sev-card.b-class .sev-total { color: var(--amber, #fbbf24); }
+    .sev-card.a-class .sev-total { color: var(--teal); }
+    .sev-sub { font-size: 0.74rem; color: var(--text-dim); }
+    .sev-open-badge {
+      display: inline-block; margin-top: 0.5rem;
+      font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 99px;
+    }
+    .sev-card.c-class .sev-open-badge { background: rgba(255,124,124,0.1); color: var(--coral); }
+    .sev-card.b-class .sev-open-badge { background: rgba(251,191,36,0.1); color: var(--amber, #fbbf24); }
+    .sev-card.a-class .sev-open-badge { background: rgba(0,245,196,0.1); color: var(--teal); }
+
+    /* violation list */
+    .list-header {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .list-title {
+      font-size: 1rem; font-weight: 700;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .count-pill {
+      font-size: 0.73rem; font-weight: 700; padding: 2px 9px;
+      border-radius: 99px; background: var(--surface2);
+      border: 1px solid var(--border-light); color: var(--text-secondary);
+    }
+    .filter-tabs { display: flex; gap: 0.4rem; }
+    .ftab {
+      padding: 0.3rem 0.85rem; border-radius: 99px;
+      font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; border: 1px solid var(--border);
+      background: transparent; color: var(--text-secondary);
+      font-family: "DM Sans", sans-serif; transition: all 0.15s;
+    }
+    .ftab.active { background: var(--surface2); border-color: var(--border-light); color: var(--text); }
+    .ftab:hover { border-color: var(--border-light); color: var(--text); }
+
+    .viol-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .viol-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1rem 1.25rem;
+      display: grid; grid-template-columns: auto 1fr auto;
+      gap: 0.75rem 1rem; align-items: start;
+      transition: border-color 0.15s;
+    }
+    .viol-item:hover { border-color: var(--border-light); }
+    .viol-cls {
+      width: 28px; height: 28px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.82rem; font-weight: 800; flex-shrink: 0;
+    }
+    .viol-cls.C { background: rgba(255,124,124,0.13); color: var(--coral); }
+    .viol-cls.B { background: rgba(251,191,36,0.13); color: var(--amber, #fbbf24); }
+    .viol-cls.A { background: rgba(0,245,196,0.1); color: var(--teal); }
+    .viol-desc { font-size: 0.875rem; color: var(--text); line-height: 1.5; margin-bottom: 0.3rem; }
+    .viol-meta {
+      font-size: 0.74rem; color: var(--text-dim);
+      display: flex; flex-wrap: wrap; gap: 0.75rem;
+    }
+    .viol-status {
+      font-size: 0.7rem; font-weight: 700; padding: 3px 8px;
+      border-radius: 99px; white-space: nowrap; flex-shrink: 0; align-self: center;
+    }
+    .viol-status.open   { background: rgba(255,124,124,0.09); border: 1px solid rgba(255,124,124,0.2); color: var(--coral); }
+    .viol-status.closed { background: rgba(14,246,204,0.07); border: 1px solid rgba(14,246,204,0.15); color: var(--teal); }
+    .viol-status.pending { background: rgba(251,191,36,0.07); border: 1px solid rgba(251,191,36,0.15); color: var(--amber, #fbbf24); }
+
+    .show-more-btn {
+      width: 100%; margin-top: 0.75rem;
+      padding: 0.75rem; background: var(--surface);
+      border: 1px dashed var(--border-light); border-radius: var(--radius);
+      color: var(--text-secondary); font-family: "DM Sans", sans-serif;
+      font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.18s;
+    }
+    .show-more-btn:hover { border-color: var(--teal); color: var(--teal); background: rgba(0,245,196,0.04); }
+
+    .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--text-secondary); }
+    .empty-state .check-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .empty-state strong { display: block; font-size: 1rem; margin-bottom: 0.4rem; color: var(--teal); }
+    .empty-state p { font-size: 0.875rem; color: var(--text-dim); }
+
+    /* info grid */
+    .info-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+      gap: 1rem; margin-top: 2.5rem;
+    }
+    .info-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+    }
+    .info-card-title {
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 1rem;
+    }
+    .sev-legend-item { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.85rem; }
+    .sev-legend-item:last-child { margin-bottom: 0; }
+    .sev-badge {
+      font-size: 0.7rem; font-weight: 800; width: 22px; height: 22px;
+      border-radius: 5px; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; margin-top: 1px;
+    }
+    .sev-badge.C { background: rgba(255,124,124,0.13); color: var(--coral); }
+    .sev-badge.B { background: rgba(251,191,36,0.13); color: var(--amber, #fbbf24); }
+    .sev-badge.A { background: rgba(0,245,196,0.1); color: var(--teal); }
+    .sev-legend-name { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.15rem; }
+    .sev-legend-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; }
+    .action-list { list-style: none; }
+    .action-item {
+      display: flex; gap: 0.75rem; align-items: flex-start;
+      margin-bottom: 0.85rem; font-size: 0.875rem;
+      color: var(--text-secondary); line-height: 1.55;
+    }
+    .action-item:last-child { margin-bottom: 0; }
+    .action-num {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--surface2); border: 1px solid var(--border-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700; color: var(--teal);
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .action-item a { color: var(--teal); text-decoration: none; }
+    .action-item a:hover { text-decoration: underline; }
+
+    .data-strip {
+      display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+      padding: 0.85rem 1.25rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); margin-top: 2rem;
+      font-size: 0.8rem; color: var(--text-dim);
+    }
+    .data-strip a { color: var(--teal); text-decoration: none; }
+    .data-strip a:hover { text-decoration: underline; }
+    .data-strip .sep { color: var(--border-light); }
+
+    /* idle state */
+    #state-idle { padding: 2.5rem 0 0; }
+    .idle-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2.5rem; }
+    .idle-pill {
+      padding: 0.4rem 0.9rem; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 99px;
+      font-size: 0.78rem; color: var(--text-dim);
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+    .idle-pill svg { width: 11px; height: 11px; color: var(--teal); }
+    .idle-section-label {
+      text-align: center; font-size: 0.72rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); font-weight: 700; margin-bottom: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .tool-hero { padding: 3.5rem 1rem 2.5rem; }
+      .tool-main { padding: 0 1rem 3rem; }
+      .severity-grid { gap: 0.5rem; }
+      .sev-total { font-size: 1.5rem; }
+      .sev-label { font-size: 0.62rem; }
+      .viol-item { grid-template-columns: auto 1fr; }
+      .viol-status { grid-column: 2; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="site-nav">
+  <nav class="nav">
+    <a href="/" class="logo">
+      <svg width="28" height="28" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="lg0" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00f5c4"/><stop offset="100%" stop-color="#b197fc"/></linearGradient></defs>
+        <rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(0,245,196,0.07)" stroke="url(#lg0)" stroke-width="1.5"/>
+        <rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lg0)"/>
+        <rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lg0)" opacity="0.75"/>
+        <rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lg0)" opacity="0.5"/>
+        <path d="M10.75 16.5 L17 11.5 L23.25 7" stroke="#00f5c4" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+        <circle cx="23.25" cy="7" r="1.8" fill="#00f5c4"/>
+      </svg>
+      <span class="logo-wordmark">civic<span class="cb">byte</span></span>
+    </a>
+    <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="cb-nav-links">
+      <span class="cb-ham" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+    <div class="nav-links" id="cb-nav-links">
+      <a href="/">Home</a>
+      <a href="/tools.html" class="active">Tools</a>
+      <a href="/about.html">About</a>
+      <a href="/submit.html">Submit a Tool</a>
+      <a href="https://github.com/civicbytedev" target="_blank" rel="noopener" class="nav-gh">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="tool-hero">
+  <div class="tool-eyebrow">
+    <div class="dot"></div>
+    NYC Housing Tool &mdash; Free &amp; Open Source
+  </div>
+  <h1>NYC <span class="grad">Building Report</span></h1>
+  <p class="hero-sub">
+    Look up housing maintenance violations for any NYC building — instantly.
+    Powered by HPD open data, built for tenants, organizers, and advocates.
+  </p>
+
+  <div class="search-card">
+    <div class="search-row">
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input
+          type="text"
+          id="address-input"
+          class="addr-input"
+          placeholder="e.g. 123 Main St, Brooklyn"
+          autocomplete="street-address"
+          aria-label="NYC building address"
+        />
+      </div>
+      <button class="btn-primary" id="search-btn" onclick="lookupAddress()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search
+      </button>
+    </div>
+    <p class="search-hint">
+      Try:
+      <span onclick="fillExample('55 Water St, Manhattan')">55 Water St, Manhattan</span> &middot;
+      <span onclick="fillExample('2095 Grand Concourse, Bronx')">2095 Grand Concourse, Bronx</span> &middot;
+      <span onclick="fillExample('460 Kent Ave, Brooklyn')">460 Kent Ave, Brooklyn</span>
+    </p>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="tool-main">
+
+  <!-- IDLE -->
+  <div id="state-idle">
+    <p class="idle-section-label">What this tool checks</p>
+    <div class="idle-pills">
+      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Class C — Immediately hazardous violations</span>
+      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Class B — Hazardous violations</span>
+      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Class A — Non-hazardous violations</span>
+      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Open vs. resolved status</span>
+      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Building registration &amp; owner info</span>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">Violation Classes</div>
+        <div class="sev-legend-item">
+          <span class="sev-badge C">C</span>
+          <div>
+            <div class="sev-legend-name" style="color:var(--coral)">Immediately Hazardous</div>
+            <div class="sev-legend-desc">Lead paint, heat/hot water outages, pest infestations, broken locks. Must be corrected within 24 hours.</div>
+          </div>
+        </div>
+        <div class="sev-legend-item">
+          <span class="sev-badge B">B</span>
+          <div>
+            <div class="sev-legend-name" style="color:var(--amber,#fbbf24)">Hazardous</div>
+            <div class="sev-legend-desc">Mold, defective plumbing, broken windows, fire safety issues. Must be corrected within 30 days.</div>
+          </div>
+        </div>
+        <div class="sev-legend-item">
+          <span class="sev-badge A">A</span>
+          <div>
+            <div class="sev-legend-name" style="color:var(--teal)">Non-Hazardous</div>
+            <div class="sev-legend-desc">Lower-priority maintenance issues. Must be corrected within 90 days.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-title">If You Find Open Violations</div>
+        <ul class="action-list">
+          <li class="action-item"><span class="action-num">1</span><span>Document conditions with photos and written records — date, time, and location.</span></li>
+          <li class="action-item"><span class="action-num">2</span><span>Report new issues via <a href="https://portal.311.nyc.gov" target="_blank" rel="noopener">311</a> or <a href="https://hpdonline.nyc.gov" target="_blank" rel="noopener">HPD Online</a>.</span></li>
+          <li class="action-item"><span class="action-num">3</span><span>Get free legal advice from <a href="https://www.legalaidnyc.org" target="_blank" rel="noopener">Legal Aid</a> or <a href="https://www.metcouncilonhousing.org" target="_blank" rel="noopener">Met Council on Housing</a>.</span></li>
+          <li class="action-item"><span class="action-num">4</span><span>Tenants have the right to a rent reduction if heat, hot water, or essential services are withheld.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div id="state-loading" class="hidden">
+    <div class="spinner"></div>
+    <div class="loading-text">Looking up building data&hellip;</div>
+    <div class="loading-step-text" id="loading-step"></div>
+  </div>
+
+  <!-- ERROR -->
+  <div id="state-error" class="hidden">
+    <div class="err-icon">&#9888;&#65039;</div>
+    <div class="err-title" id="err-title">Something went wrong</div>
+    <div class="err-msg" id="err-msg">We couldn't find data for that address. Try including the borough (e.g. "Brooklyn") and check your spelling.</div>
+    <button class="err-retry" onclick="resetToIdle()">Try another address</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="state-results" class="hidden">
+
+    <div class="building-header">
+      <div>
+        <div class="building-addr-label">Building Report for</div>
+        <div class="building-addr" id="result-address">—</div>
+        <div class="building-bbl" id="result-bbl">—</div>
+      </div>
+      <div class="reg-badge reg-unknown" id="reg-badge">
+        <span class="dot-sm"></span>
+        <span id="reg-label">Checking&hellip;</span>
+      </div>
+    </div>
+
+    <div class="owner-card" id="owner-card"></div>
+
+    <div class="severity-grid">
+      <div class="sev-card c-class">
+        <div class="sev-label">Class C</div>
+        <div class="sev-total" id="count-c-all">—</div>
+        <div class="sev-sub">total violations</div>
+        <div class="sev-open-badge" id="count-c-open"></div>
+      </div>
+      <div class="sev-card b-class">
+        <div class="sev-label">Class B</div>
+        <div class="sev-total" id="count-b-all">—</div>
+        <div class="sev-sub">total violations</div>
+        <div class="sev-open-badge" id="count-b-open"></div>
+      </div>
+      <div class="sev-card a-class">
+        <div class="sev-label">Class A</div>
+        <div class="sev-total" id="count-a-all">—</div>
+        <div class="sev-sub">total violations</div>
+        <div class="sev-open-badge" id="count-a-open"></div>
+      </div>
+    </div>
+
+    <div class="list-header">
+      <span class="list-title">
+        Violations
+        <span class="count-pill" id="list-count-pill">0</span>
+      </span>
+      <div class="filter-tabs">
+        <button class="ftab active" data-filter="open"  onclick="setFilter('open')">Open</button>
+        <button class="ftab"        data-filter="all"   onclick="setFilter('all')">All</button>
+      </div>
+    </div>
+
+    <div class="viol-list" id="violation-list"></div>
+    <button class="show-more-btn hidden" id="show-more-btn" onclick="showMore()">Show more</button>
+
+    <hr class="divider" />
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">Violation Classes</div>
+        <div class="sev-legend-item">
+          <span class="sev-badge C">C</span>
+          <div>
+            <div class="sev-legend-name" style="color:var(--coral)">Immediately Hazardous</div>
+            <div class="sev-legend-desc">Lead paint, heat/hot water, pests. Fix within 24 hours.</div>
+          </div>
+        </div>
+        <div class="sev-legend-item">
+          <span class="sev-badge B">B</span>
+          <div>
+            <div class="sev-legend-name" style="color:var(--amber,#fbbf24)">Hazardous</div>
+            <div class="sev-legend-desc">Mold, plumbing, fire safety. Fix within 30 days.</div>
+          </div>
+        </div>
+        <div class="sev-legend-item">
+          <span class="sev-badge A">A</span>
+          <div>
+            <div class="sev-legend-name" style="color:var(--teal)">Non-Hazardous</div>
+            <div class="sev-legend-desc">Minor maintenance. Fix within 90 days.</div>
+          </div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Tenant Resources</div>
+        <ul class="action-list">
+          <li class="action-item"><span class="action-num">1</span><span>File a complaint: <a href="https://portal.311.nyc.gov" target="_blank" rel="noopener">portal.311.nyc.gov</a></span></li>
+          <li class="action-item"><span class="action-num">2</span><span>Track HPD orders: <a href="https://hpdonline.nyc.gov" target="_blank" rel="noopener">hpdonline.nyc.gov</a></span></li>
+          <li class="action-item"><span class="action-num">3</span><span>Free legal help: <a href="https://www.legalaidnyc.org" target="_blank" rel="noopener">Legal Aid Society</a> &middot; <a href="https://www.metcouncilonhousing.org" target="_blank" rel="noopener">Met Council</a></span></li>
+          <li class="action-item"><span class="action-num">4</span><span>Organize: <a href="https://housingcourtanswers.org" target="_blank" rel="noopener">Housing Court Answers</a></span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="data-strip">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Data: <a href="https://data.cityofnewyork.us/Housing-Development/Housing-Maintenance-Code-Violations/wvxf-dwi5" target="_blank" rel="noopener">NYC HPD Violations</a>
+      <span class="sep">&middot;</span>
+      <a href="https://geosearch.planninglabs.nyc" target="_blank" rel="noopener">NYC Planning GeoSearch</a>
+      <span class="sep">&middot;</span>
+      Updated daily &middot; MIT License
+    </div>
+
+  </div><!-- /#state-results -->
+
+</div><!-- /.tool-main -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-left">&copy; 2025 CivicByte &mdash; Open source under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.</div>
+  <div class="f-right">
+    <a href="/tools.html">Tools</a>
+    <a href="/about.html">About</a>
+    <a href="/submit.html">Submit</a>
+    <a href="https://github.com/civicbytedev" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  let allViolations = [], currentFilter = 'open', visibleCount = 20;
+
+  function show(id) { document.getElementById(id).classList.remove('hidden'); }
+  function hide(id) { document.getElementById(id).classList.add('hidden'); }
+  function setText(id, val) { document.getElementById(id).textContent = val; }
+  function setStep(msg) { document.getElementById('loading-step').textContent = msg; }
+
+  function showState(state) {
+    ['state-idle','state-loading','state-error','state-results'].forEach(s => {
+      document.getElementById(s).classList.toggle('hidden', s !== state);
+    });
+  }
+
+  function resetToIdle() {
+    showState('state-idle');
+    document.getElementById('search-btn').disabled = false;
+  }
+
+  function fillExample(addr) {
+    document.getElementById('address-input').value = addr;
+    lookupAddress();
+  }
+
+  document.getElementById('address-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') lookupAddress();
+  });
+
+  async function lookupAddress() {
+    const raw = document.getElementById('address-input').value.trim();
+    if (!raw) return;
+    document.getElementById('search-btn').disabled = true;
+    showState('state-loading');
+    setStep('Geocoding address…');
+
+    try {
+      const geoRes = await fetch(`https://geosearch.planninglabs.nyc/v2/search?text=${encodeURIComponent(raw)}&size=1`);
+      if (!geoRes.ok) throw new Error('Geocoder unavailable. Please try again.');
+      const geoData = await geoRes.json();
+
+      if (!geoData.features || geoData.features.length === 0) {
+        showError('Address not found', `We couldn't geocode "${raw}". Try including the borough — e.g. "123 Main St, Brooklyn".`);
+        return;
+      }
+
+      const props = geoData.features[0].properties;
+      const bbl   = props.pad_bbl;
+      const displayAddr = props.label || raw;
+
+      if (!bbl) {
+        showError('No building data', 'We found the address but couldn't match it to an NYC building lot.');
+        return;
+      }
+
+      setStep('Fetching HPD violations…');
+
+      const [violRes, regRes] = await Promise.all([
+        fetch(`https://data.cityofnewyork.us/resource/wvxf-dwi5.json?bbl=${bbl}&$limit=2000&$order=inspectiondate%20DESC`),
+        fetch(`https://data.cityofnewyork.us/resource/tesw-yqqr.json?bbl=${bbl}&$limit=1`)
+      ]);
+
+      const violations = violRes.ok ? await violRes.json() : [];
+      const regData    = regRes.ok  ? await regRes.json()  : [];
+
+      setStep('Rendering results…');
+      renderResults(displayAddr, bbl, violations, regData[0] || null);
+
+    } catch (err) {
+      showError('Something went wrong', err.message || 'An unexpected error occurred. Please try again.');
+    } finally {
+      document.getElementById('search-btn').disabled = false;
+    }
+  }
+
+  function showError(title, msg) {
+    setText('err-title', title);
+    setText('err-msg', msg);
+    showState('state-error');
+  }
+
+  function renderResults(address, bbl, violations, reg) {
+    allViolations = violations;
+    currentFilter = 'open';
+    visibleCount  = 20;
+
+    setText('result-address', address);
+    setText('result-bbl', `BBL: ${bbl}`);
+    renderRegistration(reg);
+    renderOwner(reg);
+
+    const counts = countBySeverity(violations);
+    ['A','B','C'].forEach(cls => {
+      const all  = counts[cls]?.all  ?? 0;
+      const open = counts[cls]?.open ?? 0;
+      setText(`count-${cls.toLowerCase()}-all`, all);
+      document.getElementById(`count-${cls.toLowerCase()}-open`).textContent = open > 0 ? `${open} open` : 'none open';
+    });
+
+    document.querySelectorAll('.ftab').forEach(t => t.classList.toggle('active', t.dataset.filter === 'open'));
+    renderViolationList();
+    showState('state-results');
+  }
+
+  function renderRegistration(reg) {
+    const badge = document.getElementById('reg-badge');
+    const label = document.getElementById('reg-label');
+    if (!reg) { badge.className = 'reg-badge reg-unknown'; label.textContent = 'Registration unknown'; return; }
+    const endDate = reg.registrationenddate ? new Date(reg.registrationenddate) : null;
+    const now = new Date();
+    if (endDate && endDate > now) {
+      badge.className = 'reg-badge reg-active';
+      label.textContent = `Registered · expires ${endDate.toLocaleDateString('en-US',{month:'short',year:'numeric'})}`;
+    } else if (endDate) {
+      badge.className = 'reg-badge reg-expired';
+      label.textContent = `Registration expired ${endDate.toLocaleDateString('en-US',{month:'short',year:'numeric'})}`;
+    } else {
+      badge.className = 'reg-badge reg-unknown';
+      label.textContent = 'Registration status unknown';
+    }
+  }
+
+  function renderOwner(reg) {
+    const card = document.getElementById('owner-card');
+    if (!reg) { card.style.display = 'none'; return; }
+    card.style.display = '';
+    const fields = [];
+    const ownerName = [reg.ownerfirstname, reg.ownerlastname].filter(Boolean).join(' ').trim() || reg.corporationname || null;
+    if (ownerName) fields.push({ label: 'Owner', value: ownerName });
+    const agentName = [reg.managingagentfirstname, reg.managingagentlastname].filter(Boolean).join(' ').trim() || reg.managingagentcompanyname || null;
+    if (agentName) fields.push({ label: 'Managing Agent', value: agentName });
+    const agentAddr = [reg.managingagentbuildingaddress, reg.managingagentcity, reg.managingagentstate].filter(Boolean).join(', ');
+    if (agentAddr) fields.push({ label: 'Agent Address', value: agentAddr });
+    if (reg.lifebuildingcount) fields.push({ label: 'Portfolio Buildings', value: reg.lifebuildingcount });
+    if (fields.length === 0) { card.style.display = 'none'; return; }
+    card.innerHTML = fields.map(f => `<div class="owner-field"><div class="owner-field-label">${esc(f.label)}</div><div class="owner-field-value">${esc(String(f.value))}</div></div>`).join('');
+  }
+
+  function countBySeverity(violations) {
+    const c = { A:{all:0,open:0}, B:{all:0,open:0}, C:{all:0,open:0} };
+    violations.forEach(v => {
+      const cls = (v.class||'').toUpperCase();
+      if (!c[cls]) return;
+      c[cls].all++;
+      if (isOpen(v)) c[cls].open++;
+    });
+    return c;
+  }
+
+  function isOpen(v) {
+    const s = (v.currentstatus||'').toLowerCase();
+    return s.includes('open') || s.includes('nov sent out') || s.includes('not complied');
+  }
+
+  function setFilter(f) {
+    currentFilter = f; visibleCount = 20;
+    document.querySelectorAll('.ftab').forEach(t => t.classList.toggle('active', t.dataset.filter === f));
+    renderViolationList();
+  }
+
+  function showMore() { visibleCount += 20; renderViolationList(); }
+
+  function renderViolationList() {
+    const list = document.getElementById('violation-list');
+    const btn  = document.getElementById('show-more-btn');
+    const filtered = currentFilter === 'open' ? allViolations.filter(isOpen) : allViolations;
+    setText('list-count-pill', filtered.length.toString());
+
+    if (filtered.length === 0) {
+      list.innerHTML = `<div class="empty-state"><div class="check-icon">✓</div><strong>${currentFilter === 'open' ? 'No open violations' : 'No violations on record'}</strong><p>${currentFilter === 'open' ? 'No currently open HPD violations for this building.' : 'HPD has no violation records for this building.'}</p></div>`;
+      btn.classList.add('hidden'); return;
+    }
+
+    list.innerHTML = filtered.slice(0, visibleCount).map(v => {
+      const cls  = (v.class||'?').toUpperCase();
+      const desc = titleCase(v.novdescription || v.violationstatus || 'No description available.');
+      const open = isOpen(v);
+      const status = (v.currentstatus||'').toUpperCase();
+      const statusClass = open ? 'open' : status.includes('CLOSE') || status.includes('COMPLI') ? 'closed' : 'pending';
+      const statusLabel = open ? 'Open' : status.includes('CLOSE') ? 'Closed' : status.includes('COMPLI') ? 'Complied' : titleCase(v.currentstatus||'Unknown');
+      const inspDate = v.inspectiondate ? new Date(v.inspectiondate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : null;
+      const apt  = v.apartment ? `Apt ${v.apartment}` : v.story ? `Floor ${v.story}` : null;
+      const type = v.type ? titleCase(v.type) : null;
+      const meta = [inspDate, apt, type].filter(Boolean);
+      return `<div class="viol-item"><div class="viol-cls ${cls}">${cls}</div><div><div class="viol-desc">${esc(desc)}</div>${meta.length?`<div class="viol-meta">${meta.map(m=>`<span>${esc(m)}</span>`).join('')}</div>`:''}</div><span class="viol-status ${statusClass}">${esc(statusLabel)}</span></div>`;
+    }).join('');
+
+    if (filtered.length > visibleCount) {
+      btn.textContent = `Show ${Math.min(20, filtered.length - visibleCount)} more (${filtered.length - visibleCount} remaining)`;
+      btn.classList.remove('hidden');
+    } else { btn.classList.add('hidden'); }
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function titleCase(s) { return s ? s.toLowerCase().replace(/\b\w/g,c=>c.toUpperCase()) : ''; }
+</script>
+
+<!-- Mobile nav -->
+<script>
+  (function() {
+    var toggle   = document.querySelector('.mobile-toggle');
+    var navLinks = document.querySelector('.nav-links');
+    var siteNav  = document.querySelector('.site-nav');
+    if (!toggle || !navLinks) return;
+    var isOpen = false, savedY = 0;
+    function openMenu()  { isOpen=true;  toggle.setAttribute('aria-expanded','true');  navLinks.classList.add('open');    savedY=window.scrollY; document.body.style.top='-'+savedY+'px'; document.body.classList.add('nav-open'); }
+    function closeMenu() { isOpen=false; toggle.setAttribute('aria-expanded','false'); navLinks.classList.remove('open'); document.body.classList.remove('nav-open'); document.body.style.top=''; window.scrollTo(0,savedY); }
+    toggle.addEventListener('click', function(e){ e.stopPropagation(); isOpen?closeMenu():openMenu(); });
+    navLinks.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',function(){ if(isOpen)closeMenu(); }); });
+    document.addEventListener('click', function(e){ if(isOpen&&!siteNav.contains(e.target))closeMenu(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape'&&isOpen){closeMenu();toggle.focus();} });
+    window.addEventListener('resize', function(){ if(window.innerWidth>768&&isOpen)closeMenu(); });
+  })();
+</script>
+
+</body>
+</html>
