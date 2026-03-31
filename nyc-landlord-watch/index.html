@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#080b1a" />
+  <title>NYC Landlord Watch — CivicByte</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%23080b1a' stroke='%2300f5c4' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%2300f5c4'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%2300f5c4' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%2300f5c4' opacity='.5'/%3E%3C/svg%3E">
+  <meta name="description" content="Look up any NYC landlord's full violation history, portfolio size, and risk score. Free tenant accountability tool by CivicByte." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    body { background: var(--bg); }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: linear-gradient(rgba(30,45,82,0.16) 1px,transparent 1px), linear-gradient(90deg,rgba(30,45,82,0.16) 1px,transparent 1px);
+      background-size: 56px 56px; pointer-events: none; z-index: 0;
+    }
+    .site-nav, .tool-hero, .tool-main, footer { position: relative; z-index: 1; }
+
+    /* ── hero ── */
+    .tool-hero {
+      padding: 5.5rem 2rem 3.5rem; text-align: center;
+      max-width: 800px; margin: 0 auto; position: relative; overflow: hidden;
+    }
+    .tool-hero::before {
+      content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 420px;
+      background: radial-gradient(ellipse,rgba(0,245,196,0.07) 0%,transparent 65%);
+      pointer-events: none; z-index: 0;
+    }
+    .tool-hero > * { position: relative; z-index: 1; }
+    .tool-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(0,245,196,0.06); border: 1px solid rgba(0,245,196,0.2);
+      border-radius: 100px; padding: 0.35rem 1rem 0.35rem 0.75rem;
+      font-size: 0.78rem; font-weight: 500; color: var(--text-secondary);
+      margin-bottom: 1.5rem; animation: fadeUp 0.45s ease-out both;
+    }
+    .tool-eyebrow .dot { width: 6px; height: 6px; background: var(--teal); border-radius: 50%; box-shadow: 0 0 7px var(--teal); flex-shrink: 0; }
+    .tool-hero h1 {
+      font-size: clamp(2.2rem,5.5vw,3.5rem); font-weight: 700; line-height: 1.1;
+      letter-spacing: -0.04em; margin-bottom: 1rem;
+      animation: fadeUp 0.45s ease-out 0.08s both;
+    }
+    .tool-hero .sub {
+      font-size: 1.05rem; color: var(--text-secondary); max-width: 560px;
+      margin: 0 auto 2.5rem; line-height: 1.75;
+      animation: fadeUp 0.45s ease-out 0.16s both;
+    }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── search card ── */
+    .search-card {
+      background: var(--surface); border: 1px solid rgba(0,245,196,0.18);
+      border-radius: var(--radius-lg); padding: 1.75rem;
+      box-shadow: 0 0 0 1px rgba(0,245,196,0.04), 0 20px 60px rgba(0,0,0,0.45);
+      animation: fadeUp 0.45s ease-out 0.22s both;
+    }
+    .search-tabs {
+      display: flex; gap: 0.4rem; margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border); padding-bottom: 1.25rem;
+    }
+    .stab {
+      padding: 0.45rem 1.1rem; border-radius: 99px;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      border: 1px solid transparent; background: transparent;
+      color: var(--text-secondary); font-family: "DM Sans", sans-serif;
+      transition: all 0.15s;
+    }
+    .stab.active { background: var(--surface2); border-color: var(--border-light); color: var(--text); }
+    .stab:hover:not(.active) { color: var(--text); }
+    .search-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .input-wrap { flex: 1; min-width: 200px; position: relative; }
+    .input-wrap svg { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-dim); width: 17px; height: 17px; pointer-events: none; }
+    .s-input {
+      width: 100%; padding: 0.875rem 1rem 0.875rem 2.75rem;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text);
+      font-family: "DM Sans", sans-serif; font-size: 0.95rem;
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .s-input::placeholder { color: var(--text-dim); }
+    .s-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,245,196,0.08); }
+    .search-hint { margin-top: 0.85rem; font-size: 0.8rem; color: var(--text-dim); }
+    .search-hint span { color: var(--text-secondary); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+    .search-hint span:hover { color: var(--teal); }
+
+    /* ── main ── */
+    .tool-main { max-width: 960px; margin: 0 auto; padding: 0 2rem 5rem; }
+    .hidden { display: none !important; }
+
+    /* ── states ── */
+    #state-loading { text-align: center; padding: 4rem 1rem; }
+    .spinner {
+      width: 38px; height: 38px; border: 3px solid var(--border);
+      border-top-color: var(--teal); border-radius: 50%;
+      animation: spin 0.7s linear infinite; margin: 0 auto 1.25rem;
+    }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .loading-text { color: var(--text-secondary); font-size: 0.95rem; }
+    .loading-step { margin-top: 0.4rem; font-size: 0.82rem; color: var(--text-dim); min-height: 1.2em; }
+
+    #state-error {
+      background: rgba(255,124,124,0.05); border: 1px solid rgba(255,124,124,0.18);
+      border-radius: var(--radius-lg); padding: 2.25rem; text-align: center; margin-top: 2rem;
+    }
+    .err-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .err-title { font-weight: 700; font-size: 1.1rem; color: var(--coral); margin-bottom: 0.5rem; }
+    .err-msg { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.65; }
+    .err-retry {
+      margin-top: 1.25rem; padding: 0.6rem 1.5rem; background: transparent;
+      border: 1px solid rgba(255,124,124,0.3); border-radius: var(--radius);
+      color: var(--coral); font-family: "DM Sans", sans-serif;
+      font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: background 0.18s;
+    }
+    .err-retry:hover { background: rgba(255,124,124,0.08); }
+
+    /* ── match list ── */
+    #state-matches { margin-top: 2.5rem; }
+    .matches-header { margin-bottom: 1.25rem; }
+    .matches-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .matches-sub { font-size: 0.82rem; color: var(--text-dim); }
+    .match-list { display: flex; flex-direction: column; gap: 0.65rem; }
+    .match-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1rem 1.25rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .match-card:hover { border-color: var(--border-light); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .match-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .match-meta { font-size: 0.78rem; color: var(--text-dim); display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .match-meta span { display: flex; align-items: center; gap: 0.3rem; }
+    .view-btn {
+      padding: 0.45rem 1rem; background: transparent;
+      border: 1px solid var(--border-light); border-radius: var(--radius);
+      color: var(--teal); font-family: "DM Sans", sans-serif;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .view-btn:hover { background: rgba(0,245,196,0.07); border-color: var(--teal); }
+
+    /* ── profile ── */
+    #state-profile { margin-top: 2.5rem; }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.4rem 0; background: transparent; border: none;
+      color: var(--text-secondary); font-family: "DM Sans", sans-serif;
+      font-size: 0.85rem; font-weight: 500; cursor: pointer;
+      margin-bottom: 1.5rem; transition: color 0.15s;
+    }
+    .back-btn:hover { color: var(--teal); }
+    .back-btn svg { width: 14px; height: 14px; }
+
+    /* profile header */
+    .profile-header {
+      display: flex; gap: 1.5rem; align-items: flex-start;
+      flex-wrap: wrap; margin-bottom: 1.5rem;
+    }
+    .profile-identity { flex: 1; min-width: 220px; }
+    .profile-type-badge {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 2px 9px; border-radius: 99px; margin-bottom: 0.6rem;
+      background: var(--surface2); border: 1px solid var(--border-light); color: var(--text-secondary);
+    }
+    .profile-name { font-size: 1.6rem; font-weight: 700; line-height: 1.2; margin-bottom: 0.3rem; }
+    .profile-address { font-size: 0.85rem; color: var(--text-dim); }
+    .risk-block {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 1.25rem 1.75rem; border-radius: var(--radius);
+      border: 1px solid var(--border); background: var(--surface); flex-shrink: 0;
+    }
+    .risk-label-top { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.3rem; }
+    .risk-num { font-size: 3rem; font-weight: 700; line-height: 1; margin-bottom: 0.2rem; font-family: "Space Grotesk", sans-serif; }
+    .risk-desc { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+    .risk-low  .risk-num, .risk-low  .risk-desc { color: #10b981; }
+    .risk-mid  .risk-num, .risk-mid  .risk-desc { color: #f59e0b; }
+    .risk-high .risk-num, .risk-high .risk-desc { color: #ef4444; }
+    .risk-low  { border-color: rgba(16,185,129,0.2); background: rgba(16,185,129,0.04); }
+    .risk-mid  { border-color: rgba(245,158,11,0.2); background: rgba(245,158,11,0.04); }
+    .risk-high { border-color: rgba(239,68,68,0.2);  background: rgba(239,68,68,0.04);  }
+
+    /* stat row */
+    .stat-row { display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+    .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; }
+    .stat-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.3rem; }
+    .stat-value { font-size: 1.5rem; font-weight: 700; font-family: "Space Grotesk", sans-serif; }
+    .stat-sub { font-size: 0.72rem; color: var(--text-dim); margin-top: 0.15rem; }
+    .stat-c .stat-value { color: #ef4444; }
+    .stat-b .stat-value { color: #f59e0b; }
+    .stat-a .stat-value { color: var(--teal); }
+
+    /* two-col grid */
+    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    @media (max-width: 680px) { .profile-grid { grid-template-columns: 1fr; } }
+
+    /* cards */
+    .p-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+    .p-card-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1.1rem; }
+
+    /* category bars */
+    .cat-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.7rem; }
+    .cat-row:last-child { margin-bottom: 0; }
+    .cat-name { font-size: 0.8rem; color: var(--text-secondary); width: 110px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cat-bar-wrap { flex: 1; height: 6px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
+    .cat-bar { height: 100%; border-radius: 99px; background: var(--teal); transition: width 0.5s ease; }
+    .cat-bar.c-bar { background: #ef4444; }
+    .cat-bar.b-bar { background: #f59e0b; }
+    .cat-count { font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); min-width: 30px; text-align: right; }
+
+    /* timeline */
+    .timeline-wrap { display: flex; align-items: flex-end; gap: 0.5rem; height: 100px; margin-bottom: 0.5rem; }
+    .t-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; height: 100%; justify-content: flex-end; }
+    .t-bar-outer { width: 100%; background: var(--surface2); border-radius: 4px 4px 0 0; display: flex; align-items: flex-end; flex: 1; }
+    .t-bar { width: 100%; border-radius: 4px 4px 0 0; background: rgba(0,245,196,0.35); transition: height 0.5s ease; min-height: 4px; }
+    .t-bar.has-c { background: rgba(239,68,68,0.5); }
+    .t-year { font-size: 0.7rem; color: var(--text-dim); font-weight: 500; }
+    .t-count { font-size: 0.65rem; color: var(--text-dim); }
+    .timeline-legend { display: flex; gap: 1rem; margin-top: 0.5rem; }
+    .tleg { font-size: 0.72rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.35rem; }
+    .tleg-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+    /* properties list */
+    .props-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; }
+    .props-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
+    .props-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); }
+    .props-count-pill { font-size: 0.72rem; font-weight: 700; padding: 2px 9px; border-radius: 99px; background: var(--surface2); border: 1px solid var(--border-light); color: var(--text-secondary); }
+
+    .prop-row {
+      display: grid; grid-template-columns: 1fr auto auto; gap: 0.5rem 1rem;
+      align-items: center; padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .prop-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .prop-addr { font-size: 0.875rem; color: var(--text); font-weight: 500; }
+    .prop-boro { font-size: 0.75rem; color: var(--text-dim); }
+    .prop-vcount { font-size: 0.82rem; font-weight: 700; white-space: nowrap; }
+    .prop-vcount.high { color: #ef4444; }
+    .prop-vcount.mid  { color: #f59e0b; }
+    .prop-vcount.low  { color: var(--teal); }
+    .prop-open-badge { font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 99px; white-space: nowrap; }
+    .prop-open-badge.has-open { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #ef4444; }
+    .prop-open-badge.clean    { background: rgba(0,245,196,0.07); border: 1px solid rgba(0,245,196,0.15); color: var(--teal); }
+    .show-more-btn {
+      width: 100%; margin-top: 0.75rem; padding: 0.65rem;
+      background: var(--surface); border: 1px dashed var(--border-light);
+      border-radius: var(--radius); color: var(--text-secondary);
+      font-family: "DM Sans", sans-serif; font-size: 0.875rem; font-weight: 600;
+      cursor: pointer; transition: all 0.18s;
+    }
+    .show-more-btn:hover { border-color: var(--teal); color: var(--teal); background: rgba(0,245,196,0.04); }
+
+    /* data strip */
+    .data-strip {
+      display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+      padding: 0.85rem 1.25rem; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); margin-top: 2rem; font-size: 0.8rem; color: var(--text-dim);
+    }
+    .data-strip a { color: var(--teal); text-decoration: none; }
+    .data-strip a:hover { text-decoration: underline; }
+    .data-strip .sep { color: var(--border-light); }
+
+    /* publisher credit */
+    .publisher-strip {
+      display: flex; align-items: center; gap: 0.5rem;
+      margin-top: 0.75rem; font-size: 0.82rem; color: var(--text-dim);
+    }
+    .publisher-strip strong { color: var(--text-secondary); }
+
+    /* idle */
+    #state-idle { padding: 2rem 0 0; }
+    .idle-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+    .idle-pill {
+      padding: 0.4rem 0.9rem; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 99px; font-size: 0.78rem; color: var(--text-dim);
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+    .idle-pill svg { width: 11px; height: 11px; color: var(--teal); }
+    .idle-sec-label { text-align: center; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 1rem; }
+
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 1rem; }
+    .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+    .info-card-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .risk-legend-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .risk-legend-row:last-child { margin-bottom: 0; }
+    .risk-swatch { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; flex-shrink: 0; }
+    .riskl-green { background: rgba(16,185,129,0.12); color: #10b981; }
+    .riskl-amber { background: rgba(245,158,11,0.12); color: #f59e0b; }
+    .riskl-red   { background: rgba(239,68,68,0.12);  color: #ef4444; }
+    .risk-legend-text { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+    .risk-legend-text strong { color: var(--text); display: block; margin-bottom: 0.1rem; }
+    .howto-list { list-style: none; }
+    .howto-item { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 0.75rem; font-size: 0.875rem; color: var(--text-secondary); line-height: 1.55; }
+    .howto-item:last-child { margin-bottom: 0; }
+    .howto-num { width: 22px; height: 22px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: var(--teal); flex-shrink: 0; margin-top: 1px; }
+
+    @media (max-width: 600px) {
+      .tool-hero { padding: 3.5rem 1rem 2.5rem; }
+      .tool-main { padding: 0 1rem 3rem; }
+      .profile-header { gap: 1rem; }
+      .risk-block { flex-direction: row; gap: 1rem; width: 100%; padding: 1rem 1.25rem; }
+      .risk-num { font-size: 2rem; }
+      .stat-row { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="site-nav">
+  <nav class="nav">
+    <a href="/" class="logo">
+      <svg width="28" height="28" viewBox="0 0 34 34" fill="none">
+        <defs><linearGradient id="lg0" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00f5c4"/><stop offset="100%" stop-color="#b197fc"/></linearGradient></defs>
+        <rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(0,245,196,0.07)" stroke="url(#lg0)" stroke-width="1.5"/>
+        <rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lg0)"/>
+        <rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lg0)" opacity="0.75"/>
+        <rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lg0)" opacity="0.5"/>
+        <path d="M10.75 16.5 L17 11.5 L23.25 7" stroke="#00f5c4" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+        <circle cx="23.25" cy="7" r="1.8" fill="#00f5c4"/>
+      </svg>
+      <span class="logo-wordmark">civic<span class="cb">byte</span></span>
+    </a>
+    <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span class="cb-ham" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+    <div class="nav-links" id="cb-nav-links">
+      <a href="/">Home</a>
+      <a href="/tools.html" class="active">Tools</a>
+      <a href="/about.html">About</a>
+      <a href="/submit.html">Submit a Tool</a>
+      <a href="https://github.com/civicbytedev" target="_blank" rel="noopener" class="nav-gh">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="tool-hero">
+  <div class="tool-eyebrow"><div class="dot"></div>NYC Housing Accountability &mdash; Published by <strong>Sheldon H</strong></div>
+  <h1>NYC <span class="grad">Landlord Watch</span></h1>
+  <p class="sub">Search any NYC landlord or property address to see their full violation history, portfolio size, and accountability risk score — powered by HPD open data.</p>
+
+  <div class="search-card">
+    <div class="search-tabs">
+      <button class="stab active" id="tab-name" onclick="switchTab('name')">Landlord / Company Name</button>
+      <button class="stab" id="tab-addr" onclick="switchTab('addr')">Property Address</button>
+    </div>
+    <div class="search-row">
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-input" class="s-input" placeholder="e.g. Kushner Companies" autocomplete="off" aria-label="Search" />
+      </div>
+      <button class="btn-primary" id="search-btn" onclick="doSearch()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search
+      </button>
+    </div>
+    <p class="search-hint" id="search-hint">
+      Try:
+      <span onclick="fillEx('Kushner Companies')">Kushner Companies</span> &middot;
+      <span onclick="fillEx('STANTON')">Stanton</span> &middot;
+      <span onclick="fillEx('WEINSTEIN')">Weinstein</span>
+    </p>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="tool-main">
+
+  <!-- IDLE -->
+  <div id="state-idle">
+    <p class="idle-sec-label">What this tool shows</p>
+    <div class="idle-pills">
+      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Full violation history by landlord</span>
+      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Portfolio size &amp; all properties</span>
+      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Risk score (1–10)</span>
+      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Violation types &amp; severity</span>
+      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>5-year timeline</span>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">Risk Score Guide</div>
+        <div class="risk-legend-row"><span class="risk-swatch riskl-green">1–3</span><div class="risk-legend-text"><strong>Low Risk</strong>Few open violations relative to portfolio size.</div></div>
+        <div class="risk-legend-row"><span class="risk-swatch riskl-amber">4–6</span><div class="risk-legend-text"><strong>Moderate Risk</strong>Recurring or unresolved violations across properties.</div></div>
+        <div class="risk-legend-row"><span class="risk-swatch riskl-red">7–10</span><div class="risk-legend-text"><strong>High Risk</strong>Serious pattern of hazardous violations. Exercise caution.</div></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">How to Use This Tool</div>
+        <ul class="howto-list">
+          <li class="howto-item"><span class="howto-num">1</span><span>Search by the landlord or company name as it appears on your lease or HPD records.</span></li>
+          <li class="howto-item"><span class="howto-num">2</span><span>Or search by your property address to automatically identify the owner.</span></li>
+          <li class="howto-item"><span class="howto-num">3</span><span>Review the risk score, violation history, and full property portfolio.</span></li>
+          <li class="howto-item"><span class="howto-num">4</span><span>For legal help, contact <a href="https://www.legalaidnyc.org" target="_blank" rel="noopener" style="color:var(--teal)">Legal Aid</a> or <a href="https://www.metcouncilonhousing.org" target="_blank" rel="noopener" style="color:var(--teal)">Met Council</a>.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div id="state-loading" class="hidden">
+    <div class="spinner"></div>
+    <div class="loading-text">Looking up landlord data&hellip;</div>
+    <div class="loading-step" id="loading-step"></div>
+  </div>
+
+  <!-- ERROR -->
+  <div id="state-error" class="hidden">
+    <div class="err-icon">&#9888;&#65039;</div>
+    <div class="err-title" id="err-title">Something went wrong</div>
+    <div class="err-msg" id="err-msg">Please try again.</div>
+    <button class="err-retry" onclick="resetToIdle()">Try again</button>
+  </div>
+
+  <!-- MATCH LIST -->
+  <div id="state-matches" class="hidden">
+    <div class="matches-header">
+      <div class="matches-title" id="matches-title">Multiple landlords found</div>
+      <div class="matches-sub">Select a result to view the full accountability profile.</div>
+    </div>
+    <div class="match-list" id="match-list"></div>
+  </div>
+
+  <!-- PROFILE -->
+  <div id="state-profile" class="hidden">
+    <button class="back-btn" id="back-btn" onclick="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to results
+    </button>
+
+    <div class="profile-header">
+      <div class="profile-identity">
+        <div class="profile-type-badge" id="profile-type-badge">Corporate Owner</div>
+        <div class="profile-name" id="profile-name">—</div>
+        <div class="profile-address" id="profile-address"></div>
+      </div>
+      <div class="risk-block" id="risk-block">
+        <div class="risk-label-top">Risk Score</div>
+        <div class="risk-num" id="risk-num">—</div>
+        <div class="risk-desc" id="risk-desc">—</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-label">Properties</div><div class="stat-value" id="stat-props">—</div><div class="stat-sub">in portfolio</div></div>
+      <div class="stat-box stat-c"><div class="stat-label">Class C Open</div><div class="stat-value" id="stat-c">—</div><div class="stat-sub">immediately hazardous</div></div>
+      <div class="stat-box stat-b"><div class="stat-label">Class B Open</div><div class="stat-value" id="stat-b">—</div><div class="stat-sub">hazardous</div></div>
+      <div class="stat-box stat-a"><div class="stat-label">Total Violations</div><div class="stat-value" id="stat-total">—</div><div class="stat-sub">all time</div></div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="p-card">
+        <div class="p-card-title">Top Violation Types</div>
+        <div id="cat-chart"></div>
+      </div>
+      <div class="p-card">
+        <div class="p-card-title">5-Year Violation Timeline</div>
+        <div class="timeline-wrap" id="timeline-bars"></div>
+        <div class="timeline-legend">
+          <span class="tleg"><span class="tleg-dot" style="background:rgba(239,68,68,0.5)"></span>Class C</span>
+          <span class="tleg"><span class="tleg-dot" style="background:rgba(0,245,196,0.35)"></span>All violations</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="props-card">
+      <div class="props-header">
+        <span class="props-title">Properties</span>
+        <span class="props-count-pill" id="props-count-pill">0</span>
+      </div>
+      <div id="props-list"></div>
+      <button class="show-more-btn hidden" id="props-more-btn" onclick="showMoreProps()">Show more properties</button>
+    </div>
+
+    <div class="data-strip">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Data:
+      <a href="https://data.cityofnewyork.us/Housing-Development/Housing-Maintenance-Code-Violations/wvxf-dwi5" target="_blank" rel="noopener">HPD Violations</a>
+      <span class="sep">&middot;</span>
+      <a href="https://data.cityofnewyork.us/Housing-Development/Multiple-Dwelling-Registrations/tesw-yqqr" target="_blank" rel="noopener">HPD Registrations</a>
+      <span class="sep">&middot;</span>
+      <a href="https://data.cityofnewyork.us/Housing-Development/Registration-Contacts/feu5-w2e2" target="_blank" rel="noopener">Registration Contacts</a>
+      <span class="sep">&middot;</span>
+      Updated daily &middot; MIT License
+    </div>
+    <div class="publisher-strip">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Published by <strong>Sheldon H</strong> &middot; <a href="https://civicbyte.dev" style="color:var(--teal);text-decoration:none">CivicByte</a>
+    </div>
+  </div>
+
+</div><!-- /.tool-main -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-left">&copy; 2025 CivicByte &mdash; Open source under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>. Published by <strong style="color:var(--text-secondary)">Sheldon H</strong>.</div>
+  <div class="f-right">
+    <a href="/tools.html">Tools</a>
+    <a href="/about.html">About</a>
+    <a href="/submit.html">Submit</a>
+    <a href="https://github.com/civicbytedev" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<script>
+// ── APIs ───────────────────────────────────────────────────────────────────────
+const CONTACTS_API  = 'https://data.cityofnewyork.us/resource/feu5-w2e2.json';
+const REG_API       = 'https://data.cityofnewyork.us/resource/tesw-yqqr.json';
+const VIOL_API      = 'https://data.cityofnewyork.us/resource/wvxf-dwi5.json';
+const GEO_API       = 'https://geosearch.planninglabs.nyc/v2/search';
+
+const BORO_CODES = {
+  'manhattan':'1','new york county':'1',
+  'bronx':'2','bronx county':'2',
+  'brooklyn':'3','kings county':'3','kings':'3',
+  'queens':'4','queens county':'4',
+  'staten island':'5','richmond county':'5','richmond':'5'
+};
+
+// ── State ──────────────────────────────────────────────────────────────────────
+let activeTab      = 'name';
+let lastMatches    = [];
+let propsData      = [];
+let propsShown     = 15;
+
+// ── UI helpers ─────────────────────────────────────────────────────────────────
+function setText(id, v) { document.getElementById(id).textContent = v; }
+function setStep(m)     { document.getElementById('loading-step').textContent = m; }
+function showState(s) {
+  ['state-idle','state-loading','state-error','state-matches','state-profile'].forEach(id => {
+    document.getElementById(id).classList.toggle('hidden', id !== s);
+  });
+}
+function resetToIdle() {
+  showState('state-idle');
+  document.getElementById('search-btn').disabled = false;
+}
+function showErr(t, m) {
+  setText('err-title', t); setText('err-msg', m); showState('state-error');
+  document.getElementById('search-btn').disabled = false;
+}
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('tab-name').classList.toggle('active', tab === 'name');
+  document.getElementById('tab-addr').classList.toggle('active', tab === 'addr');
+  const inp = document.getElementById('search-input');
+  const hint = document.getElementById('search-hint');
+  if (tab === 'name') {
+    inp.placeholder = 'e.g. Kushner Companies, SMITH';
+    hint.innerHTML = 'Try: <span onclick="fillEx(\'Kushner Companies\')">Kushner Companies</span> &middot; <span onclick="fillEx(\'STANTON\')">Stanton</span> &middot; <span onclick="fillEx(\'WEINSTEIN\')">Weinstein</span>';
+  } else {
+    inp.placeholder = 'e.g. 123 Main St, Brooklyn';
+    hint.innerHTML = 'Try: <span onclick="fillEx(\'221 East 168 Street, Bronx\')">221 E 168 St, Bronx</span> &middot; <span onclick="fillEx(\'1175 Morris Avenue, Bronx\')">1175 Morris Ave, Bronx</span>';
+  }
+  inp.value = '';
+}
+function fillEx(v) {
+  document.getElementById('search-input').value = v;
+  doSearch();
+}
+
+document.getElementById('search-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doSearch();
+});
+
+// ── Fetch helpers ──────────────────────────────────────────────────────────────
+async function apiFetch(url, timeoutMs = 12000) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const r = await fetch(url, { signal: ctrl.signal });
+    clearTimeout(t);
+    if (!r.ok) throw new Error(`API error ${r.status}`);
+    return r.json();
+  } catch(e) {
+    clearTimeout(t);
+    if (e.name === 'AbortError') throw new Error('Request timed out — please try again.');
+    throw e;
+  }
+}
+
+// ── Risk score ─────────────────────────────────────────────────────────────────
+function calcRisk(openC, openB, openA, portfolio) {
+  const p = Math.max(1, portfolio);
+  const w = (openC * 3 + openB * 2 + openA) / p;
+  if (w === 0) return 1;
+  if (w < 0.3) return 2;
+  if (w < 0.7) return 3;
+  if (w < 1.2) return 4;
+  if (w < 2)   return 5;
+  if (w < 3.5) return 6;
+  if (w < 5.5) return 7;
+  if (w < 9)   return 8;
+  if (w < 14)  return 9;
+  return 10;
+}
+function riskClass(s) { return s <= 3 ? 'risk-low' : s <= 6 ? 'risk-mid' : 'risk-high'; }
+function riskLabel(s) { return s <= 3 ? 'LOW RISK' : s <= 6 ? 'MODERATE' : 'HIGH RISK'; }
+
+// ── Violation helpers ──────────────────────────────────────────────────────────
+function isOpen(v) {
+  const s = (v.currentstatus || '').toLowerCase();
+  return s.includes('open') || s.includes('nov sent out') || s.includes('not complied');
+}
+function categorize(desc) {
+  const d = (desc || '').toLowerCase();
+  if (/lead|27-2056/.test(d))                                      return 'Lead Paint';
+  if (/heat|hot water|27-2029|27-2031/.test(d))                    return 'Heat / Hot Water';
+  if (/pest|roach|mice|rat|rodent|bedbug|vermin|insect/.test(d))   return 'Pest Infestation';
+  if (/mold|mildew/.test(d))                                       return 'Mold';
+  if (/plumb|toilet|sink|drain|sewer|pipe/.test(d))                return 'Plumbing';
+  if (/window|door|lock|guard|entrance/.test(d))                   return 'Windows / Doors';
+  if (/ceiling|wall|floor|stair|crack|structural/.test(d))         return 'Structural';
+  if (/fire|smoke|sprinkler|alarm|carbon/.test(d))                 return 'Fire Safety';
+  if (/elevator/.test(d))                                          return 'Elevator';
+  return 'Other';
+}
+
+// ── Batched violations fetch ───────────────────────────────────────────────────
+async function fetchViolations(regIds) {
+  if (!regIds.length) return [];
+  const BATCH = 40;
+  const batches = [];
+  for (let i = 0; i < regIds.length; i += BATCH) batches.push(regIds.slice(i, i + BATCH));
+  const results = await Promise.all(batches.map((batch, idx) => {
+    setStep(`Fetching violations (batch ${idx + 1}/${batches.length})…`);
+    const ids = batch.map(id => `'${id}'`).join(',');
+    const url = `${VIOL_API}?$where=${encodeURIComponent(`registrationid in (${ids})`)}&$limit=5000&$order=inspectiondate DESC`;
+    return apiFetch(url).catch(() => []);
+  }));
+  return results.flat();
+}
+
+// ── Search: by name ────────────────────────────────────────────────────────────
+async function searchByName(query) {
+  const q = query.toUpperCase().replace(/'/g, "''");
+  setStep('Searching landlord registry…');
+  const where = `(upper(corporationname) like '%25${encodeURIComponent(q)}%25' OR upper(lastname) like '%25${encodeURIComponent(q)}%25') AND (type='CorporateOwner' OR type='IndividualOwner' OR type='HeadOfficer')`;
+  const url = `${CONTACTS_API}?$where=${encodeURIComponent(`(upper(corporationname) like '%${q}%' OR upper(lastname) like '%${q}%') AND (type='CorporateOwner' OR type='IndividualOwner' OR type='HeadOfficer')`)}&$limit=600`;
+  const contacts = await apiFetch(url);
+  if (!contacts.length) throw new Error(`No landlords found matching "${query}". Try a different spelling or a specific LLC name.`);
+  return groupContacts(contacts);
+}
+
+// ── Search: by address ─────────────────────────────────────────────────────────
+async function searchByAddress(query) {
+  setStep('Geocoding address…');
+  const hasNYC = /\b(nyc|new york|brooklyn|manhattan|bronx|queens|staten island)\b/i.test(query);
+  const geoQuery = hasNYC ? query : query + ', New York City';
+  const geoData = await apiFetch(`${GEO_API}?text=${encodeURIComponent(geoQuery)}&size=5`);
+  if (!geoData.features?.length) throw new Error(`Address not found. Try adding the borough — e.g. "${query}, Brooklyn".`);
+
+  const props = (geoData.features.find(f => f.properties?.addendum?.pad?.bbl) || geoData.features[0]).properties;
+  const bbl = props?.addendum?.pad?.bbl || null;
+  if (!bbl) throw new Error('Could not find a building record for that address. Try a nearby intersection or include the borough.');
+
+  setStep('Finding building registration…');
+  const regs = await apiFetch(`${REG_API}?bbl=${encodeURIComponent(bbl)}&$limit=1`);
+  if (!regs.length) throw new Error('No HPD registration found for this building. It may be a commercial property or a new construction not yet registered.');
+  const reg = regs[0];
+
+  setStep('Looking up owner information…');
+  const regContacts = await apiFetch(`${CONTACTS_API}?registrationid=${encodeURIComponent(reg.registrationid)}&$where=${encodeURIComponent("type='CorporateOwner' OR type='IndividualOwner' OR type='HeadOfficer'")}&$limit=5`);
+  if (!regContacts.length) throw new Error('No owner contact found for this registration. The building may have incomplete HPD records.');
+
+  const ownerContact = regContacts[0];
+  const ownerName = ownerContact.corporationname || [ownerContact.firstname, ownerContact.lastname].filter(Boolean).join(' ');
+  const escapedName = ownerName.toUpperCase().replace(/'/g, "''");
+
+  setStep(`Finding all properties owned by "${ownerName}"…`);
+  const allContacts = await apiFetch(`${CONTACTS_API}?$where=${encodeURIComponent(`(upper(corporationname)='${escapedName}' OR (upper(lastname)='${escapedName.split(' ').pop()}' AND type='IndividualOwner')) AND (type='CorporateOwner' OR type='IndividualOwner' OR type='HeadOfficer')`  )}&$limit=600`);
+
+  const groups = groupContacts(allContacts.length > 0 ? allContacts : [ownerContact]);
+  return groups;
+}
+
+// ── Group contacts into landlord entities ──────────────────────────────────────
+function groupContacts(contacts) {
+  const map = new Map();
+  contacts.forEach(c => {
+    const key = (c.corporationname || [c.firstname, c.lastname].filter(Boolean).join(' ')).toUpperCase().trim();
+    if (!key) return;
+    if (!map.has(key)) map.set(key, { name: key, type: c.type, regIds: new Set(), address: [c.businesshousenumber, c.businessstreetname, c.businesscity, c.businessstate].filter(Boolean).join(' ') });
+    map.get(key).regIds.add(c.registrationid);
+  });
+  return Array.from(map.values())
+    .sort((a, b) => b.regIds.size - a.regIds.size)
+    .slice(0, 8);
+}
+
+// ── Main search dispatcher ─────────────────────────────────────────────────────
+async function doSearch() {
+  const raw = document.getElementById('search-input').value.trim();
+  if (!raw) return;
+  document.getElementById('search-btn').disabled = true;
+  showState('state-loading');
+  setStep('');
+  try {
+    const groups = activeTab === 'name' ? await searchByName(raw) : await searchByAddress(raw);
+    if (groups.length === 0) { showErr('No results', `No landlords found matching "${raw}".`); return; }
+    if (groups.length === 1) {
+      await loadProfile(groups[0]);
+    } else {
+      lastMatches = groups;
+      renderMatchList(groups, raw);
+      showState('state-matches');
+      document.getElementById('search-btn').disabled = false;
+    }
+  } catch(e) {
+    showErr('Could not load data', e.message || 'An unexpected error occurred.');
+  }
+}
+
+// ── Render match list ──────────────────────────────────────────────────────────
+function renderMatchList(groups, query) {
+  setText('matches-title', `${groups.length} landlords found for "${query}"`);
+  document.getElementById('match-list').innerHTML = groups.map((g, i) => `
+    <div class="match-card" onclick="selectMatch(${i})">
+      <div>
+        <div class="match-name">${esc(g.name)}</div>
+        <div class="match-meta">
+          <span>${esc(g.type || 'Owner')}</span>
+          <span>${g.regIds.size} registered building${g.regIds.size !== 1 ? 's' : ''}</span>
+          ${g.address ? `<span>${esc(g.address)}</span>` : ''}
+        </div>
+      </div>
+      <button class="view-btn">View Profile &rarr;</button>
+    </div>`).join('');
+}
+async function selectMatch(i) {
+  showState('state-loading');
+  document.getElementById('search-btn').disabled = true;
+  try { await loadProfile(lastMatches[i]); }
+  catch(e) { showErr('Could not load profile', e.message); }
+}
+function goBack() {
+  if (lastMatches.length > 1) showState('state-matches');
+  else resetToIdle();
+  document.getElementById('search-btn').disabled = false;
+}
+
+// ── Load full landlord profile ─────────────────────────────────────────────────
+async function loadProfile(landlord) {
+  setStep('Fetching building registrations…');
+  const regIds = Array.from(landlord.regIds);
+
+  // Get building details
+  const regBatches = [];
+  const RBATCH = 50;
+  for (let i = 0; i < regIds.length; i += RBATCH) {
+    const batch = regIds.slice(i, i + RBATCH);
+    const ids = batch.map(id => `'${id}'`).join(',');
+    const url = `${REG_API}?$where=${encodeURIComponent(`registrationid in (${ids})`)}&$limit=2000`;
+    regBatches.push(apiFetch(url).catch(() => []));
+  }
+  const regResults = (await Promise.all(regBatches)).flat();
+
+  // Fetch violations
+  setStep('Fetching violation records…');
+  const violations = await fetchViolations(regIds);
+
+  // Aggregate
+  setStep('Calculating risk score…');
+  const openC   = violations.filter(v => isOpen(v) && v.class === 'C').length;
+  const openB   = violations.filter(v => isOpen(v) && v.class === 'B').length;
+  const openA   = violations.filter(v => isOpen(v) && v.class === 'A').length;
+  const riskScore = calcRisk(openC, openB, openA, regIds.length);
+
+  renderProfile(landlord, regResults, violations, riskScore, openC, openB, openA);
+  showState('state-profile');
+  document.getElementById('search-btn').disabled = false;
+  setTimeout(() => document.getElementById('state-profile').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+}
+
+// ── Render profile ─────────────────────────────────────────────────────────────
+function renderProfile(landlord, regs, violations, riskScore, openC, openB, openA) {
+  // Header
+  setText('profile-name', landlord.name);
+  setText('profile-type-badge', formatType(landlord.type));
+  setText('profile-address', landlord.address || '');
+
+  // Risk block
+  const rb = document.getElementById('risk-block');
+  rb.className = 'risk-block ' + riskClass(riskScore);
+  setText('risk-num', riskScore);
+  setText('risk-desc', riskLabel(riskScore));
+
+  // Stats
+  setText('stat-props',  regs.length || landlord.regIds.size);
+  setText('stat-c',      openC);
+  setText('stat-b',      openB);
+  setText('stat-total',  violations.length);
+
+  // Category chart
+  renderCatChart(violations);
+
+  // Timeline
+  renderTimeline(violations);
+
+  // Properties
+  propsData  = buildPropsData(regs, violations);
+  propsShown = 15;
+  renderPropsList();
+}
+
+function formatType(t) {
+  const map = { CorporateOwner:'Corporate Owner', IndividualOwner:'Individual Owner', HeadOfficer:'Head Officer', JointOwner:'Joint Owner' };
+  return map[t] || t || 'Owner';
+}
+
+// ── Category chart ─────────────────────────────────────────────────────────────
+function renderCatChart(violations) {
+  const counts = {};
+  violations.forEach(v => {
+    const cat = categorize(v.novdescription);
+    counts[cat] = (counts[cat] || 0) + 1;
+  });
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 7);
+  const max = sorted[0]?.[1] || 1;
+  const openCounts = {};
+  violations.filter(isOpen).forEach(v => {
+    const cat = categorize(v.novdescription);
+    openCounts[cat] = (openCounts[cat] || 0) + 1;
+  });
+  document.getElementById('cat-chart').innerHTML = sorted.map(([cat, count]) => {
+    const pct = Math.round((count / max) * 100);
+    const openCount = openCounts[cat] || 0;
+    const isCrit = ['Lead Paint','Heat / Hot Water','Fire Safety'].includes(cat);
+    return `<div class="cat-row">
+      <span class="cat-name" title="${esc(cat)}">${esc(cat)}</span>
+      <div class="cat-bar-wrap"><div class="cat-bar${isCrit ? ' c-bar' : ''}" style="width:${pct}%"></div></div>
+      <span class="cat-count">${count}${openCount > 0 ? `<span style="color:#ef4444;font-size:0.65rem"> (${openCount} open)</span>` : ''}</span>
+    </div>`;
+  }).join('') || '<div style="color:var(--text-dim);font-size:0.85rem">No violations on record.</div>';
+}
+
+// ── Timeline ───────────────────────────────────────────────────────────────────
+function renderTimeline(violations) {
+  const now = new Date().getFullYear();
+  const years = {};
+  for (let i = 4; i >= 0; i--) years[now - i] = { total: 0, c: 0 };
+  violations.forEach(v => {
+    if (!v.inspectiondate) return;
+    const yr = new Date(v.inspectiondate).getFullYear();
+    if (years[yr] !== undefined) {
+      years[yr].total++;
+      if (v.class === 'C') years[yr].c++;
+    }
+  });
+  const vals = Object.values(years);
+  const maxTotal = Math.max(...vals.map(y => y.total), 1);
+  document.getElementById('timeline-bars').innerHTML = Object.entries(years).map(([yr, data]) => {
+    const totalPct = Math.round((data.total / maxTotal) * 100);
+    const cPct     = data.total > 0 ? Math.round((data.c / data.total) * 100) : 0;
+    return `<div class="t-col">
+      <div class="t-bar-outer">
+        <div class="t-bar${data.c > 0 ? ' has-c' : ''}" style="height:${Math.max(totalPct, data.total > 0 ? 8 : 0)}%" title="${data.total} violations in ${yr} (${data.c} Class C)"></div>
+      </div>
+      <span class="t-year">${yr}</span>
+      ${data.total > 0 ? `<span class="t-count">${data.total}</span>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ── Properties list ────────────────────────────────────────────────────────────
+function buildPropsData(regs, violations) {
+  const byRegId = {};
+  violations.forEach(v => {
+    const rid = v.registrationid;
+    if (!byRegId[rid]) byRegId[rid] = { total: 0, open: 0 };
+    byRegId[rid].total++;
+    if (isOpen(v)) byRegId[rid].open++;
+  });
+  return regs.map(r => ({
+    addr: [r.housenumber, r.streetname].filter(Boolean).join(' '),
+    boro: r.boro || '',
+    total: byRegId[r.registrationid]?.total || 0,
+    open:  byRegId[r.registrationid]?.open  || 0,
+  })).sort((a, b) => b.open - a.open || b.total - a.total);
+}
+
+function renderPropsList() {
+  const list = document.getElementById('props-list');
+  const btn  = document.getElementById('props-more-btn');
+  const slice = propsData.slice(0, propsShown);
+  setText('props-count-pill', propsData.length.toString());
+  list.innerHTML = slice.map(p => {
+    const vc = p.total > 10 ? 'high' : p.total > 3 ? 'mid' : 'low';
+    return `<div class="prop-row">
+      <div>
+        <div class="prop-addr">${esc(p.addr || '—')}</div>
+        <div class="prop-boro">${esc(titleCase(p.boro))}</div>
+      </div>
+      <span class="prop-vcount ${vc}">${p.total} violation${p.total !== 1 ? 's' : ''}</span>
+      <span class="prop-open-badge ${p.open > 0 ? 'has-open' : 'clean'}">${p.open > 0 ? p.open + ' open' : 'Clean'}</span>
+    </div>`;
+  }).join('') || '<div style="color:var(--text-dim);font-size:0.85rem;padding:0.5rem 0">No property data available.</div>';
+  if (propsData.length > propsShown) {
+    btn.textContent = `Show ${Math.min(15, propsData.length - propsShown)} more (${propsData.length - propsShown} remaining)`;
+    btn.classList.remove('hidden');
+  } else { btn.classList.add('hidden'); }
+}
+function showMoreProps() { propsShown += 15; renderPropsList(); }
+
+// ── Utils ──────────────────────────────────────────────────────────────────────
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function titleCase(s) { return s ? s.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : ''; }
+</script>
+
+<!-- Mobile nav -->
+<script>
+(function(){
+  var toggle=document.querySelector('.mobile-toggle'), navLinks=document.querySelector('.nav-links'), siteNav=document.querySelector('.site-nav');
+  if(!toggle||!navLinks)return;
+  var open=false,sy=0;
+  function o(){open=true;toggle.setAttribute('aria-expanded','true');navLinks.classList.add('open');sy=window.scrollY;document.body.style.top='-'+sy+'px';document.body.classList.add('nav-open');}
+  function c(){open=false;toggle.setAttribute('aria-expanded','false');navLinks.classList.remove('open');document.body.classList.remove('nav-open');document.body.style.top='';window.scrollTo(0,sy);}
+  toggle.addEventListener('click',function(e){e.stopPropagation();open?c():o();});
+  navLinks.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){if(open)c();});});
+  document.addEventListener('click',function(e){if(open&&!siteNav.contains(e.target))c();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&open){c();toggle.focus();}});
+  window.addEventListener('resize',function(){if(window.innerWidth>768&&open)c();});
+})();
+</script>
+</body>
+</html>
