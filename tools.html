@@ -72,6 +72,83 @@
                         .search-bar { padding: 0 1.5rem 1.5rem; }
                         .section { padding-top: 0; }
               }
+
+              /* ── Per-card theme accents ── */
+              .tool-card.card-budget   { --ca: var(--teal);   --ca-rgb: 0,245,196; }
+              .tool-card.card-landlord { --ca: var(--coral);  --ca-rgb: 255,124,124; }
+              .tool-card.card-building { --ca: var(--purple); --ca-rgb: 177,151,252; }
+
+              .tool-card.card-budget::before,
+              .tool-card.card-landlord::before,
+              .tool-card.card-building::before {
+                content: ''; position: absolute;
+                top: 0; left: 0; right: 0; height: 2px;
+                background: var(--ca); z-index: 1;
+              }
+              .tool-card.card-budget::after   { background: radial-gradient(circle at 80% 0%, rgba(0,245,196,0.06) 0%, transparent 55%); }
+              .tool-card.card-landlord::after { background: radial-gradient(circle at 80% 0%, rgba(255,124,124,0.06) 0%, transparent 55%); }
+              .tool-card.card-building::after { background: radial-gradient(circle at 80% 0%, rgba(177,151,252,0.06) 0%, transparent 55%); }
+              .tool-card.card-budget:hover   { border-color: rgba(0,245,196,0.28);   box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(0,245,196,0.08); }
+              .tool-card.card-landlord:hover { border-color: rgba(255,124,124,0.28); box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(255,124,124,0.08); }
+              .tool-card.card-building:hover { border-color: rgba(177,151,252,0.28); box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(177,151,252,0.08); }
+
+              /* ── Card icon ── */
+              .card-icon {
+                width: 38px; height: 38px; border-radius: 10px;
+                display: flex; align-items: center; justify-content: center;
+                margin-bottom: 1rem; flex-shrink: 0; color: var(--ca);
+                background: rgba(var(--ca-rgb), 0.08);
+                border: 1px solid rgba(var(--ca-rgb), 0.18);
+              }
+              .card-icon svg { width: 18px; height: 18px; }
+
+              /* ── Themed h3 + link ── */
+              .card-budget   h3, .card-budget   .tool-link { color: var(--teal); }
+              .card-landlord h3, .card-landlord .tool-link { color: var(--coral); }
+              .card-building h3, .card-building .tool-link { color: var(--purple); }
+
+              /* ── Landlord: urgency label ── */
+              .card-urgency-label {
+                font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em;
+                text-transform: uppercase; color: var(--coral);
+                display: flex; align-items: center; gap: 0.3rem;
+                margin-bottom: 0.5rem;
+              }
+              .card-urgency-label svg { width: 11px; height: 11px; }
+
+              /* ── Landlord: risk gradient bar ── */
+              .risk-bar-row {
+                display: flex; align-items: center; gap: 0.6rem;
+                margin: 0.6rem 0 1rem;
+              }
+              .risk-bar-lbl { font-size: 0.7rem; color: var(--text-dim); white-space: nowrap; }
+              .risk-bar-track {
+                flex: 1; height: 5px; border-radius: 99px;
+                background: linear-gradient(90deg, #10b981 0%, #f59e0b 50%, #ef4444 100%);
+                position: relative;
+              }
+              .risk-bar-track::after {
+                content: ''; position: absolute;
+                right: 0; top: 50%; transform: translateY(-50%);
+                width: 9px; height: 9px; border-radius: 50%;
+                background: #ef4444; border: 2px solid var(--surface);
+                box-shadow: 0 0 6px rgba(239,68,68,0.6);
+              }
+
+              /* ── Building: stats micro-row ── */
+              .card-stats-mini {
+                display: flex; gap: 1rem; flex-wrap: wrap;
+                margin: 0.4rem 0 1rem;
+              }
+              .card-stat-mini {
+                display: flex; flex-direction: column;
+                font-size: 0.7rem; color: var(--text-dim);
+              }
+              .card-stat-mini strong {
+                font-size: 0.88rem; font-weight: 700;
+                color: var(--purple); font-family: "Space Grotesk", sans-serif;
+                line-height: 1.1;
+              }
             </style>
           <!-- Firebase -->
           <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -138,7 +215,10 @@
       <section class="section" style="padding-top: 0;">
           <div class="tools-grid" id="toolsGrid">
           
-                <div class="tool-card" data-category="education" data-name="NYC School Budget Tracker" data-status="live">
+                <div class="tool-card card-budget" data-category="education" data-name="NYC School Budget Tracker" data-status="live">
+                        <div class="card-icon">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
+                        </div>
                         <div class="tool-meta">
                                   <span class="tool-status live">Live</span>
                                   <span class="tool-category">Education</span>
@@ -156,13 +236,25 @@
                         </div>
                 </div>
           
-                <div class="tool-card" data-category="housing" data-name="NYC Landlord Watch" data-status="live">
+                <div class="tool-card card-landlord" data-category="housing" data-name="NYC Landlord Watch" data-status="live">
+                        <div class="card-icon">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </div>
                         <div class="tool-meta">
                                   <span class="tool-status live">Live</span>
-                                  <span class="tool-category">Housing</span>
+                                  <span class="tool-category">Housing · Accountability</span>
+                        </div>
+                        <div class="card-urgency-label">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                  Tenant Accountability Tool
                         </div>
                         <h3>NYC Landlord Watch</h3>
-                        <p>Search any NYC landlord or company name to see their full violation history, portfolio size, risk score (1–10), and all properties. Published by Sheldon H.</p>
+                        <div class="risk-bar-row">
+                                  <span class="risk-bar-lbl">Low</span>
+                                  <div class="risk-bar-track"></div>
+                                  <span class="risk-bar-lbl">High Risk</span>
+                        </div>
+                        <p>Search any landlord or company name to expose their full violation history, portfolio size, and risk score across all NYC properties.</p>
                         <div class="tool-tags">
                                   <span class="tool-tag">NYC</span>
                                   <span class="tool-tag">Housing</span>
@@ -174,13 +266,21 @@
                         </div>
                 </div>
 
-                <div class="tool-card" data-category="housing" data-name="NYC Building Report" data-status="live">
+                <div class="tool-card card-building" data-category="housing" data-name="NYC Building Report" data-status="live">
+                        <div class="card-icon">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                        </div>
                         <div class="tool-meta">
                                   <span class="tool-status live">Live</span>
-                                  <span class="tool-category">Housing</span>
+                                  <span class="tool-category">Housing · Infrastructure</span>
                         </div>
                         <h3>NYC Building Report</h3>
-                        <p>Look up HPD housing maintenance violations for any NYC building. See class breakdowns, open violations, building registration, and owner info — powered by NYC Open Data.</p>
+                        <div class="card-stats-mini">
+                                  <div class="card-stat-mini"><strong>3</strong>Severity classes</div>
+                                  <div class="card-stat-mini"><strong>A · B · C</strong>Violation grades</div>
+                                  <div class="card-stat-mini"><strong>Daily</strong>Data updates</div>
+                        </div>
+                        <p>Enter any NYC address to pull HPD maintenance violations — open violations, severity breakdown, building registration, and owner info.</p>
                         <div class="tool-tags">
                                   <span class="tool-tag">NYC</span>
                                   <span class="tool-tag">Housing</span>
