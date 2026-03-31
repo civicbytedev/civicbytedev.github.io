@@ -552,8 +552,8 @@ function switchTab(tab) {
   const inp = document.getElementById('search-input');
   const hint = document.getElementById('search-hint');
   if (tab === 'name') {
-    inp.placeholder = 'e.g. Kushner Companies, SMITH';
-    hint.innerHTML = 'Try: <span onclick="fillEx(\'Kushner Companies\')">Kushner Companies</span> &middot; <span onclick="fillEx(\'STANTON\')">Stanton</span> &middot; <span onclick="fillEx(\'WEINSTEIN\')">Weinstein</span>';
+    inp.placeholder = 'e.g. Glenwood Management, SMITH';
+    hint.innerHTML = 'Try: <span onclick="fillEx(\'Glenwood\')">Glenwood</span> &middot; <span onclick="fillEx(\'STANTON\')">Stanton</span> &middot; <span onclick="fillEx(\'WEINSTEIN\')">Weinstein</span>';
   } else {
     inp.placeholder = 'e.g. 123 Main St, Brooklyn';
     hint.innerHTML = 'Try: <span onclick="fillEx(\'221 East 168 Street, Bronx\')">221 E 168 St, Bronx</span> &middot; <span onclick="fillEx(\'1175 Morris Avenue, Bronx\')">1175 Morris Ave, Bronx</span>';
