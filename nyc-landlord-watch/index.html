@@ -661,7 +661,11 @@ async function searchByAddress(query) {
   if (!bbl) throw new Error('Could not find a building record for that address. Try a nearby intersection or include the borough.');
 
   setStep('Finding building registration…');
-  const regs = await apiFetch(`${REG_API}?bbl=${encodeURIComponent(bbl)}&$limit=1`);
+  // BBL format: [boro(1)][block(5)][lot(4)] — parse into components for query
+  const bblBoro  = bbl.substring(0, 1);
+  const bblBlock = String(parseInt(bbl.substring(1, 6), 10));
+  const bblLot   = String(parseInt(bbl.substring(6, 10), 10));
+  const regs = await apiFetch(`${REG_API}?$where=${encodeURIComponent(`boroid='${bblBoro}' AND block='${bblBlock}' AND lot='${bblLot}'`)}&$limit=1`);
   if (!regs.length) throw new Error('No HPD registration found for this building. It may be a commercial property or a new construction not yet registered.');
   const reg = regs[0];
 
