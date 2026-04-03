@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#080b1a">
+  <title>Privacy Policy — CivicByte</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%23080b1a' stroke='%2300f5c4' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%2300f5c4'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%2300f5c4' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%2300f5c4' opacity='.5'/%3E%3C/svg%3E">
+  <meta name="description" content="Privacy Policy for CivicByte — we don't collect your personal data.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body { background: var(--bg); }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(rgba(30,45,82,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(30,45,82,0.16) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .site-nav, .privacy-hero, .privacy-body, footer { position: relative; z-index: 1; }
+
+    .privacy-hero {
+      padding: 6rem 2rem 3rem;
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .privacy-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0,245,196,0.06);
+      border: 1px solid rgba(0,245,196,0.2);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 1.75rem;
+    }
+    .privacy-badge .dot {
+      width: 6px; height: 6px;
+      background: var(--teal);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--teal);
+    }
+    .privacy-hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .privacy-hero p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.75;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .privacy-body {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    .privacy-tldr {
+      background: var(--surface);
+      border: 1px solid rgba(0,245,196,0.25);
+      border-radius: 16px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .privacy-tldr::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--teal), var(--purple));
+    }
+    .privacy-tldr-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.75rem;
+      font-family: "Space Grotesk", sans-serif;
+    }
+    .privacy-tldr p {
+      font-size: 1rem;
+      color: var(--text-primary);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .privacy-section {
+      margin-bottom: 2.5rem;
+    }
+    .privacy-section h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+      font-family: "Space Grotesk", sans-serif;
+      letter-spacing: -0.02em;
+    }
+    .privacy-section p, .privacy-section li {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin: 0 0 0.6rem;
+    }
+    .privacy-section ul {
+      padding-left: 1.25rem;
+      margin: 0.5rem 0 0;
+    }
+    .privacy-section li { margin-bottom: 0.35rem; }
+    .privacy-section a { color: var(--teal); text-decoration: none; }
+    .privacy-section a:hover { text-decoration: underline; }
+
+    .privacy-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .contact-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: rgba(0,245,196,0.08);
+      border: 1px solid rgba(0,245,196,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .contact-label {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      margin-bottom: 0.2rem;
+    }
+    .contact-value { font-size: 0.95rem; color: var(--text-primary); }
+    .contact-value a { color: var(--teal); text-decoration: none; }
+    .contact-value a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="site-nav">
+    <nav class="nav">
+      <a href="/" class="logo">
+        <svg width="28" height="28" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="lg0" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00f5c4"/><stop offset="100%" stop-color="#b197fc"/></linearGradient></defs>
+          <rect x="2" y="2" width="30" height="30" rx="9" fill="rgba(0,245,196,0.07)" stroke="url(#lg0)" stroke-width="1.5"/>
+          <rect x="9" y="18" width="3.5" height="8" rx="1.2" fill="url(#lg0)"/>
+          <rect x="15.25" y="13" width="3.5" height="13" rx="1.2" fill="url(#lg0)" opacity="0.75"/>
+          <rect x="21.5" y="8" width="3.5" height="18" rx="1.2" fill="url(#lg0)" opacity="0.5"/>
+          <path d="M10.75 16.5 L17 11.5 L23.25 7" stroke="#00f5c4" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+          <circle cx="23.25" cy="7" r="1.8" fill="#00f5c4"/>
+        </svg>
+        <span class="logo-wordmark">civic<span class="cb">byte</span></span>
+      </a>
+      <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="cb-nav-links">
+        <span class="cb-ham" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <div class="nav-links" id="cb-nav-links">
+        <a href="/">Home</a>
+        <a href="/tools.html">Tools</a>
+        <a href="/about.html">About</a>
+        <a href="/submit.html">Submit a Tool</a>
+        <a href="https://github.com/civicbytedev" target="_blank" rel="noopener" class="nav-gh">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <div class="privacy-hero">
+    <div class="privacy-badge"><div class="dot"></div> Legal &middot; Last updated April 3, 2025</div>
+    <h1>Privacy <span class="grad">Policy</span></h1>
+    <p>CivicByte is built on a simple principle: public data should serve the public, not the other way around. We don't collect your personal information.</p>
+  </div>
+
+  <!-- BODY -->
+  <div class="privacy-body">
+
+    <div class="privacy-tldr">
+      <div class="privacy-tldr-label">TL;DR</div>
+      <p>CivicByte does not collect, store, or sell any personal data. The app and website are free tools &mdash; you are not the product. No accounts, no tracking, no ads.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>1. Information We Collect</h2>
+      <p>We collect <strong>no personal information</strong> from users of the CivicByte app or website.</p>
+      <p>Specifically, we do not collect:</p>
+      <ul>
+        <li>Names, email addresses, or contact information</li>
+        <li>Device identifiers or advertising IDs</li>
+        <li>Location data</li>
+        <li>Usage analytics or behavioral data</li>
+        <li>Cookies or tracking pixels</li>
+        <li>Any form of account or login data (no accounts exist)</li>
+      </ul>
+    </div>
+
+    <hr class="privacy-divider">
+
+    <div class="privacy-section">
+      <h2>2. How the App Works</h2>
+      <p>The CivicByte iOS app is a curated directory of free civic tech tools. When you tap a tool, the app opens it in an in-app browser (WebView) pointed directly at the tool's URL. All data processing happens on the tool's own server or in your browser &mdash; not through CivicByte.</p>
+      <p>We do not intercept, log, or store any data you enter or retrieve while using tools within the app.</p>
+    </div>
+
+    <hr class="privacy-divider">
+
+    <div class="privacy-section">
+      <h2>3. Third-Party Tools and Services</h2>
+      <p>CivicByte links to civic tools built and maintained by third-party developers. These tools are independent services and have their own privacy practices. We encourage you to review the privacy policy of any tool you use.</p>
+      <p>Current tools on the platform include:</p>
+      <ul>
+        <li><strong>NYC School Budget Tracker</strong> &mdash; powered by NYC Open Data</li>
+        <li><strong>NYC Building Report</strong> &mdash; powered by NYC HPD Open Data</li>
+        <li><strong>NYC Landlord Watch</strong> &mdash; powered by NYC Open Data</li>
+      </ul>
+      <p>None of these tools require an account or collect personal data as part of CivicByte's platform.</p>
+    </div>
+
+    <hr class="privacy-divider">
+
+    <div class="privacy-section">
+      <h2>4. Open Source</h2>
+      <p>All CivicByte code is open source under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>. You can inspect exactly what the app does at any time:</p>
+      <ul>
+        <li>Website: <a href="https://github.com/civicbytedev/civicbytedev.github.io" target="_blank" rel="noopener">github.com/civicbytedev/civicbytedev.github.io</a></li>
+        <li>iOS App: <a href="https://github.com/civicbytedev" target="_blank" rel="noopener">github.com/civicbytedev</a></li>
+      </ul>
+    </div>
+
+    <hr class="privacy-divider">
+
+    <div class="privacy-section">
+      <h2>5. Children's Privacy</h2>
+      <p>CivicByte does not knowingly collect any information from anyone, including children under 13. Since we collect no personal data at all, we comply with COPPA by design.</p>
+    </div>
+
+    <hr class="privacy-divider">
+
+    <div class="privacy-section">
+      <h2>6. Changes to This Policy</h2>
+      <p>If we ever update this privacy policy, we will post the updated version at this URL with a revised "last updated" date. Given that we collect no data, material changes are unlikely.</p>
+    </div>
+
+    <hr class="privacy-divider">
+
+    <div class="privacy-section">
+      <h2>7. Contact</h2>
+      <p>Questions about this privacy policy? Reach out:</p>
+      <div class="contact-card">
+        <div class="contact-icon">&#9993;</div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-value"><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="f-left">&copy; 2025 CivicByte &mdash; Open source under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.</div>
+    <div class="f-right">
+      <a href="/tools.html">Tools</a>
+      <a href="/about.html">About</a>
+      <a href="/submit.html">Submit</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="https://github.com/civicbytedev" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+</body>
+</html>
