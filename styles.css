@@ -330,6 +330,24 @@ a { text-decoration: none; color: inherit; }
 }
 .btn-secondary:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); transform: translateY(-1px); }
 
+.btn-appstore {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.5rem;
+     background: #fff;
+     color: #000;
+     font-family: "DM Sans", sans-serif;
+     font-weight: 600;
+     font-size: 0.92rem;
+     padding: 0.7rem 1.5rem;
+     border-radius: var(--radius-xl);
+     border: none;
+     text-decoration: none;
+     cursor: pointer;
+     transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+}
+.btn-appstore:hover { background: #e8e8e8; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(255,255,255,0.15); }
+
 .btn-ghost {
      display: inline-flex;
      align-items: center;
@@ -965,7 +983,8 @@ body {
     padding: 0 1rem !important;
   }
   .hero-actions .btn-primary,
-  .hero-actions .btn-secondary {
+  .hero-actions .btn-secondary,
+  .hero-actions .btn-appstore {
     min-height: 52px !important;
     justify-content: center !important;
     font-size: 1rem !important;
@@ -1008,7 +1027,8 @@ body {
     gap: 0.75rem !important;
   }
   .cta-actions .btn-primary,
-  .cta-actions .btn-secondary {
+  .cta-actions .btn-secondary,
+  .cta-actions .btn-appstore {
     min-height: 52px !important;
     justify-content: center !important;
     font-size: 1rem !important;
@@ -1047,8 +1067,8 @@ body {
 
 /* ── Touch device improvements ── */
 @media (hover: none) and (pointer: coarse) {
-  .btn-primary:hover, .btn-secondary:hover { transform: none !important; }
-  .btn-primary:active, .btn-secondary:active { transform: scale(0.98) !important; transition: transform 0.1s !important; }
+  .btn-primary:hover, .btn-secondary:hover, .btn-appstore:hover { transform: none !important; }
+  .btn-primary:active, .btn-secondary:active, .btn-appstore:active { transform: scale(0.98) !important; transition: transform 0.1s !important; }
   .tool-card-featured:hover, .tool-card-pipeline:hover, .how-card:hover { transform: none !important; box-shadow: initial !important; }
 }
 
