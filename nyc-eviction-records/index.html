@@ -101,7 +101,17 @@
     }
     .search-btn:hover { background: #00c9a0; transform: translateY(-1px); }
     .search-btn:active { transform: scale(0.98); }
-    .search-hint { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.75rem; }
+    .search-hint {
+      font-size: 0.78rem; color: var(--text-dim); margin-top: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;
+    }
+    .example-btn {
+      background: rgba(0,245,196,0.06); border: 1px solid rgba(0,245,196,0.18);
+      color: var(--teal); font-family: "DM Sans", sans-serif; font-size: 0.75rem;
+      padding: 0.2rem 0.65rem; border-radius: 6px; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .example-btn:hover { background: rgba(0,245,196,0.12); border-color: rgba(0,245,196,0.35); }
 
     /* ── Main content ── */
     .tool-main { max-width: 860px; margin: 0 auto; padding: 2rem 2rem 5rem; }
@@ -293,10 +303,15 @@
       <span class="search-icon">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </span>
-      <input id="searchInput" type="text" placeholder="Enter a street address, e.g. 331 Saratoga Ave" autocomplete="off" autocorrect="off" spellcheck="false" />
+      <input id="searchInput" type="text" placeholder="e.g. 1000 Southern Blvd, Bronx" autocomplete="off" autocorrect="off" spellcheck="false" />
       <button class="search-btn" onclick="runSearch()">Search</button>
     </div>
-    <div class="search-hint">Press Enter or click Search &mdash; searches across all 5 NYC boroughs</div>
+    <div class="search-hint">
+      Try:
+      <button class="example-btn" onclick="tryExample('1000 Southern Blvd')">1000 Southern Blvd</button>
+      <button class="example-btn" onclick="tryExample('2770 Briggs Ave')">2770 Briggs Ave</button>
+      <button class="example-btn" onclick="tryExample('600 West 136 St')">600 W 136 St</button>
+    </div>
   </div>
 </div>
 
@@ -427,6 +442,7 @@
 
 <script>
   const API = 'https://data.cityofnewyork.us/resource/6z8x-wfk4.json';
+  const APP_TOKEN = ''; // optional Socrata app token — add yours to avoid throttling
   const PAGE_SIZE = 25;
 
   let allResults   = [];
@@ -438,6 +454,23 @@
   function showState(id) {
     ['state-idle','state-loading','state-error','state-results','state-empty']
       .forEach(s => document.getElementById(s).classList.toggle('hidden', s !== id));
+  }
+
+  // ── Address normalization ──────────────────────────────────────────────────
+  // Expand common abbreviations so "Ave" matches "AVENUE" etc.
+  const ABBREVS = {
+    'STREET': 'ST', 'AVENUE': 'AVE', 'BOULEVARD': 'BLVD', 'DRIVE': 'DR',
+    'PLACE': 'PL', 'COURT': 'CT', 'LANE': 'LN', 'ROAD': 'RD',
+    'TERRACE': 'TER', 'PARKWAY': 'PKY', 'HIGHWAY': 'HWY',
+    'NORTH': 'N', 'SOUTH': 'S', 'EAST': 'E', 'WEST': 'W',
+  };
+  function normalizeAddr(s) {
+    let u = s.toUpperCase().replace(/[.,#]/g, ' ').replace(/\s+/g, ' ').trim();
+    // Expand abbreviations both ways (so "ST" doesn't need to expand, but "STREET" does)
+    Object.entries(ABBREVS).forEach(([long, short]) => {
+      u = u.replace(new RegExp(`\\b${long}\\b`, 'g'), short);
+    });
+    return u;
   }
 
   // ── Search ─────────────────────────────────────────────────────────────────
@@ -456,20 +489,61 @@
     showState('state-loading');
 
     try {
-      // Full-text search against address fields
-      const encoded = encodeURIComponent(raw);
-      const url = `${API}?$q=${encoded}&$limit=500&$order=executed_date DESC`;
-      const res  = await fetch(url);
-      if (!res.ok) throw new Error(`API error ${res.status}`);
-      const data = await res.json();
-
+      const data = await fetchEvictions(raw);
       allResults = data;
       applyFilters(true);
-
     } catch (err) {
       document.getElementById('errorMsg').textContent = err.message || 'Could not load data. Please try again.';
       showState('state-error');
     }
+  }
+
+  async function fetchEvictions(query) {
+    // Strategy 1: $where LIKE on eviction_address (most reliable for address search)
+    const normalized = normalizeAddr(query);
+    const words = normalized.split(' ').filter(w => w.length >= 2);
+
+    // Build WHERE: each word must appear somewhere in the address
+    const safeWords = words.map(w => w.replace(/'/g, "''"));
+    const whereClause = safeWords
+      .map(w => `upper(eviction_address) like '%${w}%'`)
+      .join(' AND ');
+
+    const headers = APP_TOKEN ? { 'X-App-Token': APP_TOKEN } : {};
+
+    let url = `${API}?$where=${encodeURIComponent(whereClause)}&$limit=500`;
+    let res = await fetch(url, { headers });
+
+    // Strategy 2: fall back to $q full-text if $where returned 0 or errored
+    if (!res.ok || (res.status === 200 && (await res.clone().json()).length === 0 && words.length > 2)) {
+      // Try a shorter, house-number + first street word query
+      const shortWhere = safeWords.slice(0, 2)
+        .map(w => `upper(eviction_address) like '%${w}%'`)
+        .join(' AND ');
+      url = `${API}?$where=${encodeURIComponent(shortWhere)}&$limit=500`;
+      res = await fetch(url, { headers });
+    }
+
+    if (!res.ok) {
+      const body = await res.text().catch(() => '');
+      throw new Error(`NYC Open Data returned ${res.status}. ${body.slice(0, 120)}`);
+    }
+
+    const data = await res.json();
+
+    // Sort newest first client-side (avoids $order field-name dependency)
+    data.sort((a, b) => {
+      const da = a.executed_date || '';
+      const db = b.executed_date || '';
+      return db.localeCompare(da);
+    });
+
+    return data;
+  }
+
+  function tryExample(addr) {
+    document.getElementById('searchInput').value = addr;
+    runSearch();
   }
 
   // ── Filters ────────────────────────────────────────────────────────────────
