@@ -60,7 +60,6 @@
 </style>
 </head>
 <body>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <header class="site-nav">
   <nav class="nav">
@@ -173,12 +172,29 @@
 </footer>
 
 <script>
-var GA_PROPERTY_ID = '529736343';
-var GA_CLIENT_ID   = '515820798423-nvgpuhd91mios17r0atme8br9tsff09h.apps.googleusercontent.com';
-var GH_OWNER       = 'civicbytedev';
-var GH_REPO        = 'civicbytedev.github.io';
-var GH_DATA_PATH   = 'data/analytics-data.json';
-var IS_UPDATE      = /[?&]update=1/.test(window.location.search);
+var GA_PROPERTY_ID  = '529736343';
+var GA_CLIENT_ID    = '515820798423-nvgpuhd91mios17r0atme8br9tsff09h.apps.googleusercontent.com';
+var GA_REDIRECT_URI = 'https://civicbyte.dev/analytics.html';
+var GH_OWNER        = 'civicbytedev';
+var GH_REPO         = 'civicbytedev.github.io';
+var GH_DATA_PATH    = 'data/analytics-data.json';
+var IS_UPDATE       = /[?&]update=1/.test(window.location.search);
+
+// ── Check for OAuth redirect return ─────────────────────────
+var hashParams = {};
+if (window.location.hash) {
+  window.location.hash.substring(1).split('&').forEach(function(part) {
+    var eq = part.indexOf('=');
+    if (eq > -1) hashParams[decodeURIComponent(part.substring(0, eq))] = decodeURIComponent(part.substring(eq + 1));
+  });
+}
+var OAUTH_TOKEN     = hashParams['access_token'] || '';
+var IS_OAUTH_RETURN = !!(OAUTH_TOKEN && hashParams['state'] === 'update1');
+
+// Clean hash from URL on OAuth return
+if (IS_OAUTH_RETURN && window.history && window.history.replaceState) {
+  window.history.replaceState(null, '', window.location.pathname + '?update=1');
+}
 
 // ── Load static data for all visitors ───────────────────────
 fetch('/data/analytics-data.json?_=' + Date.now())
@@ -187,39 +203,32 @@ fetch('/data/analytics-data.json?_=' + Date.now())
   .catch(function() {}); // no data yet — dashes stay
 
 // ── Show update panel for admin ──────────────────────────────
-if (IS_UPDATE) {
+if (IS_UPDATE || IS_OAUTH_RETURN) {
   document.getElementById('updatePanel').style.display = 'block';
   var savedToken = '';
   try { savedToken = localStorage.getItem('cb_gh_token') || ''; } catch(e) {}
   if (savedToken) document.getElementById('ghToken').value = savedToken;
+
+  // Auto-trigger fetch if returning from Google OAuth
+  if (IS_OAUTH_RETURN && savedToken) {
+    setStatus('', 'Authenticated! Fetching analytics data…');
+    fetchAndPublish(OAUTH_TOKEN, savedToken);
+  }
 }
 
 document.getElementById('updateBtn') && document.getElementById('updateBtn').addEventListener('click', function() {
   var token = document.getElementById('ghToken').value.trim();
   if (!token) { setStatus('err', 'Enter your GitHub token first.'); return; }
   try { localStorage.setItem('cb_gh_token', token); } catch(e) {}
-  setStatus('', 'Connecting to Google Analytics…');
-  waitForGIS(function() { triggerOAuth(token); });
+  setStatus('', 'Redirecting to Google sign-in…');
+  var oauthUrl = 'https://accounts.google.com/o/oauth2/auth'
+    + '?client_id='     + encodeURIComponent(GA_CLIENT_ID)
+    + '&redirect_uri='  + encodeURIComponent(GA_REDIRECT_URI)
+    + '&response_type=token'
+    + '&scope='         + encodeURIComponent('https://www.googleapis.com/auth/analytics.readonly')
+    + '&state=update1';
+  window.location.href = oauthUrl;
 });
-
-// ── Google Identity Services ─────────────────────────────────
-function waitForGIS(cb) {
-  if (window.google && google.accounts && google.accounts.oauth2) { cb(); }
-  else { setTimeout(function() { waitForGIS(cb); }, 150); }
-}
-
-function triggerOAuth(ghToken) {
-  var tc = google.accounts.oauth2.initTokenClient({
-    client_id: GA_CLIENT_ID,
-    scope: 'https://www.googleapis.com/auth/analytics.readonly',
-    callback: function(resp) {
-      if (resp.error) { setStatus('err', 'Google auth error: ' + (resp.error_description || resp.error)); return; }
-      setStatus('', 'Fetching analytics data…');
-      fetchAndPublish(resp.access_token, ghToken);
-    }
-  });
-  tc.requestAccessToken();
-}
 
 // ── Fetch GA4 data then push to GitHub ──────────────────────
 function fetchAndPublish(accessToken, ghToken) {
