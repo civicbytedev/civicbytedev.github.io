@@ -11,46 +11,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
 <style>
-/* ── Stats grid ── */
 .stats-4 { grid-template-columns: repeat(4, 1fr); }
-.stats-2 { grid-template-columns: repeat(2, 1fr); }
 @media (max-width: 900px) { .stats-4 { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 540px) { .stats-4, .stats-2 { grid-template-columns: 1fr; } }
+@media (max-width: 540px) { .stats-4 { grid-template-columns: 1fr; } }
 
-/* ── Realtime pulse dot ── */
 .rt-dot {
-  display: inline-block;
-  width: 8px; height: 8px;
-  background: var(--teal);
-  border-radius: 50%;
-  box-shadow: 0 0 10px var(--teal);
-  margin-right: 0.4rem;
-  animation: dot-pulse 2.2s ease-in-out infinite;
-  vertical-align: middle;
+  display: inline-block; width: 8px; height: 8px;
+  background: var(--teal); border-radius: 50%;
+  box-shadow: 0 0 10px var(--teal); margin-right: 0.4rem;
+  animation: dot-pulse 2.2s ease-in-out infinite; vertical-align: middle;
 }
 
-/* ── Section subheadings ── */
 .analytics-section-title {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--text-dim);
-  margin-bottom: 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  font-family: "Space Grotesk", sans-serif; font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-dim);
+  margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem;
 }
 
-/* ── Chart bars (no numbers) ── */
 .bar-chart { display: flex; flex-direction: column; gap: 0.6rem; }
 .bar-row { display: flex; align-items: center; gap: 0.75rem; font-size: 0.84rem; }
 .bar-label { min-width: 0; flex: 0 0 52%; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bar-track { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--teal), var(--purple)); transition: width 0.6s cubic-bezier(0.22, 0.61, 0.36, 1); }
 
-/* ── Source rows (no counts) ── */
 .source-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--border); font-size: 0.86rem; }
 .source-row:last-child { border-bottom: none; }
 .source-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
@@ -58,37 +41,22 @@
 .source-track { flex: 0 0 38%; height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
 .source-fill { height: 100%; border-radius: 3px; transition: width 0.6s cubic-bezier(0.22, 0.61, 0.36, 1); }
 
-/* ── Two-col layout ── */
 .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 2rem; }
 @media (max-width: 768px) { .analytics-grid { grid-template-columns: 1fr; } }
 
-/* ── Card ── */
-.analytics-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem 1.75rem;
-}
+.analytics-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem 1.75rem; }
 
-/* ── Error banner ── */
-.ga-error {
-  display: none;
-  background: var(--coral-glow);
-  border: 1px solid rgba(255,124,124,0.3);
-  border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem;
-  color: var(--coral);
-  font-size: 0.86rem;
-  margin-bottom: 1.5rem;
+/* Admin update panel */
+.update-panel {
+  background: var(--surface); border: 1px solid rgba(0,245,196,0.25);
+  border-radius: var(--radius); padding: 1.5rem 1.75rem; margin-bottom: 2rem;
 }
-.ga-error.visible { display: block; }
+.update-panel h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; color: var(--teal); }
+.update-status { font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.75rem; min-height: 1.2em; }
+.update-status.ok  { color: var(--teal); }
+.update-status.err { color: var(--coral, #ff7c7c); }
 
-/* ── Loading skeleton pulse ── */
-@keyframes skeleton-pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
-}
-.stat-val.loading { animation: skeleton-pulse 1.2s ease-in-out infinite; color: var(--border-light); }
+.stat-val.dim { color: var(--text-dim); }
 </style>
 </head>
 <body>
@@ -112,37 +80,50 @@
 <header class="page-header">
   <div class="label">Transparency</div>
   <h1>Site <span class="grad">Analytics</span></h1>
-  <p>Live usage stats for civicbyte.dev — updated in real time.</p>
+  <p>Live usage stats for civicbyte.dev.</p>
 </header>
 <hr class="divider">
 
 <section class="section" style="padding-top:2.5rem">
 
-  <div class="ga-error" id="gaError"></div>
+  <!-- Admin update panel — only visible at ?update=1 -->
+  <div id="updatePanel" class="update-panel" style="display:none">
+    <h3>Update Analytics Data</h3>
+    <div style="margin-bottom:0.85rem">
+      <label class="form-label" style="font-size:0.8rem">GitHub Personal Access Token (contents:write scope)</label>
+      <input type="password" class="admin-search" id="ghToken" placeholder="ghp_…" style="margin-bottom:0;font-size:0.84rem">
+      <div style="font-size:0.73rem;color:var(--text-dim);margin-top:0.3rem">Stored in your browser only. <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=CivicByte+analytics+update" target="_blank" style="color:var(--teal)">Create token →</a></div>
+    </div>
+    <button class="btn-primary" id="updateBtn" style="font-size:0.84rem;padding:0.55rem 1.25rem">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:0.4rem"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Fetch &amp; Publish Data
+    </button>
+    <div class="update-status" id="updateStatus"></div>
+  </div>
 
-  <!-- Realtime + 7-day -->
+  <!-- Live & Recent -->
   <div class="analytics-section-title">
     <span class="rt-dot"></span>
     Live &amp; Recent
-    <span id="refreshLabel" style="margin-left:auto;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-dim);font-size:0.73rem">Refreshes every 30s</span>
+    <span id="dataAge" style="margin-left:auto;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-dim);font-size:0.73rem"></span>
   </div>
 
   <div class="stats-row stats-4" style="margin-bottom:2rem">
     <div class="stat-card" style="border-color:rgba(0,245,196,0.3)">
       <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),transparent)"></div>
-      <div class="stat-val loading" id="statRealtime">—</div>
+      <div class="stat-val dim" id="statRealtime">—</div>
       <div class="stat-lbl">Active Right Now</div>
     </div>
     <div class="stat-card">
-      <div class="stat-val loading" id="stat7Users">—</div>
+      <div class="stat-val dim" id="stat7Users">—</div>
       <div class="stat-lbl">Users (7 days)</div>
     </div>
     <div class="stat-card">
-      <div class="stat-val loading" id="stat7Views">—</div>
+      <div class="stat-val dim" id="stat7Views">—</div>
       <div class="stat-lbl">Page Views (7 days)</div>
     </div>
     <div class="stat-card">
-      <div class="stat-val loading" id="stat7Sessions">—</div>
+      <div class="stat-val dim" id="stat7Sessions">—</div>
       <div class="stat-lbl">Sessions (7 days)</div>
     </div>
   </div>
@@ -151,33 +132,33 @@
   <div class="analytics-section-title" style="margin-top:2rem">30-Day Overview</div>
   <div class="stats-row stats-4" style="margin-bottom:2rem">
     <div class="stat-card">
-      <div class="stat-val loading" id="stat30Users">—</div>
+      <div class="stat-val dim" id="stat30Users">—</div>
       <div class="stat-lbl">Users</div>
     </div>
     <div class="stat-card">
-      <div class="stat-val loading" id="stat30New">—</div>
+      <div class="stat-val dim" id="stat30New">—</div>
       <div class="stat-lbl">New Users</div>
     </div>
     <div class="stat-card">
-      <div class="stat-val loading" id="stat30Views">—</div>
+      <div class="stat-val dim" id="stat30Views">—</div>
       <div class="stat-lbl">Page Views</div>
     </div>
     <div class="stat-card">
-      <div class="stat-val loading" id="stat30Sessions">—</div>
+      <div class="stat-val dim" id="stat30Sessions">—</div>
       <div class="stat-lbl">Sessions</div>
     </div>
   </div>
 
-  <!-- Two-col: popular tools + traffic sources -->
+  <!-- Charts -->
   <div class="analytics-grid">
     <div class="analytics-card">
-      <div class="analytics-section-title" style="margin-bottom:1.25rem">Popular Tools</div>
-      <div id="topPagesLoading" style="color:var(--text-secondary);font-size:0.86rem">Loading…</div>
+      <div class="analytics-section-title" style="margin-bottom:1.25rem">Popular Pages</div>
+      <div id="topPagesPlaceholder" style="color:var(--text-dim);font-size:0.84rem">No data yet.</div>
       <div class="bar-chart" id="topPagesList"></div>
     </div>
     <div class="analytics-card">
       <div class="analytics-section-title" style="margin-bottom:1.25rem">Traffic Sources</div>
-      <div id="sourcesLoading" style="color:var(--text-secondary);font-size:0.86rem">Loading…</div>
+      <div id="sourcesPlaceholder" style="color:var(--text-dim);font-size:0.84rem">No data yet.</div>
       <div id="sourcesList"></div>
     </div>
   </div>
@@ -194,263 +175,247 @@
 <script>
 var GA_PROPERTY_ID = '529736343';
 var GA_CLIENT_ID   = '515820798423-nvgpuhd91mios17r0atme8br9tsff09h.apps.googleusercontent.com';
-var CACHE_KEY      = 'cb_analytics_data';
-var CACHE_TTL      = 1800000; // 30 min
+var GH_OWNER       = 'civicbytedev';
+var GH_REPO        = 'civicbytedev.github.io';
+var GH_DATA_PATH   = 'data/analytics-data.json';
+var IS_UPDATE      = /[?&]update=1/.test(window.location.search);
 
-var tokenClient   = null;
-var accessToken   = null;
-var realtimeTimer = null;
+// ── Load static data for all visitors ───────────────────────
+fetch('/data/analytics-data.json?_=' + Date.now())
+  .then(function(r) { if (!r.ok) throw new Error(); return r.json(); })
+  .then(function(d) { renderAll(d); })
+  .catch(function() {}); // no data yet — dashes stay
 
-// ── Boot ─────────────────────────────────────────────────────
-// Show cached data immediately, then try to refresh via OAuth
-(function boot() {
-  var ok = loadFromCache();
-  waitForGIS(function() {
-    tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: GA_CLIENT_ID,
-      scope: 'https://www.googleapis.com/auth/analytics.readonly',
-      prompt: '',   // silent when possible
-      callback: function(resp) {
-        if (resp.error) return; // silently fail for non-admin visitors
-        accessToken = resp.access_token;
-        loadAll();
-        if (realtimeTimer) clearInterval(realtimeTimer);
-        realtimeTimer = setInterval(loadRealtime, 30000);
-      }
-    });
-    // Attempt silent token — visitors without access just stay on cached data
-    try { tokenClient.requestAccessToken({ prompt: '' }); } catch(e) {}
-  });
-})();
+// ── Show update panel for admin ──────────────────────────────
+if (IS_UPDATE) {
+  document.getElementById('updatePanel').style.display = 'block';
+  var savedToken = '';
+  try { savedToken = localStorage.getItem('cb_gh_token') || ''; } catch(e) {}
+  if (savedToken) document.getElementById('ghToken').value = savedToken;
+}
 
-// ── GIS loader ───────────────────────────────────────────────
+document.getElementById('updateBtn') && document.getElementById('updateBtn').addEventListener('click', function() {
+  var token = document.getElementById('ghToken').value.trim();
+  if (!token) { setStatus('err', 'Enter your GitHub token first.'); return; }
+  try { localStorage.setItem('cb_gh_token', token); } catch(e) {}
+  setStatus('', 'Connecting to Google Analytics…');
+  waitForGIS(function() { triggerOAuth(token); });
+});
+
+// ── Google Identity Services ─────────────────────────────────
 function waitForGIS(cb) {
   if (window.google && google.accounts && google.accounts.oauth2) { cb(); }
   else { setTimeout(function() { waitForGIS(cb); }, 150); }
 }
 
-// ── GA4 Data API ─────────────────────────────────────────────
-var API_BASE = 'https://analyticsdata.googleapis.com/v1beta/properties/';
-
-function gaPost(endpoint, body, cb) {
-  fetch(API_BASE + GA_PROPERTY_ID + endpoint, {
-    method: 'POST',
-    headers: { 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    if (data.error) return; // silent
-    cb(data);
-  })
-  .catch(function() {});
+function triggerOAuth(ghToken) {
+  var tc = google.accounts.oauth2.initTokenClient({
+    client_id: GA_CLIENT_ID,
+    scope: 'https://www.googleapis.com/auth/analytics.readonly',
+    callback: function(resp) {
+      if (resp.error) { setStatus('err', 'Google auth error: ' + (resp.error_description || resp.error)); return; }
+      setStatus('', 'Fetching analytics data…');
+      fetchAndPublish(resp.access_token, ghToken);
+    }
+  });
+  tc.requestAccessToken();
 }
 
-function metricVal(report, row, idx) {
+// ── Fetch GA4 data then push to GitHub ──────────────────────
+function fetchAndPublish(accessToken, ghToken) {
+  var promises = [
+    gaPost(accessToken, ':runRealtimeReport', { metrics: [{ name: 'activeUsers' }] }),
+    gaPost(accessToken, ':runReport', {
+      dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
+      metrics: [{ name: 'activeUsers' }, { name: 'screenPageViews' }, { name: 'sessions' }]
+    }),
+    gaPost(accessToken, ':runReport', {
+      dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+      metrics: [{ name: 'activeUsers' }, { name: 'newUsers' }, { name: 'screenPageViews' }, { name: 'sessions' }]
+    }),
+    gaPost(accessToken, ':runReport', {
+      dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+      dimensions: [{ name: 'pagePath' }],
+      metrics: [{ name: 'activeUsers' }],
+      orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }],
+      limit: 20
+    }),
+    gaPost(accessToken, ':runReport', {
+      dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+      dimensions: [{ name: 'sessionDefaultChannelGroup' }],
+      metrics: [{ name: 'sessions' }],
+      orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
+      limit: 7
+    })
+  ];
+
+  Promise.all(promises).then(function(results) {
+    var rt = results[0], d7 = results[1], d30 = results[2], pages = results[3], srcs = results[4];
+
+    // Build top pages list
+    var pageRows = (pages.rows || []);
+    var toolRows = [];
+    var seen = {};
+    pageRows.forEach(function(row) {
+      var path = row.dimensionValues[0].value;
+      var label = pathToLabel(path);
+      if (!label || seen[label]) return;
+      seen[label] = true;
+      toolRows.push({ label: label, count: parseInt(row.metricValues[0].value, 10) });
+    });
+
+    // Build sources list
+    var sourceRows = (srcs.rows || []).map(function(r, i) {
+      return { name: r.dimensionValues[0].value, count: parseInt(r.metricValues[0].value, 10), i: i };
+    });
+
+    var data = {
+      updatedAt: new Date().toISOString(),
+      realtime: mv(rt, 0, 0),
+      '7day': { users: mv(d7,0,0), views: mv(d7,0,1), sessions: mv(d7,0,2) },
+      '30day': { users: mv(d30,0,0), newUsers: mv(d30,0,1), views: mv(d30,0,2), sessions: mv(d30,0,3) },
+      topPages: toolRows.slice(0, 8),
+      sources: sourceRows
+    };
+
+    renderAll(data);
+    setStatus('', 'Pushing to GitHub…');
+    pushToGitHub(ghToken, data);
+  }).catch(function(err) {
+    setStatus('err', 'Error fetching data: ' + err.message);
+  });
+}
+
+function pushToGitHub(token, data) {
+  var content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+  var apiUrl = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_DATA_PATH;
+  // First get current SHA
+  fetch(apiUrl, { headers: { 'Authorization': 'token ' + token } })
+    .then(function(r) { return r.json(); })
+    .then(function(info) {
+      return fetch(apiUrl, {
+        method: 'PUT',
+        headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'Update analytics data ' + new Date().toISOString().substring(0,10),
+          content: content,
+          sha: info.sha
+        })
+      });
+    })
+    .then(function(r) {
+      if (r.ok) { setStatus('ok', 'Published! Visitors will see updated data in ~1 minute.'); }
+      else { return r.json().then(function(e) { setStatus('err', 'GitHub error: ' + (e.message || r.status)); }); }
+    })
+    .catch(function(err) { setStatus('err', 'GitHub push failed: ' + err.message); });
+}
+
+// ── GA4 helpers ──────────────────────────────────────────────
+var API_BASE = 'https://analyticsdata.googleapis.com/v1beta/properties/';
+
+function gaPost(token, endpoint, body) {
+  return fetch(API_BASE + GA_PROPERTY_ID + endpoint, {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    if (d.error) throw new Error(d.error.message || JSON.stringify(d.error));
+    return d;
+  });
+}
+
+function mv(report, row, idx) {
   try { return parseInt(report.rows[row].metricValues[idx].value, 10); } catch(e) { return 0; }
 }
 
 function fmt(n) {
-  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-  if (n >= 1000)    return (n / 1000).toFixed(1) + 'K';
+  if (n == null) return '—';
+  if (n >= 1000000) return (n/1000000).toFixed(1)+'M';
+  if (n >= 1000)    return (n/1000).toFixed(1)+'K';
   return String(n);
 }
 
-// ── Load functions ───────────────────────────────────────────
-function loadAll() {
-  loadRealtime();
-  load7Day();
-  load30Day();
-  loadTopPages();
-  loadSources();
-}
-
-function loadRealtime() {
-  if (!accessToken) return;
-  gaPost(':runRealtimeReport', { metrics: [{ name: 'activeUsers' }] }, function(data) {
-    var val = metricVal(data, 0, 0);
-    setVal('statRealtime', fmt(val));
-    saveCache('realtime', val);
-  });
-}
-
-function load7Day() {
-  gaPost(':runReport', {
-    dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
-    metrics: [{ name: 'activeUsers' }, { name: 'screenPageViews' }, { name: 'sessions' }]
-  }, function(data) {
-    var users = metricVal(data, 0, 0), views = metricVal(data, 0, 1), sessions = metricVal(data, 0, 2);
-    setVal('stat7Users',    fmt(users));
-    setVal('stat7Views',    fmt(views));
-    setVal('stat7Sessions', fmt(sessions));
-    saveCache('7day', { users: users, views: views, sessions: sessions });
-  });
-}
-
-function load30Day() {
-  gaPost(':runReport', {
-    dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
-    metrics: [{ name: 'activeUsers' }, { name: 'newUsers' }, { name: 'screenPageViews' }, { name: 'sessions' }]
-  }, function(data) {
-    var u = metricVal(data,0,0), n = metricVal(data,0,1), v = metricVal(data,0,2), s = metricVal(data,0,3);
-    setVal('stat30Users',    fmt(u));
-    setVal('stat30New',      fmt(n));
-    setVal('stat30Views',    fmt(v));
-    setVal('stat30Sessions', fmt(s));
-    saveCache('30day', { users: u, newUsers: n, views: v, sessions: s });
-  });
-}
-
-function loadTopPages() {
-  gaPost(':runReport', {
-    dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
-    dimensions: [{ name: 'pagePath' }],
-    metrics: [{ name: 'activeUsers' }],
-    orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }],
-    limit: 20
-  }, function(data) {
-    var rows = (data.rows || []);
-    // Filter to tool/feature pages and label them
-    var toolRows = [];
-    rows.forEach(function(row) {
-      var path = row.dimensionValues[0].value;
-      var label = pathToLabel(path);
-      if (!label) return;
-      var count = parseInt(row.metricValues[0].value, 10);
-      toolRows.push({ label: label, count: count });
-    });
-    // deduplicate by label (keep highest count)
-    var seen = {};
-    toolRows = toolRows.filter(function(r) {
-      if (seen[r.label]) return false;
-      seen[r.label] = true;
-      return true;
-    });
-    renderTopPages(toolRows.slice(0, 8));
-    saveCache('topPages', toolRows.slice(0, 8));
-  });
-}
-
-// Map page paths to friendly tool/page names; return null to exclude
 function pathToLabel(path) {
   var p = path.replace(/\/$/, '').toLowerCase();
   if (p === '' || p === '/index.html') return 'Home';
-  if (p === '/tools' || p === '/tools.html') return 'Tools — All';
+  if (p === '/tools' || p === '/tools.html') return 'Tools';
   if (p === '/about' || p === '/about.html') return 'About';
-  if (p === '/analytics' || p === '/analytics.html') return null; // skip self
-  if (p === '/admin' || p === '/admin.html') return null;
-  if (p === '/login' || p === '/login.html') return null;
-  // Tool subpages: /tools/some-tool → "Some Tool"
+  if (p === '/submit' || p === '/submit.html') return 'Submit a Tool';
+  if (p === '/analytics' || p === '/analytics.html') return null;
+  if (p === '/admin' || p === '/admin.html' || p === '/login' || p === '/login.html') return null;
   var m = p.match(/^\/tools\/([^/?#]+)/);
-  if (m) {
-    return m[1].replace(/[-_]/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
-  }
-  // Generic page
-  var name = p.split('/').pop().replace(/\.html$/, '').replace(/[-_]/g, ' ');
-  if (!name) return null;
-  return name.replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+  if (m) return m[1].replace(/[-_]/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
+  var name = p.split('/').pop().replace(/\.html$/, '').replace(/[-_]/g,' ');
+  return name ? name.replace(/\b\w/g,function(c){return c.toUpperCase();}) : null;
 }
 
-function renderTopPages(rows) {
-  document.getElementById('topPagesLoading').style.display = 'none';
-  if (!rows.length) {
-    document.getElementById('topPagesList').innerHTML = '<div style="color:var(--text-dim);font-size:0.84rem">No data yet.</div>';
-    return;
-  }
-  var maxVal = rows[0].count || 1;
-  var html = '';
-  rows.forEach(function(r) {
-    var pct = Math.round(r.count / maxVal * 100);
-    html += '<div class="bar-row">'
-      + '<div class="bar-label">' + _esc(r.label) + '</div>'
-      + '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div>'
-      + '</div>';
-  });
-  document.getElementById('topPagesList').innerHTML = html;
-}
-
+// ── Render ────────────────────────────────────────────────────
 var SOURCE_COLORS = ['#00f5c4','#b197fc','#ff7c7c','#fbbf24','#38bdf8','#34d399','#fb923c'];
 
-function loadSources() {
-  gaPost(':runReport', {
-    dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
-    dimensions: [{ name: 'sessionDefaultChannelGroup' }],
-    metrics: [{ name: 'sessions' }],
-    orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
-    limit: 7
-  }, function(data) {
-    var rows = (data.rows || []);
-    renderSources(rows.map(function(r, i) {
-      return { name: r.dimensionValues[0].value, count: parseInt(r.metricValues[0].value, 10), i: i };
-    }));
-    saveCache('sources', rows.map(function(r, i) {
-      return { name: r.dimensionValues[0].value, count: parseInt(r.metricValues[0].value, 10), i: i };
-    }));
-  });
-}
+function renderAll(d) {
+  if (!d) return;
 
-function renderSources(rows) {
-  document.getElementById('sourcesLoading').style.display = 'none';
-  if (!rows.length) {
-    document.getElementById('sourcesList').innerHTML = '<div style="color:var(--text-dim);font-size:0.84rem">No data yet.</div>';
-    return;
+  // Age label
+  if (d.updatedAt) {
+    var age = Math.round((Date.now() - new Date(d.updatedAt)) / 60000);
+    var ageStr = age < 2 ? 'Just updated' : age < 60 ? age + 'm ago' : Math.floor(age/60) + 'h ago';
+    document.getElementById('dataAge').textContent = 'Updated ' + ageStr;
   }
-  var maxVal = rows[0].count || 1;
-  var html = '';
-  rows.forEach(function(r) {
-    var pct = Math.round(r.count / maxVal * 100);
-    var color = SOURCE_COLORS[r.i % SOURCE_COLORS.length];
-    html += '<div class="source-row">'
-      + '<div class="source-dot" style="background:' + color + ';box-shadow:0 0 6px ' + color + '55"></div>'
-      + '<div class="source-name">' + _esc(r.name) + '</div>'
-      + '<div class="source-track"><div class="source-fill" style="width:' + pct + '%;background:' + color + '99"></div></div>'
-      + '</div>';
-  });
-  document.getElementById('sourcesList').innerHTML = html;
-}
 
-// ── Cache ────────────────────────────────────────────────────
-var _cache = null;
-
-function getCache() {
-  if (_cache) return _cache;
-  try { _cache = JSON.parse(localStorage.getItem(CACHE_KEY)) || {}; } catch(e) { _cache = {}; }
-  return _cache;
-}
-
-function saveCache(key, val) {
-  var c = getCache();
-  c[key] = val;
-  c._ts = Date.now();
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify(c)); } catch(e) {}
-}
-
-function loadFromCache() {
-  var c = getCache();
-  if (!c._ts || (Date.now() - c._ts) > CACHE_TTL) return false;
-  if (c['7day']) {
-    setVal('stat7Users',    fmt(c['7day'].users));
-    setVal('stat7Views',    fmt(c['7day'].views));
-    setVal('stat7Sessions', fmt(c['7day'].sessions));
+  // Stat cards
+  setVal('statRealtime', d.realtime != null ? fmt(d.realtime) : null);
+  if (d['7day']) {
+    setVal('stat7Users',    fmt(d['7day'].users));
+    setVal('stat7Views',    fmt(d['7day'].views));
+    setVal('stat7Sessions', fmt(d['7day'].sessions));
   }
-  if (c['30day']) {
-    setVal('stat30Users',    fmt(c['30day'].users));
-    setVal('stat30New',      fmt(c['30day'].newUsers));
-    setVal('stat30Views',    fmt(c['30day'].views));
-    setVal('stat30Sessions', fmt(c['30day'].sessions));
+  if (d['30day']) {
+    setVal('stat30Users',    fmt(d['30day'].users));
+    setVal('stat30New',      fmt(d['30day'].newUsers));
+    setVal('stat30Views',    fmt(d['30day'].views));
+    setVal('stat30Sessions', fmt(d['30day'].sessions));
   }
-  if (c.realtime !== undefined) setVal('statRealtime', fmt(c.realtime));
-  if (c.topPages)  renderTopPages(c.topPages);
-  if (c.sources)   renderSources(c.sources);
-  return true;
+
+  // Top pages
+  if (d.topPages && d.topPages.length) {
+    document.getElementById('topPagesPlaceholder').style.display = 'none';
+    var maxVal = d.topPages[0].count || 1;
+    document.getElementById('topPagesList').innerHTML = d.topPages.map(function(r) {
+      var pct = Math.round(r.count / maxVal * 100);
+      return '<div class="bar-row">'
+        + '<div class="bar-label">' + _esc(r.label) + '</div>'
+        + '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div>'
+        + '</div>';
+    }).join('');
+  }
+
+  // Sources
+  if (d.sources && d.sources.length) {
+    document.getElementById('sourcesPlaceholder').style.display = 'none';
+    var maxSrc = d.sources[0].count || 1;
+    document.getElementById('sourcesList').innerHTML = d.sources.map(function(r) {
+      var pct = Math.round(r.count / maxSrc * 100);
+      var color = SOURCE_COLORS[r.i % SOURCE_COLORS.length];
+      return '<div class="source-row">'
+        + '<div class="source-dot" style="background:' + color + ';box-shadow:0 0 6px ' + color + '55"></div>'
+        + '<div class="source-name">' + _esc(r.name) + '</div>'
+        + '<div class="source-track"><div class="source-fill" style="width:' + pct + '%;background:' + color + '99"></div></div>'
+        + '</div>';
+    }).join('');
+  }
 }
 
-// ── Helpers ──────────────────────────────────────────────────
 function setVal(id, val) {
   var el = document.getElementById(id);
   if (!el) return;
-  el.textContent = val;
-  el.classList.remove('loading');
+  if (val != null) { el.textContent = val; el.classList.remove('dim'); }
+}
+
+function setStatus(type, msg) {
+  var el = document.getElementById('updateStatus');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'update-status' + (type ? ' ' + type : '');
 }
 
 function _esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
