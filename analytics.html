@@ -220,45 +220,60 @@ document.getElementById('updateBtn') && document.getElementById('updateBtn').add
   var token = document.getElementById('ghToken').value.trim();
   if (!token) { setStatus('err', 'Enter your GitHub token first.'); return; }
   try { localStorage.setItem('cb_gh_token', token); } catch(e) {}
-  setStatus('', 'Redirecting to Google sign-in…');
-  var oauthUrl = 'https://accounts.google.com/o/oauth2/auth'
-    + '?client_id='     + encodeURIComponent(GA_CLIENT_ID)
-    + '&redirect_uri='  + encodeURIComponent(GA_REDIRECT_URI)
-    + '&response_type=token'
-    + '&scope='         + encodeURIComponent('https://www.googleapis.com/auth/analytics.readonly')
-    + '&state=update1';
-  window.location.href = oauthUrl;
+  if (OAUTH_TOKEN) {
+    // Already authenticated (from this OAuth return) — retry directly
+    setStatus('', 'Retrying…');
+    fetchAndPublish(OAUTH_TOKEN, token);
+  } else {
+    setStatus('', 'Redirecting to Google sign-in…');
+    var oauthUrl = 'https://accounts.google.com/o/oauth2/auth'
+      + '?client_id='     + encodeURIComponent(GA_CLIENT_ID)
+      + '&redirect_uri='  + encodeURIComponent(GA_REDIRECT_URI)
+      + '&response_type=token'
+      + '&scope='         + encodeURIComponent('https://www.googleapis.com/auth/analytics.readonly')
+      + '&state=update1';
+    window.location.href = oauthUrl;
+  }
 });
 
 // ── Fetch GA4 data then push to GitHub ──────────────────────
 function fetchAndPublish(accessToken, ghToken) {
+  if (!accessToken) { setStatus('err', 'No access token — sign in again.'); return; }
+
+  function safe(p) { return p.catch(function() { return null; }); }
+
   var promises = [
-    gaPost(accessToken, ':runRealtimeReport', { metrics: [{ name: 'activeUsers' }] }),
-    gaPost(accessToken, ':runReport', {
+    safe(gaPost(accessToken, ':runRealtimeReport', { metrics: [{ name: 'activeUsers' }] })),
+    safe(gaPost(accessToken, ':runReport', {
       dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
       metrics: [{ name: 'activeUsers' }, { name: 'screenPageViews' }, { name: 'sessions' }]
-    }),
-    gaPost(accessToken, ':runReport', {
+    })),
+    safe(gaPost(accessToken, ':runReport', {
       dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
       metrics: [{ name: 'activeUsers' }, { name: 'newUsers' }, { name: 'screenPageViews' }, { name: 'sessions' }]
-    }),
-    gaPost(accessToken, ':runReport', {
+    })),
+    safe(gaPost(accessToken, ':runReport', {
       dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
       dimensions: [{ name: 'pagePath' }],
       metrics: [{ name: 'activeUsers' }],
       orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }],
       limit: 20
-    }),
-    gaPost(accessToken, ':runReport', {
+    })),
+    safe(gaPost(accessToken, ':runReport', {
       dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
       dimensions: [{ name: 'sessionDefaultChannelGroup' }],
       metrics: [{ name: 'sessions' }],
       orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
       limit: 7
-    })
+    }))
   ];
 
   Promise.all(promises).then(function(results) {
+    if (!results[1] && !results[2]) {
+      setStatus('err', 'GA4 API error — token may have expired. Click the button to sign in again.');
+      OAUTH_TOKEN = '';
+      return;
+    }
     var rt = results[0], d7 = results[1], d30 = results[2], pages = results[3], srcs = results[4];
 
     // Build top pages list
