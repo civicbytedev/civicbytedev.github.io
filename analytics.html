@@ -240,7 +240,8 @@ document.getElementById('updateBtn') && document.getElementById('updateBtn').add
 function fetchAndPublish(accessToken, ghToken) {
   if (!accessToken) { setStatus('err', 'No access token — sign in again.'); return; }
 
-  function safe(p) { return p.catch(function() { return null; }); }
+  var firstErr = null;
+  function safe(p) { return p.catch(function(e) { if (!firstErr) firstErr = e; return null; }); }
 
   var promises = [
     safe(gaPost(accessToken, ':runRealtimeReport', { metrics: [{ name: 'activeUsers' }] })),
@@ -270,7 +271,8 @@ function fetchAndPublish(accessToken, ghToken) {
 
   Promise.all(promises).then(function(results) {
     if (!results[1] && !results[2]) {
-      setStatus('err', 'GA4 API error — token may have expired. Click the button to sign in again.');
+      var msg = firstErr ? firstErr.message : 'unknown error';
+      setStatus('err', 'GA4 error: ' + msg + ' — click button to sign in again.');
       OAUTH_TOKEN = '';
       return;
     }
