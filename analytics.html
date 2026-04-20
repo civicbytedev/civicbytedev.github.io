@@ -28,23 +28,15 @@
   margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem;
 }
 
-.bar-chart { display: flex; flex-direction: column; gap: 0.6rem; }
-.bar-row { display: flex; align-items: center; gap: 0.75rem; font-size: 0.84rem; }
-.bar-label { min-width: 0; flex: 0 0 52%; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.bar-track { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--teal), var(--purple)); transition: width 0.6s cubic-bezier(0.22, 0.61, 0.36, 1); }
+.rank-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.rank-row { display: flex; align-items: center; gap: 0.9rem; font-size: 0.9rem; }
+.rank-num { font-family: "Space Grotesk", sans-serif; font-size: 1rem; font-weight: 700; color: var(--teal); min-width: 1.4rem; text-align: right; }
+.rank-label { color: var(--text); }
 
-.source-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--border); font-size: 0.86rem; }
-.source-row:last-child { border-bottom: none; }
-.source-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.source-name { flex: 1; color: var(--text); }
-.source-track { flex: 0 0 38%; height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
-.source-fill { height: 100%; border-radius: 3px; transition: width 0.6s cubic-bezier(0.22, 0.61, 0.36, 1); }
+.analytics-grid { margin-top: 2rem; }
 
-.analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 2rem; }
-@media (max-width: 768px) { .analytics-grid { grid-template-columns: 1fr; } }
+.analytics-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem 1.75rem; max-width: 480px; }
 
-.analytics-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem 1.75rem; }
 
 /* Admin update panel */
 .update-panel {
@@ -148,17 +140,12 @@
     </div>
   </div>
 
-  <!-- Charts -->
+  <!-- Top Tools -->
   <div class="analytics-grid">
     <div class="analytics-card">
-      <div class="analytics-section-title" style="margin-bottom:1.25rem">Popular Pages</div>
+      <div class="analytics-section-title" style="margin-bottom:1.25rem">Popular Tools</div>
       <div id="topPagesPlaceholder" style="color:var(--text-dim);font-size:0.84rem">No data yet.</div>
-      <div class="bar-chart" id="topPagesList"></div>
-    </div>
-    <div class="analytics-card">
-      <div class="analytics-section-title" style="margin-bottom:1.25rem">Traffic Sources</div>
-      <div id="sourcesPlaceholder" style="color:var(--text-dim);font-size:0.84rem">No data yet.</div>
-      <div id="sourcesList"></div>
+      <div class="rank-list" id="topPagesList"></div>
     </div>
   </div>
 
@@ -376,8 +363,6 @@ function pathToLabel(path) {
 }
 
 // ── Render ────────────────────────────────────────────────────
-var SOURCE_COLORS = ['#00f5c4','#b197fc','#ff7c7c','#fbbf24','#38bdf8','#34d399','#fb923c'];
-
 function renderAll(d) {
   if (!d) return;
 
@@ -402,32 +387,19 @@ function renderAll(d) {
     setVal('stat30Sessions', fmt(d['30day'].sessions));
   }
 
-  // Top pages
+  // Popular tools — filter out nav pages, show ranked 1-N
+  var NON_TOOLS = { 'Home': true, 'Tools': true, 'About': true, 'Submit a Tool': true };
   if (d.topPages && d.topPages.length) {
-    document.getElementById('topPagesPlaceholder').style.display = 'none';
-    var maxVal = d.topPages[0].count || 1;
-    document.getElementById('topPagesList').innerHTML = d.topPages.map(function(r) {
-      var pct = Math.round(r.count / maxVal * 100);
-      return '<div class="bar-row">'
-        + '<div class="bar-label">' + _esc(r.label) + '</div>'
-        + '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div>'
-        + '</div>';
-    }).join('');
-  }
-
-  // Sources
-  if (d.sources && d.sources.length) {
-    document.getElementById('sourcesPlaceholder').style.display = 'none';
-    var maxSrc = d.sources[0].count || 1;
-    document.getElementById('sourcesList').innerHTML = d.sources.map(function(r) {
-      var pct = Math.round(r.count / maxSrc * 100);
-      var color = SOURCE_COLORS[r.i % SOURCE_COLORS.length];
-      return '<div class="source-row">'
-        + '<div class="source-dot" style="background:' + color + ';box-shadow:0 0 6px ' + color + '55"></div>'
-        + '<div class="source-name">' + _esc(r.name) + '</div>'
-        + '<div class="source-track"><div class="source-fill" style="width:' + pct + '%;background:' + color + '99"></div></div>'
-        + '</div>';
-    }).join('');
+    var toolPages = d.topPages.filter(function(r) { return !NON_TOOLS[r.label]; });
+    if (toolPages.length) {
+      document.getElementById('topPagesPlaceholder').style.display = 'none';
+      document.getElementById('topPagesList').innerHTML = toolPages.map(function(r, i) {
+        return '<div class="rank-row">'
+          + '<div class="rank-num">' + (i + 1) + '</div>'
+          + '<div class="rank-label">' + _esc(r.label) + '</div>'
+          + '</div>';
+      }).join('');
+    }
   }
 }
 
