@@ -1,0 +1,36 @@
+name: Update Analytics Data
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # every hour
+  workflow_dispatch: {}    # also allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install google-analytics-data --quiet
+
+      - name: Fetch GA4 data
+        env:
+          GA4_PROPERTY_ID: '529736343'
+          GA4_SERVICE_ACCOUNT_KEY: ${{ secrets.GA4_SERVICE_ACCOUNT_KEY }}
+        run: python .github/scripts/fetch_analytics.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/analytics-data.json
+          git diff --staged --quiet || git commit -m "Update analytics data [skip ci]"
+          git push
