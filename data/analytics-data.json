@@ -1,1 +1,86 @@
-{"updatedAt":null,"realtime":null,"7day":null,"30day":null,"topPages":null,"sources":null}
+{
+  "updatedAt": "2026-04-20T16:37:43.712347+00:00",
+  "realtime": 57,
+  "7day": {
+    "users": 17957,
+    "views": 37958,
+    "sessions": 18072
+  },
+  "30day": {
+    "users": 18084,
+    "newUsers": 18210,
+    "views": 38247,
+    "sessions": 18310
+  },
+  "topPages": [
+    {
+      "label": "Home",
+      "count": 17909
+    },
+    {
+      "label": "Nyc Building Checker",
+      "count": 15924
+    },
+    {
+      "label": "Nyc Landlord Watch",
+      "count": 101
+    },
+    {
+      "label": "Nyc School Budget Tracker",
+      "count": 7
+    },
+    {
+      "label": "Tools",
+      "count": 5
+    },
+    {
+      "label": "About",
+      "count": 2
+    },
+    {
+      "label": "Submit a Tool",
+      "count": 2
+    },
+    {
+      "label": "Nyc Eviction Records",
+      "count": 1
+    }
+  ],
+  "sources": [
+    {
+      "name": "Organic Search",
+      "count": 5898,
+      "i": 0
+    },
+    {
+      "name": "Organic Video",
+      "count": 4273,
+      "i": 1
+    },
+    {
+      "name": "Direct",
+      "count": 4199,
+      "i": 2
+    },
+    {
+      "name": "Referral",
+      "count": 3880,
+      "i": 3
+    },
+    {
+      "name": "Unassigned",
+      "count": 857,
+      "i": 4
+    },
+    {
+      "name": "Organic Social",
+      "count": 42,
+      "i": 5
+    },
+    {
+      "name": "Cross-network",
+      "count": 3,
+      "i": 6
+    }
+  ]
+}
