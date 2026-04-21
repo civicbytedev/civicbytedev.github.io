@@ -28,9 +28,10 @@
   margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem;
 }
 
-.rank-list { display: flex; flex-direction: column; gap: 0.5rem; }
-.rank-row { display: flex; align-items: center; gap: 0.9rem; font-size: 0.9rem; }
-.rank-num { font-family: "Space Grotesk", sans-serif; font-size: 1rem; font-weight: 700; color: var(--teal); min-width: 1.4rem; text-align: right; }
+.rank-list { display: flex; flex-direction: column; gap: 0.6rem; }
+.rank-row { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; }
+.rank-num { font-family: "Space Grotesk", sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--teal); min-width: 1.2rem; text-align: right; }
+.rank-icon { font-size: 1.05rem; line-height: 1; }
 .rank-label { color: var(--text); }
 
 .analytics-grid { margin-top: 2rem; }
@@ -357,12 +358,27 @@ function pathToLabel(path) {
   if (p === '/analytics' || p === '/analytics.html') return null;
   if (p === '/admin' || p === '/admin.html' || p === '/login' || p === '/login.html') return null;
   var m = p.match(/^\/tools\/([^/?#]+)/);
-  if (m) return m[1].replace(/[-_]/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
-  var name = p.split('/').pop().replace(/\.html$/, '').replace(/[-_]/g,' ');
-  return name ? name.replace(/\b\w/g,function(c){return c.toUpperCase();}) : null;
+  var raw = m ? m[1] : p.split('/').pop().replace(/\.html$/, '');
+  if (!raw) return null;
+  return raw.replace(/[-_]/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();}).replace(/\bNyc\b/g,'NYC');
 }
 
 // ── Render ────────────────────────────────────────────────────
+function toolIcon(label) {
+  var l = label.toLowerCase();
+  if (l.includes('building'))            return '🏢';
+  if (l.includes('landlord'))            return '🏠';
+  if (l.includes('school') || l.includes('budget')) return '📊';
+  if (l.includes('eviction'))            return '📋';
+  if (l.includes('police') || l.includes('crime')) return '🚔';
+  if (l.includes('park'))                return '🌳';
+  if (l.includes('transit') || l.includes('subway') || l.includes('bus')) return '🚇';
+  if (l.includes('permit'))              return '📝';
+  if (l.includes('restaurant') || l.includes('food')) return '🍽️';
+  if (l.includes('hospital') || l.includes('health')) return '🏥';
+  return '🔹';
+}
+
 function renderAll(d) {
   if (!d) return;
 
@@ -394,9 +410,11 @@ function renderAll(d) {
     if (toolPages.length) {
       document.getElementById('topPagesPlaceholder').style.display = 'none';
       document.getElementById('topPagesList').innerHTML = toolPages.map(function(r, i) {
+        var label = r.label.replace(/\bNyc\b/g, 'NYC');
         return '<div class="rank-row">'
           + '<div class="rank-num">' + (i + 1) + '</div>'
-          + '<div class="rank-label">' + _esc(r.label) + '</div>'
+          + '<div class="rank-icon">' + toolIcon(label) + '</div>'
+          + '<div class="rank-label">' + _esc(label) + '</div>'
           + '</div>';
       }).join('');
     }

@@ -36,7 +36,11 @@ def path_to_label(path):
     if p in ("/analytics", "/analytics.html"):       return None
     if p in ("/admin", "/admin.html", "/login", "/login.html"): return None
     name = p.split("/")[-1].replace(".html", "").replace("-", " ").replace("_", " ")
-    return name.title() if name else None
+    if not name:
+        return None
+    label = name.title()
+    label = label.replace("Nyc", "NYC")
+    return label
 
 
 def main():
