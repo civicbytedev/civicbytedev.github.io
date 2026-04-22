@@ -18,17 +18,13 @@ const db   = firebase.firestore();
 
 // ── requireAuth ──────────────────────────────────────────────
 function requireAuth() {
-  document.documentElement.style.visibility = 'hidden';
+  // Auth requirement disabled — pages are publicly accessible
   auth.onAuthStateChanged(function (user) {
-    if (!user) {
-      sessionStorage.setItem('cb_redirect', window.location.href);
-      window.location.replace('/login.html');
-    } else {
+    if (user) {
       db.doc('users/' + user.uid)
         .set({ lastLogin: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
         .catch(function () {});
       _injectNavUser(user);
-      document.documentElement.style.visibility = 'visible';
     }
   });
 }
