@@ -1,29 +1,29 @@
 {
-  "updatedAt": "2026-04-23T22:55:02.565227+00:00",
-  "realtime": 62,
+  "updatedAt": "2026-04-23T23:53:20.416452+00:00",
+  "realtime": 60,
   "7day": {
-    "users": 23338,
-    "views": 46226,
-    "sessions": 23583
+    "users": 23451,
+    "views": 46521,
+    "sessions": 23650
   },
   "30day": {
-    "users": 28146,
-    "newUsers": 28151,
-    "views": 58219,
-    "sessions": 28464
+    "users": 28262,
+    "newUsers": 28278,
+    "views": 58514,
+    "sessions": 28557
   },
   "topPages": [
     {
       "label": "Home",
-      "count": 27823
+      "count": 27925
     },
     {
       "label": "NYC Building Checker",
-      "count": 25717
+      "count": 25811
     },
     {
       "label": "NYC Landlord Watch",
-      "count": 149
+      "count": 150
     },
     {
       "label": "Tools",
@@ -39,7 +39,7 @@
     },
     {
       "label": "Impact",
-      "count": 2
+      "count": 3
     },
     {
       "label": "NYC Eviction Records",
@@ -49,32 +49,32 @@
   "sources": [
     {
       "name": "Organic Search",
-      "count": 8338,
+      "count": 8358,
       "i": 0
     },
     {
       "name": "Organic Video",
-      "count": 7049,
+      "count": 7071,
       "i": 1
     },
     {
       "name": "Direct",
-      "count": 6629,
+      "count": 6666,
       "i": 2
     },
     {
       "name": "Referral",
-      "count": 6148,
+      "count": 6167,
       "i": 3
     },
     {
       "name": "Unassigned",
-      "count": 1396,
+      "count": 1473,
       "i": 4
     },
     {
       "name": "Organic Social",
-      "count": 95,
+      "count": 96,
       "i": 5
     },
     {
