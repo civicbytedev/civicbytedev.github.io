@@ -103,6 +103,11 @@
               .tool-card.card-landlord { --ca: var(--coral);  --ca-rgb: 255,124,124; }
               .tool-card.card-building { --ca: var(--purple); --ca-rgb: 177,151,252; }
 
+              .tool-card.card-eviction { --ca: #60a5fa; --ca-rgb: 96,165,250; }
+              .tool-card.card-eviction::after { background: radial-gradient(circle at 80% 0%, rgba(96,165,250,0.06) 0%, transparent 55%); }
+              .tool-card.card-eviction:hover { border-color: rgba(96,165,250,0.28); box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(96,165,250,0.08); }
+              .card-eviction h3, .card-eviction .tool-link { color: #60a5fa; }
+
               .tool-card.card-311 { --ca: var(--amber); --ca-rgb: 251,191,36; }
               .tool-card.card-311::after { background: radial-gradient(circle at 80% 0%, rgba(251,191,36,0.06) 0%, transparent 55%); }
               .tool-card.card-311:hover { border-color: rgba(251,191,36,0.28); box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(251,191,36,0.08); }
@@ -111,6 +116,7 @@
               .tool-card.card-budget::before,
               .tool-card.card-landlord::before,
               .tool-card.card-building::before,
+              .tool-card.card-eviction::before,
               .tool-card.card-311::before {
                 content: ''; position: absolute;
                 top: 0; left: 0; right: 0; height: 2px;
