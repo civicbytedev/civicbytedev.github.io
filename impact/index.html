@@ -433,18 +433,9 @@
       <span class="imp-panel-meta">30 days</span>
     </div>
     <div class="bar-row" id="tools-bars">
-      <div class="bar-item">
-        <div class="bar-lbl-row"><span class="bar-name sk" style="width:120px;height:12px;display:block"></span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:0"></div></div>
-      </div>
-      <div class="bar-item">
-        <div class="bar-lbl-row"><span class="bar-name sk" style="width:100px;height:12px;display:block"></span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:0"></div></div>
-      </div>
-      <div class="bar-item">
-        <div class="bar-lbl-row"><span class="bar-name sk" style="width:80px;height:12px;display:block"></span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:0"></div></div>
-      </div>
+      <div class="bar-item"><span class="bar-name sk" style="width:120px;height:12px;display:block"></span></div>
+      <div class="bar-item"><span class="bar-name sk" style="width:100px;height:12px;display:block"></span></div>
+      <div class="bar-item"><span class="bar-name sk" style="width:80px;height:12px;display:block"></span></div>
     </div>
   </div>
 
@@ -565,20 +556,10 @@
       const colors = ['', 'purple', 'amber', 'coral', 'blue'];
       return `
         <div class="bar-item">
-          <div class="bar-lbl-row">
-            <span class="bar-name">${esc(p.label.replace('NYC ',''))}</span>
-          </div>
-          <div class="bar-track">
-            <div class="bar-fill ${colors[i] || ''}" data-w="${(p.count/max*100).toFixed(1)}"></div>
-          </div>
+          <span class="bar-name">${esc(p.label.replace('NYC ',''))}</span>
         </div>
       `;
     }).join('');
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      document.querySelectorAll('#tools-bars .bar-fill').forEach(el => {
-        el.style.width = el.dataset.w + '%';
-      });
-    }));
   }
 
   function renderMap(d) {
