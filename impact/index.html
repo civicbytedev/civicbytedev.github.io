@@ -425,57 +425,28 @@
 
   </div><!-- /.mid-grid -->
 
-  <!-- SOURCES + TOOLS -->
-  <div class="bottom-grid" id="bottom-grid">
-
-    <!-- Traffic Sources -->
-    <div class="imp-panel">
-      <div class="imp-panel-hdr">
-        <span class="imp-panel-hdr-dot" style="background:var(--purple)"></span>
-        <span class="imp-panel-title">How People Find CivicByte</span>
-        <span class="imp-panel-meta">30 days</span>
+  <!-- TOP TOOLS -->
+  <div class="imp-panel" style="margin-bottom:1.5rem">
+    <div class="imp-panel-hdr">
+      <span class="imp-panel-hdr-dot" style="background:var(--amber)"></span>
+      <span class="imp-panel-title">Top Tools</span>
+      <span class="imp-panel-meta">30 days</span>
+    </div>
+    <div class="bar-row" id="tools-bars">
+      <div class="bar-item">
+        <div class="bar-lbl-row"><span class="bar-name sk" style="width:120px;height:12px;display:block"></span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:0"></div></div>
       </div>
-      <div class="bar-row" id="sources-bars">
-        <!-- filled by JS -->
-        <div class="bar-item">
-          <div class="bar-lbl-row"><span class="bar-name sk" style="width:100px;height:12px;display:block"></span><span class="bar-val sk" style="width:36px;height:12px;display:block"></span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:0"></div></div>
-        </div>
-        <div class="bar-item">
-          <div class="bar-lbl-row"><span class="bar-name sk" style="width:80px;height:12px;display:block"></span><span class="bar-val sk" style="width:36px;height:12px;display:block"></span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:0"></div></div>
-        </div>
-        <div class="bar-item">
-          <div class="bar-lbl-row"><span class="bar-name sk" style="width:60px;height:12px;display:block"></span><span class="bar-val sk" style="width:36px;height:12px;display:block"></span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:0"></div></div>
-        </div>
+      <div class="bar-item">
+        <div class="bar-lbl-row"><span class="bar-name sk" style="width:100px;height:12px;display:block"></span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:0"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-lbl-row"><span class="bar-name sk" style="width:80px;height:12px;display:block"></span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:0"></div></div>
       </div>
     </div>
-
-    <!-- Tool Breakdown -->
-    <div class="imp-panel">
-      <div class="imp-panel-hdr">
-        <span class="imp-panel-hdr-dot" style="background:var(--amber)"></span>
-        <span class="imp-panel-title">Top Tools</span>
-        <span class="imp-panel-meta">searches, 30 days</span>
-      </div>
-      <div class="bar-row" id="tools-bars">
-        <div class="bar-item">
-          <div class="bar-lbl-row"><span class="bar-name sk" style="width:120px;height:12px;display:block"></span><span class="bar-val sk" style="width:36px;height:12px;display:block"></span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:0"></div></div>
-        </div>
-        <div class="bar-item">
-          <div class="bar-lbl-row"><span class="bar-name sk" style="width:100px;height:12px;display:block"></span><span class="bar-val sk" style="width:36px;height:12px;display:block"></span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:0"></div></div>
-        </div>
-        <div class="bar-item">
-          <div class="bar-lbl-row"><span class="bar-name sk" style="width:80px;height:12px;display:block"></span><span class="bar-val sk" style="width:36px;height:12px;display:block"></span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:0"></div></div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /.bottom-grid -->
+  </div>
 
   <!-- MISSION -->
   <div class="mission-strip">
@@ -509,9 +480,6 @@
     bronx:     0.15,
     staten:    0.03,
   };
-  // Bar fill colors per source index
-  const SRC_COLORS = ['', 'purple', 'coral', 'amber', 'blue', ''];
-
   // ── Animated counter ──────────────────────────────────────────────────────
   function animateCount(el, target, duration = 1800) {
     const start = performance.now();
@@ -530,7 +498,6 @@
       if (!r.ok) throw new Error();
       const d = await r.json();
       renderStats(d);
-      renderSources(d.sources || []);
       renderTools(d.topPages || []);
       renderMap(d);
       renderFreshness(d);
@@ -590,29 +557,6 @@
     });
   }
 
-  function renderSources(sources) {
-    if (!sources.length) return;
-    const max = Math.max(...sources.map(s => s.count));
-    const top = sources.slice(0, 5);
-    document.getElementById('sources-bars').innerHTML = top.map((s, i) => `
-      <div class="bar-item">
-        <div class="bar-lbl-row">
-          <span class="bar-name">${esc(s.name)}</span>
-          <span class="bar-val">${s.count.toLocaleString()}</span>
-        </div>
-        <div class="bar-track">
-          <div class="bar-fill ${SRC_COLORS[i] || ''}" data-w="${(s.count/max*100).toFixed(1)}"></div>
-        </div>
-      </div>
-    `).join('');
-    // animate bars after paint
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      document.querySelectorAll('#sources-bars .bar-fill').forEach(el => {
-        el.style.width = el.dataset.w + '%';
-      });
-    }));
-  }
-
   function renderTools(pages) {
     const toolPages = pages.filter(p => !['Home','Tools','About','Submit a Tool','Analytics','Impact'].includes(p.label));
     if (!toolPages.length) return;
@@ -623,7 +567,6 @@
         <div class="bar-item">
           <div class="bar-lbl-row">
             <span class="bar-name">${esc(p.label.replace('NYC ',''))}</span>
-            <span class="bar-val">${p.count.toLocaleString()}</span>
           </div>
           <div class="bar-track">
             <div class="bar-fill ${colors[i] || ''}" data-w="${(p.count/max*100).toFixed(1)}"></div>
