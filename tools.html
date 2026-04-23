@@ -103,9 +103,15 @@
               .tool-card.card-landlord { --ca: var(--coral);  --ca-rgb: 255,124,124; }
               .tool-card.card-building { --ca: var(--purple); --ca-rgb: 177,151,252; }
 
+              .tool-card.card-311 { --ca: var(--amber); --ca-rgb: 251,191,36; }
+              .tool-card.card-311::after { background: radial-gradient(circle at 80% 0%, rgba(251,191,36,0.06) 0%, transparent 55%); }
+              .tool-card.card-311:hover { border-color: rgba(251,191,36,0.28); box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(251,191,36,0.08); }
+              .card-311 h3, .card-311 .tool-link { color: var(--amber); }
+
               .tool-card.card-budget::before,
               .tool-card.card-landlord::before,
-              .tool-card.card-building::before {
+              .tool-card.card-building::before,
+              .tool-card.card-311::before {
                 content: ''; position: absolute;
                 top: 0; left: 0; right: 0; height: 2px;
                 background: var(--ca); z-index: 1;
@@ -333,6 +339,32 @@
                         </div>
                         <div class="tool-card-footer">
                                   <a href="/nyc-eviction-records/" class="tool-link">View Tool &rarr;</a>
+                        </div>
+                </div>
+
+                <div class="tool-card card-311" data-category="municipal" data-name="NYC 311 Complaint Lookup" data-status="live">
+                        <div class="card-icon">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.93 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012.84 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.84a16 16 0 006.29 6.29l1.21-1.28a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                        </div>
+                        <div class="tool-meta">
+                                  <span class="tool-status live">Live</span>
+                                  <span class="tool-category">Municipal Data · Housing</span>
+                        </div>
+                        <h3>NYC 311 Complaint Lookup</h3>
+                        <div class="card-stats-mini">
+                                  <div class="card-stat-mini"><strong style="color:var(--amber)">35M+</strong>Records</div>
+                                  <div class="card-stat-mini"><strong style="color:var(--amber)">100+</strong>Complaint types</div>
+                                  <div class="card-stat-mini"><strong style="color:var(--amber)">Daily</strong>Data updates</div>
+                        </div>
+                        <p>Enter any NYC address to see every 311 service request filed there — noise, heat, pests, plumbing, and more. Filter by type, see agency assignments and resolution notes.</p>
+                        <div class="tool-tags">
+                                  <span class="tool-tag">NYC</span>
+                                  <span class="tool-tag">311</span>
+                                  <span class="tool-tag">Municipal</span>
+                                  <span class="tool-tag">Tenants</span>
+                        </div>
+                        <div class="tool-card-footer">
+                                  <a href="/nyc-311-complaints/" class="tool-link">View Tool &rarr;</a>
                         </div>
                 </div>
 

@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MV3SDWV3DV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MV3SDWV3DV');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#080b1a" />
+  <title>NYC 311 Complaint Lookup — CivicByte</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%23080b1a' stroke='%2300f5c4' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%2300f5c4'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%2300f5c4' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%2300f5c4' opacity='.5'/%3E%3C/svg%3E">
+  <meta name="description" content="Look up every 311 service request filed for any NYC address. Filter by complaint type — noise, heat, pests, plumbing, and more. Free tool by CivicByte." />
+  <meta name="keywords" content="NYC 311 lookup, 311 complaint history, NYC noise complaint lookup, 311 service requests NYC, NYC municipal complaints by address">
+  <link rel="canonical" href="https://civicbyte.dev/nyc-311-complaints/">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://civicbyte.dev/nyc-311-complaints/">
+  <meta property="og:title" content="NYC 311 Complaint Lookup — See Every Service Request for Any Address">
+  <meta property="og:description" content="Enter any NYC address to see its full 311 service request history — noise, heat, pests, plumbing, and more. Filter by type. Free, live data.">
+  <meta property="og:image" content="https://civicbyte.dev/og-image.png">
+  <meta property="og:site_name" content="CivicByte">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NYC 311 Complaint Lookup — Free Tool by CivicByte">
+  <meta name="twitter:description" content="Enter any NYC address and see every 311 service request ever filed there — noise, heat, pests, plumbing, and more. Free.">
+  <meta name="twitter:image" content="https://civicbyte.dev/og-image.png">
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"NYC 311 Complaint Lookup","url":"https://civicbyte.dev/nyc-311-complaints/","description":"Free tool to look up every 311 service request filed for any NYC address. Filter by complaint type — noise, heat, pests, plumbing, and more.","applicationCategory":"Utilities","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"provider":{"@type":"Organization","name":"CivicByte","url":"https://civicbyte.dev"}}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    /* ── page background ── */
+    body { background: var(--bg); }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(30,45,82,0.16) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,45,82,0.16) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none; z-index: 0;
+    }
+    .site-nav, .tool-hero, .tool-main, footer { position: relative; z-index: 1; }
+
+    /* ── hero ── */
+    .tool-hero {
+      padding: 5.5rem 2rem 4rem;
+      text-align: center;
+      max-width: 780px;
+      margin: 0 auto;
+      overflow: visible; /* allow autocomplete dropdown to escape */
+    }
+    .tool-hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 420px;
+      background: radial-gradient(ellipse, rgba(251,191,36,0.06) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
+    }
+    .tool-hero > * { position: relative; z-index: 1; }
+    .tool-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(251,191,36,0.06);
+      border: 1px solid rgba(251,191,36,0.22);
+      border-radius: 100px;
+      padding: 0.35rem 1rem 0.35rem 0.75rem;
+      font-size: 0.78rem; font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.45s ease-out both;
+    }
+    .tool-eyebrow .dot {
+      width: 6px; height: 6px;
+      background: var(--amber); border-radius: 50%;
+      box-shadow: 0 0 7px var(--amber);
+      flex-shrink: 0;
+    }
+    .tool-hero h1 {
+      font-size: clamp(2.2rem, 5.5vw, 3.5rem);
+      font-weight: 700; line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin-bottom: 1rem;
+      animation: fadeUp 0.45s ease-out 0.08s both;
+    }
+    .hero-sub {
+      font-size: 1.05rem; color: var(--text-secondary);
+      max-width: 560px; margin: 0 auto 2.5rem;
+      line-height: 1.75;
+      animation: fadeUp 0.45s ease-out 0.16s both;
+    }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ── search card ── */
+    .search-card {
+      background: var(--surface);
+      border: 1px solid rgba(251,191,36,0.18);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: 0 0 0 1px rgba(251,191,36,0.04), 0 20px 60px rgba(0,0,0,0.45);
+      animation: fadeUp 0.45s ease-out 0.22s both;
+      overflow: visible;
+    }
+    .search-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .input-wrap { flex: 1; min-width: 200px; position: relative; }
+    .input-wrap > svg {
+      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+      color: var(--text-dim); width: 17px; height: 17px; pointer-events: none;
+      z-index: 1;
+    }
+    .addr-input {
+      width: 100%;
+      padding: 0.875rem 2.5rem 0.875rem 2.75rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .addr-input::placeholder { color: var(--text-dim); }
+    .addr-input:focus {
+      border-color: var(--amber);
+      box-shadow: 0 0 0 3px rgba(251,191,36,0.09);
+    }
+    .clear-btn {
+      position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: var(--text-dim); padding: 4px; display: none;
+      line-height: 1;
+    }
+    .clear-btn:hover { color: var(--text-secondary); }
+    .clear-btn.visible { display: flex; align-items: center; }
+
+    /* ── autocomplete dropdown ── */
+    .ac-list {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0; right: 0;
+      background: var(--surface2);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      z-index: 200;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+      display: none;
+    }
+    .ac-list.open { display: block; }
+    .ac-item {
+      display: flex; align-items: flex-start; gap: 0.65rem;
+      padding: 0.75rem 1rem; cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.12s;
+    }
+    .ac-item:last-child { border-bottom: none; }
+    .ac-item:hover { background: var(--surface3); }
+    .ac-icon {
+      flex-shrink: 0; margin-top: 2px;
+      color: var(--amber); opacity: 0.8;
+    }
+    .ac-main { font-size: 0.9rem; font-weight: 600; color: var(--text); font-family: "Space Grotesk", sans-serif; }
+    .ac-sub  { font-size: 0.78rem; color: var(--text-secondary); margin-top: 1px; }
+
+    .search-hint {
+      margin-top: 0.85rem;
+      font-size: 0.8rem; color: var(--text-dim);
+    }
+    .search-hint span {
+      color: var(--text-secondary); cursor: pointer;
+      text-decoration: underline; text-underline-offset: 2px;
+    }
+    .search-hint span:hover { color: var(--amber); }
+
+    /* ── main ── */
+    .tool-main {
+      max-width: 960px; margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+
+    /* ── shared hidden ── */
+    .hidden { display: none !important; }
+
+    /* ── idle ── */
+    #state-idle { padding: 2.5rem 0 0; }
+    .idle-section-label {
+      text-align: center; font-size: 0.72rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); font-weight: 700; margin-bottom: 1rem;
+    }
+    .idle-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2.5rem; }
+    .idle-pill {
+      padding: 0.4rem 0.9rem; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 99px;
+      font-size: 0.78rem; color: var(--text-dim);
+      display: flex; align-items: center; gap: 0.35rem;
+    }
+    .idle-pill-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--amber); flex-shrink: 0; }
+    .info-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+      gap: 1rem;
+    }
+    .info-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+    }
+    .info-card-title {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 1rem;
+    }
+    .info-row {
+      display: flex; gap: 0.65rem; align-items: flex-start;
+      margin-bottom: 0.85rem;
+    }
+    .info-row:last-child { margin-bottom: 0; }
+    .info-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+    }
+    .info-row-text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55; }
+    .info-row-label { font-weight: 600; color: var(--text); margin-bottom: 0.1rem; font-size: 0.85rem; }
+    .action-list { list-style: none; }
+    .action-item {
+      display: flex; gap: 0.75rem; align-items: flex-start;
+      margin-bottom: 0.85rem; font-size: 0.875rem;
+      color: var(--text-secondary); line-height: 1.55;
+    }
+    .action-item:last-child { margin-bottom: 0; }
+    .action-num {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--surface2); border: 1px solid var(--border-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700; color: var(--amber);
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .action-item a { color: var(--amber); text-decoration: none; }
+    .action-item a:hover { text-decoration: underline; }
+
+    /* ── skeleton loading ── */
+    #state-loading { padding-top: 2rem; }
+    @keyframes shimmer {
+      0%   { background-position: -800px 0; }
+      100% { background-position:  800px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg,
+        var(--surface) 20%,
+        var(--surface2) 50%,
+        var(--surface) 80%);
+      background-size: 1600px 100%;
+      animation: shimmer 1.6s infinite linear;
+      border-radius: 5px;
+    }
+    .sk-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      display: flex; gap: 0.75rem;
+      margin-bottom: 0.6rem;
+    }
+    .sk-accent { width: 3px; border-radius: 2px; align-self: stretch; flex-shrink: 0; }
+    .sk-body { flex: 1; display: flex; flex-direction: column; gap: 0.55rem; padding: 0.1rem 0; }
+    .sk-row { display: flex; gap: 0.5rem; align-items: center; }
+
+    /* ── error ── */
+    #state-error {
+      background: rgba(255,124,124,0.05);
+      border: 1px solid rgba(255,124,124,0.18);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem; text-align: center;
+      margin-top: 2rem;
+    }
+    .err-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .err-title { font-weight: 700; font-size: 1.1rem; color: var(--coral); margin-bottom: 0.5rem; }
+    .err-msg { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.65; }
+    .err-retry {
+      margin-top: 1.25rem;
+      padding: 0.6rem 1.5rem;
+      background: transparent;
+      border: 1px solid rgba(255,124,124,0.3);
+      border-radius: var(--radius);
+      color: var(--coral);
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.875rem; font-weight: 600;
+      cursor: pointer; transition: background 0.18s;
+    }
+    .err-retry:hover { background: rgba(255,124,124,0.08); }
+
+    /* ── results ── */
+    #state-results { margin-top: 2.5rem; }
+
+    /* summary card */
+    .summary-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .summary-addr-label {
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 0.3rem;
+    }
+    .summary-addr { font-size: 1.25rem; font-weight: 700; line-height: 1.3; }
+    .summary-sub { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.2rem; }
+    .stats-row {
+      display: flex; gap: 0;
+      border-top: 1px solid var(--border);
+      margin-top: 1.25rem; padding-top: 1.25rem;
+    }
+    .stat-cell {
+      flex: 1; text-align: center;
+      border-right: 1px solid var(--border);
+      padding: 0 0.5rem;
+    }
+    .stat-cell:first-child { padding-left: 0; }
+    .stat-cell:last-child { border-right: none; padding-right: 0; }
+    .stat-num {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 2rem; font-weight: 700; line-height: 1; letter-spacing: -0.03em;
+    }
+    .stat-label {
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-dim); margin-top: 0.3rem;
+    }
+
+    /* filter chips */
+    .filters-wrap {
+      display: flex; gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.25rem;
+      -ms-overflow-style: none; scrollbar-width: none;
+    }
+    .filters-wrap::-webkit-scrollbar { display: none; }
+    .chip {
+      display: flex; align-items: center; gap: 0.35rem;
+      padding: 0.35rem 0.85rem; border-radius: 99px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 0.78rem; font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer; white-space: nowrap;
+      transition: all 0.15s; font-family: "DM Sans", sans-serif;
+      flex-shrink: 0;
+    }
+    .chip:hover { border-color: var(--border-light); color: var(--text); }
+    .chip.active { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.3); color: var(--amber); }
+    .chip-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+    /* list header */
+    .list-header {
+      display: flex; align-items: center; gap: 0.6rem;
+      margin-bottom: 0.85rem;
+    }
+    .list-hdr-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .list-hdr-text { font-size: 0.95rem; font-weight: 700; flex: 1; }
+    .count-pill {
+      font-size: 0.73rem; font-weight: 700; padding: 2px 9px;
+      border-radius: 99px; background: var(--surface2);
+      border: 1px solid var(--border-light); color: var(--text-secondary);
+    }
+
+    /* complaint cards */
+    .complaint-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .complaint-card {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.15s;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .complaint-card.visible {
+      animation: cardIn 0.28s ease-out forwards;
+    }
+    @keyframes cardIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .complaint-card:hover { border-color: var(--border-light); }
+    .card-accent { width: 3px; flex-shrink: 0; }
+    .card-body { flex: 1; padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.55rem; }
+    .card-top {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;
+    }
+    .card-badges { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+    .type-badge {
+      font-size: 0.7rem; font-weight: 700;
+      padding: 3px 9px; border-radius: 6px; border: 1px solid;
+      max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .status-badge {
+      font-size: 0.7rem; font-weight: 700;
+      padding: 3px 8px; border-radius: 99px; border: 1px solid;
+      display: flex; align-items: center; gap: 4px; white-space: nowrap;
+    }
+    .status-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .card-date { font-size: 0.75rem; color: var(--text-dim); flex-shrink: 0; margin-top: 3px; }
+    .card-desc { font-size: 0.875rem; font-weight: 500; color: var(--text); line-height: 1.5; }
+    .card-meta { display: flex; flex-direction: column; gap: 0.2rem; }
+    .card-agency { font-size: 0.78rem; color: var(--text-secondary); }
+    .card-agency-label { color: var(--text-dim); }
+    .card-resolution {
+      font-size: 0.78rem; color: var(--text-secondary);
+      line-height: 1.55; font-style: italic;
+    }
+
+    /* show more */
+    .show-more-btn {
+      width: 100%; margin-top: 0.75rem;
+      padding: 0.75rem; background: var(--surface);
+      border: 1px dashed var(--border-light); border-radius: var(--radius);
+      color: var(--text-secondary); font-family: "DM Sans", sans-serif;
+      font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.18s;
+    }
+    .show-more-btn:hover { border-color: var(--amber); color: var(--amber); background: rgba(251,191,36,0.04); }
+
+    /* empty list */
+    .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--text-secondary); }
+    .empty-state .empty-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .empty-state strong { display: block; font-size: 1rem; margin-bottom: 0.4rem; color: var(--amber); }
+    .empty-state p { font-size: 0.875rem; color: var(--text-dim); }
+
+    /* data strip */
+    .data-strip {
+      display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+      padding: 0.85rem 1.25rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); margin-top: 2rem;
+      font-size: 0.8rem; color: var(--text-dim);
+    }
+    .data-strip a { color: var(--amber); text-decoration: none; }
+    .data-strip a:hover { text-decoration: underline; }
+    .data-strip .sep { color: var(--border-light); }
+
+    /* responsive */
+    @media (max-width: 600px) {
+      .tool-hero { padding: 3.5rem 1rem 2.5rem; }
+      .tool-main { padding: 0 1rem 3rem; }
+      .stats-row { gap: 0; }
+      .stat-num { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="site-nav">
+  <nav class="nav">
+    <a href="/" class="logo">
+      <svg width="30" height="30" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lgNav" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00f5c4"/><stop offset="100%" stop-color="#b197fc"/></linearGradient></defs><rect width="1024" height="1024" rx="220" fill="#080b1a"/><rect x="170" y="573" width="72" height="144" rx="2" fill="url(#lgNav)"/><rect x="260" y="501" width="54" height="216" rx="2" fill="url(#lgNav)"/><rect x="332" y="393" width="90" height="324" rx="2" fill="url(#lgNav)"/><rect x="375" y="303" width="5" height="90" rx="2" fill="url(#lgNav)"/><rect x="440" y="465" width="108" height="252" rx="2" fill="url(#lgNav)"/><rect x="566" y="321" width="90" height="396" rx="2" fill="url(#lgNav)"/><rect x="609" y="213" width="5" height="108" rx="2" fill="url(#lgNav)"/><rect x="674" y="483" width="72" height="234" rx="2" fill="url(#lgNav)"/><rect x="764" y="555" width="54" height="162" rx="2" fill="url(#lgNav)"/><rect x="789" y="501" width="5" height="54" rx="2" fill="url(#lgNav)"/><rect x="818" y="609" width="36" height="108" rx="2" fill="url(#lgNav)"/><rect x="170" y="717" width="684" height="3" rx="1" fill="url(#lgNav)" opacity="0.6"/></svg>
+      <span class="logo-wordmark">civic<span class="cb">byte</span></span>
+    </a>
+    <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="cb-nav-links">
+      <span class="cb-ham" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+    <div class="nav-links" id="cb-nav-links">
+      <a href="/">Home</a>
+      <a href="/tools.html" class="active">Tools</a>
+      <a href="/about.html">About</a>
+      <a href="/submit.html">Submit a Tool</a>
+      <a href="https://github.com/civicbytedev" target="_blank" rel="noopener" class="nav-gh">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="tool-hero">
+  <div class="tool-eyebrow">
+    <div class="dot"></div>
+    NYC Municipal Data &mdash; Free &amp; Open Source
+  </div>
+  <h1>NYC 311 <span class="grad">Complaint Lookup</span></h1>
+  <p class="hero-sub">
+    Enter any NYC address to see every 311 service request ever filed there —
+    noise, heat, pests, plumbing, and more. Filter by type. Powered by NYC Open Data.
+  </p>
+
+  <div class="search-card">
+    <div class="search-row">
+      <div class="input-wrap">
+        <!-- location icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <input
+          type="text"
+          id="addr-input"
+          class="addr-input"
+          placeholder="e.g. 120 Broadway, Manhattan"
+          autocomplete="off"
+          aria-label="NYC address"
+          aria-autocomplete="list"
+          aria-controls="ac-list"
+        />
+        <button class="clear-btn" id="clear-btn" aria-label="Clear address" onclick="clearSearch()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <!-- autocomplete dropdown -->
+        <div class="ac-list" id="ac-list" role="listbox"></div>
+      </div>
+      <button class="btn-primary" id="search-btn" onclick="doSearch()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search
+      </button>
+    </div>
+    <p class="search-hint">
+      Try:
+      <span onclick="fillExample('120 Broadway, Manhattan')">120 Broadway, Manhattan</span> &middot;
+      <span onclick="fillExample('2095 Grand Concourse, Bronx')">2095 Grand Concourse, Bronx</span> &middot;
+      <span onclick="fillExample('460 Kent Ave, Brooklyn')">460 Kent Ave, Brooklyn</span>
+    </p>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="tool-main">
+
+  <!-- IDLE -->
+  <div id="state-idle">
+    <p class="idle-section-label">What this tool shows</p>
+    <div class="idle-pills">
+      <span class="idle-pill"><span class="idle-pill-dot"></span>Noise complaints</span>
+      <span class="idle-pill"><span class="idle-pill-dot"></span>Heat &amp; hot water</span>
+      <span class="idle-pill"><span class="idle-pill-dot"></span>Pest control</span>
+      <span class="idle-pill"><span class="idle-pill-dot"></span>Plumbing issues</span>
+      <span class="idle-pill"><span class="idle-pill-dot"></span>Illegal dumping</span>
+      <span class="idle-pill"><span class="idle-pill-dot"></span>Open vs. closed status</span>
+      <span class="idle-pill"><span class="idle-pill-dot"></span>Agency assigned</span>
+      <span class="idle-pill"><span class="idle-pill-dot"></span>Resolution notes</span>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">Common Complaint Types</div>
+        <div class="info-row">
+          <span class="info-dot" style="background:#fbbf24"></span>
+          <div>
+            <div class="info-row-label">Noise</div>
+            <div class="info-row-text">Residential, street, commercial — one of the most common 311 categories in NYC.</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-dot" style="background:#ff7c7c"></span>
+          <div>
+            <div class="info-row-label">Heat / Hot Water</div>
+            <div class="info-row-text">Legally required year-round. Landlords must provide heat Oct–May; hot water 365 days.</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-dot" style="background:#b197fc"></span>
+          <div>
+            <div class="info-row-label">Plumbing &amp; Water</div>
+            <div class="info-row-text">Leaks, flooding, no water — routed to DEP or HPD depending on the issue.</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-dot" style="background:#00f5c4"></span>
+          <div>
+            <div class="info-row-label">Pests / Rodents</div>
+            <div class="info-row-text">Routed to DOHMH. Buildings with repeat complaints may face increased inspections.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-title">What to do with this data</div>
+        <ul class="action-list">
+          <li class="action-item"><span class="action-num">1</span><span>Check your building's complaint history before signing a lease to spot recurring problems.</span></li>
+          <li class="action-item"><span class="action-num">2</span><span>File your own 311 complaint at <a href="https://portal.311.nyc.gov" target="_blank" rel="noopener">portal.311.nyc.gov</a> or by calling 311.</span></li>
+          <li class="action-item"><span class="action-num">3</span><span>Cross-reference with <a href="/nyc-building-checker/">HPD violations</a> for a full picture of building conditions.</span></li>
+          <li class="action-item"><span class="action-num">4</span><span>Organize with neighbors — repeated complaints help establish patterns for legal action.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING: skeleton cards -->
+  <div id="state-loading" class="hidden">
+    <div id="skeleton-cards">
+      <div class="sk-card">
+        <div class="sk-accent skeleton" style="background: rgba(251,191,36,0.15); animation: none;"></div>
+        <div class="sk-body">
+          <div class="sk-row">
+            <div class="skeleton" style="width:100px;height:20px;"></div>
+            <div class="skeleton" style="width:64px;height:20px;"></div>
+            <div class="skeleton" style="width:72px;height:12px;margin-left:auto;"></div>
+          </div>
+          <div class="skeleton" style="width:88%;height:12px;"></div>
+          <div class="skeleton" style="width:66%;height:12px;"></div>
+          <div class="skeleton" style="width:44%;height:10px;"></div>
+        </div>
+      </div>
+      <div class="sk-card">
+        <div class="sk-accent skeleton" style="background: rgba(251,191,36,0.15); animation: none;"></div>
+        <div class="sk-body">
+          <div class="sk-row">
+            <div class="skeleton" style="width:130px;height:20px;"></div>
+            <div class="skeleton" style="width:54px;height:20px;"></div>
+            <div class="skeleton" style="width:68px;height:12px;margin-left:auto;"></div>
+          </div>
+          <div class="skeleton" style="width:76%;height:12px;"></div>
+          <div class="skeleton" style="width:58%;height:12px;"></div>
+          <div class="skeleton" style="width:38%;height:10px;"></div>
+        </div>
+      </div>
+      <div class="sk-card">
+        <div class="sk-accent skeleton" style="background: rgba(251,191,36,0.15); animation: none;"></div>
+        <div class="sk-body">
+          <div class="sk-row">
+            <div class="skeleton" style="width:84px;height:20px;"></div>
+            <div class="skeleton" style="width:70px;height:20px;"></div>
+            <div class="skeleton" style="width:80px;height:12px;margin-left:auto;"></div>
+          </div>
+          <div class="skeleton" style="width:93%;height:12px;"></div>
+          <div class="skeleton" style="width:70%;height:12px;"></div>
+        </div>
+      </div>
+      <div class="sk-card">
+        <div class="sk-accent skeleton" style="background: rgba(251,191,36,0.15); animation: none;"></div>
+        <div class="sk-body">
+          <div class="sk-row">
+            <div class="skeleton" style="width:110px;height:20px;"></div>
+            <div class="skeleton" style="width:58px;height:20px;"></div>
+            <div class="skeleton" style="width:76px;height:12px;margin-left:auto;"></div>
+          </div>
+          <div class="skeleton" style="width:82%;height:12px;"></div>
+          <div class="skeleton" style="width:50%;height:12px;"></div>
+          <div class="skeleton" style="width:36%;height:10px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div id="state-error" class="hidden">
+    <div class="err-icon">&#9888;&#65039;</div>
+    <div class="err-title" id="err-title">Something went wrong</div>
+    <div class="err-msg" id="err-msg">We couldn't load complaints for that address. Check the spelling or try including the borough.</div>
+    <button class="err-retry" onclick="resetToIdle()">Try another address</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="state-results" class="hidden">
+
+    <!-- Summary -->
+    <div class="summary-card">
+      <div class="summary-addr-label">311 Complaint History for</div>
+      <div class="summary-addr" id="result-address">—</div>
+      <div class="summary-sub" id="result-sub">—</div>
+      <div class="stats-row">
+        <div class="stat-cell">
+          <div class="stat-num" id="stat-open" style="color:var(--coral)">—</div>
+          <div class="stat-label">Open</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num" id="stat-closed" style="color:var(--text-secondary)">—</div>
+          <div class="stat-label">Closed</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num" id="stat-total" style="color:var(--text)">—</div>
+          <div class="stat-label">Total</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter chips -->
+    <div class="filters-wrap" id="filters-wrap"></div>
+
+    <!-- List header -->
+    <div class="list-header">
+      <span class="list-hdr-dot" id="list-hdr-dot" style="background:var(--amber)"></span>
+      <span class="list-hdr-text" id="list-hdr-text">All Complaints</span>
+      <span class="count-pill" id="list-count-pill">0</span>
+    </div>
+
+    <!-- Complaint cards -->
+    <div class="complaint-list" id="complaint-list"></div>
+    <button class="show-more-btn hidden" id="show-more-btn" onclick="showMore()">Show more</button>
+
+    <!-- Info + data strip -->
+    <div class="info-grid" style="margin-top:2.5rem">
+      <div class="info-card">
+        <div class="info-card-title">Status Guide</div>
+        <div class="info-row">
+          <span class="info-dot" style="background:var(--coral)"></span>
+          <div><div class="info-row-label" style="color:var(--coral)">Open</div><div class="info-row-text">Complaint received; agency has not yet resolved it.</div></div>
+        </div>
+        <div class="info-row">
+          <span class="info-dot" style="background:var(--amber)"></span>
+          <div><div class="info-row-label" style="color:var(--amber)">Assigned / In Progress</div><div class="info-row-text">Agency has accepted and is actively working the complaint.</div></div>
+        </div>
+        <div class="info-row">
+          <span class="info-dot" style="background:var(--teal)"></span>
+          <div><div class="info-row-label" style="color:var(--teal)">Closed</div><div class="info-row-text">Agency has resolved or closed the complaint. See resolution notes for details.</div></div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Resources</div>
+        <ul class="action-list">
+          <li class="action-item"><span class="action-num">1</span><span>File a complaint: <a href="https://portal.311.nyc.gov" target="_blank" rel="noopener">portal.311.nyc.gov</a></span></li>
+          <li class="action-item"><span class="action-num">2</span><span>HPD violations: <a href="/nyc-building-checker/">NYC Building Report</a></span></li>
+          <li class="action-item"><span class="action-num">3</span><span>Free legal help: <a href="https://www.legalaidnyc.org" target="_blank" rel="noopener">Legal Aid Society</a></span></li>
+          <li class="action-item"><span class="action-num">4</span><span>Organize: <a href="https://housingcourtanswers.org" target="_blank" rel="noopener">Housing Court Answers</a></span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="data-strip">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Data: <a href="https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9" target="_blank" rel="noopener">NYC 311 Service Requests</a>
+      <span class="sep">&middot;</span>
+      <a href="https://geosearch.planninglabs.nyc" target="_blank" rel="noopener">NYC Planning GeoSearch</a>
+      <span class="sep">&middot;</span>
+      Updated daily &middot; MIT License
+    </div>
+
+  </div><!-- /#state-results -->
+
+</div><!-- /.tool-main -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-left">&copy; 2026 CivicByte &mdash; Open source under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.</div>
+  <div class="f-right">
+    <a href="/tools.html">Tools</a>
+    <a href="/about.html">About</a>
+    <a href="/submit.html">Submit</a>
+    <a href="https://github.com/civicbytedev" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  // ── APIs ──────────────────────────────────────────────────────────────────
+  const API_311    = 'https://data.cityofnewyork.us/resource/erm2-nwe9.json';
+  const GEOSEARCH  = 'https://geosearch.planninglabs.nyc/v2/autocomplete';
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  let allComplaints = [];
+  let activeFilter  = null;
+  let visibleCount  = 20;
+  let pickedAddr    = null;   // { housenumber, street, borough }
+  let acDebounce    = null;
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function esc(s) {
+    return String(s ?? '')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function titleCase(s) {
+    return (s || '').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+  }
+  function fmtDate(iso) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+  }
+
+  function setText(id, val) { document.getElementById(id).textContent = val; }
+
+  function showState(s) {
+    ['state-idle','state-loading','state-error','state-results'].forEach(id => {
+      document.getElementById(id).classList.toggle('hidden', id !== s);
+    });
+  }
+
+  function resetToIdle() {
+    showState('state-idle');
+    document.getElementById('search-btn').disabled = false;
+  }
+
+  // ── Color helpers ──────────────────────────────────────────────────────────
+  const TYPE_COLOR_MAP = [
+    ['noise',       '#fbbf24'],
+    ['heat',        '#ff7c7c'],
+    ['hot water',   '#ff7c7c'],
+    ['plumbing',    '#b197fc'],
+    ['water',       '#b197fc'],
+    ['pest',        '#00f5c4'],
+    ['rodent',      '#00f5c4'],
+    ['unsanitary',  '#00f5c4'],
+  ];
+  const FALLBACK_COLORS = ['#fbbf24','#ff7c7c','#b197fc','#00f5c4'];
+
+  function typeColor(type) {
+    const t = (type || '').toLowerCase();
+    for (const [k, c] of TYPE_COLOR_MAP) {
+      if (t.includes(k)) return c;
+    }
+    let h = 0;
+    for (const ch of (type || '')) h = (h * 31 + ch.charCodeAt(0)) & 0xffff;
+    return FALLBACK_COLORS[h % FALLBACK_COLORS.length];
+  }
+
+  function statusInfo(status) {
+    const s = (status || '').toLowerCase();
+    if (s === 'open')
+      return { label: 'Open',   color: '#ff7c7c', bg: 'rgba(255,124,124,0.09)', border: 'rgba(255,124,124,0.22)' };
+    if (s === 'closed')
+      return { label: 'Closed', color: '#00f5c4', bg: 'rgba(0,245,196,0.07)',   border: 'rgba(0,245,196,0.18)' };
+    return { label: titleCase(status) || 'In Progress', color: '#fbbf24', bg: 'rgba(251,191,36,0.07)', border: 'rgba(251,191,36,0.18)' };
+  }
+
+  // ── Fetch with timeout ─────────────────────────────────────────────────────
+  async function fetchTimeout(url, ms = 12000) {
+    const ctrl  = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), ms);
+    try {
+      const r = await fetch(url, { signal: ctrl.signal });
+      clearTimeout(timer);
+      return r;
+    } catch (e) {
+      clearTimeout(timer);
+      if (e.name === 'AbortError') throw new Error('Request timed out — please try again.');
+      throw e;
+    }
+  }
+
+  // ── Autocomplete ───────────────────────────────────────────────────────────
+  const input   = document.getElementById('addr-input');
+  const acList  = document.getElementById('ac-list');
+  const clearBtn= document.getElementById('clear-btn');
+
+  input.addEventListener('input', () => {
+    const val = input.value.trim();
+    clearBtn.classList.toggle('visible', val.length > 0);
+    if (pickedAddr) { pickedAddr = null; }
+    clearTimeout(acDebounce);
+    if (val.length < 3) { closeAC(); return; }
+    acDebounce = setTimeout(() => fetchSuggestions(val), 300);
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { closeAC(); doSearch(); }
+    if (e.key === 'Escape') closeAC();
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.input-wrap')) closeAC();
+  });
+
+  async function fetchSuggestions(text) {
+    try {
+      const r = await fetchTimeout(`${GEOSEARCH}?text=${encodeURIComponent(text)}&size=8`, 5000);
+      if (!r.ok) { closeAC(); return; }
+      const d = await r.json();
+      const feats = (d.features || []).filter(f => f.properties?.housenumber && f.properties?.street);
+      renderAC(feats.slice(0, 7));
+    } catch { closeAC(); }
+  }
+
+  function renderAC(feats) {
+    if (!feats.length) { closeAC(); return; }
+    acList.innerHTML = feats.map((f, i) => {
+      const p   = f.properties;
+      const main = esc(`${p.housenumber} ${p.street}`);
+      const sub  = esc(p.borough || '');
+      return `<div class="ac-item" role="option" tabindex="-1"
+        onclick="pickSuggestion(${JSON.stringify(p.housenumber)},${JSON.stringify(p.street)},${JSON.stringify(p.borough||'')})">
+        <svg class="ac-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div><div class="ac-main">${main}</div>${sub ? `<div class="ac-sub">${sub}</div>` : ''}</div>
+      </div>`;
+    }).join('');
+    acList.classList.add('open');
+  }
+
+  function closeAC() {
+    acList.classList.remove('open');
+    acList.innerHTML = '';
+  }
+
+  function pickSuggestion(housenumber, street, borough) {
+    pickedAddr = { housenumber, street, borough };
+    input.value = `${housenumber} ${street}${borough ? ', ' + borough : ''}`;
+    clearBtn.classList.add('visible');
+    closeAC();
+    doSearch();
+  }
+
+  function fillExample(addr) {
+    input.value = addr;
+    clearBtn.classList.add('visible');
+    closeAC();
+    doSearch();
+  }
+
+  function clearSearch() {
+    input.value = '';
+    clearBtn.classList.remove('visible');
+    pickedAddr = null;
+    closeAC();
+    resetToIdle();
+  }
+
+  // ── Main search ────────────────────────────────────────────────────────────
+  async function doSearch() {
+    const raw = input.value.trim();
+    if (!raw) return;
+
+    document.getElementById('search-btn').disabled = true;
+    showState('state-loading');
+    activeFilter  = null;
+    allComplaints = [];
+    visibleCount  = 20;
+
+    try {
+      let housenumber, street, borough;
+
+      if (pickedAddr) {
+        // Use pre-parsed suggestion data
+        ({ housenumber, street, borough } = pickedAddr);
+      } else {
+        // Geocode the raw string
+        const hasNYC = /\b(nyc|new york|brooklyn|manhattan|bronx|queens|staten island)\b/i.test(raw);
+        const query  = hasNYC ? raw : raw + ', New York City';
+        const r = await fetchTimeout(`${GEOSEARCH}?text=${encodeURIComponent(query)}&size=5`);
+        if (!r.ok) throw new Error('Geocoder unavailable — please try again shortly.');
+        const d = await r.json();
+        const feats = (d.features || []).filter(f => f.properties?.housenumber && f.properties?.street);
+        if (!feats.length) throw new Error(`Address not found. Try adding a borough — e.g. "${raw}, Brooklyn"`);
+        const p = feats[0].properties;
+        housenumber = p.housenumber;
+        street      = p.street;
+        borough     = p.borough || '';
+      }
+
+      // Build 311 $where clause
+      const addr = `${housenumber} ${street}`.toUpperCase().replace(/'/g, "''");
+      const boro = (borough || '').toUpperCase().replace(/'/g, "''");
+      let where = `upper(incident_address)='${addr}'`;
+      if (boro) where += ` AND upper(borough)='${boro}'`;
+
+      const url = `${API_311}?$where=${encodeURIComponent(where)}&$order=created_date DESC&$limit=200`;
+      const r2 = await fetchTimeout(url);
+      if (!r2.ok) throw new Error(`API error ${r2.status} — please try again.`);
+      const complaints = await r2.json();
+
+      renderResults(housenumber, street, borough, complaints);
+
+    } catch (err) {
+      setText('err-title', 'Could not load complaints');
+      setText('err-msg', err.message || 'An unexpected error occurred. Please try again.');
+      showState('state-error');
+    } finally {
+      document.getElementById('search-btn').disabled = false;
+    }
+  }
+
+  // ── Render results ─────────────────────────────────────────────────────────
+  function renderResults(housenumber, street, borough, complaints) {
+    allComplaints = complaints;
+    activeFilter  = null;
+    visibleCount  = 20;
+
+    const displayAddr = `${housenumber} ${street}`.toUpperCase();
+    const openCount   = complaints.filter(c => (c.status||'').toLowerCase() === 'open').length;
+
+    setText('result-address', displayAddr);
+    setText('result-sub', `${borough || 'NYC'} · 311 Service Requests`);
+    setText('stat-open',   openCount);
+    setText('stat-closed', complaints.length - openCount);
+    setText('stat-total',  complaints.length);
+
+    renderFilterChips(complaints);
+    updateListHeader();
+    renderComplaintList();
+    showState('state-results');
+  }
+
+  function renderFilterChips(complaints) {
+    const wrap  = document.getElementById('filters-wrap');
+    const types = [...new Set(complaints.map(c => c.complaint_type).filter(Boolean))];
+
+    if (types.length <= 1) { wrap.innerHTML = ''; return; }
+
+    const allCount = complaints.length;
+    wrap.innerHTML = `<button class="chip active" data-type="" onclick="setFilter(this,'',this.textContent)">
+      All (${allCount})
+    </button>` + types.map(t => {
+      const c   = typeColor(t);
+      const cnt = complaints.filter(cp => cp.complaint_type === t).length;
+      return `<button class="chip" data-type="${esc(t)}"
+        style="--chip-c:${c}"
+        onclick="setFilter(this,${JSON.stringify(t)},this.querySelector('.chip-label').textContent)">
+        <span class="chip-dot" style="background:${c}"></span>
+        <span class="chip-label">${esc(t)}</span>
+        <span>(${cnt})</span>
+      </button>`;
+    }).join('');
+  }
+
+  function setFilter(btn, type, label) {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = type || null;
+    visibleCount = 20;
+    updateListHeader();
+    renderComplaintList();
+  }
+
+  function updateListHeader() {
+    const filtered = getFiltered();
+    const color    = activeFilter ? typeColor(activeFilter) : '#fbbf24';
+    document.getElementById('list-hdr-dot').style.background  = color;
+    setText('list-hdr-text', activeFilter || 'All Complaints');
+    setText('list-count-pill', filtered.length.toString());
+  }
+
+  function getFiltered() {
+    return activeFilter
+      ? allComplaints.filter(c => c.complaint_type === activeFilter)
+      : allComplaints;
+  }
+
+  function showMore() { visibleCount += 20; renderComplaintList(); }
+
+  function renderComplaintList() {
+    const list     = document.getElementById('complaint-list');
+    const moreBtn  = document.getElementById('show-more-btn');
+    const filtered = getFiltered();
+
+    if (filtered.length === 0) {
+      list.innerHTML = `<div class="empty-state">
+        <div class="empty-icon">&#10003;</div>
+        <strong>No complaints in this category</strong>
+        <p>Try selecting a different type above, or clear the filter to see all complaints.</p>
+      </div>`;
+      moreBtn.classList.add('hidden');
+      return;
+    }
+
+    const slice = filtered.slice(0, visibleCount);
+    list.innerHTML = slice.map(c => {
+      const color  = typeColor(c.complaint_type || '');
+      const st     = statusInfo(c.status || '');
+      const date   = fmtDate(c.created_date);
+      const desc   = titleCase(c.descriptor || '');
+      const agency = c.agency_name ? esc(c.agency_name) : '';
+      const res    = c.resolution_description ? esc(c.resolution_description) : '';
+
+      return `<div class="complaint-card">
+        <div class="card-accent" style="background:${color}"></div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-badges">
+              <span class="type-badge" style="color:${color};background:${color}18;border-color:${color}30">
+                ${esc(c.complaint_type || 'Unknown')}
+              </span>
+              <span class="status-badge" style="color:${st.color};background:${st.bg};border-color:${st.border}">
+                <span class="status-dot" style="background:${st.color}"></span>
+                ${esc(st.label)}
+              </span>
+            </div>
+            ${date ? `<span class="card-date">${esc(date)}</span>` : ''}
+          </div>
+          ${desc ? `<div class="card-desc">${esc(desc)}</div>` : ''}
+          ${(agency || res) ? `<div class="card-meta">
+            ${agency ? `<div class="card-agency"><span class="card-agency-label">Agency: </span>${agency}</div>` : ''}
+            ${res    ? `<div class="card-resolution">${res}</div>` : ''}
+          </div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    // Staggered fade-in
+    const cards = list.querySelectorAll('.complaint-card');
+    cards.forEach((card, i) => {
+      setTimeout(() => card.classList.add('visible'), Math.min(i * 45, 500));
+    });
+
+    // Show more button
+    if (filtered.length > visibleCount) {
+      const remaining = filtered.length - visibleCount;
+      moreBtn.textContent = `Show ${Math.min(20, remaining)} more (${remaining} remaining)`;
+      moreBtn.classList.remove('hidden');
+    } else {
+      moreBtn.classList.add('hidden');
+    }
+  }
+</script>
+
+<!-- Mobile nav -->
+<script>
+  (function() {
+    var toggle   = document.querySelector('.mobile-toggle');
+    var navLinks = document.querySelector('.nav-links');
+    var siteNav  = document.querySelector('.site-nav');
+    if (!toggle || !navLinks) return;
+    var isOpen = false, savedY = 0;
+    function openMenu()  { isOpen=true;  toggle.setAttribute('aria-expanded','true');  navLinks.classList.add('open');    savedY=window.scrollY; document.body.style.top='-'+savedY+'px'; document.body.classList.add('nav-open'); }
+    function closeMenu() { isOpen=false; toggle.setAttribute('aria-expanded','false'); navLinks.classList.remove('open'); document.body.classList.remove('nav-open'); document.body.style.top=''; window.scrollTo(0,savedY); }
+    toggle.addEventListener('click', function(e){ e.stopPropagation(); isOpen?closeMenu():openMenu(); });
+    navLinks.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',function(){ if(isOpen)closeMenu(); }); });
+    document.addEventListener('click', function(e){ if(isOpen&&!siteNav.contains(e.target))closeMenu(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape'&&isOpen){closeMenu();toggle.focus();} });
+    window.addEventListener('resize', function(){ if(window.innerWidth>768&&isOpen)closeMenu(); });
+  })();
+</script>
+
+</body>
+</html>
