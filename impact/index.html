@@ -217,24 +217,40 @@
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 1.25rem; margin-bottom: 1.25rem;
     }
-    .bar-row { display: flex; flex-direction: column; gap: 0.65rem; padding: 1rem 1.25rem; }
-    .bar-item { display: flex; flex-direction: column; gap: 0.3rem; }
-    .bar-lbl-row { display: flex; justify-content: space-between; align-items: center; }
-    .bar-name { font-size: 0.82rem; color: var(--text-secondary); }
-    .bar-val  { font-size: 0.78rem; font-weight: 700; color: var(--text); font-family: "Space Grotesk", sans-serif; }
-    .bar-track {
-      height: 5px; border-radius: 99px;
-      background: var(--surface2); overflow: hidden;
+    /* ── podium ── */
+    .podium-wrap { padding: 1.5rem 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .podium-item {
+      display: flex; align-items: center; gap: 0.9rem;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative; overflow: hidden;
     }
-    .bar-fill {
-      height: 100%; border-radius: 99px;
-      background: var(--teal);
-      width: 0; transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+    .podium-item::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      border-radius: 0;
     }
-    .bar-fill.purple { background: var(--purple); }
-    .bar-fill.coral  { background: var(--coral); }
-    .bar-fill.amber  { background: var(--amber); }
-    .bar-fill.blue   { background: #60a5fa; }
+    .podium-item.rank-1 { border-color: rgba(251,191,36,0.3); background: rgba(251,191,36,0.04); }
+    .podium-item.rank-1::before { background: var(--amber); }
+    .podium-item.rank-2 { border-color: rgba(180,180,200,0.25); background: rgba(180,180,200,0.03); }
+    .podium-item.rank-2::before { background: #b0b0c8; }
+    .podium-item.rank-3 { border-color: rgba(205,127,50,0.25); background: rgba(205,127,50,0.03); }
+    .podium-item.rank-3::before { background: #cd7f32; }
+    .podium-medal {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700; font-family: "Space Grotesk", sans-serif;
+      flex-shrink: 0;
+    }
+    .rank-1 .podium-medal { background: rgba(251,191,36,0.15); color: var(--amber); border: 1px solid rgba(251,191,36,0.3); }
+    .rank-2 .podium-medal { background: rgba(180,180,200,0.12); color: #b0b0c8; border: 1px solid rgba(180,180,200,0.25); }
+    .rank-3 .podium-medal { background: rgba(205,127,50,0.12); color: #cd7f32; border: 1px solid rgba(205,127,50,0.25); }
+    .podium-name { font-size: 0.88rem; font-weight: 600; font-family: "Space Grotesk", sans-serif; color: var(--text); flex: 1; }
+    .podium-crown { font-size: 0.95rem; flex-shrink: 0; }
+    .podium-sk { height: 14px; border-radius: 6px; background: var(--surface2); }
 
     /* ── freshness strip ── */
     .freshness {
@@ -432,10 +448,10 @@
       <span class="imp-panel-title">Top Tools</span>
       <span class="imp-panel-meta">30 days</span>
     </div>
-    <div class="bar-row" id="tools-bars">
-      <div class="bar-item"><span class="bar-name sk" style="width:120px;height:12px;display:block"></span></div>
-      <div class="bar-item"><span class="bar-name sk" style="width:100px;height:12px;display:block"></span></div>
-      <div class="bar-item"><span class="bar-name sk" style="width:80px;height:12px;display:block"></span></div>
+    <div class="podium-wrap" id="tools-bars">
+      <div class="podium-item rank-1"><div class="podium-medal">1</div><span class="podium-sk" style="width:140px"></span><span class="podium-crown">👑</span></div>
+      <div class="podium-item rank-2"><div class="podium-medal">2</div><span class="podium-sk" style="width:110px"></span></div>
+      <div class="podium-item rank-3"><div class="podium-medal">3</div><span class="podium-sk" style="width:90px"></span></div>
     </div>
   </div>
 
@@ -551,15 +567,14 @@
   function renderTools(pages) {
     const toolPages = pages.filter(p => !['Home','Tools','About','Submit a Tool','Analytics','Impact'].includes(p.label));
     if (!toolPages.length) return;
-    const max = Math.max(...toolPages.map(p => p.count));
-    document.getElementById('tools-bars').innerHTML = toolPages.slice(0, 5).map((p, i) => {
-      const colors = ['', 'purple', 'amber', 'coral', 'blue'];
-      return `
-        <div class="bar-item">
-          <span class="bar-name">${esc(p.label.replace('NYC ',''))}</span>
-        </div>
-      `;
-    }).join('');
+    const medals = ['👑','🥈','🥉'];
+    document.getElementById('tools-bars').innerHTML = toolPages.slice(0, 3).map((p, i) => `
+      <div class="podium-item rank-${i+1}">
+        <div class="podium-medal">${i + 1}</div>
+        <span class="podium-name">${esc(p.label.replace('NYC ',''))}</span>
+        ${i === 0 ? '<span class="podium-crown">👑</span>' : ''}
+      </div>
+    `).join('');
   }
 
   function renderMap(d) {
