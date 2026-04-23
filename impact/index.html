@@ -212,45 +212,43 @@
     .map-leg-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: var(--text-secondary); }
     .map-leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
-    /* ── sources / tools ── */
-    .bottom-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 1.25rem; margin-bottom: 1.25rem;
+    /* ── podium stage ── */
+    .podium-stage {
+      display: flex; align-items: flex-end;
+      gap: 0.5rem; padding: 1.5rem 1.25rem 0;
     }
-    /* ── podium ── */
-    .podium-wrap { padding: 1.5rem 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
-    .podium-item {
-      display: flex; align-items: center; gap: 0.9rem;
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      transition: border-color 0.2s, transform 0.2s;
-      position: relative; overflow: hidden;
+    .podium-col {
+      display: flex; flex-direction: column; align-items: center;
+      flex: 1; gap: 0.6rem;
     }
-    .podium-item::before {
-      content: '';
-      position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-      border-radius: 0;
-    }
-    .podium-item.rank-1 { border-color: rgba(251,191,36,0.3); background: rgba(251,191,36,0.04); }
-    .podium-item.rank-1::before { background: var(--amber); }
-    .podium-item.rank-2 { border-color: rgba(180,180,200,0.25); background: rgba(180,180,200,0.03); }
-    .podium-item.rank-2::before { background: #b0b0c8; }
-    .podium-item.rank-3 { border-color: rgba(205,127,50,0.25); background: rgba(205,127,50,0.03); }
-    .podium-item.rank-3::before { background: #cd7f32; }
-    .podium-medal {
-      width: 28px; height: 28px; border-radius: 50%;
+    .podium-tool-icon {
+      width: 36px; height: 36px; border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.7rem; font-weight: 700; font-family: "Space Grotesk", sans-serif;
-      flex-shrink: 0;
+      border: 1px solid transparent; flex-shrink: 0;
     }
-    .rank-1 .podium-medal { background: rgba(251,191,36,0.15); color: var(--amber); border: 1px solid rgba(251,191,36,0.3); }
-    .rank-2 .podium-medal { background: rgba(180,180,200,0.12); color: #b0b0c8; border: 1px solid rgba(180,180,200,0.25); }
-    .rank-3 .podium-medal { background: rgba(205,127,50,0.12); color: #cd7f32; border: 1px solid rgba(205,127,50,0.25); }
-    .podium-name { font-size: 0.88rem; font-weight: 600; font-family: "Space Grotesk", sans-serif; color: var(--text); flex: 1; }
-    .podium-crown { font-size: 0.95rem; flex-shrink: 0; }
-    .podium-sk { height: 14px; border-radius: 6px; background: var(--surface2); }
+    .podium-tool-name {
+      font-size: 0.7rem; font-weight: 600;
+      font-family: "Space Grotesk", sans-serif;
+      text-align: center; line-height: 1.3;
+    }
+    .podium-block {
+      width: 100%; border-radius: 6px 6px 0 0;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 0.6rem;
+      font-size: 0.95rem; font-weight: 700;
+      font-family: "Space Grotesk", sans-serif;
+      color: rgba(255,255,255,0.35);
+    }
+    .podium-col.rank-1 .podium-block { height: 76px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-bottom: none; }
+    .podium-col.rank-2 .podium-block { height: 52px; background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.07); border-bottom: none; }
+    .podium-col.rank-3 .podium-block { height: 36px; background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05); border-bottom: none; }
+    .podium-stage-floor {
+      height: 3px; border-radius: 2px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+      margin: 0 1.25rem 1.25rem;
+    }
+    .podium-sk-icon { width: 36px; height: 36px; border-radius: 10px; }
+    .podium-sk-name { height: 9px; border-radius: 5px; }
 
     /* ── freshness strip ── */
     .freshness {
@@ -448,11 +446,24 @@
       <span class="imp-panel-title">Top Tools</span>
       <span class="imp-panel-meta">30 days</span>
     </div>
-    <div class="podium-wrap" id="tools-bars">
-      <div class="podium-item rank-1"><div class="podium-medal">1</div><span class="podium-sk" style="width:140px"></span><span class="podium-crown">👑</span></div>
-      <div class="podium-item rank-2"><div class="podium-medal">2</div><span class="podium-sk" style="width:110px"></span></div>
-      <div class="podium-item rank-3"><div class="podium-medal">3</div><span class="podium-sk" style="width:90px"></span></div>
+    <div class="podium-stage" id="tools-bars">
+      <div class="podium-col rank-2">
+        <div class="podium-sk-icon sk"></div>
+        <div class="podium-sk-name sk" style="width:70px"></div>
+        <div class="podium-block">2</div>
+      </div>
+      <div class="podium-col rank-1">
+        <div class="podium-sk-icon sk"></div>
+        <div class="podium-sk-name sk" style="width:90px"></div>
+        <div class="podium-block">1</div>
+      </div>
+      <div class="podium-col rank-3">
+        <div class="podium-sk-icon sk"></div>
+        <div class="podium-sk-name sk" style="width:55px"></div>
+        <div class="podium-block">3</div>
+      </div>
     </div>
+    <div class="podium-stage-floor"></div>
   </div>
 
   <!-- MISSION -->
@@ -564,17 +575,36 @@
     });
   }
 
+  const TOOL_META = {
+    'Building': { color: '#b197fc', rgb: '177,151,252', svg: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>' },
+    'Landlord': { color: '#ff7c7c', rgb: '255,124,124', svg: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>' },
+    'Budget':   { color: '#00f5c4', rgb: '0,245,196',   svg: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/>' },
+    'Eviction': { color: '#60a5fa', rgb: '96,165,250',  svg: '<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>' },
+    '311':      { color: '#fbbf24', rgb: '251,191,36',  svg: '<path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.93 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012.84 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.84a16 16 0 006.29 6.29l1.21-1.28a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>' },
+  };
+  function toolMeta(label) {
+    for (const [k, m] of Object.entries(TOOL_META)) if (label.includes(k)) return m;
+    return { color: '#888', rgb: '136,136,136', svg: '<circle cx="12" cy="12" r="10"/>' };
+  }
+  function podiumCol(p, rank) {
+    const name = p ? p.label.replace('NYC ', '') : '';
+    const m = p ? toolMeta(name) : null;
+    if (!p) return `<div class="podium-col rank-${rank}"><div class="podium-sk-icon sk"></div><div class="podium-sk-name sk" style="width:60px"></div><div class="podium-block">${rank}</div></div>`;
+    return `
+      <div class="podium-col rank-${rank}">
+        <div class="podium-tool-icon" style="background:rgba(${m.rgb},0.12);border-color:rgba(${m.rgb},0.28)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="${m.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${m.svg}</svg>
+        </div>
+        <span class="podium-tool-name" style="color:${m.color}">${esc(name)}</span>
+        <div class="podium-block">${rank}</div>
+      </div>`;
+  }
   function renderTools(pages) {
     const toolPages = pages.filter(p => !['Home','Tools','About','Submit a Tool','Analytics','Impact'].includes(p.label));
     if (!toolPages.length) return;
-    const medals = ['👑','🥈','🥉'];
-    document.getElementById('tools-bars').innerHTML = toolPages.slice(0, 3).map((p, i) => `
-      <div class="podium-item rank-${i+1}">
-        <div class="podium-medal">${i + 1}</div>
-        <span class="podium-name">${esc(p.label.replace('NYC ',''))}</span>
-        ${i === 0 ? '<span class="podium-crown">👑</span>' : ''}
-      </div>
-    `).join('');
+    const [p1, p2, p3] = toolPages;
+    document.getElementById('tools-bars').innerHTML =
+      podiumCol(p2, 2) + podiumCol(p1, 1) + podiumCol(p3, 3);
   }
 
   function renderMap(d) {
