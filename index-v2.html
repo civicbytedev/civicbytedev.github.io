@@ -1,810 +1,574 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MV3SDWV3DV"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-MV3SDWV3DV');
-  </script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#080b1a">
-  <title>CivicByte — Free NYC Civic Tools: Landlord Violations, Building Records, School Budgets</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%23080b1a' stroke='%2300f5c4' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%2300f5c4'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%2300f5c4' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%2300f5c4' opacity='.5'/%3E%3C/svg%3E">
-  <meta name="google-site-verification" content="GAI0wMVzQzCyaLHlkw_shE-_8qpOeiSO5VoJK9Z-K7I">
-  <meta name="description" content="Free NYC tools: look up landlord HPD violations, check building violation records, track school budgets by school. No login. No account. Powered by NYC Open Data.">
-  <link rel="canonical" href="https://civicbyte.dev/">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://civicbyte.dev/">
-  <meta property="og:title" content="CivicByte — Free Civic Tech Tools for NYC Residents">
-  <meta property="og:description" content="Look up your landlord's violation history, check your building's HPD record, and track school budgets. Free tools powered by NYC Open Data.">
-  <meta property="og:image" content="https://civicbyte.dev/og-image.png">
-  <meta property="og:site_name" content="CivicByte">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@civicbyte">
-  <script type="application/ld+json">
-  [{"@context":"https://schema.org","@type":"WebSite","name":"CivicByte","url":"https://civicbyte.dev","description":"Free civic tech tools for NYC residents powered by NYC Open Data"}]
-  </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CivicByte — Free NYC Civic Tools</title>
+<meta name="description" content="Free NYC tools: look up landlord HPD violations, check building violation records, track school budgets. No login. No account. Powered by NYC Open Data.">
+<link rel="canonical" href="https://civicbyte.dev/">
+<meta property="og:title" content="CivicByte — Free Civic Tech Tools for NYC Residents">
+<meta property="og:description" content="Free tools for NYC residents. No login, no fees, no lawyers.">
+<meta property="og:image" content="https://civicbyte.dev/og-image.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%23080b1a' stroke='%2300f5c4' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%2300f5c4'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%2300f5c4' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%2300f5c4' opacity='.5'/%3E%3C/svg%3E">
 
-  <style>
-    /* ─────────────────────────────────────────
-       RESET VIBECODED GLOBALS FROM styles.css
-    ───────────────────────────────────────── */
-    body::before, body::after { display: none !important; }
-    .cb-orb { display: none !important; }
-    .hero::before { display: none !important; }
-    .site-nav::after { display: none !important; }
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MV3SDWV3DV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MV3SDWV3DV');</script>
 
-    /* ─────────────────────────────────────────
-       SCROLL PROGRESS BAR
-    ───────────────────────────────────────── */
-    #scroll-bar {
-      position: fixed;
-      top: 0; left: 0;
-      height: 2px;
-      width: 0%;
-      background: var(--teal);
-      z-index: 9999;
-      transition: width 0.05s linear;
-      pointer-events: none;
-    }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,1,400;9..144,1,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    /* ─────────────────────────────────────────
-       NAV — tighter, cleaner
-    ───────────────────────────────────────── */
-    .site-nav {
-      border-bottom: 1px solid var(--border) !important;
-      background: rgba(8,11,26,0.92) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-    }
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter Tight',system-ui,sans-serif;background:#f4f0e7;color:#1d1a15;-webkit-font-smoothing:antialiased;}
 
-    /* ─────────────────────────────────────────
-       HERO
-    ───────────────────────────────────────── */
-    .hero {
-      padding: 9rem 2rem 7rem;
-      text-align: left;
-    }
-    .hero-inner {
-      max-width: 1180px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 5rem;
-      align-items: center;
-    }
+:root{
+  --ink:#1d1a15;
+  --ink-soft:#3a342b;
+  --paper:#f4f0e7;
+  --paper-2:#ebe6d9;
+  --paper-3:#ddd6c4;
+  --cream:#f8f4ea;
+  --white:#ffffff;
+  --brick:#b8432b;
+  --brick-dk:#8f2f1d;
+  --ochre:#c88733;
+  --moss:#5b6b3a;
+  --sky:#2d5a78;
+  --rule:rgba(29,26,21,0.14);
+}
 
-    /* Eyebrow */
-    .hero-eyebrow {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 1.75rem;
-      opacity: 0;
-      animation: riseIn 0.6s ease-out 0.1s forwards;
-    }
+/* ── Scroll progress ────────────────────── */
+#spb{position:fixed;top:0;left:0;height:3px;width:0%;background:var(--brick);z-index:9999;pointer-events:none;transition:width .05s linear;}
 
-    /* Headline */
-    .hero h1 {
-      font-size: clamp(3rem, 5.5vw, 5rem) !important;
-      font-weight: 700 !important;
-      line-height: 1.06 !important;
-      letter-spacing: -0.045em !important;
-      color: var(--text) !important;
-      margin-bottom: 1.5rem;
-      opacity: 0;
-      animation: riseIn 0.7s ease-out 0.2s forwards;
-    }
-    .hero h1 em {
-      font-style: normal;
-      color: var(--teal);
-    }
+/* ── Nav ────────────────────────────────── */
+nav.site-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 44px;
+  background:rgba(244,240,231,0.92);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--rule);
+  position:sticky;top:0;z-index:100;
+}
+.nav-logo{
+  font-family:'Fraunces',serif;font-weight:700;font-size:22px;
+  letter-spacing:-0.02em;text-decoration:none;color:var(--ink);
+  display:flex;align-items:center;gap:10px;
+}
+.nav-logo em{color:var(--brick);font-style:italic;}
+.nav-sq{width:20px;height:20px;background:var(--brick);border-radius:5px;position:relative;overflow:hidden;flex-shrink:0;}
+.nav-sq::before{content:'';position:absolute;inset:5px 5px auto auto;width:7px;height:7px;background:var(--cream);border-radius:2px;}
+.nav-sq::after{content:'';position:absolute;inset:auto auto 4px 4px;width:5px;height:5px;background:var(--ochre);border-radius:50%;}
+.nav-links{display:flex;align-items:center;gap:26px;list-style:none;}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--ink);text-decoration:none;opacity:.8;}
+.nav-links a:hover{opacity:1;color:var(--brick);}
+.nav-cta{
+  background:var(--ink);color:var(--cream);padding:10px 18px;
+  border-radius:999px;text-decoration:none;font-size:13px;font-weight:600;
+  transition:background .15s;
+}
+.nav-cta:hover{background:#2d2820;}
+.nav-mobile-toggle{display:none;background:none;border:none;cursor:pointer;padding:4px;}
+.nav-mobile-toggle span{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0;transition:.2s;}
 
-    .hero-sub {
-      font-size: 1.08rem !important;
-      color: var(--text-secondary) !important;
-      max-width: 520px;
-      line-height: 1.8;
-      margin-bottom: 2.5rem;
-      opacity: 0;
-      animation: riseIn 0.7s ease-out 0.32s forwards;
-    }
+/* ── Hero ───────────────────────────────── */
+.hero{padding:44px 44px 56px;}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.08em;
+  background:var(--paper-2);border:1px solid rgba(29,26,21,.12);
+  padding:6px 14px;border-radius:999px;color:var(--ink-soft);
+  margin-bottom:24px;
+}
+.hero-pill .pulse{width:7px;height:7px;border-radius:50%;background:var(--brick);box-shadow:0 0 0 4px rgba(184,67,43,.15);flex-shrink:0;}
+.hero h1{
+  font-family:'Fraunces',serif;font-weight:500;
+  font-size:clamp(52px,7.5vw,96px);line-height:.96;
+  letter-spacing:-.035em;margin:0 0 32px;max-width:18ch;
+}
+.hero h1 em{font-style:italic;color:var(--brick);}
+.hero h1 u{
+  text-decoration:none;
+  background:linear-gradient(180deg,transparent 62%,rgba(200,135,51,.4) 62%,rgba(200,135,51,.4) 94%,transparent 94%);
+  padding:0 2px;
+}
+.hero-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:56px;align-items:end;margin-top:8px;}
+.hero-copy p{font-size:17px;line-height:1.58;color:var(--ink-soft);max-width:46ch;margin:0 0 28px;}
+.hero-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.btn-brick{padding:14px 22px;border-radius:999px;font-weight:600;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:var(--brick);color:#fff;border:1px solid var(--brick);transition:background .15s;}
+.btn-brick:hover{background:var(--brick-dk);border-color:var(--brick-dk);}
+.btn-ghost{padding:13px 22px;border-radius:999px;font-weight:600;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--ink);border:1px solid rgba(29,26,21,.2);transition:border-color .15s;}
+.btn-ghost:hover{border-color:rgba(29,26,21,.45);}
+.btn-app{padding:12px 18px;border-radius:999px;font-weight:600;font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--ink-soft);border:1px solid rgba(29,26,21,.15);transition:border-color .15s;}
+.btn-app:hover{border-color:rgba(29,26,21,.35);}
 
-    .hero-actions {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: riseIn 0.6s ease-out 0.44s forwards;
-    }
+/* Livecard */
+.livecard{
+  background:#fff;border-radius:16px;
+  border:1px solid rgba(29,26,21,.09);
+  box-shadow:0 1px 0 rgba(29,26,21,.04),0 28px 56px -24px rgba(29,26,21,.2);
+  overflow:hidden;
+}
+.livecard-bar{
+  display:flex;align-items:center;gap:6px;
+  padding:10px 14px;border-bottom:1px solid rgba(29,26,21,.07);
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-soft);
+}
+.lc-dot{width:9px;height:9px;border-radius:50%;}
+.d1{background:#e57373;}.d2{background:#f0c674;}.d3{background:#9ccc65;}
+.livecard-url{margin-left:8px;background:var(--paper);padding:3px 10px;border-radius:999px;flex:1;text-align:center;font-size:10px;letter-spacing:.04em;}
+.livecard-body{padding:18px 18px 20px;}
+.livecard-body h4{font-family:'Fraunces',serif;font-size:19px;margin:0 0 3px;font-weight:600;letter-spacing:-.01em;}
+.livecard-sub{font-size:12px;color:var(--ink-soft);margin-bottom:14px;}
+.lc-search{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--paper);border-radius:10px;border:1px solid rgba(29,26,21,.08);margin-bottom:12px;}
+.lc-mag{width:13px;height:13px;border:1.5px solid var(--ink-soft);border-radius:50%;position:relative;flex-shrink:0;}
+.lc-mag::after{content:'';position:absolute;width:5px;height:1.5px;background:var(--ink-soft);transform:rotate(45deg);right:-4px;bottom:-1px;}
+.lc-search span{font-size:12.5px;color:var(--ink);opacity:.7;}
+.lc-rows{display:flex;flex-direction:column;}
+.lc-row{display:flex;justify-content:space-between;align-items:center;padding:9px 4px;border-top:1px solid rgba(29,26,21,.07);font-size:12px;}
+.lc-row:first-child{border-top:none;}
+.lc-row-l{display:flex;flex-direction:column;gap:1px;}
+.lc-row-l strong{font-weight:600;font-size:12px;}
+.lc-row-l span{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-soft);letter-spacing:.04em;}
+.lc-val{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;}
+.lc-val.red{color:var(--brick);}
+.lc-val.green{color:var(--moss);}
 
-    /* Right: impact card */
-    .hero-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2.25rem 2rem;
-      text-align: center;
-      opacity: 0;
-      animation: riseIn 0.7s ease-out 0.5s forwards;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--teal);
-      opacity: 0.5;
-    }
-    .hero-card-num {
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 3.5rem;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.04em;
-    }
-    .hero-card-label {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin-bottom: 1.25rem;
-    }
-    .hero-card-sub {
-      font-size: 0.72rem;
-      color: var(--text-dim);
-      letter-spacing: 0.04em;
-      border-top: 1px solid var(--border);
-      padding-top: 1rem;
-      margin-top: 0.25rem;
-    }
+/* ── Stat band ──────────────────────────── */
+.statband{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(29,26,21,.1);margin:0 44px;border-radius:16px;overflow:hidden;border:1px solid rgba(29,26,21,.1);}
+.stat-cell{background:var(--cream);padding:24px 26px;}
+.stat-n{font-family:'Fraunces',serif;font-size:48px;font-weight:500;letter-spacing:-.025em;line-height:1;}
+.stat-n em{font-style:italic;color:var(--brick);}
+.stat-k{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-top:8px;}
 
-    @keyframes riseIn {
-      from { opacity: 0; transform: translateY(22px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+/* ── Principles ─────────────────────────── */
+.principles{padding:72px 44px 64px;}
+.sec-hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;gap:40px;}
+.sec-hd-l .k{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--brick);margin-bottom:10px;}
+.sec-hd-l h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(36px,4.5vw,56px);letter-spacing:-.025em;margin:0;line-height:1;max-width:14ch;}
+.sec-hd-l h2 em{color:var(--brick);font-style:italic;}
+.sec-hd-r{max-width:34ch;font-size:14.5px;color:var(--ink-soft);line-height:1.55;}
+.pr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid rgba(29,26,21,.12);border-radius:14px;overflow:hidden;}
+.pr{padding:26px 26px 28px;border-right:1px solid rgba(29,26,21,.12);border-bottom:1px solid rgba(29,26,21,.12);background:var(--cream);transition:background .15s;}
+.pr:hover{background:#fff;}
+.pr:nth-child(3n){border-right:none;}
+.pr:nth-child(4),.pr:nth-child(5),.pr:nth-child(6){border-bottom:none;}
+.pr .pr-n{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--brick);margin-bottom:12px;}
+.pr h4{font-family:'Fraunces',serif;font-weight:600;font-size:24px;margin:0 0 8px;line-height:1.1;letter-spacing:-.01em;}
+.pr p{font-size:13.5px;line-height:1.55;color:var(--ink-soft);}
+.pr.soft{background:var(--paper-2);}
+.pr.soft h4{font-size:20px;}
 
-    /* ─────────────────────────────────────────
-       STATS STRIP
-    ───────────────────────────────────────── */
-    .stats-strip {
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-    }
-    .stats-strip-inner {
-      max-width: 1180px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      padding: 0;
-    }
-    .stat-item {
-      padding: 1.6rem 2rem;
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-    .stat-item:last-child { border-right: none; }
-    .stat-num {
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1;
-    }
-    .stat-label {
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
+/* ── Tools / Projects ───────────────────── */
+.tools-sec{padding:0 44px 72px;}
+.tools-intro{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:28px;gap:40px;}
+.tools-grid{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:18px;}
+.tool-card{
+  background:#fff;border:1px solid rgba(29,26,21,.09);border-radius:16px;overflow:hidden;
+  display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s;
+}
+.tool-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px -12px rgba(29,26,21,.18);}
+.tool-card-shot{
+  height:130px;position:relative;border-bottom:1px solid rgba(29,26,21,.08);
+  overflow:hidden;
+}
+.tool-card-shot .shot-label{position:absolute;inset:auto 10px 10px auto;font-family:'IBM Plex Mono',monospace;font-size:10px;background:rgba(255,255,255,.85);padding:3px 8px;border-radius:999px;color:var(--ink-soft);letter-spacing:.08em;}
+.tool-card-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:6px;flex:1;}
+.tool-tag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;}
+.tool-card h3{font-family:'Fraunces',serif;font-size:24px;font-weight:600;letter-spacing:-.015em;line-height:1.1;}
+.tool-card .partner{font-size:12.5px;color:var(--ink-soft);font-style:italic;margin-bottom:6px;}
+.tool-card p{font-size:13.5px;color:var(--ink-soft);line-height:1.52;flex:1;margin:0 0 14px;}
+.tool-card-foot{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;}
+.chip{font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:4px 10px;border-radius:999px;background:var(--paper);color:var(--ink-soft);letter-spacing:.05em;}
+.tool-link{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;text-decoration:none;margin-top:10px;transition:gap .15s;}
+.tool-card:hover .tool-link{gap:7px;}
 
-    /* ─────────────────────────────────────────
-       SECTION HEADERS
-    ───────────────────────────────────────── */
-    .section {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 6rem 2rem;
-    }
-    .section-eyebrow {
-      font-size: 0.72rem !important;
-      font-weight: 500 !important;
-      letter-spacing: 0.12em !important;
-      text-transform: uppercase !important;
-      color: var(--text-dim) !important;
-      margin-bottom: 1rem !important;
-      background: none !important;
-      -webkit-background-clip: unset !important;
-      -webkit-text-fill-color: var(--text-dim) !important;
-    }
-    .section-title {
-      font-size: clamp(1.8rem, 3.5vw, 2.75rem) !important;
-      font-weight: 700 !important;
-      letter-spacing: -0.03em !important;
-      color: var(--text) !important;
-      line-height: 1.15 !important;
-      margin-bottom: 1rem !important;
-      max-width: 640px;
-    }
-    .section-desc {
-      font-size: 0.98rem !important;
-      color: var(--text-secondary) !important;
-      line-height: 1.75 !important;
-      max-width: 540px;
-      margin-bottom: 3rem !important;
-    }
+/* Tool card accent colors */
+.tc-building .tool-card-shot{background:repeating-linear-gradient(135deg,rgba(177,151,252,.12) 0 1px,transparent 1px 9px),#ede8f8;}
+.tc-building .tool-tag{color:#7c5cbf;}
+.tc-building .tool-link{color:#7c5cbf;}
+.tc-landlord .tool-card-shot{background:repeating-linear-gradient(135deg,rgba(184,67,43,.12) 0 1px,transparent 1px 9px),#fbe8dd;}
+.tc-landlord .tool-tag{color:var(--brick);}
+.tc-landlord .tool-link{color:var(--brick);}
+.tc-eviction .tool-card-shot{background:repeating-linear-gradient(135deg,rgba(45,90,120,.12) 0 1px,transparent 1px 9px),#ddeaf3;}
+.tc-eviction .tool-tag{color:var(--sky);}
+.tc-eviction .tool-link{color:var(--sky);}
+.tc-budget .tool-card-shot{background:repeating-linear-gradient(135deg,rgba(91,107,58,.14) 0 1px,transparent 1px 9px),#ecefd8;}
+.tc-budget .tool-tag{color:var(--moss);}
+.tc-budget .tool-link{color:var(--moss);}
 
-    /* ─────────────────────────────────────────
-       TOOL CARDS — clean
-    ───────────────────────────────────────── */
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-    }
-    .tool-card-v2 {
-      background: var(--bg);
-      padding: 2.25rem 2.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      transition: background 0.2s;
-      position: relative;
-    }
-    .tool-card-v2:hover {
-      background: var(--surface);
-    }
-    .tool-card-v2-icon {
-      width: 38px; height: 38px;
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 1.25rem;
-      flex-shrink: 0;
-      border: 1px solid transparent;
-    }
-    .tool-card-v2 h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 0.6rem;
-      line-height: 1.3;
-    }
-    .tool-card-v2 p {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      line-height: 1.7;
-      flex: 1;
-      margin-bottom: 1.5rem;
-    }
-    .tool-card-v2-link {
-      font-size: 0.82rem;
-      font-weight: 600;
-      font-family: "Space Grotesk", sans-serif;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      transition: gap 0.2s;
-    }
-    .tool-card-v2:hover .tool-card-v2-link {
-      gap: 0.55rem;
-    }
-    .tool-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.6rem;
-      border-radius: 100px;
-      margin-bottom: 1rem;
-      width: fit-content;
-    }
-    .tool-status.live {
-      background: rgba(0,245,196,0.08);
-      color: var(--teal);
-      border: 1px solid rgba(0,245,196,0.2);
-    }
-    .tool-status.live::before {
-      content: '';
-      width: 5px; height: 5px;
-      background: var(--teal);
-      border-radius: 50%;
-    }
+/* ── Quote ──────────────────────────────── */
+.quote-sec{padding:72px 44px;background:var(--ink);color:var(--cream);}
+.quote-k{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ochre);margin-bottom:20px;}
+.quote-sec blockquote{font-family:'Fraunces',serif;font-weight:400;font-style:italic;font-size:clamp(28px,4vw,44px);line-height:1.2;letter-spacing:-.015em;max-width:24ch;margin:0;}
+.quote-sec cite{display:block;margin-top:24px;font-family:'Inter Tight',sans-serif;font-style:normal;font-size:13.5px;color:rgba(248,244,234,.65);}
+.quote-sec cite strong{color:var(--cream);font-weight:600;}
 
-    /* ─────────────────────────────────────────
-       ORIGIN STORY SECTION
-    ───────────────────────────────────────── */
-    .origin-section {
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-      padding: 7rem 2rem;
-    }
-    .origin-inner {
-      max-width: 860px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: start;
-    }
-    .origin-left {}
-    .origin-eyebrow {
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 1.5rem;
-    }
-    .origin-quote {
-      font-family: "Space Grotesk", sans-serif;
-      font-size: clamp(1.6rem, 3vw, 2.25rem);
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.25;
-      letter-spacing: -0.03em;
-    }
-    .origin-quote em {
-      font-style: normal;
-      color: var(--teal);
-    }
-    .origin-right {
-      padding-top: 0.25rem;
-    }
-    .origin-body p {
-      font-size: 0.98rem;
-      color: var(--text-secondary);
-      line-height: 1.85;
-      margin-bottom: 1.1rem;
-    }
-    .origin-body p:last-child { margin-bottom: 0; }
-    .origin-body strong {
-      color: var(--text);
-      font-weight: 600;
-    }
+/* ── Paths ──────────────────────────────── */
+.paths-sec{padding:72px 44px 56px;}
+.paths-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:40px;}
+.path{border-radius:18px;padding:30px 30px 28px;border:1px solid rgba(29,26,21,.1);display:flex;flex-direction:column;min-height:280px;}
+.path-use{background:var(--brick);color:var(--cream);border-color:var(--brick);}
+.path-build{background:var(--cream);color:var(--ink);}
+.path-k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin-bottom:16px;}
+.path h3{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(32px,4vw,44px);letter-spacing:-.025em;line-height:1;margin:0 0 16px;}
+.path h3 em{font-style:italic;}
+.path p{font-size:14.5px;line-height:1.55;opacity:.85;max-width:36ch;margin:0 0 24px;}
+.path-cta{margin-top:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.path-use .path-cta a.primary{background:var(--cream);color:var(--ink);padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:600;font-size:13.5px;}
+.path-build .path-cta a.primary{background:var(--ink);color:var(--cream);padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:600;font-size:13.5px;}
+.path-cta a.sec{opacity:.75;font-size:13px;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;color:inherit;}
 
-    /* ─────────────────────────────────────────
-       HOW IT WORKS — horizontal steps
-    ───────────────────────────────────────── */
-    .how-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-    }
-    .how-card {
-      padding: 2.5rem 2.25rem;
-      border-right: 1px solid var(--border);
-      background: var(--bg) !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-      transition: background 0.2s;
-    }
-    .how-card:last-child { border-right: none; }
-    .how-card:hover { background: var(--surface) !important; }
-    .how-step-num {
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      margin-bottom: 1.25rem;
-    }
-    .how-card h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 0.6rem;
-    }
-    .how-card p {
-      font-size: 0.86rem;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
+/* ── Footer ─────────────────────────────── */
+footer.site-footer{padding:52px 44px 28px;background:var(--paper-2);border-top:1px solid var(--rule);}
+.footer-grid{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;gap:36px;padding-bottom:24px;border-bottom:1px solid rgba(29,26,21,.12);}
+.footer-brand{font-family:'Fraunces',serif;font-weight:700;font-size:22px;letter-spacing:-.02em;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.footer-brand em{color:var(--brick);font-style:italic;}
+.footer-desc{font-size:13.5px;color:var(--ink-soft);line-height:1.55;max-width:32ch;}
+footer h5{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 14px;font-weight:500;}
+footer ul{list-style:none;font-size:13.5px;}
+footer ul li{padding:5px 0;}
+footer ul a{color:var(--ink);text-decoration:none;}
+footer ul a:hover{color:var(--brick);}
+.footer-col{display:flex;justify-content:space-between;padding-top:18px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);}
 
-    /* ─────────────────────────────────────────
-       CTA BAND — clean
-    ───────────────────────────────────────── */
-    .cta-band {
-      background: var(--surface) !important;
-      border-top: 1px solid var(--border) !important;
-      border-bottom: 1px solid var(--border) !important;
-      padding: 7rem 2rem !important;
-      text-align: center !important;
-      position: relative !important;
-    }
-    .cta-band::before, .cta-band::after { display: none !important; }
-    .cta-band h2 {
-      font-size: clamp(1.8rem, 3.5vw, 2.75rem) !important;
-      font-weight: 700 !important;
-      letter-spacing: -0.03em !important;
-      margin-bottom: 1rem !important;
-      color: var(--text) !important;
-    }
-    .cta-band p {
-      color: var(--text-secondary) !important;
-      font-size: 1rem !important;
-      max-width: 440px;
-      margin: 0 auto 2.5rem !important;
-      line-height: 1.75 !important;
-    }
-    .cta-actions {
-      display: flex;
-      gap: 0.85rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+/* ── Scroll reveal ──────────────────────── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease-out,transform .65s ease-out;}
+.reveal.up{opacity:1;transform:translateY(0);}
+.d1s{transition-delay:.08s;}.d2s{transition-delay:.16s;}.d3s{transition-delay:.24s;}.d4s{transition-delay:.32s;}
 
-    /* ─────────────────────────────────────────
-       DIVIDER
-    ───────────────────────────────────────── */
-    .v2-divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 0;
-    }
+/* ── Responsive ─────────────────────────── */
+@media(max-width:960px){
+  .hero-grid{grid-template-columns:1fr;gap:36px;}
+  .statband{grid-template-columns:1fr 1fr;margin:0 20px;}
+  .tools-grid{grid-template-columns:1fr 1fr;}
+  .pr-grid{grid-template-columns:1fr 1fr;}
+  .pr:nth-child(2n){border-right:none;}
+  .pr:nth-child(3n){border-right:1px solid rgba(29,26,21,.12);}
+  .pr:nth-child(4),.pr:nth-child(5){border-bottom:1px solid rgba(29,26,21,.12);}
+  .pr:nth-child(6){border-bottom:none;}
+  .pr:nth-child(5){border-right:none;}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:28px;}
+}
+@media(max-width:680px){
+  nav.site-nav{padding:14px 20px;}
+  .nav-links,.nav-cta-wrap{display:none;}
+  .nav-mobile-toggle{display:block;}
+  nav.site-nav.open .nav-links{display:flex;flex-direction:column;position:fixed;inset:0;background:var(--cream);padding:80px 28px 28px;gap:20px;z-index:99;}
+  nav.site-nav.open .nav-links a{font-size:18px;}
+  .hero{padding:36px 20px 48px;}
+  .hero h1{font-size:clamp(44px,12vw,72px);}
+  .statband{grid-template-columns:1fr 1fr;margin:0 20px;border-radius:12px;}
+  .stat-n{font-size:36px;}
+  .principles{padding:52px 20px;}
+  .pr-grid{grid-template-columns:1fr;}
+  .pr{border-right:none!important;border-bottom:1px solid rgba(29,26,21,.12)!important;}
+  .pr:last-child{border-bottom:none!important;}
+  .tools-sec{padding:0 20px 52px;}
+  .tools-grid{grid-template-columns:1fr;}
+  .paths-sec{padding:52px 20px 40px;}
+  .paths-grid{grid-template-columns:1fr;}
+  .quote-sec{padding:52px 20px;}
+  footer.site-footer{padding:40px 20px 24px;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .sec-hd{flex-direction:column;gap:16px;}
+  .tools-intro{flex-direction:column;gap:12px;}
+}
+</style>
 
-    /* ─────────────────────────────────────────
-       SCROLL REVEAL
-    ───────────────────────────────────────── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.65s ease-out, transform 0.65s ease-out;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .reveal-delay-1 { transition-delay: 0.08s; }
-    .reveal-delay-2 { transition-delay: 0.16s; }
-    .reveal-delay-3 { transition-delay: 0.24s; }
-    .reveal-delay-4 { transition-delay: 0.32s; }
-
-    /* ─────────────────────────────────────────
-       RESPONSIVE
-    ───────────────────────────────────────── */
-    @media (max-width: 900px) {
-      .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
-      .hero-card { max-width: 320px; }
-      .stats-strip-inner { grid-template-columns: 1fr 1fr; }
-      .stat-item:nth-child(2) { border-right: none; }
-      .stat-item:nth-child(3) { border-top: 1px solid var(--border); border-right: 1px solid var(--border); }
-      .stat-item:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
-      .tools-grid { grid-template-columns: 1fr; }
-      .origin-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-      .how-grid { grid-template-columns: 1fr; }
-      .how-card { border-right: none; border-bottom: 1px solid var(--border); }
-      .how-card:last-child { border-bottom: none; }
-    }
-    @media (max-width: 600px) {
-      .hero { padding: 6.5rem 1.5rem 4.5rem; }
-      .section { padding: 4rem 1.5rem; }
-      .stats-strip-inner { grid-template-columns: 1fr 1fr; padding: 0 0.5rem; }
-      .stat-item { padding: 1.25rem 1.25rem; }
-      .origin-section { padding: 4.5rem 1.5rem; }
-      .cta-band { padding: 4.5rem 1.5rem !important; }
-    }
-  </style>
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="/auth.js"></script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/auth.js"></script>
 </head>
 <body>
-  <script>requireAuth();</script>
+<script>requireAuth();</script>
+<div id="spb"></div>
 
-  <!-- Scroll progress bar -->
-  <div id="scroll-bar"></div>
+<!-- NAV -->
+<nav class="site-nav">
+  <a href="/" class="nav-logo"><span class="nav-sq"></span> civic<em>byte</em></a>
+  <ul class="nav-links">
+    <li><a href="/tools.html">Tools</a></li>
+    <li><a href="/about.html">About</a></li>
+    <li><a href="/impact/">Impact</a></li>
+    <li><a href="/submit.html">Submit a Tool</a></li>
+    <li><a href="https://github.com/civicbytedev" target="_blank" rel="noopener">GitHub</a></li>
+  </ul>
+  <a href="/tools.html" class="nav-cta">Browse tools</a>
+  <button class="nav-mobile-toggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-  <!-- NAV -->
-  <header class="site-nav">
-    <nav class="nav">
-      <a href="/" class="logo">
-        <svg width="30" height="30" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lgNav" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00f5c4"/><stop offset="100%" stop-color="#b197fc"/></linearGradient></defs><rect width="1024" height="1024" rx="220" fill="#080b1a"/><rect x="170" y="573" width="72" height="144" rx="2" fill="url(#lgNav)"/><rect x="260" y="501" width="54" height="216" rx="2" fill="url(#lgNav)"/><rect x="332" y="393" width="90" height="324" rx="2" fill="url(#lgNav)"/><rect x="375" y="303" width="5" height="90" rx="2" fill="url(#lgNav)"/><rect x="440" y="465" width="108" height="252" rx="2" fill="url(#lgNav)"/><rect x="566" y="321" width="90" height="396" rx="2" fill="url(#lgNav)"/><rect x="609" y="213" width="5" height="108" rx="2" fill="url(#lgNav)"/><rect x="674" y="483" width="72" height="234" rx="2" fill="url(#lgNav)"/><rect x="764" y="555" width="54" height="162" rx="2" fill="url(#lgNav)"/><rect x="789" y="501" width="5" height="54" rx="2" fill="url(#lgNav)"/><rect x="818" y="609" width="36" height="108" rx="2" fill="url(#lgNav)"/><rect x="170" y="717" width="684" height="3" rx="1" fill="url(#lgNav)" opacity="0.6"/></svg>
-        <span class="logo-wordmark">civic<span class="cb">byte</span></span>
-      </a>
-      <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="cb-nav-links">
-        <span class="cb-ham" aria-hidden="true"><span></span><span></span><span></span></span>
-      </button>
-      <div class="nav-links" id="cb-nav-links">
-        <a href="/" class="active">Home</a>
-        <a href="/tools.html">Tools</a>
-        <a href="/about.html">About</a>
-        <a href="/impact/">Impact</a>
-        <a href="/submit.html">Submit a Tool</a>
-        <a href="https://github.com/civicbytedev" target="_blank" rel="noopener" class="nav-gh">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-          GitHub
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-pill"><span class="pulse"></span>&nbsp; 4 live tools &nbsp;·&nbsp; 27k+ users this month</div>
+  <h1>Turning <u>public data</u> into things people <em>actually use.</em></h1>
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <p>CivicByte is a free, open-source platform of civic tools that put NYC government records directly in residents' hands — no login, no fees, no lawyers required.</p>
+      <div class="hero-actions">
+        <a href="/tools.html" class="btn-brick">See what we've built &rarr;</a>
+        <a href="/submit.html" class="btn-ghost">Submit a tool</a>
+        <a href="https://apps.apple.com/us/app/civicbyte-nyc-data-tools/id6761625363" target="_blank" rel="noopener" class="btn-app">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          iOS App
         </a>
       </div>
-    </nav>
-  </header>
-
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-inner">
-      <div class="hero-left">
-        <div class="hero-eyebrow">Open civic tech &middot; NYC &middot; MIT License</div>
-        <h1>Public data should work<br>for the <em>public.</em></h1>
-        <p class="hero-sub">CivicByte is a free, open-source platform of civic tools that put NYC government records directly in residents' hands — no login, no fees, no lawyers.</p>
-        <div class="hero-actions">
-          <a href="/tools.html" class="btn-primary">Browse Tools &rarr;</a>
-          <a href="/submit.html" class="btn-secondary">Submit a Tool</a>
-          <a href="https://apps.apple.com/us/app/civicbyte-nyc-data-tools/id6761625363" target="_blank" rel="noopener" class="btn-appstore">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-            Download on iOS
-          </a>
-        </div>
+    </div>
+    <!-- Live card mockup -->
+    <div class="livecard reveal">
+      <div class="livecard-bar">
+        <span class="lc-dot d1"></span><span class="lc-dot d2"></span><span class="lc-dot d3"></span>
+        <span class="livecard-url">civicbyte.dev/nyc-building-checker/</span>
       </div>
-      <div class="hero-right">
-        <div class="hero-card">
-          <div class="hero-card-num" id="hero-counter">27,694</div>
-          <div class="hero-card-label">New Yorkers served<br>in the last 30 days</div>
-          <div class="hero-card-sub">4 free tools &middot; 0 logins required &middot; 100% open source</div>
+      <div class="livecard-body">
+        <h4>NYC Building Report</h4>
+        <div class="livecard-sub">184,302 violations indexed &middot; updated nightly from HPD, DOB</div>
+        <div class="lc-search">
+          <span class="lc-mag"></span>
+          <span>520 Atlantic Ave, Brooklyn</span>
+        </div>
+        <div class="lc-rows">
+          <div class="lc-row">
+            <div class="lc-row-l"><strong>Open violations (B &amp; C)</strong><span>HPD &middot; active</span></div>
+            <div class="lc-val red">9</div>
+          </div>
+          <div class="lc-row">
+            <div class="lc-row-l"><strong>Heat complaints (24 mo)</strong><span>311 &middot; verified</span></div>
+            <div class="lc-val red">14</div>
+          </div>
+          <div class="lc-row">
+            <div class="lc-row-l"><strong>Certificate of occupancy</strong><span>DOB &middot; last filed</span></div>
+            <div class="lc-val green">Valid</div>
+          </div>
+          <div class="lc-row">
+            <div class="lc-row-l"><strong>Ownership</strong><span>ACRIS &middot; registered owner</span></div>
+            <div class="lc-val">LLC chain</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- STATS STRIP -->
-  <div class="stats-strip">
-    <div class="stats-strip-inner">
-      <div class="stat-item reveal">
-        <span class="stat-num">4</span>
-        <span class="stat-label">Live Tools</span>
-      </div>
-      <div class="stat-item reveal reveal-delay-1">
-        <span class="stat-num">27k+</span>
-        <span class="stat-label">Monthly Users</span>
-      </div>
-      <div class="stat-item reveal reveal-delay-2">
-        <span class="stat-num">MIT</span>
-        <span class="stat-label">Open Source</span>
-      </div>
-      <div class="stat-item reveal reveal-delay-3">
-        <span class="stat-num">$0</span>
-        <span class="stat-label">Cost to Use</span>
-      </div>
+<!-- STAT BAND -->
+<div class="statband reveal">
+  <div class="stat-cell"><div class="stat-n"><em>4</em></div><div class="stat-k">Live tools</div></div>
+  <div class="stat-cell d1s"><div class="stat-n" id="sc-users">27k+</div><div class="stat-k">Monthly users</div></div>
+  <div class="stat-cell d2s"><div class="stat-n">$<em>0</em></div><div class="stat-k">Cost to use</div></div>
+  <div class="stat-cell d3s"><div class="stat-n">MIT</div><div class="stat-k">Open source</div></div>
+</div>
+
+<!-- PRINCIPLES -->
+<section class="principles">
+  <div class="sec-hd reveal">
+    <div class="sec-hd-l">
+      <div class="k">&sect;01 &mdash; What we stand for</div>
+      <h2>Five rules we <em>don't</em> break.</h2>
+    </div>
+    <div class="sec-hd-r">The decisions that made CivicByte what it is — and keep it from becoming something it shouldn't be.</div>
+  </div>
+  <div class="pr-grid">
+    <div class="pr reveal">
+      <div class="pr-n">01</div>
+      <h4>Free forever.</h4>
+      <p>No paywalls, no freemium tiers, no accounts. If you have an address, you get the data. That's the deal.</p>
+    </div>
+    <div class="pr reveal d1s">
+      <div class="pr-n">02</div>
+      <h4>Open source.</h4>
+      <p>MIT-licensed, public repos, documented data sources. Anyone can fork, audit, translate, or improve the work.</p>
+    </div>
+    <div class="pr reveal d2s">
+      <div class="pr-n">03</div>
+      <h4>Real data only.</h4>
+      <p>Every result comes directly from NYC Open Data — HPD, DOB, 311, the courts. No scraping, no estimates, no guessing.</p>
+    </div>
+    <div class="pr reveal">
+      <div class="pr-n">04</div>
+      <h4>Works for everyone.</h4>
+      <p>Plain language, mobile-first, no jargon. If your grandmother can't use it on her phone, it isn't finished.</p>
+    </div>
+    <div class="pr reveal d1s">
+      <div class="pr-n">05</div>
+      <h4>Accuracy over speed.</h4>
+      <p>We'd rather not ship than ship something wrong. Civic tools have real consequences for real people.</p>
+    </div>
+    <div class="pr soft reveal d2s">
+      <div class="pr-n">&mdash;</div>
+      <h4>One we bend sometimes.</h4>
+      <p>Adding new tools takes time. We'd rather be slow and thorough than fast and sloppy.</p>
     </div>
   </div>
+</section>
 
-  <!-- TOOLS -->
-  <section class="section">
-    <div class="reveal"><div class="section-eyebrow">Tools</div></div>
-    <div class="reveal reveal-delay-1"><div class="section-title">Civic tech that actually reaches people</div></div>
-    <div class="reveal reveal-delay-2"><div class="section-desc">Every tool on CivicByte is free, open-source, and designed to be usable by anyone — not just developers.</div></div>
-    <div class="tools-grid">
-      <div class="tool-card-v2 reveal">
-        <div class="tool-card-v2-icon" style="background:rgba(177,151,252,0.1);border-color:rgba(177,151,252,0.2)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b197fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-        </div>
-        <div class="tool-status live">Live</div>
+<!-- TOOLS -->
+<section class="tools-sec">
+  <div class="tools-intro reveal">
+    <div class="sec-hd-l">
+      <div class="k">&sect;02 &mdash; From the shelf</div>
+      <h2>Tools that are <em>live</em> right now.</h2>
+    </div>
+    <div class="sec-hd-r">Four free tools. Open data. Zero logins. All built for the New Yorkers who need them most.</div>
+  </div>
+  <div class="tools-grid">
+    <article class="tool-card tc-building reveal">
+      <div class="tool-card-shot"><span class="shot-label">building report</span></div>
+      <div class="tool-card-body">
+        <span class="tool-tag">Housing &middot; Citywide</span>
         <h3>NYC Building Report</h3>
-        <p>Look up HPD housing maintenance violations for any NYC building — instantly. See severity breakdowns, open violations, owner info, and registration status. Built for tenants and organizers.</p>
-        <a href="/nyc-building-checker/" class="tool-card-v2-link" style="color:#b197fc">View Tool &rarr;</a>
-      </div>
-      <div class="tool-card-v2 reveal reveal-delay-1">
-        <div class="tool-card-v2-icon" style="background:rgba(255,124,124,0.1);border-color:rgba(255,124,124,0.2)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff7c7c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <p>Look up HPD violations for any NYC address — instantly. Severity breakdowns, open violations, owner info, registration status. Built for tenants.</p>
+        <div class="tool-card-foot">
+          <span class="chip">25k+ searches / mo</span>
+          <span class="chip">MIT</span>
+          <span class="chip">HPD &middot; DOB</span>
         </div>
-        <div class="tool-status live">Live</div>
+        <a href="/nyc-building-checker/" class="tool-link">View tool &rarr;</a>
+      </div>
+    </article>
+    <article class="tool-card tc-landlord reveal d1s">
+      <div class="tool-card-shot"><span class="shot-label">landlord watch</span></div>
+      <div class="tool-card-body">
+        <span class="tool-tag">Housing &middot; Accountability</span>
         <h3>NYC Landlord Watch</h3>
-        <p>Search any landlord or company name to see their full violation history, portfolio size, and accountability risk score across all NYC properties.</p>
-        <a href="/nyc-landlord-watch/" class="tool-card-v2-link" style="color:#ff7c7c">View Tool &rarr;</a>
-      </div>
-      <div class="tool-card-v2 reveal reveal-delay-2">
-        <div class="tool-card-v2-icon" style="background:rgba(96,165,250,0.1);border-color:rgba(96,165,250,0.2)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <p>Search any landlord name to see their full violation history, portfolio size, and risk score across all NYC properties.</p>
+        <div class="tool-card-foot">
+          <span class="chip">MIT</span>
+          <span class="chip">HPD</span>
         </div>
-        <div class="tool-status live">Live</div>
+        <a href="/nyc-landlord-watch/" class="tool-link">View tool &rarr;</a>
+      </div>
+    </article>
+    <article class="tool-card tc-eviction reveal d2s">
+      <div class="tool-card-shot"><span class="shot-label">eviction records</span></div>
+      <div class="tool-card-body">
+        <span class="tool-tag">Housing &middot; Tenant Rights</span>
         <h3>NYC Eviction Records</h3>
-        <p>Search executed marshal evictions for any NYC address. Know a building's eviction history before signing a lease — 100k+ records across all 5 boroughs.</p>
-        <a href="/nyc-eviction-records/" class="tool-card-v2-link" style="color:#60a5fa">View Tool &rarr;</a>
-      </div>
-      <div class="tool-card-v2 reveal reveal-delay-3">
-        <div class="tool-card-v2-icon" style="background:rgba(0,245,196,0.1);border-color:rgba(0,245,196,0.2)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f5c4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
+        <p>Search marshal evictions for any NYC address. Know a building's eviction history before you sign a lease. 100k+ records, all 5 boroughs.</p>
+        <div class="tool-card-foot">
+          <span class="chip">MIT</span>
+          <span class="chip">Court records</span>
         </div>
-        <div class="tool-status live">Live</div>
-        <h3>NYC School Budget Tracker</h3>
-        <p>Interactive dashboard mapping per-pupil spending, Title I funding, and PTA contributions across 1,800+ NYC public schools. Search, filter, and compare any school.</p>
-        <a href="/nyc-school-budget-tracker/" class="tool-card-v2-link" style="color:#00f5c4">View Tool &rarr;</a>
+        <a href="/nyc-eviction-records/" class="tool-link">View tool &rarr;</a>
       </div>
-    </div>
-    <div style="text-align:center;margin-top:2rem" class="reveal">
-      <a href="/tools.html" class="btn-secondary">Browse all tools &rarr;</a>
-    </div>
-  </section>
+    </article>
+  </div>
+  <div style="text-align:center;margin-top:22px" class="reveal">
+    <a href="/tools.html" class="btn-ghost">Browse all tools &rarr;</a>
+  </div>
+</section>
 
-  <!-- ORIGIN STORY -->
-  <div class="origin-section">
-    <div class="origin-inner">
-      <div class="origin-left reveal">
-        <div class="origin-eyebrow">Why CivicByte exists</div>
-        <div class="origin-quote">I built this for<br>my <em>grandmother.</em></div>
+<!-- QUOTE -->
+<section class="quote-sec">
+  <div class="quote-k reveal">From a user &middot; Brooklyn</div>
+  <blockquote class="reveal d1s">
+    Found 11 open violations on my building before signing the lease. Didn't sign. This tool saved me from a nightmare.
+  </blockquote>
+  <cite class="reveal d2s"><strong>Anonymous</strong> &middot; Searched NYC Building Report, March 2026</cite>
+</section>
+
+<!-- PATHS -->
+<section class="paths-sec">
+  <div class="sec-hd reveal">
+    <div class="sec-hd-l">
+      <div class="k">Get involved</div>
+      <h2>Two ways <em>in.</em></h2>
+    </div>
+  </div>
+  <div class="paths-grid">
+    <div class="path path-use reveal">
+      <div class="path-k">For New Yorkers</div>
+      <h3>Use the tools. <em>Free.</em></h3>
+      <p>Look up your building, your landlord, your school's budget. No account, no login, no cost. The data already belongs to you.</p>
+      <div class="path-cta">
+        <a href="/tools.html" class="primary">Browse the tools &rarr;</a>
+        <a href="https://apps.apple.com/us/app/civicbyte-nyc-data-tools/id6761625363" target="_blank" rel="noopener" class="sec">Download iOS app</a>
       </div>
-      <div class="origin-right">
-        <div class="origin-body">
-          <p class="reveal">She needed to know about the violations in her building. She didn't know who to call, where to look, or how to read government documents. I searched for a tool that could help her.</p>
-          <p class="reveal reveal-delay-1">There wasn't one. <strong>So I built it.</strong></p>
-          <p class="reveal reveal-delay-2">CivicByte started as a single tool for one person. Today, over 27,000 New Yorkers use it every month — tenants checking on their landlords, parents comparing school budgets, families researching buildings before signing a lease.</p>
-          <p class="reveal reveal-delay-3">Every tool on this platform is <strong>free. Always.</strong> No login. No account. No cost.</p>
-        </div>
+    </div>
+    <div class="path path-build reveal d1s">
+      <div class="path-k">For developers &amp; students</div>
+      <h3>Build something <em>real.</em></h3>
+      <p>CivicByte is open to developers, students, and nonprofits. If you've built a tool that serves the public good, list it here. Free to submit, always.</p>
+      <div class="path-cta">
+        <a href="/submit.html" class="primary">Submit a tool &rarr;</a>
+        <a href="https://github.com/civicbytedev" target="_blank" rel="noopener" class="sec">View on GitHub</a>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- HOW IT WORKS -->
-  <section class="section">
-    <div class="reveal"><div class="section-eyebrow">How It Works</div></div>
-    <div class="reveal reveal-delay-1"><div class="section-title">Built by developers. Used by communities.</div></div>
-    <div class="reveal reveal-delay-2"><div class="section-desc">CivicByte is an open platform. Anyone can submit a civic tech tool — and every community can discover and use them.</div></div>
-    <div class="how-grid">
-      <div class="how-card reveal">
-        <div class="how-step-num">Step 01</div>
-        <h3>Build a civic tool</h3>
-        <p>Identify a real community need. Build a free, open-source tool that addresses it — and deploy it publicly on the web.</p>
-      </div>
-      <div class="how-card reveal reveal-delay-1">
-        <div class="how-step-num">Step 02</div>
-        <h3>Submit to CivicByte</h3>
-        <p>Open a GitHub issue with your tool's details. We review it against our platform standards and get it listed.</p>
-      </div>
-      <div class="how-card reveal reveal-delay-2">
-        <div class="how-step-num">Step 03</div>
-        <h3>Communities find it</h3>
-        <p>Your tool is discoverable by the organizers, advocates, parents, and community members who need it most.</p>
-      </div>
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><span class="nav-sq"></span> civic<em>byte</em></div>
+      <p class="footer-desc">A free, open-source civic tech platform for NYC residents. All tools released under MIT. All data sourced from NYC Open Data.</p>
     </div>
-  </section>
-
-  <!-- CTA -->
-  <div class="cta-band">
-    <h2 class="reveal">Have a civic tech tool?</h2>
-    <p class="reveal reveal-delay-1">CivicByte is open to developers, students, nonprofits, and community organizations. If you've built something that serves the public good, list it here.</p>
-    <div class="cta-actions reveal reveal-delay-2">
-      <a href="/submit.html" class="btn-primary">Submit Your Tool &rarr;</a>
-      <a href="/tools.html" class="btn-secondary">Browse the Directory</a>
-      <a href="https://apps.apple.com/us/app/civicbyte-nyc-data-tools/id6761625363" target="_blank" rel="noopener" class="btn-appstore">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        Download on iOS
-      </a>
+    <div>
+      <h5>Tools</h5>
+      <ul>
+        <li><a href="/nyc-building-checker/">Building Report</a></li>
+        <li><a href="/nyc-landlord-watch/">Landlord Watch</a></li>
+        <li><a href="/nyc-eviction-records/">Eviction Records</a></li>
+        <li><a href="/nyc-school-budget-tracker/">School Budgets</a></li>
+        <li><a href="/nyc-311-complaints/">311 Lookup</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Platform</h5>
+      <ul>
+        <li><a href="/tools.html">All Tools</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/impact/">Impact</a></li>
+        <li><a href="/submit.html">Submit a Tool</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Links</h5>
+      <ul>
+        <li><a href="https://github.com/civicbytedev" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://apps.apple.com/us/app/civicbyte-nyc-data-tools/id6761625363" target="_blank" rel="noopener">iOS App</a></li>
+        <li><a href="/privacy.html">Privacy</a></li>
+      </ul>
     </div>
   </div>
+  <div class="footer-col">
+    <span>&copy; 2026 CivicByte &mdash; MIT License</span>
+    <span>Set in Fraunces &middot; IBM Plex Mono &middot; Inter Tight</span>
+    <span>Built for New York</span>
+  </div>
+</footer>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="f-left">&copy; 2026 CivicByte &mdash; Open source under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.</div>
-    <div class="f-right">
-      <a href="/tools.html">Tools</a>
-      <a href="/about.html">About</a>
-      <a href="/impact/">Impact</a>
-      <a href="/submit.html">Submit</a>
-      <a href="https://github.com/civicbytedev" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </footer>
+<script>
+// Scroll progress bar
+(function(){
+  var bar=document.getElementById('spb');
+  function u(){var s=window.scrollY,d=document.documentElement.scrollHeight-window.innerHeight;bar.style.width=(d>0?s/d*100:0).toFixed(2)+'%';}
+  window.addEventListener('scroll',u,{passive:true});u();
+})();
 
-  <script>
-    // ── Scroll progress bar ──────────────────────────────
-    (function() {
-      var bar = document.getElementById('scroll-bar');
-      function updateBar() {
-        var scrollTop = window.scrollY;
-        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-        bar.style.width = pct.toFixed(2) + '%';
-      }
-      window.addEventListener('scroll', updateBar, { passive: true });
-      updateBar();
-    })();
+// Scroll reveals
+(function(){
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('up');obs.unobserve(e.target);}});
+  },{threshold:0.1,rootMargin:'0px 0px -32px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+})();
 
-    // ── Scroll reveals ───────────────────────────────────
-    (function() {
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            observer.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-      document.querySelectorAll('.reveal').forEach(function(el) {
-        observer.observe(el);
-      });
-    })();
-
-    // ── Counter animation on hero card ──────────────────
-    (function() {
-      var el = document.getElementById('hero-counter');
-      if (!el) return;
-      var target = 27694;
-      var duration = 1800;
-      var start = null;
-      var started = false;
-
-      function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
-
-      function step(ts) {
-        if (!start) start = ts;
-        var p = Math.min((ts - start) / duration, 1);
-        var val = Math.round(easeOutQuart(p) * target);
-        el.textContent = val.toLocaleString();
-        if (p < 1) requestAnimationFrame(step);
-        else el.textContent = target.toLocaleString();
-      }
-
-      var obs = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting && !started) {
-          started = true;
-          requestAnimationFrame(step);
-          obs.disconnect();
-        }
-      }, { threshold: 0.5 });
-      obs.observe(el);
-    })();
-
-    // ── Mobile nav ───────────────────────────────────────
-    (function() {
-      var toggle = document.querySelector('.mobile-toggle');
-      var navLinks = document.querySelector('.nav-links');
-      var siteNav = document.querySelector('.site-nav');
-      if (!toggle || !navLinks) return;
-      var isOpen = false;
-      var savedScrollY = 0;
-
-      function openMenu() {
-        isOpen = true;
-        toggle.setAttribute('aria-expanded', 'true');
-        navLinks.classList.add('open');
-        savedScrollY = window.scrollY;
-        document.body.style.top = '-' + savedScrollY + 'px';
-        document.body.classList.add('nav-open');
-      }
-      function closeMenu() {
-        isOpen = false;
-        toggle.setAttribute('aria-expanded', 'false');
-        navLinks.classList.remove('open');
-        document.body.classList.remove('nav-open');
-        document.body.style.top = '';
-        window.scrollTo(0, savedScrollY);
-      }
-      toggle.addEventListener('click', function(e) { e.stopPropagation(); isOpen ? closeMenu() : openMenu(); });
-      navLinks.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', function() { if (isOpen) closeMenu(); }); });
-      document.addEventListener('click', function(e) { if (isOpen && !siteNav.contains(e.target)) closeMenu(); });
-      document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && isOpen) { closeMenu(); toggle.focus(); } });
-      window.addEventListener('resize', function() { if (window.innerWidth > 768 && isOpen) closeMenu(); });
-    })();
-  </script>
+// Mobile nav
+(function(){
+  var nav=document.querySelector('.site-nav');
+  var toggle=document.querySelector('.nav-mobile-toggle');
+  if(!toggle)return;
+  toggle.addEventListener('click',function(){nav.classList.toggle('open');});
+  document.addEventListener('click',function(e){if(nav.classList.contains('open')&&!nav.contains(e.target))nav.classList.remove('open');});
+})();
+</script>
 </body>
 </html>
