@@ -696,7 +696,7 @@
     // Seed with 5 staggered items so the feed looks populated immediately
     feedItems = Array.from({ length: 5 }, (_, i) => ({
       activity: randomActivity(),
-      ts: now - (i * 18000 + Math.random() * 12000),
+      ts: now - (i * 105000 + Math.random() * 30000),
     }));
     renderFeed();
   }
@@ -717,7 +717,7 @@
   }
 
   function scheduleFeedUpdate() {
-    const delay = 4000 + Math.random() * 6000; // 4–10 seconds
+    const delay = 75000 + Math.random() * 45000; // ~75–120s, avg ~97s ≈ real search rate
     setTimeout(() => { addFeedItem(); scheduleFeedUpdate(); }, delay);
   }
 
