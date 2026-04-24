@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MV3SDWV3DV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MV3SDWV3DV');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#080b1a">
+  <title>CivicByte — Free NYC Civic Tools: Landlord Violations, Building Records, School Budgets</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%23080b1a' stroke='%2300f5c4' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%2300f5c4'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%2300f5c4' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%2300f5c4' opacity='.5'/%3E%3C/svg%3E">
+  <meta name="google-site-verification" content="GAI0wMVzQzCyaLHlkw_shE-_8qpOeiSO5VoJK9Z-K7I">
+  <meta name="description" content="Free NYC tools: look up landlord HPD violations, check building violation records, track school budgets by school. No login. No account. Powered by NYC Open Data.">
+  <link rel="canonical" href="https://civicbyte.dev/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://civicbyte.dev/">
+  <meta property="og:title" content="CivicByte — Free Civic Tech Tools for NYC Residents">
+  <meta property="og:description" content="Look up your landlord's violation history, check your building's HPD record, and track school budgets. Free tools powered by NYC Open Data.">
+  <meta property="og:image" content="https://civicbyte.dev/og-image.png">
+  <meta property="og:site_name" content="CivicByte">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@civicbyte">
+  <script type="application/ld+json">
+  [{"@context":"https://schema.org","@type":"WebSite","name":"CivicByte","url":"https://civicbyte.dev","description":"Free civic tech tools for NYC residents powered by NYC Open Data"}]
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    /* ─────────────────────────────────────────
+       RESET VIBECODED GLOBALS FROM styles.css
+    ───────────────────────────────────────── */
+    body::before, body::after { display: none !important; }
+    .cb-orb { display: none !important; }
+    .hero::before { display: none !important; }
+    .site-nav::after { display: none !important; }
+
+    /* ─────────────────────────────────────────
+       SCROLL PROGRESS BAR
+    ───────────────────────────────────────── */
+    #scroll-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--teal);
+      z-index: 9999;
+      transition: width 0.05s linear;
+      pointer-events: none;
+    }
+
+    /* ─────────────────────────────────────────
+       NAV — tighter, cleaner
+    ───────────────────────────────────────── */
+    .site-nav {
+      border-bottom: 1px solid var(--border) !important;
+      background: rgba(8,11,26,0.92) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+    }
+
+    /* ─────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────── */
+    .hero {
+      padding: 9rem 2rem 7rem;
+      text-align: left;
+    }
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    /* Eyebrow */
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1.75rem;
+      opacity: 0;
+      animation: riseIn 0.6s ease-out 0.1s forwards;
+    }
+
+    /* Headline */
+    .hero h1 {
+      font-size: clamp(3rem, 5.5vw, 5rem) !important;
+      font-weight: 700 !important;
+      line-height: 1.06 !important;
+      letter-spacing: -0.045em !important;
+      color: var(--text) !important;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: riseIn 0.7s ease-out 0.2s forwards;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--teal);
+    }
+
+    .hero-sub {
+      font-size: 1.08rem !important;
+      color: var(--text-secondary) !important;
+      max-width: 520px;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: riseIn 0.7s ease-out 0.32s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: riseIn 0.6s ease-out 0.44s forwards;
+    }
+
+    /* Right: impact card */
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.25rem 2rem;
+      text-align: center;
+      opacity: 0;
+      animation: riseIn 0.7s ease-out 0.5s forwards;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--teal);
+      opacity: 0.5;
+    }
+    .hero-card-num {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.04em;
+    }
+    .hero-card-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+    }
+    .hero-card-sub {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+      margin-top: 0.25rem;
+    }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─────────────────────────────────────────
+       STATS STRIP
+    ───────────────────────────────────────── */
+    .stats-strip {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .stats-strip-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 0;
+    }
+    .stat-item {
+      padding: 1.6rem 2rem;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ─────────────────────────────────────────
+       SECTION HEADERS
+    ───────────────────────────────────────── */
+    .section {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+    }
+    .section-eyebrow {
+      font-size: 0.72rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.12em !important;
+      text-transform: uppercase !important;
+      color: var(--text-dim) !important;
+      margin-bottom: 1rem !important;
+      background: none !important;
+      -webkit-background-clip: unset !important;
+      -webkit-text-fill-color: var(--text-dim) !important;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.75rem) !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.03em !important;
+      color: var(--text) !important;
+      line-height: 1.15 !important;
+      margin-bottom: 1rem !important;
+      max-width: 640px;
+    }
+    .section-desc {
+      font-size: 0.98rem !important;
+      color: var(--text-secondary) !important;
+      line-height: 1.75 !important;
+      max-width: 540px;
+      margin-bottom: 3rem !important;
+    }
+
+    /* ─────────────────────────────────────────
+       TOOL CARDS — clean
+    ───────────────────────────────────────── */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .tool-card-v2 {
+      background: var(--bg);
+      padding: 2.25rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      transition: background 0.2s;
+      position: relative;
+    }
+    .tool-card-v2:hover {
+      background: var(--surface);
+    }
+    .tool-card-v2-icon {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.25rem;
+      flex-shrink: 0;
+      border: 1px solid transparent;
+    }
+    .tool-card-v2 h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+    .tool-card-v2 p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+      margin-bottom: 1.5rem;
+    }
+    .tool-card-v2-link {
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: "Space Grotesk", sans-serif;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: gap 0.2s;
+    }
+    .tool-card-v2:hover .tool-card-v2-link {
+      gap: 0.55rem;
+    }
+    .tool-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+      width: fit-content;
+    }
+    .tool-status.live {
+      background: rgba(0,245,196,0.08);
+      color: var(--teal);
+      border: 1px solid rgba(0,245,196,0.2);
+    }
+    .tool-status.live::before {
+      content: '';
+      width: 5px; height: 5px;
+      background: var(--teal);
+      border-radius: 50%;
+    }
+
+    /* ─────────────────────────────────────────
+       ORIGIN STORY SECTION
+    ───────────────────────────────────────── */
+    .origin-section {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      padding: 7rem 2rem;
+    }
+    .origin-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .origin-left {}
+    .origin-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1.5rem;
+    }
+    .origin-quote {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.25rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+    }
+    .origin-quote em {
+      font-style: normal;
+      color: var(--teal);
+    }
+    .origin-right {
+      padding-top: 0.25rem;
+    }
+    .origin-body p {
+      font-size: 0.98rem;
+      color: var(--text-secondary);
+      line-height: 1.85;
+      margin-bottom: 1.1rem;
+    }
+    .origin-body p:last-child { margin-bottom: 0; }
+    .origin-body strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* ─────────────────────────────────────────
+       HOW IT WORKS — horizontal steps
+    ───────────────────────────────────────── */
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .how-card {
+      padding: 2.5rem 2.25rem;
+      border-right: 1px solid var(--border);
+      background: var(--bg) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      transition: background 0.2s;
+    }
+    .how-card:last-child { border-right: none; }
+    .how-card:hover { background: var(--surface) !important; }
+    .how-step-num {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+    .how-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+    .how-card p {
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ─────────────────────────────────────────
+       CTA BAND — clean
+    ───────────────────────────────────────── */
+    .cta-band {
+      background: var(--surface) !important;
+      border-top: 1px solid var(--border) !important;
+      border-bottom: 1px solid var(--border) !important;
+      padding: 7rem 2rem !important;
+      text-align: center !important;
+      position: relative !important;
+    }
+    .cta-band::before, .cta-band::after { display: none !important; }
+    .cta-band h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.75rem) !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.03em !important;
+      margin-bottom: 1rem !important;
+      color: var(--text) !important;
+    }
+    .cta-band p {
+      color: var(--text-secondary) !important;
+      font-size: 1rem !important;
+      max-width: 440px;
+      margin: 0 auto 2.5rem !important;
+      line-height: 1.75 !important;
+    }
+    .cta-actions {
+      display: flex;
+      gap: 0.85rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ─────────────────────────────────────────
+       DIVIDER
+    ───────────────────────────────────────── */
+    .v2-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ─────────────────────────────────────────
+       SCROLL REVEAL
+    ───────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease-out, transform 0.65s ease-out;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.08s; }
+    .reveal-delay-2 { transition-delay: 0.16s; }
+    .reveal-delay-3 { transition-delay: 0.24s; }
+    .reveal-delay-4 { transition-delay: 0.32s; }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-card { max-width: 320px; }
+      .stats-strip-inner { grid-template-columns: 1fr 1fr; }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(3) { border-top: 1px solid var(--border); border-right: 1px solid var(--border); }
+      .stat-item:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+      .tools-grid { grid-template-columns: 1fr; }
+      .origin-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .how-grid { grid-template-columns: 1fr; }
+      .how-card { border-right: none; border-bottom: 1px solid var(--border); }
+      .how-card:last-child { border-bottom: none; }
+    }
+    @media (max-width: 600px) {
+      .hero { padding: 6.5rem 1.5rem 4.5rem; }
+      .section { padding: 4rem 1.5rem; }
+      .stats-strip-inner { grid-template-columns: 1fr 1fr; padding: 0 0.5rem; }
+      .stat-item { padding: 1.25rem 1.25rem; }
+      .origin-section { padding: 4.5rem 1.5rem; }
+      .cta-band { padding: 4.5rem 1.5rem !important; }
+    }
+  </style>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="/auth.js"></script>
+</head>
+<body>
+  <script>requireAuth();</script>
+
+  <!-- Scroll progress bar -->
+  <div id="scroll-bar"></div>
+
+  <!-- NAV -->
+  <header class="site-nav">
+    <nav class="nav">
+      <a href="/" class="logo">
+        <svg width="30" height="30" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lgNav" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00f5c4"/><stop offset="100%" stop-color="#b197fc"/></linearGradient></defs><rect width="1024" height="1024" rx="220" fill="#080b1a"/><rect x="170" y="573" width="72" height="144" rx="2" fill="url(#lgNav)"/><rect x="260" y="501" width="54" height="216" rx="2" fill="url(#lgNav)"/><rect x="332" y="393" width="90" height="324" rx="2" fill="url(#lgNav)"/><rect x="375" y="303" width="5" height="90" rx="2" fill="url(#lgNav)"/><rect x="440" y="465" width="108" height="252" rx="2" fill="url(#lgNav)"/><rect x="566" y="321" width="90" height="396" rx="2" fill="url(#lgNav)"/><rect x="609" y="213" width="5" height="108" rx="2" fill="url(#lgNav)"/><rect x="674" y="483" width="72" height="234" rx="2" fill="url(#lgNav)"/><rect x="764" y="555" width="54" height="162" rx="2" fill="url(#lgNav)"/><rect x="789" y="501" width="5" height="54" rx="2" fill="url(#lgNav)"/><rect x="818" y="609" width="36" height="108" rx="2" fill="url(#lgNav)"/><rect x="170" y="717" width="684" height="3" rx="1" fill="url(#lgNav)" opacity="0.6"/></svg>
+        <span class="logo-wordmark">civic<span class="cb">byte</span></span>
+      </a>
+      <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="cb-nav-links">
+        <span class="cb-ham" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <div class="nav-links" id="cb-nav-links">
+        <a href="/" class="active">Home</a>
+        <a href="/tools.html">Tools</a>
+        <a href="/about.html">About</a>
+        <a href="/impact/">Impact</a>
+        <a href="/submit.html">Submit a Tool</a>
+        <a href="https://github.com/civicbytedev" target="_blank" rel="noopener" class="nav-gh">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow">Open civic tech &middot; NYC &middot; MIT License</div>
+        <h1>Public data should work<br>for the <em>public.</em></h1>
+        <p class="hero-sub">CivicByte is a free, open-source platform of civic tools that put NYC government records directly in residents' hands — no login, no fees, no lawyers.</p>
+        <div class="hero-actions">
+          <a href="/tools.html" class="btn-primary">Browse Tools &rarr;</a>
+          <a href="/submit.html" class="btn-secondary">Submit a Tool</a>
+          <a href="https://apps.apple.com/us/app/civicbyte-nyc-data-tools/id6761625363" target="_blank" rel="noopener" class="btn-appstore">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            Download on iOS
+          </a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-card">
+          <div class="hero-card-num" id="hero-counter">27,694</div>
+          <div class="hero-card-label">New Yorkers served<br>in the last 30 days</div>
+          <div class="hero-card-sub">4 free tools &middot; 0 logins required &middot; 100% open source</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="stats-strip-inner">
+      <div class="stat-item reveal">
+        <span class="stat-num">4</span>
+        <span class="stat-label">Live Tools</span>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <span class="stat-num">27k+</span>
+        <span class="stat-label">Monthly Users</span>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <span class="stat-num">MIT</span>
+        <span class="stat-label">Open Source</span>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <span class="stat-num">$0</span>
+        <span class="stat-label">Cost to Use</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS -->
+  <section class="section">
+    <div class="reveal"><div class="section-eyebrow">Tools</div></div>
+    <div class="reveal reveal-delay-1"><div class="section-title">Civic tech that actually reaches people</div></div>
+    <div class="reveal reveal-delay-2"><div class="section-desc">Every tool on CivicByte is free, open-source, and designed to be usable by anyone — not just developers.</div></div>
+    <div class="tools-grid">
+      <div class="tool-card-v2 reveal">
+        <div class="tool-card-v2-icon" style="background:rgba(177,151,252,0.1);border-color:rgba(177,151,252,0.2)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b197fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        </div>
+        <div class="tool-status live">Live</div>
+        <h3>NYC Building Report</h3>
+        <p>Look up HPD housing maintenance violations for any NYC building — instantly. See severity breakdowns, open violations, owner info, and registration status. Built for tenants and organizers.</p>
+        <a href="/nyc-building-checker/" class="tool-card-v2-link" style="color:#b197fc">View Tool &rarr;</a>
+      </div>
+      <div class="tool-card-v2 reveal reveal-delay-1">
+        <div class="tool-card-v2-icon" style="background:rgba(255,124,124,0.1);border-color:rgba(255,124,124,0.2)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff7c7c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="tool-status live">Live</div>
+        <h3>NYC Landlord Watch</h3>
+        <p>Search any landlord or company name to see their full violation history, portfolio size, and accountability risk score across all NYC properties.</p>
+        <a href="/nyc-landlord-watch/" class="tool-card-v2-link" style="color:#ff7c7c">View Tool &rarr;</a>
+      </div>
+      <div class="tool-card-v2 reveal reveal-delay-2">
+        <div class="tool-card-v2-icon" style="background:rgba(96,165,250,0.1);border-color:rgba(96,165,250,0.2)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="tool-status live">Live</div>
+        <h3>NYC Eviction Records</h3>
+        <p>Search executed marshal evictions for any NYC address. Know a building's eviction history before signing a lease — 100k+ records across all 5 boroughs.</p>
+        <a href="/nyc-eviction-records/" class="tool-card-v2-link" style="color:#60a5fa">View Tool &rarr;</a>
+      </div>
+      <div class="tool-card-v2 reveal reveal-delay-3">
+        <div class="tool-card-v2-icon" style="background:rgba(0,245,196,0.1);border-color:rgba(0,245,196,0.2)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f5c4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
+        </div>
+        <div class="tool-status live">Live</div>
+        <h3>NYC School Budget Tracker</h3>
+        <p>Interactive dashboard mapping per-pupil spending, Title I funding, and PTA contributions across 1,800+ NYC public schools. Search, filter, and compare any school.</p>
+        <a href="/nyc-school-budget-tracker/" class="tool-card-v2-link" style="color:#00f5c4">View Tool &rarr;</a>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:2rem" class="reveal">
+      <a href="/tools.html" class="btn-secondary">Browse all tools &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ORIGIN STORY -->
+  <div class="origin-section">
+    <div class="origin-inner">
+      <div class="origin-left reveal">
+        <div class="origin-eyebrow">Why CivicByte exists</div>
+        <div class="origin-quote">I built this for<br>my <em>grandmother.</em></div>
+      </div>
+      <div class="origin-right">
+        <div class="origin-body">
+          <p class="reveal">She needed to know about the violations in her building. She didn't know who to call, where to look, or how to read government documents. I searched for a tool that could help her.</p>
+          <p class="reveal reveal-delay-1">There wasn't one. <strong>So I built it.</strong></p>
+          <p class="reveal reveal-delay-2">CivicByte started as a single tool for one person. Today, over 27,000 New Yorkers use it every month — tenants checking on their landlords, parents comparing school budgets, families researching buildings before signing a lease.</p>
+          <p class="reveal reveal-delay-3">Every tool on this platform is <strong>free. Always.</strong> No login. No account. No cost.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <div class="reveal"><div class="section-eyebrow">How It Works</div></div>
+    <div class="reveal reveal-delay-1"><div class="section-title">Built by developers. Used by communities.</div></div>
+    <div class="reveal reveal-delay-2"><div class="section-desc">CivicByte is an open platform. Anyone can submit a civic tech tool — and every community can discover and use them.</div></div>
+    <div class="how-grid">
+      <div class="how-card reveal">
+        <div class="how-step-num">Step 01</div>
+        <h3>Build a civic tool</h3>
+        <p>Identify a real community need. Build a free, open-source tool that addresses it — and deploy it publicly on the web.</p>
+      </div>
+      <div class="how-card reveal reveal-delay-1">
+        <div class="how-step-num">Step 02</div>
+        <h3>Submit to CivicByte</h3>
+        <p>Open a GitHub issue with your tool's details. We review it against our platform standards and get it listed.</p>
+      </div>
+      <div class="how-card reveal reveal-delay-2">
+        <div class="how-step-num">Step 03</div>
+        <h3>Communities find it</h3>
+        <p>Your tool is discoverable by the organizers, advocates, parents, and community members who need it most.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-band">
+    <h2 class="reveal">Have a civic tech tool?</h2>
+    <p class="reveal reveal-delay-1">CivicByte is open to developers, students, nonprofits, and community organizations. If you've built something that serves the public good, list it here.</p>
+    <div class="cta-actions reveal reveal-delay-2">
+      <a href="/submit.html" class="btn-primary">Submit Your Tool &rarr;</a>
+      <a href="/tools.html" class="btn-secondary">Browse the Directory</a>
+      <a href="https://apps.apple.com/us/app/civicbyte-nyc-data-tools/id6761625363" target="_blank" rel="noopener" class="btn-appstore">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download on iOS
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="f-left">&copy; 2026 CivicByte &mdash; Open source under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.</div>
+    <div class="f-right">
+      <a href="/tools.html">Tools</a>
+      <a href="/about.html">About</a>
+      <a href="/impact/">Impact</a>
+      <a href="/submit.html">Submit</a>
+      <a href="https://github.com/civicbytedev" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+  <script>
+    // ── Scroll progress bar ──────────────────────────────
+    (function() {
+      var bar = document.getElementById('scroll-bar');
+      function updateBar() {
+        var scrollTop = window.scrollY;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        bar.style.width = pct.toFixed(2) + '%';
+      }
+      window.addEventListener('scroll', updateBar, { passive: true });
+      updateBar();
+    })();
+
+    // ── Scroll reveals ───────────────────────────────────
+    (function() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            observer.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach(function(el) {
+        observer.observe(el);
+      });
+    })();
+
+    // ── Counter animation on hero card ──────────────────
+    (function() {
+      var el = document.getElementById('hero-counter');
+      if (!el) return;
+      var target = 27694;
+      var duration = 1800;
+      var start = null;
+      var started = false;
+
+      function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+
+      function step(ts) {
+        if (!start) start = ts;
+        var p = Math.min((ts - start) / duration, 1);
+        var val = Math.round(easeOutQuart(p) * target);
+        el.textContent = val.toLocaleString();
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = target.toLocaleString();
+      }
+
+      var obs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && !started) {
+          started = true;
+          requestAnimationFrame(step);
+          obs.disconnect();
+        }
+      }, { threshold: 0.5 });
+      obs.observe(el);
+    })();
+
+    // ── Mobile nav ───────────────────────────────────────
+    (function() {
+      var toggle = document.querySelector('.mobile-toggle');
+      var navLinks = document.querySelector('.nav-links');
+      var siteNav = document.querySelector('.site-nav');
+      if (!toggle || !navLinks) return;
+      var isOpen = false;
+      var savedScrollY = 0;
+
+      function openMenu() {
+        isOpen = true;
+        toggle.setAttribute('aria-expanded', 'true');
+        navLinks.classList.add('open');
+        savedScrollY = window.scrollY;
+        document.body.style.top = '-' + savedScrollY + 'px';
+        document.body.classList.add('nav-open');
+      }
+      function closeMenu() {
+        isOpen = false;
+        toggle.setAttribute('aria-expanded', 'false');
+        navLinks.classList.remove('open');
+        document.body.classList.remove('nav-open');
+        document.body.style.top = '';
+        window.scrollTo(0, savedScrollY);
+      }
+      toggle.addEventListener('click', function(e) { e.stopPropagation(); isOpen ? closeMenu() : openMenu(); });
+      navLinks.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', function() { if (isOpen) closeMenu(); }); });
+      document.addEventListener('click', function(e) { if (isOpen && !siteNav.contains(e.target)) closeMenu(); });
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && isOpen) { closeMenu(); toggle.focus(); } });
+      window.addEventListener('resize', function() { if (window.innerWidth > 768 && isOpen) closeMenu(); });
+    })();
+  </script>
+</body>
+</html>
