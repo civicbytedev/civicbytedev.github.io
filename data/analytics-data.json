@@ -1,25 +1,25 @@
 {
-  "updatedAt": "2026-04-28T18:23:33.510875+00:00",
-  "realtime": 59,
+  "updatedAt": "2026-04-28T20:21:23.003832+00:00",
+  "realtime": 71,
   "7day": {
-    "users": 22845,
-    "views": 45506,
-    "sessions": 22568
+    "users": 23054,
+    "views": 45879,
+    "sessions": 22755
   },
   "30day": {
-    "users": 42943,
-    "newUsers": 42684,
-    "views": 87310,
-    "sessions": 42205
+    "users": 43134,
+    "newUsers": 42873,
+    "views": 87683,
+    "sessions": 42392
   },
   "topPages": [
     {
       "label": "Home",
-      "count": 42531
+      "count": 42718
     },
     {
       "label": "NYC Building Checker",
-      "count": 40433
+      "count": 40579
     },
     {
       "label": "NYC Landlord Watch",
@@ -49,27 +49,27 @@
   "sources": [
     {
       "name": "Organic Search",
-      "count": 11709,
+      "count": 11743,
       "i": 0
     },
     {
       "name": "Organic Video",
-      "count": 10935,
+      "count": 10998,
       "i": 1
     },
     {
       "name": "Direct",
-      "count": 10262,
+      "count": 10283,
       "i": 2
     },
     {
       "name": "Referral",
-      "count": 9505,
+      "count": 9539,
       "i": 3
     },
     {
       "name": "Unassigned",
-      "count": 1055,
+      "count": 1192,
       "i": 4
     },
     {
@@ -79,7 +79,7 @@
     },
     {
       "name": "Cross-network",
-      "count": 8,
+      "count": 9,
       "i": 6
     }
   ]
