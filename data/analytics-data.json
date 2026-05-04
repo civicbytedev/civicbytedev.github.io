@@ -1,25 +1,25 @@
 {
-  "updatedAt": "2026-05-03T23:54:49.505191+00:00",
-  "realtime": 63,
+  "updatedAt": "2026-05-04T03:44:08.566603+00:00",
+  "realtime": 61,
   "7day": {
-    "users": 23190,
-    "views": 46293,
-    "sessions": 23509
+    "users": 23707,
+    "views": 47273,
+    "sessions": 23880
   },
   "30day": {
-    "users": 58160,
-    "newUsers": 58291,
-    "views": 118396,
-    "sessions": 58664
+    "users": 58667,
+    "newUsers": 58779,
+    "views": 119376,
+    "sessions": 59094
   },
   "topPages": [
     {
       "label": "Home",
-      "count": 57669
+      "count": 58139
     },
     {
       "label": "NYC Building Checker",
-      "count": 55516
+      "count": 56000
     },
     {
       "label": "NYC Landlord Watch",
@@ -27,11 +27,11 @@
     },
     {
       "label": "Tools",
-      "count": 10
+      "count": 12
     },
     {
       "label": "NYC School Budget Tracker",
-      "count": 8
+      "count": 9
     },
     {
       "label": "Impact",
@@ -39,7 +39,7 @@
     },
     {
       "label": "About",
-      "count": 4
+      "count": 5
     },
     {
       "label": "NYC Eviction Records",
@@ -49,27 +49,27 @@
   "sources": [
     {
       "name": "Organic Search",
-      "count": 15872,
+      "count": 16015,
       "i": 0
     },
     {
       "name": "Organic Video",
-      "count": 15009,
+      "count": 15147,
       "i": 1
     },
     {
       "name": "Direct",
-      "count": 14008,
+      "count": 14129,
       "i": 2
     },
     {
       "name": "Referral",
-      "count": 13484,
+      "count": 13544,
       "i": 3
     },
     {
       "name": "Unassigned",
-      "count": 1490,
+      "count": 1776,
       "i": 4
     },
     {
