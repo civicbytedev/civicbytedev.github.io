@@ -1,25 +1,25 @@
 {
-  "updatedAt": "2026-05-05T22:04:46.888849+00:00",
+  "updatedAt": "2026-05-05T23:54:19.971333+00:00",
   "realtime": 1,
   "7day": {
     "users": 19715,
-    "views": 39595,
+    "views": 39601,
     "sessions": 19926
   },
   "30day": {
-    "users": 60393,
-    "newUsers": 60899,
-    "views": 123619,
+    "users": 60395,
+    "newUsers": 60902,
+    "views": 123625,
     "sessions": 60880
   },
   "topPages": [
     {
       "label": "Home",
-      "count": 59944
+      "count": 59946
     },
     {
       "label": "NYC Building Checker",
-      "count": 57879
+      "count": 57881
     },
     {
       "label": "NYC Landlord Watch",
@@ -74,7 +74,7 @@
     },
     {
       "name": "Unassigned",
-      "count": 36,
+      "count": 37,
       "i": 5
     }
   ]
