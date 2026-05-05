@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-05-05T09:10:41.367368+00:00",
-  "realtime": 1,
+  "updatedAt": "2026-05-05T11:19:28.810065+00:00",
+  "realtime": 2,
   "7day": {
-    "users": 19681,
-    "views": 39371,
-    "sessions": 19978
+    "users": 19685,
+    "views": 39381,
+    "sessions": 19982
   },
   "30day": {
     "users": 60351,
-    "newUsers": 60794,
-    "views": 123395,
+    "newUsers": 60799,
+    "views": 123405,
     "sessions": 60329
   },
   "topPages": [
@@ -49,7 +49,7 @@
   "sources": [
     {
       "name": "Organic Search",
-      "count": 16470,
+      "count": 16473,
       "i": 0
     },
     {
@@ -69,7 +69,7 @@
     },
     {
       "name": "Unassigned",
-      "count": 1141,
+      "count": 1144,
       "i": 4
     },
     {
