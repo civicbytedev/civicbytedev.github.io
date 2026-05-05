@@ -1,25 +1,25 @@
 {
-  "updatedAt": "2026-05-05T20:11:46.592721+00:00",
-  "realtime": 2,
+  "updatedAt": "2026-05-05T22:04:46.888849+00:00",
+  "realtime": 1,
   "7day": {
-    "users": 19707,
-    "views": 39586,
-    "sessions": 19921
+    "users": 19715,
+    "views": 39595,
+    "sessions": 19926
   },
   "30day": {
-    "users": 60366,
-    "newUsers": 60895,
-    "views": 123610,
-    "sessions": 60860
+    "users": 60393,
+    "newUsers": 60899,
+    "views": 123619,
+    "sessions": 60880
   },
   "topPages": [
     {
       "label": "Home",
-      "count": 59915
+      "count": 59944
     },
     {
       "label": "NYC Building Checker",
-      "count": 57854
+      "count": 57879
     },
     {
       "label": "NYC Landlord Watch",
@@ -54,7 +54,7 @@
     },
     {
       "name": "Organic Video",
-      "count": 15732,
+      "count": 15736,
       "i": 1
     },
     {
@@ -74,7 +74,7 @@
     },
     {
       "name": "Unassigned",
-      "count": 32,
+      "count": 36,
       "i": 5
     }
   ]
