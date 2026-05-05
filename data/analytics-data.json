@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-05-05T16:45:15.731636+00:00",
-  "realtime": 2,
+  "updatedAt": "2026-05-05T18:17:19.275774+00:00",
+  "realtime": 0,
   "7day": {
     "users": 19702,
-    "views": 39575,
+    "views": 39578,
     "sessions": 19918
   },
   "30day": {
     "users": 60361,
-    "newUsers": 60891,
-    "views": 123599,
+    "newUsers": 60892,
+    "views": 123602,
     "sessions": 60832
   },
   "topPages": [
@@ -74,7 +74,7 @@
     },
     {
       "name": "Unassigned",
-      "count": 28,
+      "count": 29,
       "i": 5
     }
   ]
