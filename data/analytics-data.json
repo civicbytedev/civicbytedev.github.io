@@ -1,16 +1,16 @@
 {
-  "updatedAt": "2026-05-06T11:52:52.389808+00:00",
+  "updatedAt": "2026-05-06T14:28:47.030743+00:00",
   "realtime": 1,
   "7day": {
-    "users": 16772,
-    "views": 33672,
-    "sessions": 16938
+    "users": 16773,
+    "views": 33687,
+    "sessions": 16887
   },
   "30day": {
     "users": 60398,
-    "newUsers": 60912,
-    "views": 123651,
-    "sessions": 60898
+    "newUsers": 60923,
+    "views": 123666,
+    "sessions": 60840
   },
   "topPages": [
     {
@@ -49,22 +49,22 @@
   "sources": [
     {
       "name": "Organic Search",
-      "count": 16520,
+      "count": 16518,
       "i": 0
     },
     {
       "name": "Organic Video",
-      "count": 15736,
+      "count": 15740,
       "i": 1
     },
     {
       "name": "Direct",
-      "count": 14683,
+      "count": 14671,
       "i": 2
     },
     {
       "name": "Referral",
-      "count": 14113,
+      "count": 14123,
       "i": 3
     },
     {
@@ -74,7 +74,7 @@
     },
     {
       "name": "Unassigned",
-      "count": 46,
+      "count": 10,
       "i": 5
     }
   ]
