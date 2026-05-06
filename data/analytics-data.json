@@ -1,25 +1,25 @@
 {
-  "updatedAt": "2026-05-05T23:54:19.971333+00:00",
-  "realtime": 1,
+  "updatedAt": "2026-05-06T03:40:37.773715+00:00",
+  "realtime": 0,
   "7day": {
-    "users": 19715,
-    "views": 39601,
-    "sessions": 19926
+    "users": 19723,
+    "views": 39616,
+    "sessions": 19927
   },
   "30day": {
-    "users": 60395,
-    "newUsers": 60902,
-    "views": 123625,
-    "sessions": 60880
+    "users": 60405,
+    "newUsers": 60908,
+    "views": 123640,
+    "sessions": 60889
   },
   "topPages": [
     {
       "label": "Home",
-      "count": 59946
+      "count": 59955
     },
     {
       "label": "NYC Building Checker",
-      "count": 57881
+      "count": 57889
     },
     {
       "label": "NYC Landlord Watch",
@@ -27,11 +27,11 @@
     },
     {
       "label": "Tools",
-      "count": 12
+      "count": 13
     },
     {
       "label": "NYC School Budget Tracker",
-      "count": 9
+      "count": 10
     },
     {
       "label": "Impact",
@@ -74,7 +74,7 @@
     },
     {
       "name": "Unassigned",
-      "count": 37,
+      "count": 43,
       "i": 5
     }
   ]
