@@ -1,21 +1,21 @@
 {
-  "updatedAt": "2026-05-07T11:52:46.069925+00:00",
+  "updatedAt": "2026-05-07T14:28:30.866218+00:00",
   "realtime": 0,
   "7day": {
     "users": 13750,
-    "views": 27726,
-    "sessions": 14012
+    "views": 27732,
+    "sessions": 14045
   },
   "30day": {
     "users": 60409,
-    "newUsers": 60931,
-    "views": 123694,
-    "sessions": 60840
+    "newUsers": 60933,
+    "views": 123700,
+    "sessions": 60899
   },
   "topPages": [
     {
       "label": "Home",
-      "count": 59978
+      "count": 59981
     },
     {
       "label": "NYC Building Checker",
@@ -49,7 +49,7 @@
   "sources": [
     {
       "name": "Organic Search",
-      "count": 16518,
+      "count": 16525,
       "i": 0
     },
     {
@@ -59,12 +59,12 @@
     },
     {
       "name": "Direct",
-      "count": 14662,
+      "count": 14679,
       "i": 2
     },
     {
       "name": "Referral",
-      "count": 14123,
+      "count": 14129,
       "i": 3
     },
     {
@@ -74,7 +74,7 @@
     },
     {
       "name": "Unassigned",
-      "count": 22,
+      "count": 5,
       "i": 5
     }
   ]
