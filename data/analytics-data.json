@@ -1,16 +1,16 @@
 {
-  "updatedAt": "2026-05-08T03:47:45.458338+00:00",
+  "updatedAt": "2026-05-08T06:02:01.814029+00:00",
   "realtime": 0,
   "7day": {
-    "users": 13750,
-    "views": 27732,
-    "sessions": 14045
+    "users": 10887,
+    "views": 21733,
+    "sessions": 11035
   },
   "30day": {
     "users": 60409,
-    "newUsers": 60933,
-    "views": 123700,
-    "sessions": 60899
+    "newUsers": 60929,
+    "views": 123688,
+    "sessions": 60860
   },
   "topPages": [
     {
@@ -23,7 +23,7 @@
     },
     {
       "label": "NYC Landlord Watch",
-      "count": 83
+      "count": 80
     },
     {
       "label": "Tools",
@@ -59,7 +59,7 @@
     },
     {
       "name": "Direct",
-      "count": 14679,
+      "count": 14677,
       "i": 2
     },
     {
