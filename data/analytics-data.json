@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-05-08T16:20:08.395680+00:00",
+  "updatedAt": "2026-05-08T18:13:40.080538+00:00",
   "realtime": 0,
   "7day": {
     "users": 10889,
-    "views": 21735,
-    "sessions": 11043
+    "views": 21736,
+    "sessions": 11049
   },
   "30day": {
     "users": 60414,
     "newUsers": 60930,
-    "views": 123690,
+    "views": 123691,
     "sessions": 60899
   },
   "topPages": [
@@ -64,7 +64,7 @@
     },
     {
       "name": "Referral",
-      "count": 14129,
+      "count": 14137,
       "i": 3
     },
     {
