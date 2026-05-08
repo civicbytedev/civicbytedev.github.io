@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-05-08T06:02:01.814029+00:00",
+  "updatedAt": "2026-05-08T08:23:57.492165+00:00",
   "realtime": 0,
   "7day": {
-    "users": 10887,
+    "users": 10889,
     "views": 21733,
     "sessions": 11035
   },
   "30day": {
-    "users": 60409,
+    "users": 60414,
     "newUsers": 60929,
     "views": 123688,
     "sessions": 60860
@@ -15,7 +15,7 @@
   "topPages": [
     {
       "label": "Home",
-      "count": 59981
+      "count": 59986
     },
     {
       "label": "NYC Building Checker",
@@ -74,7 +74,7 @@
     },
     {
       "name": "Unassigned",
-      "count": 5,
+      "count": 6,
       "i": 5
     }
   ]
