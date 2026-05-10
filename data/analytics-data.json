@@ -1,21 +1,21 @@
 {
-  "updatedAt": "2026-05-10T03:50:28.104086+00:00",
+  "updatedAt": "2026-05-10T06:37:50.711974+00:00",
   "realtime": 0,
   "7day": {
-    "users": 7895,
-    "views": 15777,
-    "sessions": 8032
+    "users": 4926,
+    "views": 9837,
+    "sessions": 4979
   },
   "30day": {
-    "users": 60405,
-    "newUsers": 60920,
-    "views": 123660,
-    "sessions": 60985
+    "users": 60382,
+    "newUsers": 60901,
+    "views": 123633,
+    "sessions": 60942
   },
   "topPages": [
     {
       "label": "Home",
-      "count": 59986
+      "count": 59981
     },
     {
       "label": "NYC Building Checker",
@@ -23,7 +23,7 @@
     },
     {
       "label": "NYC Landlord Watch",
-      "count": 79
+      "count": 77
     },
     {
       "label": "Tools",
@@ -31,7 +31,7 @@
     },
     {
       "label": "NYC School Budget Tracker",
-      "count": 10
+      "count": 7
     },
     {
       "label": "Impact",
@@ -59,22 +59,22 @@
     },
     {
       "name": "Direct",
-      "count": 14673,
+      "count": 14656,
       "i": 2
     },
     {
       "name": "Referral",
-      "count": 14129,
+      "count": 14137,
       "i": 3
     },
     {
       "name": "Organic Social",
-      "count": 79,
+      "count": 73,
       "i": 4
     },
     {
       "name": "Unassigned",
-      "count": 7,
+      "count": 8,
       "i": 5
     }
   ]
