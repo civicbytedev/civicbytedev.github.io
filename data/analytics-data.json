@@ -1,16 +1,16 @@
 {
-  "updatedAt": "2026-05-10T10:22:01.890542+00:00",
+  "updatedAt": "2026-05-10T11:56:40.764399+00:00",
   "realtime": 0,
   "7day": {
     "users": 4926,
     "views": 9837,
-    "sessions": 4979
+    "sessions": 4984
   },
   "30day": {
     "users": 60382,
     "newUsers": 60901,
     "views": 123633,
-    "sessions": 60942
+    "sessions": 60951
   },
   "topPages": [
     {
@@ -59,12 +59,12 @@
     },
     {
       "name": "Direct",
-      "count": 14656,
+      "count": 14655,
       "i": 2
     },
     {
       "name": "Referral",
-      "count": 14137,
+      "count": 14133,
       "i": 3
     },
     {
@@ -74,7 +74,7 @@
     },
     {
       "name": "Unassigned",
-      "count": 8,
+      "count": 5,
       "i": 5
     }
   ]
