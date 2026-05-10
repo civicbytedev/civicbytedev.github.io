@@ -140,6 +140,62 @@
     }
   }
 
+  // ─── Mobile hamburger nav ───
+  // Only activate on screens ≤ 960px where the nav links are hidden.
+  const nav = document.querySelector('.nav');
+  if (nav) {
+    // Build hamburger button
+    const ham = document.createElement('button');
+    ham.className = 'cb-ham';
+    ham.setAttribute('aria-label', 'Toggle menu');
+    ham.setAttribute('aria-expanded', 'false');
+    ham.innerHTML = '<span></span><span></span><span></span>';
+
+    // Clone the nav UL + CTA into a drawer
+    const navUL = nav.querySelector('ul');
+    const navCTA = nav.querySelector('.cta');
+    const drawer = document.createElement('div');
+    drawer.className = 'nav-drawer';
+    if (navUL) drawer.appendChild(navUL.cloneNode(true));
+    if (navCTA) {
+      const mCTA = navCTA.cloneNode(true);
+      mCTA.className = 'cta-mobile';
+      drawer.appendChild(mCTA);
+    }
+    nav.appendChild(ham);
+    nav.parentElement.insertBefore(drawer, nav.nextSibling);
+
+    // Toggle
+    const toggle = (force) => {
+      const open = force !== undefined ? force : !nav.classList.contains('nav-open');
+      nav.classList.toggle('nav-open', open);
+      drawer.style.display = open ? 'block' : '';
+      ham.setAttribute('aria-expanded', String(open));
+    };
+
+    ham.addEventListener('click', () => toggle());
+    // Close on link click inside drawer
+    drawer.addEventListener('click', e => {
+      if (e.target.closest('a')) toggle(false);
+    });
+    // Close on outside click
+    document.addEventListener('click', e => {
+      if (!nav.contains(e.target) && !drawer.contains(e.target)) toggle(false);
+    });
+    // Close on escape
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') toggle(false); });
+
+    // Only wire up if we're actually in mobile mode (CSS hides the ul)
+    const checkMobile = () => {
+      if (getComputedStyle(ham).display === 'none') {
+        // desktop — make sure drawer is hidden
+        drawer.style.display = '';
+        nav.classList.remove('nav-open');
+      }
+    };
+    window.addEventListener('resize', checkMobile);
+  }
+
   // ─── Console easter egg (for the curious admissions reader) ───
   try {
     const big = 'color:#b8432b;font-weight:bold;font-size:13px;line-height:1.3;font-family:monospace';

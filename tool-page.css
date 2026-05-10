@@ -212,4 +212,88 @@
 .bar-mini .bm-fill.ochre { background: var(--ochre); }
 .bar-mini .bm-fill.moss { background: var(--moss); }
 .bar-mini .bm-fill.sky { background: var(--sky); }
+
+/* ═══════════════════════════════════════════════════════════
+   TOOL PAGE — Responsive
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 960px) {
+  /* Tool hero — stack vertically */
+  .tool-hero { grid-template-columns: 1fr !important; gap: 28px; padding: 20px 24px 32px; }
+  .tool-hero h1 { font-size: 52px; max-width: none; }
+  .tool-hero .sub { font-size: 16px; }
+
+  /* Info card — full width */
+  .info-card { width: 100%; }
+
+  /* Preview */
+  .preview-wrap { padding: 0 24px 36px; }
+  .preview-frame .pf-body { padding: 24px 24px 28px; }
+
+  /* Tool sections */
+  .tool-section { padding: 44px 24px; }
+
+  /* Steps — 2 col on tablet */
+  .steps-row { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Related */
+  .related { padding: 36px 24px 48px; }
+  .related-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Stat grid */
+  .stat-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Bar mini label — narrower */
+  .bar-mini .bm-label { width: 160px; }
+}
+
+@media (max-width: 600px) {
+  /* Tool hero */
+  .tool-hero { padding: 18px 18px 28px; gap: 24px; }
+  .tool-hero h1 { font-size: 38px; line-height: 1.05; }
+  .tool-hero .actions { flex-direction: column; gap: 10px; }
+  .tool-hero .actions .btn { justify-content: center; }
+
+  /* Crumb */
+  .crumb { padding: 14px 18px 0; }
+
+  /* Preview */
+  .preview-wrap { padding: 0 18px 28px; }
+  .preview-frame .pf-body { padding: 18px 16px 20px; min-height: 320px; }
+  .preview-frame .pf-bar .url { font-size: 10px; }
+
+  /* Mock search */
+  .mock-search { flex-wrap: wrap; gap: 8px; }
+  .mock-search input { min-width: 0; flex: 1 1 140px; }
+
+  /* Stat grid — 2 col on phone */
+  .stat-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .stat-grid .s .n { font-size: 24px; }
+
+  /* Data table — hide less important cols on small screens */
+  .dtable .dh, .dtable .dr { font-size: 12px; padding: 10px 12px; }
+
+  /* Steps — 1 col */
+  .steps-row { grid-template-columns: 1fr !important; gap: 10px; }
+
+  /* Sources — 1 col */
+  .src-list { grid-template-columns: 1fr !important; }
+
+  /* Related — 1 col */
+  .related-grid { grid-template-columns: 1fr !important; gap: 10px; }
+  .related { padding: 28px 18px 40px; }
+
+  /* Tool sections */
+  .tool-section { padding: 36px 18px; }
+  .tool-section h2 { font-size: 30px; }
+
+  /* Bar mini — wrap on very small */
+  .bar-mini { flex-wrap: wrap; gap: 6px; }
+  .bar-mini .bm-label { width: 100%; font-size: 13px; }
+  .bar-mini .bm-n { width: auto; text-align: left; }
+
+  /* Result header */
+  .result-head { flex-direction: column; align-items: flex-start; }
+  .result-head .addr { font-size: 18px; }
+}
 .bar-mini .bm-n { font-family:'IBM Plex Mono',monospace; font-size: 12px; color: var(--ink); font-weight: 600; width: 60px; text-align: right; }

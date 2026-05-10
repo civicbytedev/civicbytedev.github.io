@@ -29,6 +29,12 @@
   .clean-desc{font-size:13.5px;color:var(--ink-soft);max-width:420px;margin:0 auto}
   #mock-suggest{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin:-10px 0 16px;letter-spacing:.06em}
   #mock-suggest a{color:var(--brick)}
+  .bld-cols{grid-template-columns:110px 1fr 140px 110px}
+  .bld-more{grid-template-columns:1fr;color:var(--ink-soft);font-size:12px;font-family:'IBM Plex Mono',monospace}
+  @media(max-width:600px){
+    .bld-cols{grid-template-columns:72px 1fr 80px}
+    .bld-date{display:none}
+  }
 </style>
 </head>
 <body>
@@ -151,7 +157,7 @@ function renderResults(query,data){
   document.getElementById('stat-grid').innerHTML=`<div class="stat-grid"><div class="s"><div class="n ${open.length>0?'alert':'ok'}">${open.length}</div><div class="k">Open violations</div></div><div class="s"><div class="n ${c>0?'alert':''}">${c}</div><div class="k">Class C · hazardous</div></div><div class="s"><div class="n ${b>0?'alert':''}">${b}</div><div class="k">Class B</div></div><div class="s"><div class="n">${a}</div><div class="k">Class A</div></div></div>`;
   const SEV={c:'sev-c',b:'sev-b',a:'sev-a',i:'sev-a'};
   const rows=data.slice(0,20);
-  document.getElementById('dtable').innerHTML=`<div class="dtable"><div class="dh" style="grid-template-columns:110px 1fr 140px 110px"><span>Class</span><span>Violation</span><span>Date</span><span>Status</span></div>${rows.map(r=>{const cls=(r.class||'').toLowerCase();const status=(r.currentstatus||'').toLowerCase().includes('open')?'Open':'Closed';const date=r.inspectiondate?new Date(r.inspectiondate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';const desc=[r.novdescription||r.violationdescription||r.maintenancecode,r.apartment?`Apt ${r.apartment}`:''].filter(Boolean).join(' · ');return`<div class="dr" style="grid-template-columns:110px 1fr 140px 110px"><span class="sev ${SEV[cls]||'sev-a'}">${(r.class||'?').toUpperCase()}</span><span>${esc(desc.slice(0,120))}</span><span>${date}</span><span style="color:${status==='Open'?'var(--brick)':'var(--moss)'};font-weight:600">${status}</span></div>`}).join('')}${data.length>20?`<div class="dr" style="grid-template-columns:1fr;color:var(--ink-soft);font-size:12px;font-family:'IBM Plex Mono',monospace">+ ${data.length-20} more records · source: NYC Open Data HPD</div>`:''}</div>`;
+  document.getElementById('dtable').innerHTML=`<div class="dtable"><div class="dh bld-cols"><span>Class</span><span>Violation</span><span class="bld-date">Date</span><span>Status</span></div>${rows.map(r=>{const cls=(r.class||'').toLowerCase();const status=(r.currentstatus||'').toLowerCase().includes('open')?'Open':'Closed';const date=r.inspectiondate?new Date(r.inspectiondate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';const desc=[r.novdescription||r.violationdescription||r.maintenancecode,r.apartment?`Apt ${r.apartment}`:''].filter(Boolean).join(' · ');return`<div class="dr bld-cols"><span class="sev ${SEV[cls]||'sev-a'}">${(r.class||'?').toUpperCase()}</span><span>${esc(desc.slice(0,120))}</span><span class="bld-date">${date}</span><span style="color:${status==='Open'?'var(--brick)':'var(--moss)'};font-weight:600">${status}</span></div>`}).join('')}${data.length>20?`<div class="dr bld-more">+ ${data.length-20} more records · source: NYC Open Data HPD</div>`:''}</div>`;
   showState('s-results');
 }
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
