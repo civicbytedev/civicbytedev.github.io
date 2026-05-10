@@ -30,6 +30,9 @@
   #mock-suggest{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin:-10px 0 16px;letter-spacing:.06em}
   #mock-suggest a{color:var(--brick)}
   .band-pill{display:inline-block;padding:4px 12px;border-radius:999px;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.08em}
+  .ev-cols{grid-template-columns:130px 90px 1fr 130px}
+  .ev-more{grid-template-columns:1fr;color:var(--ink-soft);font-size:12px;font-family:'IBM Plex Mono',monospace}
+  @media(max-width:600px){.ev-cols{grid-template-columns:100px 52px 1fr}.ev-marshal{display:none}}
 </style>
 </head>
 <body>
@@ -149,7 +152,7 @@ function renderResults(query,data){
   document.getElementById('result-head').innerHTML=`<div class="result-head"><div><div class="addr">${esc(full)}</div><div class="meta-tag">${data.length} executed evictions · ${res} residential · via NYC Open Data</div></div><div class="meta-tag">DOI · NYC Open Data</div></div>`;
   document.getElementById('stat-grid').innerHTML=`<div class="stat-grid"><div class="s"><div class="n ${data.length>5?'alert':'ok'}">${data.length}</div><div class="k">Executed since 2017</div></div><div class="s"><div class="n ${recent>0?'alert':''}">${recent}</div><div class="k">In last 12 months</div></div><div class="s"><div class="n">${res}</div><div class="k">Residential</div></div><div class="s"><div class="n">${data.length-res}</div><div class="k">Commercial</div></div></div>`;
   const rows=data.slice(0,20);
-  document.getElementById('dtable').innerHTML=`<div class="dtable"><div class="dh" style="grid-template-columns:130px 90px 1fr 130px"><span>Date</span><span>Unit</span><span>Type</span><span>Marshal</span></div>${rows.map(r=>{const date=r.executed_date?new Date(r.executed_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';const type=(r.residential_commercial_ind||'—');const marshal=[r.marshal_first_name,r.marshal_last_name].filter(Boolean).join(' ')||'—';return`<div class="dr" style="grid-template-columns:130px 90px 1fr 130px"><span>${date}</span><span><strong>${esc(r.eviction_apt_num||'—')}</strong></span><span>${esc(type)}</span><span>${esc(marshal)}</span></div>`}).join('')}${data.length>20?`<div class="dr" style="grid-template-columns:1fr;color:var(--ink-soft);font-size:12px;font-family:'IBM Plex Mono',monospace">+ ${data.length-20} more records · source: NYC Open Data</div>`:''}</div>`;
+  document.getElementById('dtable').innerHTML=`<div class="dtable"><div class="dh ev-cols"><span>Date</span><span>Unit</span><span>Type</span><span class="ev-marshal">Marshal</span></div>${rows.map(r=>{const date=r.executed_date?new Date(r.executed_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';const type=(r.residential_commercial_ind||'—');const marshal=[r.marshal_first_name,r.marshal_last_name].filter(Boolean).join(' ')||'—';return`<div class="dr ev-cols"><span>${date}</span><span><strong>${esc(r.eviction_apt_num||'—')}</strong></span><span>${esc(type)}</span><span class="ev-marshal">${esc(marshal)}</span></div>`}).join('')}${data.length>20?`<div class="dr ev-more">+ ${data.length-20} more records · source: NYC Open Data</div>`:''}</div>`;
   showState('s-results');
 }
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}

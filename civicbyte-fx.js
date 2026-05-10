@@ -140,6 +140,47 @@
     }
   }
 
+  // ─── Mobile hamburger nav ───
+  // .cb-ham and .nav-drawer are display:none by default (set in civicbyte.css top-level).
+  // The ≤960px media query shows .cb-ham and positions .nav-drawer.
+  // This JS only toggles classes — it never sets inline display, so desktop is untouched.
+  const nav = document.querySelector('.nav');
+  if (nav) {
+    const ham = document.createElement('button');
+    ham.className = 'cb-ham';
+    ham.setAttribute('aria-label', 'Open navigation menu');
+    ham.setAttribute('aria-expanded', 'false');
+    ham.innerHTML = '<span></span><span></span><span></span>';
+    nav.appendChild(ham);
+
+    const navUL  = nav.querySelector('ul');
+    const navCTA = nav.querySelector('.cta');
+    const drawer = document.createElement('div');
+    drawer.className = 'nav-drawer';
+    if (navUL)  drawer.appendChild(navUL.cloneNode(true));
+    if (navCTA) {
+      const mCTA = navCTA.cloneNode(true);
+      mCTA.className = 'nd-cta';
+      drawer.appendChild(mCTA);
+    }
+    nav.parentNode.insertBefore(drawer, nav.nextSibling);
+
+    const toggle = (force) => {
+      const open = force !== undefined ? force : !drawer.classList.contains('open');
+      nav.classList.toggle('nav-open', open);
+      drawer.classList.toggle('open', open);
+      ham.setAttribute('aria-expanded', String(open));
+      ham.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+    };
+
+    ham.addEventListener('click', e => { e.stopPropagation(); toggle(); });
+    drawer.addEventListener('click', e => { if (e.target.closest('a')) toggle(false); });
+    document.addEventListener('click', e => {
+      if (!nav.contains(e.target) && !drawer.contains(e.target)) toggle(false);
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') toggle(false); });
+  }
+
   // ─── Console easter egg (for the curious admissions reader) ───
   try {
     const big = 'color:#b8432b;font-weight:bold;font-size:13px;line-height:1.3;font-family:monospace';
