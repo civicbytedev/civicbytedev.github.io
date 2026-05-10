@@ -1,507 +1,304 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-          <!-- Google tag (gtag.js) -->
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-MV3SDWV3DV"></script>
-          <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-MV3SDWV3DV');
-          </script>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-          <meta name="theme-color" content="#0a0e27">
-          <title>Tools &mdash; CivicByte</title>
-      <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%230a0e27' stroke='%230ef6cc' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%230ef6cc'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%230ef6cc' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%230ef6cc' opacity='.5'/%3E%3C/svg%3E">
-      <meta name="description" content="Free NYC civic tools: look up landlord HPD violations, check building violation records, track school budgets. All powered by NYC Open Data. No login needed.">
-      <meta name="keywords" content="NYC landlord violations lookup, HPD violation history, NYC building checker, tenant rights tools, school budget tracker NYC, free civic tools">
-      <link rel="canonical" href="https://civicbyte.dev/tools.html">
-      <!-- Open Graph -->
-      <meta property="og:type" content="website">
-      <meta property="og:url" content="https://civicbyte.dev/tools.html">
-      <meta property="og:title" content="Free NYC Civic Tools — CivicByte">
-      <meta property="og:description" content="Look up your landlord's violations, check your building's HPD record, and track school budgets. Free tools powered by NYC Open Data.">
-      <meta property="og:image" content="https://civicbyte.dev/og-image.png">
-      <!-- Twitter Card -->
-      <meta name="twitter:card" content="summary_large_image">
-      <meta name="twitter:title" content="Free NYC Civic Tools — CivicByte">
-      <meta name="twitter:description" content="Look up your landlord's violations, check your building's HPD record, track school budgets. Free. No login required.">
-      <meta name="twitter:image" content="https://civicbyte.dev/og-image.png">
-      <!-- Structured Data -->
-      <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":"ItemList","name":"Free NYC Civic Tech Tools","description":"Free tools for NYC residents powered by NYC Open Data","url":"https://civicbyte.dev/tools.html","itemListElement":[{"@type":"ListItem","position":1,"name":"NYC Landlord Watch","description":"Look up any NYC landlord's full violation history, portfolio, and risk score","url":"https://civicbyte.dev/nyc-landlord-watch/"},{"@type":"ListItem","position":2,"name":"NYC Building Report","description":"Check any NYC building's HPD violation record by address","url":"https://civicbyte.dev/nyc-building-checker/"}]}
-      </script>
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-      <link rel="stylesheet" href="/styles.css">
-      <style>
-              .search-bar { max-width: 1200px; margin: 0 auto; padding: 0 2rem 2rem; }
-              .search-input {
-                        width: 100%;
-                        background: var(--surface);
-                        border: 1px solid var(--border);
-                        border-radius: 12px;
-                        padding: 0.85rem 1.2rem;
-                        color: var(--text);
-                        font-size: 0.95rem;
-                        font-family: "DM Sans", sans-serif;
-                        outline: none;
-                        transition: border-color 0.2s, box-shadow 0.2s;
-                        margin-bottom: 1rem;
-              }
-              .search-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(14,246,204,0.08); }
-              .search-input::placeholder { color: var(--text-dim); }
-              .filter-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
-              .pill {
-                        padding: 0.42rem 1rem;
-                        border-radius: 100px;
-                        font-size: 0.8rem;
-                        font-weight: 500;
-                        border: 1px solid var(--border);
-                        background: var(--surface);
-                        color: var(--text-secondary);
-                        cursor: pointer;
-                        transition: all 0.2s;
-                        font-family: "DM Sans", sans-serif;
-              }
-              .pill:hover { border-color: var(--border-light); color: var(--text); }
-              .pill.active { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); }
-              .results-count { font-size: 0.82rem; color: var(--text-secondary); }
-              .no-results { text-align: center; padding: 4rem 2rem; color: var(--text-secondary); }
-              .no-results h3 { font-size: 1.4rem; color: var(--text); margin-bottom: 0.5rem; }
-              .cta-box {
-                        background: var(--surface);
-                        border: 1px solid var(--border);
-                        border-radius: var(--radius-lg);
-                        padding: 3rem;
-                        text-align: center;
-                        margin-top: 3rem;
-                        position: relative;
-                        overflow: hidden;
-              }
-              .cta-box::before {
-                        content: '';
-                        position: absolute;
-                        top: 50%; left: 50%;
-                        transform: translate(-50%, -50%);
-                        width: 400px; height: 400px;
-                        background: radial-gradient(circle, var(--teal-glow) 0%, transparent 70%);
-                        pointer-events: none;
-              }
-              .cta-box > * { position: relative; }
-              .cta-box h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
-              .cta-box p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.65; }
-              @media (max-width: 768px) {
-                        .search-bar { padding: 0 1.5rem 1.5rem; }
-                        .section { padding-top: 0; }
-              }
+<head>
+<meta charset="utf-8">
+<title>Tools — CivicByte</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/cb-icon-light.svg">
+<meta name="theme-color" content="#b8432b">
+<script defer src="/civicbyte-fx.js"></script>
+<link rel="stylesheet" href="/civicbyte.css">
+<style>
+  .filter-bar {
+    display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    padding: 24px 44px 12px;
+  }
+  .search-lg {
+    display:flex; align-items:center; gap:10px; flex:1 1 360px; min-width: 280px;
+    padding: 12px 18px; background: #fff; border-radius: 999px;
+    border: 1px solid rgba(29,26,21,0.15);
+  }
+  .search-lg .mag { width: 16px; height: 16px; border: 1.8px solid var(--ink-soft); border-radius: 50%; position:relative; flex-shrink:0; }
+  .search-lg .mag::after { content:""; position:absolute; width:7px; height:1.8px; background: var(--ink-soft); transform: rotate(45deg); right:-6px; bottom:-1px; }
+  .search-lg input { border:none; background:transparent; outline:none; flex:1; font-family:inherit; font-size: 15px; color: var(--ink); }
 
-              /* ── Per-card theme accents ── */
-              .tool-card.card-budget   { --ca: var(--teal);   --ca-rgb: 0,245,196; }
-              .tool-card.card-landlord { --ca: var(--coral);  --ca-rgb: 255,124,124; }
-              .tool-card.card-building { --ca: var(--purple); --ca-rgb: 177,151,252; }
+  .cat-chips { display:flex; gap:8px; flex-wrap:wrap; padding: 8px 44px 24px; border-bottom: 1px solid rgba(29,26,21,0.1); }
+  .cat {
+    font-family:'IBM Plex Mono',monospace; font-size: 11.5px; letter-spacing: 0.08em;
+    padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(29,26,21,0.15);
+    background: #fff; color: var(--ink-soft); cursor:pointer;
+  }
+  .cat.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
 
-              .tool-card.card-eviction { --ca: #60a5fa; --ca-rgb: 96,165,250; }
-              .tool-card.card-eviction::after { background: radial-gradient(circle at 80% 0%, rgba(96,165,250,0.06) 0%, transparent 55%); }
-              .tool-card.card-eviction:hover { border-color: rgba(96,165,250,0.28); box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(96,165,250,0.08); }
-              .card-eviction h3, .card-eviction .tool-link { color: #60a5fa; }
+  .count-row { padding: 24px 44px 0; display:flex; justify-content:space-between; align-items:baseline; }
+  .count-row .c { font-family:'IBM Plex Mono',monospace; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); }
 
-              .tool-card.card-311 { --ca: var(--amber); --ca-rgb: 251,191,36; }
-              .tool-card.card-311::after { background: radial-gradient(circle at 80% 0%, rgba(251,191,36,0.06) 0%, transparent 55%); }
-              .tool-card.card-311:hover { border-color: rgba(251,191,36,0.28); box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(251,191,36,0.08); }
-              .card-311 h3, .card-311 .tool-link { color: var(--amber); }
+  .tools-list { padding: 28px 44px 64px; display:grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
 
-              .tool-card.card-budget::before,
-              .tool-card.card-landlord::before,
-              .tool-card.card-building::before,
-              .tool-card.card-eviction::before,
-              .tool-card.card-311::before {
-                content: ''; position: absolute;
-                top: 0; left: 0; right: 0; height: 2px;
-                background: var(--ca); z-index: 1;
-              }
-              .tool-card.card-budget::after   { background: radial-gradient(circle at 80% 0%, rgba(0,245,196,0.06) 0%, transparent 55%); }
-              .tool-card.card-landlord::after { background: radial-gradient(circle at 80% 0%, rgba(255,124,124,0.06) 0%, transparent 55%); }
-              .tool-card.card-building::after { background: radial-gradient(circle at 80% 0%, rgba(177,151,252,0.06) 0%, transparent 55%); }
-              .tool-card.card-budget:hover   { border-color: rgba(0,245,196,0.28);   box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(0,245,196,0.08); }
-              .tool-card.card-landlord:hover { border-color: rgba(255,124,124,0.28); box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(255,124,124,0.08); }
-              .tool-card.card-building:hover { border-color: rgba(177,151,252,0.28); box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(177,151,252,0.08); }
+  .tool {
+    background: #fff; border: 1px solid rgba(29,26,21,0.1); border-radius: 18px;
+    overflow:hidden; display:flex; flex-direction:column;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .tool:hover { transform: translateY(-2px); box-shadow: 0 16px 40px -20px rgba(29,26,21,0.22); }
+  .tool .shot { height: 200px; }
+  .tool .pb { padding: 22px 26px 24px; display:flex; flex-direction:column; gap: 8px; flex:1; }
+  .tool .status-row { display:flex; align-items:center; gap: 8px; margin-bottom: 2px; }
+  .tool .status {
+    font-family:'IBM Plex Mono',monospace; font-size: 10.5px; letter-spacing: 0.14em;
+    text-transform:uppercase; padding: 3px 10px; border-radius: 999px;
+    background: var(--moss); color: #fff;
+  }
+  .tool .status.dev { background: var(--ochre); }
+  .tool .tag { font-family:'IBM Plex Mono',monospace; font-size: 10.5px; letter-spacing:0.14em; text-transform:uppercase; color: var(--ink-soft); }
+  .tool h3 { font-family:'Fraunces',serif; font-size: 28px; font-weight:600; letter-spacing:-0.02em; margin: 4px 0 6px; line-height:1.1; }
+  .tool .sub-title { font-family:'Inter Tight',sans-serif; font-size: 13px; color: var(--ink-soft); font-style:italic; margin-bottom: 10px; }
+  .tool p { font-size: 14px; color: var(--ink-soft); line-height:1.55; margin: 0 0 16px; }
+  .tool .stat-row { display:flex; gap: 22px; margin-bottom: 16px; padding: 12px 0; border-top: 1px solid rgba(29,26,21,0.08); border-bottom: 1px solid rgba(29,26,21,0.08); }
+  .tool .stat-row .s { display:flex; flex-direction:column; }
+  .tool .stat-row .s .n { font-family:'Fraunces',serif; font-size: 22px; font-weight:600; color: var(--ink); letter-spacing:-0.01em; line-height:1; }
+  .tool .stat-row .s .n em { color: var(--brick); font-style:italic; }
+  .tool .stat-row .s .k { font-family:'IBM Plex Mono',monospace; font-size: 10px; color: var(--ink-soft); letter-spacing: 0.1em; text-transform:uppercase; margin-top: 4px; }
+  .tool .ft { display:flex; gap: 6px; flex-wrap:wrap; margin-bottom: 18px; }
+  .tool .view { margin-top:auto; display:flex; justify-content:space-between; align-items:center; }
+  .tool .view a { font-weight:600; font-size: 14px; color: var(--brick); text-decoration:none; }
+  .tool .view a:hover { text-decoration: underline; }
+  .tool .view .repo { font-family:'IBM Plex Mono',monospace; font-size: 11px; color: var(--ink-soft); }
 
-              /* ── Card icon ── */
-              .card-icon {
-                width: 38px; height: 38px; border-radius: 10px;
-                display: flex; align-items: center; justify-content: center;
-                margin-bottom: 1rem; flex-shrink: 0; color: var(--ca);
-                background: rgba(var(--ca-rgb), 0.08);
-                border: 1px solid rgba(var(--ca-rgb), 0.18);
-              }
-              .card-icon svg { width: 18px; height: 18px; }
+  /* Submit CTA */
+  .submit-cta {
+    margin: 24px 44px 64px; padding: 44px;
+    background: var(--ink); color: var(--cream); border-radius: 20px;
+    display:grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items:center;
+  }
+  .submit-cta .k { font-family:'IBM Plex Mono',monospace; font-size: 11.5px; letter-spacing: 0.16em; text-transform:uppercase; color: var(--ochre); margin-bottom: 12px; }
+  .submit-cta h3 { font-family:'Fraunces',serif; font-size: 44px; font-weight:500; margin: 0 0 14px; line-height:1.02; letter-spacing:-0.025em; }
+  .submit-cta h3 em { font-style:italic; color: var(--ochre); }
+  .submit-cta p { font-size: 15px; line-height:1.55; margin: 0; color: rgba(248,244,234,0.75); max-width: 42ch; }
+  .submit-cta .btns { display:flex; flex-direction:column; gap: 10px; align-items:stretch; }
+  .submit-cta .btns a { padding: 14px 22px; border-radius: 999px; text-align:center; text-decoration:none; font-weight:600; font-size: 14px; }
+  .submit-cta .btns a.primary { background: var(--cream); color: var(--ink); }
+  .submit-cta .btns a.secondary { border: 1px solid rgba(248,244,234,0.25); color: var(--cream); }
+</style>
+</head>
+<body>
 
-              /* ── Themed h3 + link ── */
-              .card-budget   h3, .card-budget   .tool-link { color: var(--teal); }
-              .card-landlord h3, .card-landlord .tool-link { color: var(--coral); }
-              .card-building h3, .card-building .tool-link { color: var(--purple); }
+<div class="page">
 
-              /* ── Landlord: urgency label ── */
-              .card-urgency-label {
-                font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em;
-                text-transform: uppercase; color: var(--coral);
-                display: flex; align-items: center; gap: 0.3rem;
-                margin-bottom: 0.5rem;
-              }
-              .card-urgency-label svg { width: 11px; height: 11px; }
+  <nav class="nav">
+    <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/tools.html" class="active">Tools</a></li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/impact.html">Impact</a></li>
+      
+      <li><a href="https://github.com/civicbytedev">GitHub</a></li>
+    </ul>
+    <a href="/submit.html" class="cta">Submit a tool</a>
+  </nav>
 
-              /* ── Landlord: risk gradient bar ── */
-              .risk-bar-row {
-                display: flex; align-items: center; gap: 0.6rem;
-                margin: 0.6rem 0 1rem;
-              }
-              .risk-bar-lbl { font-size: 0.7rem; color: var(--text-dim); white-space: nowrap; }
-              .risk-bar-track {
-                flex: 1; height: 5px; border-radius: 99px;
-                background: linear-gradient(90deg, #10b981 0%, #f59e0b 50%, #ef4444 100%);
-                position: relative;
-              }
-              .risk-bar-track::after {
-                content: ''; position: absolute;
-                right: 0; top: 50%; transform: translateY(-50%);
-                width: 9px; height: 9px; border-radius: 50%;
-                background: #ef4444; border: 2px solid var(--surface);
-                box-shadow: 0 0 6px rgba(239,68,68,0.6);
-              }
+  <section class="page-hero">
+    <span class="pill"><span class="pulse"></span> Tool directory</span>
+    <h1>Browse every <em>civic tool</em> on the shelf.</h1>
+    <p class="lede">Free, open-source, and built to serve communities. Search, filter, and find the tool that matches the problem you're trying to solve.</p>
+  </section>
 
-              /* ── Building: stats micro-row ── */
-              .card-stats-mini {
-                display: flex; gap: 1rem; flex-wrap: wrap;
-                margin: 0.4rem 0 1rem;
-              }
-              .card-stat-mini {
-                display: flex; flex-direction: column;
-                font-size: 0.7rem; color: var(--text-dim);
-              }
-              .card-stat-mini strong {
-                font-size: 0.88rem; font-weight: 700;
-                color: var(--purple); font-family: "Space Grotesk", sans-serif;
-                line-height: 1.1;
-              }
-            </style>
-          <!-- Firebase -->
-          <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-          <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-          <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-          <script src="/auth.js"></script>
-    </head>
-    <body>
-          <script>requireAuth();</script>
-    
-      <header class="site-nav">
-          <nav class="nav">
-                <a href="/" class="logo">
-                        <svg width="30" height="30" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lgNav" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00f5c4"/><stop offset="100%" stop-color="#b197fc"/></linearGradient></defs><rect width="1024" height="1024" rx="220" fill="#080b1a"/><rect x="170" y="573" width="72" height="144" rx="2" fill="url(#lgNav)"/><rect x="260" y="501" width="54" height="216" rx="2" fill="url(#lgNav)"/><rect x="332" y="393" width="90" height="324" rx="2" fill="url(#lgNav)"/><rect x="375" y="303" width="5" height="90" rx="2" fill="url(#lgNav)"/><rect x="440" y="465" width="108" height="252" rx="2" fill="url(#lgNav)"/><rect x="566" y="321" width="90" height="396" rx="2" fill="url(#lgNav)"/><rect x="609" y="213" width="5" height="108" rx="2" fill="url(#lgNav)"/><rect x="674" y="483" width="72" height="234" rx="2" fill="url(#lgNav)"/><rect x="764" y="555" width="54" height="162" rx="2" fill="url(#lgNav)"/><rect x="789" y="501" width="5" height="54" rx="2" fill="url(#lgNav)"/><rect x="818" y="609" width="36" height="108" rx="2" fill="url(#lgNav)"/><rect x="170" y="717" width="684" height="3" rx="1" fill="url(#lgNav)" opacity="0.6"/></svg><span class="logo-wordmark">civic<span class="cb">byte</span></span>
-                </a>
-                <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="cb-nav-links">
-                        <span class="cb-ham" aria-hidden="true">
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                        </span>
-                </button>
-                <div class="nav-links">
-                        <a href="/">Home</a>
-                        <a href="/tools.html" class="active">Tools</a>
-                        <a href="/about.html">About</a>
-                        <a href="/impact/">Impact</a>
-                        <a href="/submit.html">Submit a Tool</a>
-                        <a href="https://github.com/civicbytedev" target="_blank" class="nav-gh">
-                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                                  GitHub
-                        </a>
-                </div>
-          </nav>
-      </header>
-    
-      <header class="page-header">
-          <div class="label">Tool Directory</div>
-          <h1>Browse <span class="grad">civic tech tools</span></h1>
-          <p>Every tool on CivicByte is free, open-source, and built to serve communities. Search, filter, and find tools that address real civic needs.</p>
-      </header>
-    
-      <div class="search-bar">
-          <input type="text" class="search-input" id="searchInput" placeholder="Search by name, category, or location..." oninput="filterTools()" aria-label="Search tools">
-          <div class="filter-pills">
-                <button class="pill active" onclick="setFilter('all', this)">All</button>
-                <button class="pill" onclick="setFilter('education', this)">Education</button>
-                <button class="pill" onclick="setFilter('services', this)">Social Services</button>
-                <button class="pill" onclick="setFilter('municipal', this)">Municipal Data</button>
-                <button class="pill" onclick="setFilter('housing', this)">Housing</button>
-                <button class="pill" onclick="setFilter('health', this)">Health</button>
-                <button class="pill" onclick="setFilter('transit', this)">Transit</button>
-          </div>
-          <div class="results-count" id="resultsCount">Showing 5 tools</div>
+  <div class="filter-bar">
+    <label class="search-lg">
+      <span class="mag"></span>
+      <input type="search" placeholder="Search by name, topic, or borough…">
+    </label>
+    <a href="/submit.html" class="btn btn-d">＋ Submit yours</a>
+  </div>
+
+  <div class="cat-chips">
+    <button class="cat active">All · 6</button>
+    <button class="cat">Housing</button>
+    <button class="cat">Education</button>
+    <button class="cat">Municipal Data</button>
+    <button class="cat">Social Services</button>
+    <button class="cat">Transit</button>
+    <button class="cat">Health</button>
+  </div>
+
+  <div class="count-row">
+    <span class="c">Showing 6 tools · sorted by most recent</span>
+    <span class="c">View: grid</span>
+  </div>
+
+  <div class="tools-list">
+
+    <article class="tool">
+      <div class="shot brick"><span class="shot-label">building report</span></div>
+      <div class="pb">
+        <div class="status-row">
+          <span class="status">Live</span>
+          <span class="tag">Housing · Infrastructure</span>
+        </div>
+        <h3>NYC Building Report</h3>
+        <div class="sub-title">Tenant lookup tool</div>
+        <p>Enter any NYC address to pull HPD maintenance violations — open violations, severity breakdown, building registration, and owner info.</p>
+        <div class="stat-row">
+          <div class="s"><div class="n">3</div><div class="k">Severity classes</div></div>
+          <div class="s"><div class="n">A · B · C</div><div class="k">Violation grades</div></div>
+          <div class="s"><div class="n"><em>Daily</em></div><div class="k">Updates</div></div>
+        </div>
+        <div class="ft"><span class="chip">NYC</span><span class="chip">Housing</span><span class="chip">Violations</span><span class="chip">Tenants</span></div>
+        <div class="view">
+          <a href="/nyc-building-checker/">View tool →</a>
+          <span class="repo">github.com/civicbytedev</span>
+        </div>
       </div>
-    
-      <section class="section" style="padding-top: 0;">
-          <div class="tools-grid" id="toolsGrid">
-          
-                <div class="tool-card card-budget" data-category="education" data-name="NYC School Budget Tracker" data-status="live">
-                        <div class="card-icon">
-                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
-                        </div>
-                        <div class="tool-meta">
-                                  <span class="tool-status live">Live</span>
-                                  <span class="tool-category">Education</span>
-                        </div>
-                        <h3>NYC School Budget Tracker</h3>
-                        <p>Interactive dashboard mapping per-pupil spending, Title I funding, and PTA contributions across 1,800+ NYC public schools. Search, filter, and compare school budgets.</p>
-                        <div class="tool-tags">
-                                  <span class="tool-tag">NYC</span>
-                                  <span class="tool-tag">Education</span>
-                                  <span class="tool-tag">Budget Data</span>
-                                  <span class="tool-tag">Dashboard</span>
-                        </div>
-                        <div class="tool-card-footer">
-                                  <a href="/nyc-school-budget-tracker/" class="tool-link">View Tool &rarr;</a>
-                        </div>
-                </div>
-          
-                <div class="tool-card card-landlord" data-category="housing" data-name="NYC Landlord Watch" data-status="live">
-                        <div class="card-icon">
-                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        </div>
-                        <div class="tool-meta">
-                                  <span class="tool-status live">Live</span>
-                                  <span class="tool-category">Housing · Accountability</span>
-                        </div>
-                        <div class="card-urgency-label">
-                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                                  Tenant Accountability Tool
-                        </div>
-                        <h3>NYC Landlord Watch</h3>
-                        <div class="risk-bar-row">
-                                  <span class="risk-bar-lbl">Low</span>
-                                  <div class="risk-bar-track"></div>
-                                  <span class="risk-bar-lbl">High Risk</span>
-                        </div>
-                        <p>Search any landlord or company name to expose their full violation history, portfolio size, and risk score across all NYC properties.</p>
-                        <div class="tool-tags">
-                                  <span class="tool-tag">NYC</span>
-                                  <span class="tool-tag">Housing</span>
-                                  <span class="tool-tag">Landlords</span>
-                                  <span class="tool-tag">Accountability</span>
-                        </div>
-                        <div class="tool-card-footer">
-                                  <a href="/nyc-landlord-watch/" class="tool-link">View Tool &rarr;</a>
-                        </div>
-                </div>
+    </article>
 
-                <div class="tool-card card-building" data-category="housing" data-name="NYC Building Report" data-status="live">
-                        <div class="card-icon">
-                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-                        </div>
-                        <div class="tool-meta">
-                                  <span class="tool-status live">Live</span>
-                                  <span class="tool-category">Housing · Infrastructure</span>
-                        </div>
-                        <h3>NYC Building Report</h3>
-                        <div class="card-stats-mini">
-                                  <div class="card-stat-mini"><strong>3</strong>Severity classes</div>
-                                  <div class="card-stat-mini"><strong>A · B · C</strong>Violation grades</div>
-                                  <div class="card-stat-mini"><strong>Daily</strong>Data updates</div>
-                        </div>
-                        <p>Enter any NYC address to pull HPD maintenance violations — open violations, severity breakdown, building registration, and owner info.</p>
-                        <div class="tool-tags">
-                                  <span class="tool-tag">NYC</span>
-                                  <span class="tool-tag">Housing</span>
-                                  <span class="tool-tag">Violations</span>
-                                  <span class="tool-tag">Tenants</span>
-                        </div>
-                        <div class="tool-card-footer">
-                                  <a href="/nyc-building-checker/" class="tool-link">View Tool &rarr;</a>
-                        </div>
-                </div>
+    <article class="tool">
+      <div class="shot ochre"><span class="shot-label">landlord watch</span></div>
+      <div class="pb">
+        <div class="status-row">
+          <span class="status">Live</span>
+          <span class="tag">Housing · Accountability</span>
+        </div>
+        <h3>NYC Landlord Watch</h3>
+        <div class="sub-title">Tenant accountability tool</div>
+        <p>Search any landlord or company name to expose their full violation history, portfolio size, and risk score across all NYC properties.</p>
+        <div class="stat-row">
+          <div class="s"><div class="n"><em>Low→High</em></div><div class="k">Risk bands</div></div>
+          <div class="s"><div class="n">Portfolio</div><div class="k">View</div></div>
+          <div class="s"><div class="n">All 5</div><div class="k">Boroughs</div></div>
+        </div>
+        <div class="ft"><span class="chip">NYC</span><span class="chip">Housing</span><span class="chip">Landlords</span><span class="chip">Accountability</span></div>
+        <div class="view">
+          <a href="/nyc-landlord-watch/">View tool →</a>
+          <span class="repo">github.com/civicbytedev</span>
+        </div>
+      </div>
+    </article>
 
-                <div class="tool-card card-eviction" data-category="housing" data-name="NYC Eviction Records" data-status="live">
-                        <div class="card-icon">
-                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                        </div>
-                        <div class="tool-meta">
-                                  <span class="tool-status live">Live</span>
-                                  <span class="tool-category">Housing · Tenant Rights</span>
-                        </div>
-                        <h3>NYC Eviction Records</h3>
-                        <div class="card-stats-mini">
-                                  <div class="card-stat-mini"><strong>100k+</strong>Records</div>
-                                  <div class="card-stat-mini"><strong>5</strong>Boroughs</div>
-                                  <div class="card-stat-mini"><strong>Live</strong>NYC Open Data</div>
-                        </div>
-                        <p>Look up executed marshal evictions for any NYC address. Know a building's eviction history before signing a lease.</p>
-                        <div class="tool-tags">
-                                  <span class="tool-tag">NYC</span>
-                                  <span class="tool-tag">Housing</span>
-                                  <span class="tool-tag">Evictions</span>
-                                  <span class="tool-tag">Tenants</span>
-                        </div>
-                        <div class="tool-card-footer">
-                                  <a href="/nyc-eviction-records/" class="tool-link">View Tool &rarr;</a>
-                        </div>
-                </div>
+    <article class="tool">
+      <div class="shot moss"><span class="shot-label">school budget</span></div>
+      <div class="pb">
+        <div class="status-row">
+          <span class="status">Live</span>
+          <span class="tag">Education</span>
+        </div>
+        <h3>NYC School Budget Tracker</h3>
+        <div class="sub-title">Interactive school finance dashboard</div>
+        <p>Interactive dashboard mapping per-pupil spending, Title I funding, and PTA contributions across 1,800+ NYC public schools. Search, filter, and compare.</p>
+        <div class="stat-row">
+          <div class="s"><div class="n"><em>1,800+</em></div><div class="k">Schools</div></div>
+          <div class="s"><div class="n">Title I</div><div class="k">Funding</div></div>
+          <div class="s"><div class="n">PTA</div><div class="k">Contributions</div></div>
+        </div>
+        <div class="ft"><span class="chip">NYC</span><span class="chip">Education</span><span class="chip">Budget</span><span class="chip">Dashboard</span></div>
+        <div class="view">
+          <a href="/nyc-school-budget/">View tool →</a>
+          <span class="repo">github.com/civicbytedev</span>
+        </div>
+      </div>
+    </article>
 
-                <div class="tool-card card-311" data-category="municipal" data-name="NYC 311 Complaint Lookup" data-status="live">
-                        <div class="card-icon">
-                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.93 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012.84 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.84a16 16 0 006.29 6.29l1.21-1.28a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-                        </div>
-                        <div class="tool-meta">
-                                  <span class="tool-status live">Live</span>
-                                  <span class="tool-category">Municipal Data · Housing</span>
-                        </div>
-                        <h3>NYC 311 Complaint Lookup</h3>
-                        <div class="card-stats-mini">
-                                  <div class="card-stat-mini"><strong style="color:var(--amber)">35M+</strong>Records</div>
-                                  <div class="card-stat-mini"><strong style="color:var(--amber)">100+</strong>Complaint types</div>
-                                  <div class="card-stat-mini"><strong style="color:var(--amber)">Daily</strong>Data updates</div>
-                        </div>
-                        <p>Enter any NYC address to see every 311 service request filed there — noise, heat, pests, plumbing, and more. Filter by type, see agency assignments and resolution notes.</p>
-                        <div class="tool-tags">
-                                  <span class="tool-tag">NYC</span>
-                                  <span class="tool-tag">311</span>
-                                  <span class="tool-tag">Municipal</span>
-                                  <span class="tool-tag">Tenants</span>
-                        </div>
-                        <div class="tool-card-footer">
-                                  <a href="/nyc-311-complaints/" class="tool-link">View Tool &rarr;</a>
-                        </div>
-                </div>
+    <article class="tool">
+      <div class="shot sky"><span class="shot-label">eviction records</span></div>
+      <div class="pb">
+        <div class="status-row">
+          <span class="status">Live</span>
+          <span class="tag">Housing · Tenant Rights</span>
+        </div>
+        <h3>NYC Eviction Records</h3>
+        <div class="sub-title">Pre-lease eviction history lookup</div>
+        <p>Look up executed marshal evictions for any NYC address. Know a building's eviction history before signing a lease.</p>
+        <div class="stat-row">
+          <div class="s"><div class="n"><em>100k+</em></div><div class="k">Records</div></div>
+          <div class="s"><div class="n">5</div><div class="k">Boroughs</div></div>
+          <div class="s"><div class="n">Live</div><div class="k">NYC Open Data</div></div>
+        </div>
+        <div class="ft"><span class="chip">NYC</span><span class="chip">Housing</span><span class="chip">Evictions</span><span class="chip">Tenants</span></div>
+        <div class="view">
+          <a href="/nyc-eviction-records/">View tool →</a>
+          <span class="repo">github.com/civicbytedev</span>
+        </div>
+      </div>
+    </article>
 
-                <div class="tool-card" data-category="services" data-name="Community Resource Finder" data-status="dev">
-                        <div class="tool-meta">
-                                  <span class="tool-status dev">In Dev</span>
-                                  <span class="tool-category">Social Services</span>
-                        </div>
-                        <h3>Community Resource Finder</h3>
-                        <p>Searchable directory of free and low-cost services &mdash; food pantries, legal aid, after-school programs &mdash; organized by neighborhood and borough.</p>
-                        <div class="tool-tags">
-                                  <span class="tool-tag">NYC</span>
-                                  <span class="tool-tag">Services</span>
-                                  <span class="tool-tag">Directory</span>
-                                  <span class="tool-tag">Search</span>
-                        </div>
-                        <div class="tool-card-footer">
-                                  <span class="tool-link" style="color: var(--amber); cursor: default;">Coming Soon</span>
-                        </div>
-                </div>
-          
-          </div>
-      
-          <div class="no-results" id="noResults" style="display: none;">
-                <h3>No tools found</h3>
-                <p>Try a different search term or filter.</p>
-          </div>
-      
-          <div class="cta-box">
-                <h3>Have a civic tech tool?</h3>
-                <p>Submit your free, open-source tool to the CivicByte directory and help communities find it.</p>
-                <a href="/submit.html" class="btn-primary">Submit Your Tool &rarr;</a>
-          </div>
-      </section>
-    
-      <footer>
-              <div class="f-left">&copy; 2026 CivicByte &mdash; Open source under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>.</div>
-              <div class="f-right">
-                        <a href="/tools.html">Tools</a>
-                        <a href="/about.html">About</a>
-                        <a href="/impact/">Impact</a>
-                        <a href="/submit.html">Submit</a>
-                        <a href="https://github.com/civicbytedev" target="_blank">GitHub</a>
-              </div>
-      </footer>
+    <article class="tool">
+      <div class="shot ink"><span class="shot-label">311 lookup</span></div>
+      <div class="pb">
+        <div class="status-row">
+          <span class="status">Live</span>
+          <span class="tag">Municipal Data · Housing</span>
+        </div>
+        <h3>NYC 311 Complaint Lookup</h3>
+        <div class="sub-title">Address-level service request history</div>
+        <p>Enter any NYC address to see every 311 service request filed there — noise, heat, pests, plumbing. Filter by type, see agency and resolution notes.</p>
+        <div class="stat-row">
+          <div class="s"><div class="n"><em>35M+</em></div><div class="k">Records</div></div>
+          <div class="s"><div class="n">100+</div><div class="k">Complaint types</div></div>
+          <div class="s"><div class="n">Daily</div><div class="k">Updates</div></div>
+        </div>
+        <div class="ft"><span class="chip">NYC</span><span class="chip">311</span><span class="chip">Municipal</span><span class="chip">Tenants</span></div>
+        <div class="view">
+          <a href="/nyc-311-complaints/">View tool →</a>
+          <span class="repo">github.com/civicbytedev</span>
+        </div>
+      </div>
+    </article>
 
-          <script>
-                  let currentFilter = 'all';
-                  function setFilter(cat, btn) {
-                            currentFilter = cat;
-                            document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-                            btn.classList.add('active');
-                            filterTools();
-                  }
-                  function filterTools() {
-                            const query = document.getElementById('searchInput').value.toLowerCase().trim();
-                            const cards = document.querySelectorAll('.tool-card');
-                            let visible = 0;
-                            cards.forEach(card => {
-                                        const category = card.dataset.category;
-                                        const text = card.textContent.toLowerCase();
-                                        const matchesFilter = currentFilter === 'all' || category === currentFilter;
-                                        const matchesSearch = !query || text.includes(query);
-                                        if (matchesFilter && matchesSearch) { card.style.display = ''; visible++; }
-                                                    else { card.style.display = 'none'; }
-                            });
-                            document.getElementById('resultsCount').textContent = `Showing ${visible} tool${visible !== 1 ? 's' : ''}`;
-                            document.getElementById('noResults').style.display = visible === 0 ? '' : 'none';
-                  }
-                  const params = new URLSearchParams(window.location.search);
-                  const catParam = params.get('cat');
-                  if (catParam) {
-                            const pill = document.querySelector(`.pill[onclick*="${catParam}"]`);
-                            if (pill) setFilter(catParam, pill);
-                  }
-                      </script>
-    </body>
-</html>
-      </footer></p></p></h1></defs></script>
-    
-  <!-- Mobile nav: hamburger toggle + body lock + close handlers -->
-  <script>
-    (function() {
-      'use strict';
-      function initMobileNav() {
-        var toggle = document.querySelector('.mobile-toggle');
-        var navLinks = document.querySelector('.nav-links');
-        var siteNav = document.querySelector('.site-nav');
-        if (!toggle || !navLinks) return;
-        var isOpen = false;
-        var savedScrollY = 0;
-        function openMenu() {
-          isOpen = true;
-          toggle.setAttribute('aria-expanded', 'true');
-          navLinks.classList.add('open');
-          savedScrollY = window.scrollY;
-          document.body.style.top = '-' + savedScrollY + 'px';
-          document.body.classList.add('nav-open');
-        }
-        function closeMenu() {
-          isOpen = false;
-          toggle.setAttribute('aria-expanded', 'false');
-          navLinks.classList.remove('open');
-          document.body.classList.remove('nav-open');
-          document.body.style.top = '';
-          window.scrollTo(0, savedScrollY);
-        }
-        function toggleMenu() { if (isOpen) closeMenu(); else openMenu(); }
-        navLinks.id = 'cb-nav-links';
-        toggle.setAttribute('aria-controls', 'cb-nav-links');
-        toggle.addEventListener('click', function(e) { e.stopPropagation(); toggleMenu(); });
-        navLinks.querySelectorAll('a').forEach(function(a) {
-          a.addEventListener('click', function() { if (isOpen) closeMenu(); });
-        });
-        document.addEventListener('click', function(e) {
-          if (isOpen && !siteNav.contains(e.target)) closeMenu();
-        });
-        document.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape' && isOpen) { closeMenu(); toggle.focus(); }
-        });
-        window.addEventListener('resize', function() {
-          if (window.innerWidth > 768 && isOpen) closeMenu();
-        });
-      }
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initMobileNav);
-      } else {
-        initMobileNav();
-      }
-    })();
-  </script>
+    <article class="tool">
+      <div class="shot"><span class="shot-label">in development</span></div>
+      <div class="pb">
+        <div class="status-row">
+          <span class="status dev">In Dev</span>
+          <span class="tag">Social Services</span>
+        </div>
+        <h3>Community Resource Finder</h3>
+        <div class="sub-title">Neighborhood services directory</div>
+        <p>Searchable directory of free and low-cost services — food pantries, legal aid, after-school programs — organized by neighborhood and borough.</p>
+        <div class="stat-row">
+          <div class="s"><div class="n"><em>NYC</em></div><div class="k">Coverage</div></div>
+          <div class="s"><div class="n">Multi</div><div class="k">Category</div></div>
+          <div class="s"><div class="n">Soon</div><div class="k">ETA</div></div>
+        </div>
+        <div class="ft"><span class="chip">NYC</span><span class="chip">Services</span><span class="chip">Directory</span><span class="chip">Search</span></div>
+        <div class="view">
+          <a href="#">Coming soon</a>
+          <span class="repo">github.com/civicbytedev</span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- Submit CTA -->
+  <section class="submit-cta">
+    <div>
+      <div class="k">Have a tool?</div>
+      <h3>Get it in front of the <em>people who need it</em>.</h3>
+      <p>Submit your free, open-source civic tech tool. If it clears our four standards, we'll list it in the directory and help communities find it.</p>
+    </div>
+    <div class="btns">
+      <a href="/submit.html" class="primary">Submit your tool →</a>
+      <a href="/about.html" class="secondary">Read the standards</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fg">
+      <div>
+        <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
+        <p>An open platform for free, community-facing civic tools built on public data.</p>
+      </div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">Our story</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="#">Newsletter</a></li><li><a href="#">Press</a></li></ul></div>
+    </div>
+    <div class="col2"><span>© 2026 CivicByte · MIT License</span><span>Made in NYC · By students, for everyone</span></div>
+  </footer>
+
+</div>
 </body>
-      </style></title>
-    </head>
+</html>

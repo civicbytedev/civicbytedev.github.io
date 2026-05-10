@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Brand — CivicByte</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/cb-icon-light.svg">
+<meta name="theme-color" content="#b8432b">
+<script defer src="/civicbyte-fx.js"></script>
+<link rel="stylesheet" href="/civicbyte.css">
+<style>
+  .brand-hero { padding: 36px 44px 24px; }
+  .brand-hero .k { font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.16em; text-transform:uppercase; color: var(--brick); }
+  .brand-hero h1 { font-family:'Fraunces',serif; font-weight:500; font-size: 80px; line-height:0.98; letter-spacing:-0.035em; margin: 14px 0 18px; max-width: 16ch; }
+  .brand-hero h1 em { font-style: italic; color: var(--brick); }
+  .brand-hero p { font-size: 17px; color: var(--ink-soft); max-width: 56ch; line-height: 1.55; margin: 0 0 8px; }
+
+  /* App icon stage */
+  .icon-stage { padding: 32px 44px 64px; display:grid; grid-template-columns: 1.4fr 1fr; gap: 36px; align-items: stretch; }
+  .icon-card {
+    background: linear-gradient(160deg, #f8f4ea, #ebe4d2);
+    border: 1px solid rgba(29,26,21,0.1);
+    border-radius: 22px; padding: 44px;
+    position: relative; overflow: hidden; min-height: 520px;
+    display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .icon-card.dark {
+    background: radial-gradient(120% 120% at 30% 0%, #2a251c, #15120d 70%);
+    color: var(--cream); border-color: rgba(248,244,234,0.1);
+  }
+  .icon-card .ikm {
+    font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--brick); margin-bottom: 8px;
+  }
+  .icon-card.dark .ikm { color: var(--ochre); }
+  .icon-card h3 {
+    font-family:'Fraunces',serif; font-weight:500; font-size: 32px;
+    margin: 0 0 4px; letter-spacing:-0.02em;
+  }
+  .icon-card p { font-size: 14px; opacity: 0.75; max-width: 38ch; margin: 6px 0 24px; line-height:1.5; }
+  .icon-row { display:flex; gap: 28px; align-items:flex-end; flex-wrap:wrap; margin-top: auto; }
+  .icon-row .iw { display:flex; flex-direction:column; align-items:center; gap: 10px; }
+  .icon-row .iw .ic {
+    border-radius: 22%;
+    background: #fff;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset, 0 24px 60px -20px rgba(29,26,21,0.35), 0 0 0 1px rgba(29,26,21,0.06);
+  }
+  .icon-row .iw .lb { font-family:'IBM Plex Mono',monospace; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.6; }
+  .ic.s256 { width: 256px; height: 256px; }
+  .ic.s120 { width: 120px; height: 120px; border-radius: 26%; }
+  .ic.s80 { width: 80px; height: 80px; border-radius: 22%; }
+  .ic.s60 { width: 60px; height: 60px; border-radius: 22%; }
+  .ic.s32 { width: 32px; height: 32px; border-radius: 8px; }
+  .ic img { width: 100%; height: 100%; display:block; border-radius: inherit; }
+
+  /* iPhone homescreen mock */
+  .phone {
+    width: 280px; height: 560px; background: #1a1814;
+    border-radius: 44px; padding: 12px; margin: 0 auto;
+    box-shadow: 0 0 0 8px #2a261f, 0 30px 60px -20px rgba(0,0,0,0.4);
+    position: relative;
+  }
+  .phone .screen {
+    width: 100%; height: 100%;
+    background:
+      radial-gradient(120% 140% at 50% -10%, #b8432b 0%, #6b2415 60%, #2a1107 100%);
+    border-radius: 32px; padding: 32px 16px 16px; position: relative;
+    overflow: hidden;
+  }
+  .phone .notch { position: absolute; top: 18px; left:50%; transform:translateX(-50%); width: 80px; height: 22px; background:#0d0a06; border-radius: 16px; z-index: 2; }
+  .phone .time { color:#fff; font-family:'IBM Plex Mono',monospace; font-size: 12px; font-weight: 600; text-align:center; margin-bottom: 28px; letter-spacing: 0.05em; }
+  .phone .grid { display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px 8px; padding: 0 4px; }
+  .phone .app { display:flex; flex-direction:column; align-items:center; gap: 4px; }
+  .phone .app .ai { width: 50px; height: 50px; border-radius: 12px; }
+  .phone .app .an { font-size: 9.5px; color: #fff; font-family:'Inter Tight',sans-serif; opacity: 0.92; }
+  .phone .app.cb .ai { box-shadow: 0 0 0 2px rgba(255,255,255,0.55), 0 8px 20px rgba(0,0,0,0.4); animation: cbWiggle 4s cubic-bezier(.5,.0,.5,1) infinite; }
+  @keyframes cbWiggle {
+    0%,86%,100% { transform: rotate(0); }
+    90% { transform: rotate(-2deg); }
+    94% { transform: rotate(2deg); }
+  }
+  .phone .dock {
+    position: absolute; left: 16px; right: 16px; bottom: 24px;
+    background: rgba(255,255,255,0.18); backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 22px; padding: 10px;
+    display:flex; justify-content:space-around;
+  }
+  .phone .dock .ai { width: 44px; height: 44px; border-radius: 10px; }
+
+  /* Wordmark anatomy */
+  .anatomy { padding: 64px 44px; background: var(--cream); border-top: 1px solid rgba(29,26,21,0.08); border-bottom: 1px solid rgba(29,26,21,0.08); }
+  .anatomy h2 { font-family:'Fraunces',serif; font-weight:500; font-size: 48px; letter-spacing:-0.025em; margin: 0 0 28px; }
+  .anatomy h2 em { color: var(--brick); font-style:italic; }
+  .ana-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: stretch; }
+  .ana-card {
+    background: #fff; border: 1px solid rgba(29,26,21,0.1);
+    border-radius: 18px; padding: 36px 36px 32px;
+  }
+  .ana-card h4 { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brick); margin: 0 0 14px; font-weight: 500; }
+  .ana-card .gigant {
+    font-family:'Fraunces',serif; font-weight: 500; font-size: 96px;
+    letter-spacing:-0.04em; line-height: 0.9;
+  }
+  .ana-card .gigant em { font-style: italic; color: var(--brick); }
+  .ana-card p { font-size: 14.5px; color: var(--ink-soft); line-height: 1.55; margin: 18px 0 0; max-width: 38ch; }
+
+  /* Pixel breakdown */
+  .px-grid {
+    display: grid; grid-template-columns: repeat(4, 56px); grid-template-rows: repeat(5, 56px);
+    gap: 6px; margin: 8px 0 14px;
+  }
+  .px-grid .px { background: var(--ink); border-radius: 6px; }
+  .px-grid .px.empty { background: rgba(29,26,21,0.06); }
+  .px-grid .px.ochre { background: var(--ochre); position: relative; }
+  .px-grid .px.ochre::after {
+    content:""; position:absolute; inset: 38% 38% auto auto; width: 22%; height: 22%;
+    background: var(--cream); border-radius: 2px;
+  }
+  .px-legend { display:flex; gap: 18px; font-family:'IBM Plex Mono',monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: 0.06em; }
+  .px-legend span::before { content:""; display:inline-block; width: 10px; height: 10px; border-radius:2px; vertical-align:middle; margin-right: 6px; }
+  .px-legend .l1::before { background: var(--ink); }
+  .px-legend .l2::before { background: var(--ochre); }
+
+  /* Color tokens */
+  .colors { padding: 64px 44px 32px; }
+  .swatches { display:grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .sw { aspect-ratio: 1.05; border-radius: 14px; padding: 14px; display:flex; flex-direction:column; justify-content:flex-end; border: 1px solid rgba(29,26,21,0.08); }
+  .sw .nm { font-family:'Fraunces',serif; font-size: 18px; font-weight: 600; letter-spacing:-0.01em; }
+  .sw .hx { font-family:'IBM Plex Mono',monospace; font-size: 10.5px; letter-spacing: 0.06em; opacity: 0.7; margin-top: 2px; }
+  .sw.brick { background: var(--brick); color: #fff; }
+  .sw.ochre { background: var(--ochre); color: var(--ink); }
+  .sw.moss  { background: var(--moss);  color: var(--cream); }
+  .sw.sky   { background: var(--sky);   color: var(--cream); }
+  .sw.ink   { background: var(--ink);   color: var(--cream); }
+  .sw.cream { background: var(--cream); color: var(--ink); }
+
+  /* Sizes scale */
+  .sizes { padding: 32px 44px 80px; }
+  .scale-row {
+    display:flex; gap: 32px; align-items: flex-end; padding: 30px 24px;
+    background:#fff; border: 1px solid rgba(29,26,21,0.1); border-radius: 16px;
+  }
+  .scale-row .iw { display:flex; flex-direction:column; align-items:center; gap: 8px; }
+  .scale-row .iw .lb { font-family:'IBM Plex Mono',monospace; font-size: 10.5px; letter-spacing:0.14em; color: var(--ink-soft); text-transform: uppercase; }
+
+  @media (max-width: 980px) {
+    .icon-stage { grid-template-columns: 1fr; }
+    .ana-grid { grid-template-columns: 1fr; }
+    .swatches { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <nav class="nav">
+    <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/tools.html">Tools</a></li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/impact.html">Impact</a></li>
+      <li><a href="/brand.html" class="active">Brand</a></li>
+      <li><a href="https://github.com/civicbytedev">GitHub</a></li>
+    </ul>
+    <a href="/submit.html" class="cta">Submit a tool</a>
+  </nav>
+
+  <section class="brand-hero">
+    <div class="k">Brand · v1.0</div>
+    <h1>One mark. <em>Eleven pixels.</em></h1>
+    <p>The CivicByte identity is a single, durable glyph: a four-by-five pixel grid arranged into a stencil "C," with a single ochre square as the byte. It reads at sixteen pixels and prints on a billboard.</p>
+  </section>
+
+  <section class="icon-stage">
+    <div class="icon-card pixel-bg">
+      <div>
+        <div class="ikm">App icon — primary</div>
+        <h3>The pixel C, on a brick field.</h3>
+        <p>Designed first at 1024 px for the App Store, then verified down to 16 px so it never loses its shape. The bottom-right pixel breaks ranks — that's the byte.</p>
+      </div>
+      <div class="icon-row">
+        <div class="iw"><div class="ic s256"><img src="cb-icon-light.svg" alt=""></div><div class="lb">256 · App Store</div></div>
+        <div class="iw"><div class="ic s120"><img src="cb-icon-light.svg" alt=""></div><div class="lb">120 · iPad</div></div>
+        <div class="iw"><div class="ic s80"><img src="cb-icon-light.svg" alt=""></div><div class="lb">80 · macOS</div></div>
+        <div class="iw"><div class="ic s60"><img src="cb-icon-light.svg" alt=""></div><div class="lb">60 · iOS</div></div>
+        <div class="iw"><div class="ic s32"><img src="cb-icon-light.svg" alt=""></div><div class="lb">32 · favicon</div></div>
+      </div>
+    </div>
+
+    <div class="icon-card dark">
+      <div>
+        <div class="ikm">In the wild</div>
+        <h3>On the home screen.</h3>
+        <p>Imagined sitting next to the apps it competes with for attention. Civic without being clinical.</p>
+      </div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="time">9:41</div>
+          <div class="grid">
+            <div class="app"><div class="ai" style="background:#1d8c5c"></div><div class="an">Notes</div></div>
+            <div class="app cb"><div class="ai"><img src="cb-icon-light.svg" alt="" style="width:100%;height:100%;border-radius:inherit"></div><div class="an">CivicByte</div></div>
+            <div class="app"><div class="ai" style="background:#0a8de8"></div><div class="an">Maps</div></div>
+            <div class="app"><div class="ai" style="background:#444"></div><div class="an">Settings</div></div>
+            <div class="app"><div class="ai" style="background:#fcb900"></div><div class="an">Files</div></div>
+            <div class="app"><div class="ai" style="background:#fff"></div><div class="an">Health</div></div>
+            <div class="app"><div class="ai" style="background:#000"></div><div class="an">Camera</div></div>
+            <div class="app"><div class="ai" style="background:#34c759"></div><div class="an">Phone</div></div>
+          </div>
+          <div class="dock">
+            <div class="ai" style="background:#0a8de8"></div>
+            <div class="ai" style="background:#1d8c5c"></div>
+            <div class="ai"><img src="cb-icon-light.svg" alt="" style="width:100%;height:100%;border-radius:inherit"></div>
+            <div class="ai" style="background:#fcb900"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="anatomy">
+    <h2>Anatomy of <em>the mark</em>.</h2>
+    <div class="ana-grid">
+      <div class="ana-card">
+        <h4>The grid</h4>
+        <div class="px-grid" aria-hidden="true">
+          <!-- 4 cols × 5 rows; row-major -->
+          <div class="px"></div><div class="px"></div><div class="px"></div><div class="px"></div>
+          <div class="px"></div><div class="px empty"></div><div class="px empty"></div><div class="px empty"></div>
+          <div class="px"></div><div class="px empty"></div><div class="px empty"></div><div class="px empty"></div>
+          <div class="px"></div><div class="px empty"></div><div class="px empty"></div><div class="px empty"></div>
+          <div class="px"></div><div class="px"></div><div class="px"></div><div class="px ochre"></div>
+        </div>
+        <div class="px-legend">
+          <span class="l1">11 ink pixels — the C</span>
+          <span class="l2">1 ochre pixel — the byte</span>
+        </div>
+        <p>The same grid scales to any size. At 16 px each cell is two pixels; at 1024 px each cell is 132 px. Nothing ever blurs.</p>
+      </div>
+      <div class="ana-card">
+        <h4>The wordmark</h4>
+        <div class="gigant">civic<em>byte</em></div>
+        <p>Fraunces text, 500 weight; the byte half is set in italic 500 in brick. The compound name reads as one word but the eye separates the civic mission from the technical means — by design.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="colors">
+    <div class="sec-head">
+      <div class="l">
+        <div class="k">Color system</div>
+        <h2>Six colors. <em>Earned.</em></h2>
+      </div>
+      <div class="r">A warm civic palette — closer to terracotta and clay than to slick startup blue. Public-archive feeling, but legible at small sizes.</div>
+    </div>
+    <div class="swatches">
+      <div class="sw brick"><div class="nm">Brick</div><div class="hx">#B8432B · primary</div></div>
+      <div class="sw ochre"><div class="nm">Ochre</div><div class="hx">#C88733 · accent · the byte</div></div>
+      <div class="sw moss"><div class="nm">Moss</div><div class="hx">#5B6B3A · live / ok</div></div>
+      <div class="sw sky"><div class="nm">Sky</div><div class="hx">#2D5A78 · municipal</div></div>
+      <div class="sw ink"><div class="nm">Ink</div><div class="hx">#1D1A15 · text</div></div>
+      <div class="sw cream"><div class="nm">Cream</div><div class="hx">#F8F4EA · paper</div></div>
+    </div>
+  </section>
+
+  <section class="sizes">
+    <div class="sec-head">
+      <div class="l">
+        <div class="k">Scaling test</div>
+        <h2>Same shape, every size.</h2>
+      </div>
+      <div class="r">From a 16-pixel browser tab to a 1024-pixel App Store listing. The grid never breaks.</div>
+    </div>
+    <div class="scale-row">
+      <div class="iw"><div class="ic s256"><img src="cb-icon-light.svg" alt=""></div><div class="lb">1024</div></div>
+      <div class="iw"><div class="ic s120"><img src="cb-icon-light.svg" alt=""></div><div class="lb">512</div></div>
+      <div class="iw"><div class="ic s80"><img src="cb-icon-light.svg" alt=""></div><div class="lb">180</div></div>
+      <div class="iw"><div class="ic s60"><img src="cb-icon-light.svg" alt=""></div><div class="lb">120</div></div>
+      <div class="iw"><div class="ic s32"><img src="cb-icon-light.svg" alt=""></div><div class="lb">60</div></div>
+      <div class="iw"><div style="width:16px;height:16px;border-radius:4px;overflow:hidden"><img src="favicon.svg" style="width:100%;height:100%"></div><div class="lb">16</div></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fg">
+      <div>
+        <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
+        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
+      </div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/impact.html">Impact</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="#">Newsletter</a></li><li><a href="#">Press</a></li></ul></div>
+    </div>
+    <div class="col2"><span>© 2026 CivicByte · MIT License</span><span>Made in NYC · By students, for everyone</span></div>
+  </footer>
+
+</div>
+</body>
+</html>

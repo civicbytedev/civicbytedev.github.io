@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="CivicByte app icon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c84c33"></stop>
+      <stop offset="1" stop-color="#a23a23"></stop>
+    </linearGradient>
+    <radialGradient id="warm" cx="0.3" cy="0.2" r="0.9">
+      <stop offset="0" stop-color="#d6633d" stop-opacity="0.45"></stop>
+      <stop offset="1" stop-color="#000" stop-opacity="0"></stop>
+    </radialGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"></feTurbulence>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.04 0"></feColorMatrix>
+      <feComposite operator="in" in2="SourceGraphic"></feComposite>
+    </filter>
+  </defs>
+
+  
+  <rect width="1024" height="1024" rx="224" ry="224" fill="url(#bg)"></rect>
+  <rect width="1024" height="1024" rx="224" ry="224" fill="url(#warm)"></rect>
+
+  
+  <rect x="6" y="6" width="1012" height="1012" rx="218" ry="218" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="2"></rect>
+
+  
+  <g>
+    
+    <rect x="212" y="134" width="132" height="132" rx="14" fill="#f8f4ea"></rect>
+    <rect x="368" y="134" width="132" height="132" rx="14" fill="#f8f4ea"></rect>
+    <rect x="524" y="134" width="132" height="132" rx="14" fill="#f8f4ea"></rect>
+    <rect x="680" y="134" width="132" height="132" rx="14" fill="#f8f4ea"></rect>
+    
+    <rect x="212" y="290" width="132" height="132" rx="14" fill="#f8f4ea"></rect>
+    
+    <rect x="212" y="446" width="132" height="132" rx="14" fill="#f8f4ea"></rect>
+    
+    <rect x="212" y="602" width="132" height="132" rx="14" fill="#f8f4ea"></rect>
+    
+    <rect x="212" y="758" width="132" height="132" rx="14" fill="#f8f4ea"></rect>
+    <rect x="368" y="758" width="132" height="132" rx="14" fill="#f8f4ea"></rect>
+    <rect x="524" y="758" width="132" height="132" rx="14" fill="#f8f4ea"></rect>
+    
+    <rect x="680" y="758" width="132" height="132" rx="14" fill="#e8a14a"></rect>
+    
+    <rect x="724" y="802" width="44" height="44" rx="6" fill="#f8f4ea" opacity="0.55"></rect>
+  </g>
+
+  
+  <rect width="1024" height="1024" rx="224" ry="224" fill="#000" opacity="0.04" filter="url(#grain)"></rect>
+</svg>

@@ -1,992 +1,202 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MV3SDWV3DV"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-MV3SDWV3DV');
-  </script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#080b1a" />
-  <title>NYC Building Report — CivicByte</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%23080b1a' stroke='%2300f5c4' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%2300f5c4'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%2300f5c4' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%2300f5c4' opacity='.5'/%3E%3C/svg%3E">
-  <meta name="description" content="Check any NYC building's HPD violation history instantly. Enter an address to see all open violations, severity classes, and inspection history. Free tool by CivicByte." />
-  <meta name="keywords" content="NYC building violations, HPD building lookup, NYC apartment violations, check building violations NYC, housing code violations NYC, building inspection history">
-  <link rel="canonical" href="https://civicbyte.dev/nyc-building-checker/">
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://civicbyte.dev/nyc-building-checker/">
-  <meta property="og:title" content="NYC Building Report — Check Any Building's Violation History">
-  <meta property="og:description" content="Enter any NYC address to see its full HPD violation history — open violations, severity (Class A/B/C), and inspection dates. Free, live data.">
-  <meta property="og:image" content="https://civicbyte.dev/og-image.png">
-  <meta property="og:site_name" content="CivicByte">
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="NYC Building Report — Free HPD Violation Lookup">
-  <meta name="twitter:description" content="Enter any NYC address and instantly see its full HPD violation history. Open violations, Class A/B/C, inspection dates. Free.">
-  <meta name="twitter:image" content="https://civicbyte.dev/og-image.png">
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebApplication","name":"NYC Building Report","url":"https://civicbyte.dev/nyc-building-checker/","description":"Free tool to check any NYC building's HPD violation history. Enter an address to see all open violations, severity classes, and inspection history.","applicationCategory":"Utilities","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"provider":{"@type":"Organization","name":"CivicByte","url":"https://civicbyte.dev"}}
-  </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/styles.css" />
-  <style>
-    /* ── page background ── */
-    body { background: var(--bg); }
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image:
-        linear-gradient(rgba(30,45,82,0.16) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(30,45,82,0.16) 1px, transparent 1px);
-      background-size: 56px 56px;
-      pointer-events: none; z-index: 0;
-    }
-    .site-nav, .tool-hero, .tool-main, footer { position: relative; z-index: 1; }
-
-    /* ── hero ── */
-    .tool-hero {
-      padding: 5.5rem 2rem 4rem;
-      text-align: center;
-      max-width: 780px;
-      margin: 0 auto;
-      overflow: hidden;
-    }
-    .tool-hero::before {
-      content: '';
-      position: absolute;
-      top: -80px; left: 50%; transform: translateX(-50%);
-      width: 700px; height: 420px;
-      background: radial-gradient(ellipse, rgba(0,245,196,0.07) 0%, transparent 65%);
-      pointer-events: none; z-index: 0;
-    }
-    .tool-hero > * { position: relative; z-index: 1; }
-    .tool-eyebrow {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      background: rgba(0,245,196,0.06);
-      border: 1px solid rgba(0,245,196,0.2);
-      border-radius: 100px;
-      padding: 0.35rem 1rem 0.35rem 0.75rem;
-      font-size: 0.78rem; font-weight: 500;
-      color: var(--text-secondary);
-      margin-bottom: 1.5rem;
-      animation: fadeUp 0.45s ease-out both;
-    }
-    .tool-eyebrow .dot {
-      width: 6px; height: 6px;
-      background: var(--teal); border-radius: 50%;
-      box-shadow: 0 0 7px var(--teal);
-      flex-shrink: 0;
-    }
-    .tool-hero h1 {
-      font-size: clamp(2.2rem, 5.5vw, 3.5rem);
-      font-weight: 700; line-height: 1.1;
-      letter-spacing: -0.04em;
-      margin-bottom: 1rem;
-      animation: fadeUp 0.45s ease-out 0.08s both;
-    }
-    .tool-hero .hero-sub {
-      font-size: 1.05rem; color: var(--text-secondary);
-      max-width: 560px; margin: 0 auto 2.5rem;
-      line-height: 1.75;
-      animation: fadeUp 0.45s ease-out 0.16s both;
-    }
-    @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
-
-    /* ── search card ── */
-    .search-card {
-      background: var(--surface);
-      border: 1px solid rgba(0,245,196,0.18);
-      border-radius: var(--radius-lg);
-      padding: 1.75rem;
-      box-shadow: 0 0 0 1px rgba(0,245,196,0.04), 0 20px 60px rgba(0,0,0,0.45);
-      animation: fadeUp 0.45s ease-out 0.22s both;
-    }
-    .search-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .input-wrap { flex: 1; min-width: 200px; position: relative; }
-    .input-wrap svg {
-      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
-      color: var(--text-dim); width: 17px; height: 17px; pointer-events: none;
-    }
-    .addr-input {
-      width: 100%;
-      padding: 0.875rem 1rem 0.875rem 2.75rem;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      color: var(--text);
-      font-family: "DM Sans", sans-serif;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .addr-input::placeholder { color: var(--text-dim); }
-    .addr-input:focus {
-      border-color: var(--teal);
-      box-shadow: 0 0 0 3px rgba(0,245,196,0.08);
-    }
-    .search-hint {
-      margin-top: 0.85rem;
-      font-size: 0.8rem; color: var(--text-dim);
-    }
-    .search-hint span {
-      color: var(--text-secondary); cursor: pointer;
-      text-decoration: underline; text-underline-offset: 2px;
-    }
-    .search-hint span:hover { color: var(--teal); }
-
-    /* ── main ── */
-    .tool-main {
-      max-width: 960px; margin: 0 auto;
-      padding: 0 2rem 5rem;
-    }
-
-    /* ── states ── */
-    .hidden { display: none !important; }
-
-    #state-loading { text-align: center; padding: 4rem 1rem; }
-    .spinner {
-      width: 38px; height: 38px;
-      border: 3px solid var(--border);
-      border-top-color: var(--teal);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      margin: 0 auto 1.25rem;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { color: var(--text-secondary); font-size: 0.95rem; }
-    .loading-step-text { margin-top: 0.4rem; font-size: 0.82rem; color: var(--text-dim); min-height: 1.2em; }
-
-    #state-error {
-      background: rgba(255,124,124,0.05);
-      border: 1px solid rgba(255,124,124,0.18);
-      border-radius: var(--radius-lg);
-      padding: 2.25rem; text-align: center;
-      margin-top: 2rem;
-    }
-    .err-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-    .err-title { font-weight: 700; font-size: 1.1rem; color: var(--coral); margin-bottom: 0.5rem; }
-    .err-msg { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.65; }
-    .err-retry {
-      margin-top: 1.25rem;
-      padding: 0.6rem 1.5rem;
-      background: transparent;
-      border: 1px solid rgba(255,124,124,0.3);
-      border-radius: var(--radius);
-      color: var(--coral);
-      font-family: "DM Sans", sans-serif;
-      font-size: 0.875rem; font-weight: 600;
-      cursor: pointer; transition: background 0.18s;
-    }
-    .err-retry:hover { background: rgba(255,124,124,0.08); }
-
-    /* ── results ── */
-    #state-results { margin-top: 2.5rem; }
-
-    .building-header {
-      display: flex; align-items: flex-start;
-      justify-content: space-between; gap: 1rem;
-      flex-wrap: wrap; margin-bottom: 1.5rem;
-    }
-    .building-addr-label {
-      font-size: 0.72rem; font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--text-dim); margin-bottom: 0.3rem;
-    }
-    .building-addr { font-size: 1.3rem; font-weight: 700; line-height: 1.3; }
-    .building-bbl { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.2rem; }
-
-    .reg-badge {
-      display: flex; align-items: center; gap: 0.4rem;
-      padding: 0.5rem 1rem; border-radius: var(--radius);
-      font-size: 0.82rem; font-weight: 600; flex-shrink: 0;
-    }
-    .reg-badge .dot-sm { width: 6px; height: 6px; border-radius: 50%; }
-    .reg-badge.reg-active  { background: rgba(14,246,204,0.07); border: 1px solid rgba(14,246,204,0.2); color: var(--teal); }
-    .reg-badge.reg-active .dot-sm  { background: var(--teal); box-shadow: 0 0 6px var(--teal); }
-    .reg-badge.reg-expired { background: rgba(255,124,124,0.07); border: 1px solid rgba(255,124,124,0.2); color: var(--coral); }
-    .reg-badge.reg-expired .dot-sm { background: var(--coral); }
-    .reg-badge.reg-unknown { background: var(--surface2); border: 1px solid var(--border); color: var(--text-secondary); }
-    .reg-badge.reg-unknown .dot-sm { background: var(--text-secondary); }
-
-    .owner-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.25rem 1.5rem;
-      margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1.5rem;
-    }
-    .owner-field-label {
-      font-size: 0.72rem; font-weight: 600;
-      letter-spacing: 0.07em; text-transform: uppercase;
-      color: var(--text-dim); margin-bottom: 0.25rem;
-    }
-    .owner-field-value { font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; }
-
-    /* severity grid */
-    .severity-grid {
-      display: grid; grid-template-columns: repeat(3,1fr);
-      gap: 1rem; margin-bottom: 1.5rem;
-    }
-    .sev-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.25rem;
-      text-align: center; position: relative; overflow: hidden;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .sev-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
-    .sev-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
-    .sev-card.c-class::before { background: var(--coral); }
-    .sev-card.b-class::before { background: var(--amber, #fbbf24); }
-    .sev-card.a-class::before { background: var(--teal); }
-    .sev-label {
-      font-size: 0.7rem; font-weight: 700;
-      letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 0.4rem;
-    }
-    .sev-card.c-class .sev-label { color: var(--coral); }
-    .sev-card.b-class .sev-label { color: var(--amber, #fbbf24); }
-    .sev-card.a-class .sev-label { color: var(--teal); }
-    .sev-total { font-size: 2rem; font-weight: 700; line-height: 1; margin-bottom: 0.15rem; }
-    .sev-card.c-class .sev-total { color: var(--coral); }
-    .sev-card.b-class .sev-total { color: var(--amber, #fbbf24); }
-    .sev-card.a-class .sev-total { color: var(--teal); }
-    .sev-sub { font-size: 0.74rem; color: var(--text-dim); }
-    .sev-open-badge {
-      display: inline-block; margin-top: 0.5rem;
-      font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 99px;
-    }
-    .sev-card.c-class .sev-open-badge { background: rgba(255,124,124,0.1); color: var(--coral); }
-    .sev-card.b-class .sev-open-badge { background: rgba(251,191,36,0.1); color: var(--amber, #fbbf24); }
-    .sev-card.a-class .sev-open-badge { background: rgba(0,245,196,0.1); color: var(--teal); }
-
-    /* violation list */
-    .list-header {
-      display: flex; align-items: center;
-      justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;
-    }
-    .list-title {
-      font-size: 1rem; font-weight: 700;
-      display: flex; align-items: center; gap: 0.5rem;
-    }
-    .count-pill {
-      font-size: 0.73rem; font-weight: 700; padding: 2px 9px;
-      border-radius: 99px; background: var(--surface2);
-      border: 1px solid var(--border-light); color: var(--text-secondary);
-    }
-    .filter-tabs { display: flex; gap: 0.4rem; }
-    .ftab {
-      padding: 0.3rem 0.85rem; border-radius: 99px;
-      font-size: 0.78rem; font-weight: 600;
-      cursor: pointer; border: 1px solid var(--border);
-      background: transparent; color: var(--text-secondary);
-      font-family: "DM Sans", sans-serif; transition: all 0.15s;
-    }
-    .ftab.active { background: var(--surface2); border-color: var(--border-light); color: var(--text); }
-    .ftab:hover { border-color: var(--border-light); color: var(--text); }
-
-    .viol-list { display: flex; flex-direction: column; gap: 0.6rem; }
-    .viol-item {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1rem 1.25rem;
-      display: grid; grid-template-columns: auto 1fr auto;
-      gap: 0.75rem 1rem; align-items: start;
-      transition: border-color 0.15s;
-    }
-    .viol-item:hover { border-color: var(--border-light); }
-    .viol-cls {
-      width: 28px; height: 28px; border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.82rem; font-weight: 800; flex-shrink: 0;
-    }
-    .viol-cls.C { background: rgba(255,124,124,0.13); color: var(--coral); }
-    .viol-cls.B { background: rgba(251,191,36,0.13); color: var(--amber, #fbbf24); }
-    .viol-cls.A { background: rgba(0,245,196,0.1); color: var(--teal); }
-    .viol-desc { font-size: 0.875rem; color: var(--text); line-height: 1.5; margin-bottom: 0.3rem; }
-    .viol-meta {
-      font-size: 0.74rem; color: var(--text-dim);
-      display: flex; flex-wrap: wrap; gap: 0.75rem;
-    }
-    .viol-status {
-      font-size: 0.7rem; font-weight: 700; padding: 3px 8px;
-      border-radius: 99px; white-space: nowrap; flex-shrink: 0; align-self: center;
-    }
-    .viol-status.open   { background: rgba(255,124,124,0.09); border: 1px solid rgba(255,124,124,0.2); color: var(--coral); }
-    .viol-status.closed { background: rgba(14,246,204,0.07); border: 1px solid rgba(14,246,204,0.15); color: var(--teal); }
-    .viol-status.pending { background: rgba(251,191,36,0.07); border: 1px solid rgba(251,191,36,0.15); color: var(--amber, #fbbf24); }
-
-    .show-more-btn {
-      width: 100%; margin-top: 0.75rem;
-      padding: 0.75rem; background: var(--surface);
-      border: 1px dashed var(--border-light); border-radius: var(--radius);
-      color: var(--text-secondary); font-family: "DM Sans", sans-serif;
-      font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.18s;
-    }
-    .show-more-btn:hover { border-color: var(--teal); color: var(--teal); background: rgba(0,245,196,0.04); }
-
-    .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--text-secondary); }
-    .empty-state .check-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
-    .empty-state strong { display: block; font-size: 1rem; margin-bottom: 0.4rem; color: var(--teal); }
-    .empty-state p { font-size: 0.875rem; color: var(--text-dim); }
-
-    /* info grid */
-    .info-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
-      gap: 1rem; margin-top: 2.5rem;
-    }
-    .info-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.5rem;
-    }
-    .info-card-title {
-      font-size: 0.75rem; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--text-dim); margin-bottom: 1rem;
-    }
-    .sev-legend-item { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.85rem; }
-    .sev-legend-item:last-child { margin-bottom: 0; }
-    .sev-badge {
-      font-size: 0.7rem; font-weight: 800; width: 22px; height: 22px;
-      border-radius: 5px; display: flex; align-items: center;
-      justify-content: center; flex-shrink: 0; margin-top: 1px;
-    }
-    .sev-badge.C { background: rgba(255,124,124,0.13); color: var(--coral); }
-    .sev-badge.B { background: rgba(251,191,36,0.13); color: var(--amber, #fbbf24); }
-    .sev-badge.A { background: rgba(0,245,196,0.1); color: var(--teal); }
-    .sev-legend-name { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.15rem; }
-    .sev-legend-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; }
-    .action-list { list-style: none; }
-    .action-item {
-      display: flex; gap: 0.75rem; align-items: flex-start;
-      margin-bottom: 0.85rem; font-size: 0.875rem;
-      color: var(--text-secondary); line-height: 1.55;
-    }
-    .action-item:last-child { margin-bottom: 0; }
-    .action-num {
-      width: 22px; height: 22px; border-radius: 50%;
-      background: var(--surface2); border: 1px solid var(--border-light);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.7rem; font-weight: 700; color: var(--teal);
-      flex-shrink: 0; margin-top: 1px;
-    }
-    .action-item a { color: var(--teal); text-decoration: none; }
-    .action-item a:hover { text-decoration: underline; }
-
-    .data-strip {
-      display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
-      padding: 0.85rem 1.25rem;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); margin-top: 2rem;
-      font-size: 0.8rem; color: var(--text-dim);
-    }
-    .data-strip a { color: var(--teal); text-decoration: none; }
-    .data-strip a:hover { text-decoration: underline; }
-    .data-strip .sep { color: var(--border-light); }
-
-    /* idle state */
-    #state-idle { padding: 2.5rem 0 0; }
-    .idle-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2.5rem; }
-    .idle-pill {
-      padding: 0.4rem 0.9rem; background: var(--surface);
-      border: 1px solid var(--border); border-radius: 99px;
-      font-size: 0.78rem; color: var(--text-dim);
-      display: flex; align-items: center; gap: 0.3rem;
-    }
-    .idle-pill svg { width: 11px; height: 11px; color: var(--teal); }
-    .idle-section-label {
-      text-align: center; font-size: 0.72rem;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--text-dim); font-weight: 700; margin-bottom: 1rem;
-    }
-
-    @media (max-width: 600px) {
-      .tool-hero { padding: 3.5rem 1rem 2.5rem; }
-      .tool-main { padding: 0 1rem 3rem; }
-      .severity-grid { gap: 0.5rem; }
-      .sev-total { font-size: 1.5rem; }
-      .sev-label { font-size: 0.62rem; }
-      .viol-item { grid-template-columns: auto 1fr; }
-      .viol-status { grid-column: 2; }
-    }
-  </style>
+<meta charset="utf-8">
+<title>NYC Building Report — CivicByte</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/cb-icon-light.svg">
+<meta name="theme-color" content="#b8432b">
+<meta name="description" content="Look up HPD violations for any NYC address. Free, live data from NYC Open Data.">
+<script defer src="/civicbyte-fx.js"></script>
+<link rel="stylesheet" href="/civicbyte.css">
+<link rel="stylesheet" href="/tool-page.css">
+<style>
+  .state-panel{display:none}.state-panel.active{display:block}
+  .loading-wrap{padding:2rem 0;text-align:center}
+  .spinner{width:28px;height:28px;border:2.5px solid rgba(29,26,21,0.1);border-top-color:var(--brick);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-text{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:.06em}
+  .err-wrap{padding:1.5rem 0}.err-box{background:#fef2f0;border:1px solid rgba(184,67,43,0.2);border-radius:12px;padding:18px 20px}
+  .err-title{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:var(--brick);margin:0 0 6px}
+  .err-msg{font-size:13.5px;color:var(--ink-soft);margin:0}
+  .clean-wrap{padding:2rem 0;text-align:center}
+  .clean-icon{width:52px;height:52px;border-radius:14px;background:rgba(91,107,58,.1);border:1px solid rgba(91,107,58,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+  .clean-title{font-family:'Fraunces',serif;font-weight:600;font-size:20px;margin:0 0 6px}
+  .clean-desc{font-size:13.5px;color:var(--ink-soft);max-width:420px;margin:0 auto}
+  #mock-suggest{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin:-10px 0 16px;letter-spacing:.06em}
+  #mock-suggest a{color:var(--brick)}
+</style>
 </head>
 <body>
+<div class="page">
 
-<!-- NAV -->
-<header class="site-nav">
-  <nav class="nav">
-    <a href="/" class="logo">
-      <svg width="30" height="30" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lgNav" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00f5c4"/><stop offset="100%" stop-color="#b197fc"/></linearGradient></defs><rect width="1024" height="1024" rx="220" fill="#080b1a"/><rect x="170" y="573" width="72" height="144" rx="2" fill="url(#lgNav)"/><rect x="260" y="501" width="54" height="216" rx="2" fill="url(#lgNav)"/><rect x="332" y="393" width="90" height="324" rx="2" fill="url(#lgNav)"/><rect x="375" y="303" width="5" height="90" rx="2" fill="url(#lgNav)"/><rect x="440" y="465" width="108" height="252" rx="2" fill="url(#lgNav)"/><rect x="566" y="321" width="90" height="396" rx="2" fill="url(#lgNav)"/><rect x="609" y="213" width="5" height="108" rx="2" fill="url(#lgNav)"/><rect x="674" y="483" width="72" height="234" rx="2" fill="url(#lgNav)"/><rect x="764" y="555" width="54" height="162" rx="2" fill="url(#lgNav)"/><rect x="789" y="501" width="5" height="54" rx="2" fill="url(#lgNav)"/><rect x="818" y="609" width="36" height="108" rx="2" fill="url(#lgNav)"/><rect x="170" y="717" width="684" height="3" rx="1" fill="url(#lgNav)" opacity="0.6"/></svg>
-      <span class="logo-wordmark">civic<span class="cb">byte</span></span>
-    </a>
-    <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="cb-nav-links">
-      <span class="cb-ham" aria-hidden="true"><span></span><span></span><span></span></span>
-    </button>
-    <div class="nav-links" id="cb-nav-links">
-      <a href="/">Home</a>
-      <a href="/tools.html" class="active">Tools</a>
-      <a href="/about.html">About</a>
-      <a href="/submit.html">Submit a Tool</a>
-      <a href="https://github.com/civicbytedev" target="_blank" rel="noopener" class="nav-gh">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-        GitHub
-      </a>
-    </div>
-  </nav>
-</header>
+<nav class="nav">
+  <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/tools.html" class="active">Tools</a></li>
+    <li><a href="/about.html">About</a></li>
+    <li><a href="/impact.html">Impact</a></li>
+    <li><a href="https://github.com/civicbytedev">GitHub</a></li>
+  </ul>
+  <a href="/submit.html" class="cta">Submit a tool</a>
+</nav>
 
-<!-- HERO -->
-<div class="tool-hero">
-  <div class="tool-eyebrow">
-    <div class="dot"></div>
-    NYC Housing Tool &mdash; Free &amp; Open Source
-  </div>
-  <h1>NYC <span class="grad">Building Report</span></h1>
-  <p class="hero-sub">
-    Look up housing maintenance violations for any NYC building — instantly.
-    Powered by HPD open data, built for tenants, organizers, and advocates.
-  </p>
-
-  <div class="search-card">
-    <div class="search-row">
-      <div class="input-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input
-          type="text"
-          id="address-input"
-          class="addr-input"
-          placeholder="e.g. 123 Main St, Brooklyn"
-          autocomplete="street-address"
-          aria-label="NYC building address"
-        />
-      </div>
-      <button class="btn-primary" id="search-btn" onclick="lookupAddress()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        Search
-      </button>
-    </div>
-    <p class="search-hint">
-      Try:
-      <span onclick="fillExample('55 Water St, Manhattan')">55 Water St, Manhattan</span> &middot;
-      <span onclick="fillExample('2095 Grand Concourse, Bronx')">2095 Grand Concourse, Bronx</span> &middot;
-      <span onclick="fillExample('460 Kent Ave, Brooklyn')">460 Kent Ave, Brooklyn</span>
-    </p>
-  </div>
+<div class="crumb">
+  <a href="/">CivicByte</a><span class="sep">/</span>
+  <a href="/tools.html">Tools</a><span class="sep">/</span>
+  <span>NYC Building Report</span>
 </div>
 
-<!-- MAIN -->
-<div class="tool-main">
-
-  <!-- IDLE -->
-  <div id="state-idle">
-    <p class="idle-section-label">What this tool checks</p>
-    <div class="idle-pills">
-      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Class C — Immediately hazardous violations</span>
-      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Class B — Hazardous violations</span>
-      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Class A — Non-hazardous violations</span>
-      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Open vs. resolved status</span>
-      <span class="idle-pill"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>Building registration &amp; owner info</span>
+<section class="tool-hero">
+  <div>
+    <div class="meta-row"><span class="status">Live</span><span class="tag">Housing · Infrastructure</span></div>
+    <h1>Every violation on <em>any NYC address</em>.</h1>
+    <p class="sub">HPD maintenance violations, in a single search.</p>
+    <p class="desc">Enter any NYC address and pull the building's full HPD record — open violations, severity breakdown, registration status. Pull in 10 seconds what would otherwise take 20 minutes and three government portals.</p>
+    <div class="actions">
+      <a href="#try" class="btn btn-p">Try it below ↓</a>
+      <a href="https://github.com/civicbytedev" class="btn btn-s">Source on GitHub</a>
     </div>
+  </div>
+  <aside class="info-card">
+    <div class="ih"><span>At a glance</span><span>v1.0</span></div>
+    <div class="ib">
+      <dl>
+        <dt>Coverage</dt><dd>All 5 boroughs</dd>
+        <dt>Records</dt><dd>900k+ violations</dd>
+        <dt>Data source</dt><dd>HPD · NYC Open Data</dd>
+        <dt>Updates</dt><dd>Daily</dd>
+        <dt>License</dt><dd>MIT · Open</dd>
+        <dt>Cost to use</dt><dd>Free</dd>
+        <dt>Login</dt><dd>Not required</dd>
+      </dl>
+    </div>
+    <a href="https://github.com/civicbytedev" class="repo-link">github.com/civicbytedev/nyc-building-checker</a>
+  </aside>
+</section>
 
-    <div class="info-grid">
-      <div class="info-card">
-        <div class="info-card-title">Violation Classes</div>
-        <div class="sev-legend-item">
-          <span class="sev-badge C">C</span>
-          <div>
-            <div class="sev-legend-name" style="color:var(--coral)">Immediately Hazardous</div>
-            <div class="sev-legend-desc">Lead paint, heat/hot water outages, pest infestations, broken locks. Must be corrected within 24 hours.</div>
-          </div>
-        </div>
-        <div class="sev-legend-item">
-          <span class="sev-badge B">B</span>
-          <div>
-            <div class="sev-legend-name" style="color:var(--amber,#fbbf24)">Hazardous</div>
-            <div class="sev-legend-desc">Mold, defective plumbing, broken windows, fire safety issues. Must be corrected within 30 days.</div>
-          </div>
-        </div>
-        <div class="sev-legend-item">
-          <span class="sev-badge A">A</span>
-          <div>
-            <div class="sev-legend-name" style="color:var(--teal)">Non-Hazardous</div>
-            <div class="sev-legend-desc">Lower-priority maintenance issues. Must be corrected within 90 days.</div>
-          </div>
-        </div>
+<section class="preview-wrap" id="try">
+  <div class="preview-frame">
+    <div class="pf-bar">
+      <span class="d d1"></span><span class="d d2"></span><span class="d d3"></span>
+      <span class="url">civicbyte.dev/nyc-building-checker</span>
+    </div>
+    <div class="pf-body">
+      <div class="mock-search">
+        <span class="mag"></span>
+        <input id="addr-input" placeholder="Enter an NYC address, e.g. 965 Longfellow Ave, Bronx" autocomplete="off" spellcheck="false">
+        <button class="submit" onclick="runSearch()">Check building</button>
       </div>
-
-      <div class="info-card">
-        <div class="info-card-title">If You Find Open Violations</div>
-        <ul class="action-list">
-          <li class="action-item"><span class="action-num">1</span><span>Document conditions with photos and written records — date, time, and location.</span></li>
-          <li class="action-item"><span class="action-num">2</span><span>Report new issues via <a href="https://portal.311.nyc.gov" target="_blank" rel="noopener">311</a> or <a href="https://hpdonline.nyc.gov" target="_blank" rel="noopener">HPD Online</a>.</span></li>
-          <li class="action-item"><span class="action-num">3</span><span>Get free legal advice from <a href="https://www.legalaidnyc.org" target="_blank" rel="noopener">Legal Aid</a> or <a href="https://www.metcouncilonhousing.org" target="_blank" rel="noopener">Met Council on Housing</a>.</span></li>
-          <li class="action-item"><span class="action-num">4</span><span>Tenants have the right to a rent reduction if heat, hot water, or essential services are withheld.</span></li>
-        </ul>
+      <div id="mock-suggest">Try: <a href="#" onclick="quickSearch('965 Longfellow Ave, Bronx');return false;">965 Longfellow Ave, Bronx</a> · <a href="#" onclick="quickSearch('350 W 56th St, Manhattan');return false;">350 W 56th St, Manhattan</a> · <a href="#" onclick="quickSearch('1248 Eastern Pkwy, Brooklyn');return false;">1248 Eastern Pkwy, Brooklyn</a></div>
+      <div id="result">
+        <div class="state-panel active" id="s-idle"><p style="font-size:14px;color:var(--ink-soft)">Enter an address above to pull its HPD violation record — live from NYC Open Data.</p></div>
+        <div class="state-panel" id="s-loading"><div class="loading-wrap"><div class="spinner"></div><div class="loading-text">Fetching HPD records…</div></div></div>
+        <div class="state-panel" id="s-error"><div class="err-wrap"><div class="err-box"><div class="err-title">Couldn't load data</div><div class="err-msg" id="err-text"></div></div></div></div>
+        <div class="state-panel" id="s-clean"><div class="clean-wrap"><div class="clean-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5b6b3a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="clean-title">No open violations found</div><div class="clean-desc" id="clean-desc"></div></div></div>
+        <div class="state-panel" id="s-results"><div id="result-head"></div><div id="stat-grid"></div><div id="dtable"></div></div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- LOADING -->
-  <div id="state-loading" class="hidden">
-    <div class="spinner"></div>
-    <div class="loading-text">Looking up building data&hellip;</div>
-    <div class="loading-step-text" id="loading-step"></div>
+<script>
+const HPD_API='https://data.cityofnewyork.us/resource/wvxf-dwi5.json';
+function showState(id){document.querySelectorAll('.state-panel').forEach(el=>el.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function quickSearch(addr){document.getElementById('addr-input').value=addr;runSearch();}
+document.getElementById('addr-input').addEventListener('keydown',e=>{if(e.key==='Enter')runSearch();});
+async function runSearch(){
+  const raw=document.getElementById('addr-input').value.trim();
+  if(!raw||raw.length<4){document.getElementById('addr-input').focus();return;}
+  showState('s-loading');
+  try{
+    const parts=raw.replace(/,.*$/,'').trim();
+    const m=parts.match(/^(\d+[a-zA-Z]?)\s+(.+)$/);
+    if(!m)throw new Error('Could not parse address — try "965 Longfellow Ave, Bronx"');
+    const num=m[1];
+    const street=m[2].toUpperCase()
+      .replace(/\bSTREET\b/g,'ST').replace(/\bAVENUE\b/g,'AVE')
+      .replace(/\bBOULEVARD\b/g,'BLVD').replace(/\bDRIVE\b/g,'DR')
+      .replace(/\bPLACE\b/g,'PL').replace(/\bROAD\b/g,'RD')
+      .replace(/\bPARKWAY\b/g,'PKWY').replace(/\bTERRACE\b/g,'TER')
+      .replace(/\bCOURT\b/g,'CT').replace(/\bLANE\b/g,'LN')
+      .replace(/\bEAST\b/g,'E').replace(/\bWEST\b/g,'W')
+      .replace(/\bNORTH\b/g,'N').replace(/\bSOUTH\b/g,'S').trim();
+    const where=`housenumber='${num.replace(/'/g,"''")}' AND streetname='${street.replace(/'/g,"''")}'`;
+    const url=`${HPD_API}?$where=${encodeURIComponent(where)}&$limit=200&$order=inspectiondate DESC`;
+    const res=await fetch(url);
+    if(!res.ok)throw new Error(`API error ${res.status}`);
+    const data=await res.json();
+    if(data.length===0){
+      document.getElementById('clean-desc').textContent=`No HPD violations found for "${raw}". This may mean no violations on record, or the address wasn't matched. Try including "Bronx", "Brooklyn", etc.`;
+      showState('s-clean');return;
+    }
+    renderResults(raw,data);
+  }catch(err){document.getElementById('err-text').textContent=err.message;showState('s-error');}
+}
+function renderResults(query,data){
+  const open=data.filter(r=>(r.currentstatus||'').toLowerCase().includes('open'));
+  const c=open.filter(r=>(r.class||'').toLowerCase()==='c').length;
+  const b=open.filter(r=>(r.class||'').toLowerCase()==='b').length;
+  const a=open.filter(r=>(r.class||'').toLowerCase()==='a').length;
+  const d=data[0];
+  const addr=[d.housenumber,d.streetname,d.apartment?`Apt ${d.apartment}`:''].filter(Boolean).join(' ');
+  const boro=d.borough||'';
+  const full=addr+(boro?` · ${boro.charAt(0)+boro.slice(1).toLowerCase()}`:'');
+  document.getElementById('result-head').innerHTML=`<div class="result-head"><div><div class="addr">${esc(full)}</div><div class="meta-tag">BIN ${d.buildingid||'—'} · ${data.length} total records · ${open.length} open</div></div><div class="meta-tag">NYC Open Data · HPD</div></div>`;
+  document.getElementById('stat-grid').innerHTML=`<div class="stat-grid"><div class="s"><div class="n ${open.length>0?'alert':'ok'}">${open.length}</div><div class="k">Open violations</div></div><div class="s"><div class="n ${c>0?'alert':''}">${c}</div><div class="k">Class C · hazardous</div></div><div class="s"><div class="n ${b>0?'alert':''}">${b}</div><div class="k">Class B</div></div><div class="s"><div class="n">${a}</div><div class="k">Class A</div></div></div>`;
+  const SEV={c:'sev-c',b:'sev-b',a:'sev-a',i:'sev-a'};
+  const rows=data.slice(0,20);
+  document.getElementById('dtable').innerHTML=`<div class="dtable"><div class="dh" style="grid-template-columns:110px 1fr 140px 110px"><span>Class</span><span>Violation</span><span>Date</span><span>Status</span></div>${rows.map(r=>{const cls=(r.class||'').toLowerCase();const status=(r.currentstatus||'').toLowerCase().includes('open')?'Open':'Closed';const date=r.inspectiondate?new Date(r.inspectiondate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';const desc=[r.novdescription||r.violationdescription||r.maintenancecode,r.apartment?`Apt ${r.apartment}`:''].filter(Boolean).join(' · ');return`<div class="dr" style="grid-template-columns:110px 1fr 140px 110px"><span class="sev ${SEV[cls]||'sev-a'}">${(r.class||'?').toUpperCase()}</span><span>${esc(desc.slice(0,120))}</span><span>${date}</span><span style="color:${status==='Open'?'var(--brick)':'var(--moss)'};font-weight:600">${status}</span></div>`}).join('')}${data.length>20?`<div class="dr" style="grid-template-columns:1fr;color:var(--ink-soft);font-size:12px;font-family:'IBM Plex Mono',monospace">+ ${data.length-20} more records · source: NYC Open Data HPD</div>`:''}</div>`;
+  showState('s-results');
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+</script>
+
+<section class="tool-section alt">
+  <div class="k">How it works</div>
+  <h2>Three clicks. No PDFs.</h2>
+  <div class="steps-row">
+    <div class="step-card"><div class="num">01</div><h4>Type an address</h4><p>Street and borough. We query HPD's database directly — live, not cached.</p></div>
+    <div class="step-card"><div class="num">02</div><h4>Read the record</h4><p>Open violations, severity bands, and inspection dates — summarized on one screen, in plain language.</p></div>
+    <div class="step-card"><div class="num">03</div><h4>Share or cite</h4><p>Every data point comes from the official HPD record via NYC Open Data. Copy a link and hand it off.</p></div>
   </div>
+</section>
 
-  <!-- ERROR -->
-  <div id="state-error" class="hidden">
-    <div class="err-icon">&#9888;&#65039;</div>
-    <div class="err-title" id="err-title">Something went wrong</div>
-    <div class="err-msg" id="err-msg">We couldn't find data for that address. Try including the borough (e.g. "Brooklyn") and check your spelling.</div>
-    <button class="err-retry" onclick="resetToIdle()">Try another address</button>
+<section class="tool-section">
+  <div class="k">Where the data comes from</div>
+  <h2>All public. All cited.</h2>
+  <div class="src-list">
+    <div class="src-card"><span class="src-k">Primary · Violations</span><h4>HPD Housing Maintenance Code Violations</h4><p>NYC Dept. of Housing Preservation &amp; Development. Open dataset, updated daily via NYC Open Data (wvxf-dwi5).</p></div>
+    <div class="src-card"><span class="src-k">API</span><h4>NYC Open Data · Socrata</h4><p>All queries are made live from your browser to the official NYC Open Data endpoint. No middleman, no caching.</p></div>
+    <div class="src-card"><span class="src-k">Secondary</span><h4>HPD Registration Contacts</h4><p>Building owner and managing agent filings — used to resolve LLCs where possible.</p></div>
+    <div class="src-card"><span class="src-k">Reference</span><h4>PLUTO · Property Land Use Tax Lot Output</h4><p>NYC Dept. of City Planning — used to cross-reference ownership and address resolution.</p></div>
   </div>
+</section>
 
-  <!-- RESULTS -->
-  <div id="state-results" class="hidden">
+<section class="related">
+  <div class="sec-head"><div class="l"><div class="k">Related tools</div><h2>Pairs well with.</h2></div></div>
+  <div class="related-grid">
+    <a class="related-card" href="/nyc-landlord-watch/"><span class="rc-k">Housing</span><h4>NYC Landlord Watch</h4><p>Portfolio-wide violation record for any NYC landlord or LLC.</p><span class="rc-go">VIEW TOOL →</span></a>
+    <a class="related-card" href="/nyc-eviction-records/"><span class="rc-k">Housing</span><h4>NYC Eviction Records</h4><p>Executed marshal evictions for any NYC address.</p><span class="rc-go">VIEW TOOL →</span></a>
+    <a class="related-card" href="/nyc-311-complaints/"><span class="rc-k">Municipal</span><h4>NYC 311 Complaint Lookup</h4><p>Every 311 request ever filed at a given address.</p><span class="rc-go">VIEW TOOL →</span></a>
+  </div>
+</section>
 
-    <div class="building-header">
-      <div>
-        <div class="building-addr-label">Building Report for</div>
-        <div class="building-addr" id="result-address">—</div>
-        <div class="building-bbl" id="result-bbl">—</div>
-      </div>
-      <div class="reg-badge reg-unknown" id="reg-badge">
-        <span class="dot-sm"></span>
-        <span id="reg-label">Checking&hellip;</span>
-      </div>
-    </div>
-
-    <div class="owner-card" id="owner-card"></div>
-
-    <div class="severity-grid">
-      <div class="sev-card c-class">
-        <div class="sev-label">Class C</div>
-        <div class="sev-total" id="count-c-all">—</div>
-        <div class="sev-sub">total violations</div>
-        <div class="sev-open-badge" id="count-c-open"></div>
-      </div>
-      <div class="sev-card b-class">
-        <div class="sev-label">Class B</div>
-        <div class="sev-total" id="count-b-all">—</div>
-        <div class="sev-sub">total violations</div>
-        <div class="sev-open-badge" id="count-b-open"></div>
-      </div>
-      <div class="sev-card a-class">
-        <div class="sev-label">Class A</div>
-        <div class="sev-total" id="count-a-all">—</div>
-        <div class="sev-sub">total violations</div>
-        <div class="sev-open-badge" id="count-a-open"></div>
-      </div>
-    </div>
-
-    <div class="list-header">
-      <span class="list-title">
-        Violations
-        <span class="count-pill" id="list-count-pill">0</span>
-      </span>
-      <div class="filter-tabs">
-        <button class="ftab active" data-filter="open"  onclick="setFilter('open')">Open</button>
-        <button class="ftab"        data-filter="all"   onclick="setFilter('all')">All</button>
-      </div>
-    </div>
-
-    <div class="viol-list" id="violation-list"></div>
-    <button class="show-more-btn hidden" id="show-more-btn" onclick="showMore()">Show more</button>
-
-    <hr class="divider" />
-
-    <div class="info-grid">
-      <div class="info-card">
-        <div class="info-card-title">Violation Classes</div>
-        <div class="sev-legend-item">
-          <span class="sev-badge C">C</span>
-          <div>
-            <div class="sev-legend-name" style="color:var(--coral)">Immediately Hazardous</div>
-            <div class="sev-legend-desc">Lead paint, heat/hot water, pests. Fix within 24 hours.</div>
-          </div>
-        </div>
-        <div class="sev-legend-item">
-          <span class="sev-badge B">B</span>
-          <div>
-            <div class="sev-legend-name" style="color:var(--amber,#fbbf24)">Hazardous</div>
-            <div class="sev-legend-desc">Mold, plumbing, fire safety. Fix within 30 days.</div>
-          </div>
-        </div>
-        <div class="sev-legend-item">
-          <span class="sev-badge A">A</span>
-          <div>
-            <div class="sev-legend-name" style="color:var(--teal)">Non-Hazardous</div>
-            <div class="sev-legend-desc">Minor maintenance. Fix within 90 days.</div>
-          </div>
-        </div>
-      </div>
-      <div class="info-card">
-        <div class="info-card-title">Tenant Resources</div>
-        <ul class="action-list">
-          <li class="action-item"><span class="action-num">1</span><span>File a complaint: <a href="https://portal.311.nyc.gov" target="_blank" rel="noopener">portal.311.nyc.gov</a></span></li>
-          <li class="action-item"><span class="action-num">2</span><span>Track HPD orders: <a href="https://hpdonline.nyc.gov" target="_blank" rel="noopener">hpdonline.nyc.gov</a></span></li>
-          <li class="action-item"><span class="action-num">3</span><span>Free legal help: <a href="https://www.legalaidnyc.org" target="_blank" rel="noopener">Legal Aid Society</a> &middot; <a href="https://www.metcouncilonhousing.org" target="_blank" rel="noopener">Met Council</a></span></li>
-          <li class="action-item"><span class="action-num">4</span><span>Organize: <a href="https://housingcourtanswers.org" target="_blank" rel="noopener">Housing Court Answers</a></span></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="data-strip">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Data: <a href="https://data.cityofnewyork.us/Housing-Development/Housing-Maintenance-Code-Violations/wvxf-dwi5" target="_blank" rel="noopener">NYC HPD Violations</a>
-      <span class="sep">&middot;</span>
-      <a href="https://geosearch.planninglabs.nyc" target="_blank" rel="noopener">NYC Planning GeoSearch</a>
-      <span class="sep">&middot;</span>
-      Updated daily &middot; MIT License
-    </div>
-
-  </div><!-- /#state-results -->
-
-</div><!-- /.tool-main -->
-
-<!-- FOOTER -->
 <footer>
-  <div class="f-left">&copy; 2026 CivicByte &mdash; Open source under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.</div>
-  <div class="f-right">
-    <a href="/tools.html">Tools</a>
-    <a href="/about.html">About</a>
-    <a href="/submit.html">Submit</a>
-    <a href="https://github.com/civicbytedev" target="_blank" rel="noopener">GitHub</a>
+  <div class="fg">
+    <div><a href="/" class="mark"><span class="sq"></span> civicbyte</a><p>An open platform for free, community-facing civic tools built on public data.</p></div>
+    <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+    <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">Our story</a></li></ul></div>
+    <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="#">Newsletter</a></li><li><a href="#">Press</a></li></ul></div>
   </div>
+  <div class="col2"><span>© 2026 CivicByte · MIT License</span><span>Made in NYC · By students, for everyone</span></div>
 </footer>
 
-<script>
-  // ── APIs ──────────────────────────────────────────────────────────────────
-  const HPD_VIOLATIONS = 'https://data.cityofnewyork.us/resource/wvxf-dwi5.json';
-  const HPD_REG        = 'https://data.cityofnewyork.us/resource/tesw-yqqr.json';
-  const GEO_API        = 'https://geosearch.planninglabs.nyc/v2/search';
-
-  const BORO_CODES = {
-    'manhattan': '1', 'new york county': '1',
-    'bronx': '2', 'bronx county': '2',
-    'brooklyn': '3', 'kings county': '3', 'kings': '3',
-    'queens': '4', 'queens county': '4',
-    'staten island': '5', 'richmond county': '5', 'richmond': '5'
-  };
-
-  // ── State ─────────────────────────────────────────────────────────────────
-  let allViolations = [], currentFilter = 'open', visibleCount = 20;
-
-  // ── UI helpers ────────────────────────────────────────────────────────────
-  function setText(id, val) { document.getElementById(id).textContent = val; }
-  function setStep(msg)     { document.getElementById('loading-step').textContent = msg; }
-
-  function showState(s) {
-    ['state-idle','state-loading','state-error','state-results'].forEach(id => {
-      document.getElementById(id).classList.toggle('hidden', id !== s);
-    });
-  }
-
-  function resetToIdle() {
-    showState('state-idle');
-    document.getElementById('search-btn').disabled = false;
-  }
-
-  function fillExample(addr) {
-    document.getElementById('address-input').value = addr;
-    lookupAddress();
-  }
-
-  document.getElementById('address-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') lookupAddress();
-  });
-
-  // ── Address helpers ───────────────────────────────────────────────────────
-  function getBoroCode(props) {
-    const candidates = [props.borough, props.localadmin, props.county, props.label].filter(Boolean);
-    for (const c of candidates) {
-      const l = c.toLowerCase();
-      for (const [name, code] of Object.entries(BORO_CODES)) {
-        if (l.includes(name)) return code;
-      }
-    }
-    return null;
-  }
-
-  // Extract BBL from GeoSearch response (API changed: now nested in addendum.pad.bbl)
-  function getBBL(props) {
-    return props?.addendum?.pad?.bbl
-      || props?.pad_bbl          // old format fallback
-      || props?.['pad:bbl']      // alternative format
-      || null;
-  }
-
-  function normalizeStreetName(s) {
-    // HPD stores full words in uppercase — expand common abbreviations
-    const ABBREVS = {
-      '\\bST\\b': 'STREET', '\\bAVE\\b': 'AVENUE', '\\bBLVD\\b': 'BOULEVARD',
-      '\\bDR\\b': 'DRIVE', '\\bRD\\b': 'ROAD', '\\bPL\\b': 'PLACE',
-      '\\bCT\\b': 'COURT', '\\bLN\\b': 'LANE', '\\bPKWY\\b': 'PARKWAY',
-      '\\bTER\\b': 'TERRACE', '\\bHWY\\b': 'HIGHWAY', '\\bCIR\\b': 'CIRCLE'
-    };
-    let out = s.toUpperCase().trim();
-    for (const [pattern, replacement] of Object.entries(ABBREVS)) {
-      out = out.replace(new RegExp(pattern, 'g'), replacement);
-    }
-    return out;
-  }
-
-  // ── Fetch with timeout ────────────────────────────────────────────────────
-  async function fetchTimeout(url, ms = 10000) {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), ms);
-    try {
-      const r = await fetch(url, { signal: ctrl.signal });
-      clearTimeout(timer);
-      return r;
-    } catch (e) {
-      clearTimeout(timer);
-      if (e.name === 'AbortError') throw new Error('Request timed out — please try again.');
-      throw e;
-    }
-  }
-
-  // ── HPD queries ───────────────────────────────────────────────────────────
-  async function fetchViolationsByBBL(bbl) {
-    const url = `${HPD_VIOLATIONS}?bbl=${encodeURIComponent(bbl)}&$limit=2000&$order=inspectiondate%20DESC`;
-    const r = await fetchTimeout(url);
-    return r.ok ? r.json() : [];
-  }
-
-  async function fetchViolationsByAddress(housenumber, streetname, boroid) {
-    const hn = housenumber.trim().toUpperCase().replace(/'/g, "''");
-    const sn = normalizeStreetName(streetname).replace(/'/g, "''");
-    const where = `upper(housenumber)='${hn}' AND upper(streetname)='${sn}' AND boroid='${boroid}'`;
-    const url = `${HPD_VIOLATIONS}?$where=${encodeURIComponent(where)}&$limit=2000&$order=inspectiondate%20DESC`;
-    const r = await fetchTimeout(url);
-    return r.ok ? r.json() : [];
-  }
-
-  async function fetchRegistration(bbl) {
-    try {
-      const r = await fetchTimeout(`${HPD_REG}?bbl=${encodeURIComponent(bbl)}&$limit=1`, 6000);
-      if (!r.ok) return null;
-      const d = await r.json();
-      return d[0] || null;
-    } catch { return null; }
-  }
-
-  // ── Main search ───────────────────────────────────────────────────────────
-  async function lookupAddress() {
-    const raw = document.getElementById('address-input').value.trim();
-    if (!raw) return;
-
-    // Auto-append NYC context if no borough hint present
-    const hasNYC = /\b(nyc|new york|brooklyn|manhattan|bronx|queens|staten island)\b/i.test(raw);
-    const query  = hasNYC ? raw : raw + ', New York City';
-
-    document.getElementById('search-btn').disabled = true;
-    showState('state-loading');
-    setStep('Geocoding address…');
-
-    try {
-      // ── 1. Geocode ────────────────────────────────────────────────────────
-      const geoRes = await fetchTimeout(`${GEO_API}?text=${encodeURIComponent(query)}&size=5`);
-      if (!geoRes.ok) throw new Error('Geocoder unavailable — please try again shortly.');
-      const geoData = await geoRes.json();
-
-      if (!geoData.features || geoData.features.length === 0) {
-        throw new Error(`Address not found. Try adding a borough — e.g. "${raw}, Brooklyn"`);
-      }
-
-      // Prefer features that have a BBL; otherwise take the first result
-      const features = geoData.features;
-      const best = features.find(f => getBBL(f.properties)) || features[0];
-      const props = best.properties;
-      const displayAddr = props.label || raw;
-
-      const bbl        = getBBL(props);
-      const housenumber= props.housenumber || null;
-      const streetname = props.street      || null;
-      const boroCode   = getBoroCode(props);
-
-      setStep('Fetching HPD violation records…');
-
-      // ── 2. Query violations: BBL first, address fallback ──────────────────
-      let violations = [];
-      let resolvedBBL = bbl;
-
-      if (bbl) {
-        violations = await fetchViolationsByBBL(bbl);
-      }
-
-      // If nothing by BBL (or no BBL), try address-based query
-      if (violations.length === 0 && housenumber && streetname && boroCode) {
-        setStep('Trying address-based lookup…');
-        violations = await fetchViolationsByAddress(housenumber, streetname, boroCode);
-        // Extract BBL from first result for registration lookup
-        if (violations.length > 0 && violations[0].bbl) {
-          resolvedBBL = violations[0].bbl;
-        }
-      }
-
-      // ── 3. Registration (best-effort, non-blocking) ───────────────────────
-      let reg = null;
-      if (resolvedBBL) {
-        setStep('Fetching building registration…');
-        reg = await fetchRegistration(resolvedBBL);
-      }
-
-      setStep('Rendering…');
-      renderResults(displayAddr, resolvedBBL, violations, reg);
-
-    } catch (err) {
-      showError('Could not load data', err.message || 'An unexpected error occurred. Please try again.');
-    } finally {
-      document.getElementById('search-btn').disabled = false;
-    }
-  }
-
-  function showError(title, msg) {
-    setText('err-title', title);
-    setText('err-msg', msg);
-    showState('state-error');
-  }
-
-  function renderResults(address, bbl, violations, reg) {
-    allViolations = violations;
-    currentFilter = 'open';
-    visibleCount  = 20;
-
-    setText('result-address', address);
-    setText('result-bbl', `BBL: ${bbl}`);
-    renderRegistration(reg);
-    renderOwner(reg);
-
-    const counts = countBySeverity(violations);
-    ['A','B','C'].forEach(cls => {
-      const all  = counts[cls]?.all  ?? 0;
-      const open = counts[cls]?.open ?? 0;
-      setText(`count-${cls.toLowerCase()}-all`, all);
-      document.getElementById(`count-${cls.toLowerCase()}-open`).textContent = open > 0 ? `${open} open` : 'none open';
-    });
-
-    document.querySelectorAll('.ftab').forEach(t => t.classList.toggle('active', t.dataset.filter === 'open'));
-    renderViolationList();
-    showState('state-results');
-  }
-
-  function renderRegistration(reg) {
-    const badge = document.getElementById('reg-badge');
-    const label = document.getElementById('reg-label');
-    if (!reg) { badge.className = 'reg-badge reg-unknown'; label.textContent = 'Registration unknown'; return; }
-    const endDate = reg.registrationenddate ? new Date(reg.registrationenddate) : null;
-    const now = new Date();
-    if (endDate && endDate > now) {
-      badge.className = 'reg-badge reg-active';
-      label.textContent = `Registered · expires ${endDate.toLocaleDateString('en-US',{month:'short',year:'numeric'})}`;
-    } else if (endDate) {
-      badge.className = 'reg-badge reg-expired';
-      label.textContent = `Registration expired ${endDate.toLocaleDateString('en-US',{month:'short',year:'numeric'})}`;
-    } else {
-      badge.className = 'reg-badge reg-unknown';
-      label.textContent = 'Registration status unknown';
-    }
-  }
-
-  function renderOwner(reg) {
-    const card = document.getElementById('owner-card');
-    if (!reg) { card.style.display = 'none'; return; }
-    card.style.display = '';
-    const fields = [];
-    const ownerName = [reg.ownerfirstname, reg.ownerlastname].filter(Boolean).join(' ').trim() || reg.corporationname || null;
-    if (ownerName) fields.push({ label: 'Owner', value: ownerName });
-    const agentName = [reg.managingagentfirstname, reg.managingagentlastname].filter(Boolean).join(' ').trim() || reg.managingagentcompanyname || null;
-    if (agentName) fields.push({ label: 'Managing Agent', value: agentName });
-    const agentAddr = [reg.managingagentbuildingaddress, reg.managingagentcity, reg.managingagentstate].filter(Boolean).join(', ');
-    if (agentAddr) fields.push({ label: 'Agent Address', value: agentAddr });
-    if (reg.lifebuildingcount) fields.push({ label: 'Portfolio Buildings', value: reg.lifebuildingcount });
-    if (fields.length === 0) { card.style.display = 'none'; return; }
-    card.innerHTML = fields.map(f => `<div class="owner-field"><div class="owner-field-label">${esc(f.label)}</div><div class="owner-field-value">${esc(String(f.value))}</div></div>`).join('');
-  }
-
-  function countBySeverity(violations) {
-    const c = { A:{all:0,open:0}, B:{all:0,open:0}, C:{all:0,open:0} };
-    violations.forEach(v => {
-      const cls = (v.class||'').toUpperCase();
-      if (!c[cls]) return;
-      c[cls].all++;
-      if (isOpen(v)) c[cls].open++;
-    });
-    return c;
-  }
-
-  function isOpen(v) {
-    const s = (v.currentstatus||'').toLowerCase();
-    return s.includes('open') || s.includes('nov sent out') || s.includes('not complied');
-  }
-
-  function setFilter(f) {
-    currentFilter = f; visibleCount = 20;
-    document.querySelectorAll('.ftab').forEach(t => t.classList.toggle('active', t.dataset.filter === f));
-    renderViolationList();
-  }
-
-  function showMore() { visibleCount += 20; renderViolationList(); }
-
-  function renderViolationList() {
-    const list = document.getElementById('violation-list');
-    const btn  = document.getElementById('show-more-btn');
-    const filtered = currentFilter === 'open' ? allViolations.filter(isOpen) : allViolations;
-    setText('list-count-pill', filtered.length.toString());
-
-    if (filtered.length === 0) {
-      list.innerHTML = `<div class="empty-state"><div class="check-icon">✓</div><strong>${currentFilter === 'open' ? 'No open violations' : 'No violations on record'}</strong><p>${currentFilter === 'open' ? 'No currently open HPD violations for this building.' : 'HPD has no violation records for this building.'}</p></div>`;
-      btn.classList.add('hidden'); return;
-    }
-
-    list.innerHTML = filtered.slice(0, visibleCount).map(v => {
-      const cls  = (v.class||'?').toUpperCase();
-      const desc = titleCase(v.novdescription || v.violationstatus || 'No description available.');
-      const open = isOpen(v);
-      const status = (v.currentstatus||'').toUpperCase();
-      const statusClass = open ? 'open' : status.includes('CLOSE') || status.includes('COMPLI') ? 'closed' : 'pending';
-      const statusLabel = open ? 'Open' : status.includes('CLOSE') ? 'Closed' : status.includes('COMPLI') ? 'Complied' : titleCase(v.currentstatus||'Unknown');
-      const inspDate = v.inspectiondate ? new Date(v.inspectiondate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : null;
-      const apt  = v.apartment ? `Apt ${v.apartment}` : v.story ? `Floor ${v.story}` : null;
-      const type = v.type ? titleCase(v.type) : null;
-      const meta = [inspDate, apt, type].filter(Boolean);
-      return `<div class="viol-item"><div class="viol-cls ${cls}">${cls}</div><div><div class="viol-desc">${esc(desc)}</div>${meta.length?`<div class="viol-meta">${meta.map(m=>`<span>${esc(m)}</span>`).join('')}</div>`:''}</div><span class="viol-status ${statusClass}">${esc(statusLabel)}</span></div>`;
-    }).join('');
-
-    if (filtered.length > visibleCount) {
-      btn.textContent = `Show ${Math.min(20, filtered.length - visibleCount)} more (${filtered.length - visibleCount} remaining)`;
-      btn.classList.remove('hidden');
-    } else { btn.classList.add('hidden'); }
-  }
-
-  function esc(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-  function titleCase(s) { return s ? s.toLowerCase().replace(/\b\w/g,c=>c.toUpperCase()) : ''; }
-</script>
-
-<!-- Mobile nav -->
-<script>
-  (function() {
-    var toggle   = document.querySelector('.mobile-toggle');
-    var navLinks = document.querySelector('.nav-links');
-    var siteNav  = document.querySelector('.site-nav');
-    if (!toggle || !navLinks) return;
-    var isOpen = false, savedY = 0;
-    function openMenu()  { isOpen=true;  toggle.setAttribute('aria-expanded','true');  navLinks.classList.add('open');    savedY=window.scrollY; document.body.style.top='-'+savedY+'px'; document.body.classList.add('nav-open'); }
-    function closeMenu() { isOpen=false; toggle.setAttribute('aria-expanded','false'); navLinks.classList.remove('open'); document.body.classList.remove('nav-open'); document.body.style.top=''; window.scrollTo(0,savedY); }
-    toggle.addEventListener('click', function(e){ e.stopPropagation(); isOpen?closeMenu():openMenu(); });
-    navLinks.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',function(){ if(isOpen)closeMenu(); }); });
-    document.addEventListener('click', function(e){ if(isOpen&&!siteNav.contains(e.target))closeMenu(); });
-    document.addEventListener('keydown', function(e){ if(e.key==='Escape'&&isOpen){closeMenu();toggle.focus();} });
-    window.addEventListener('resize', function(){ if(window.innerWidth>768&&isOpen)closeMenu(); });
-  })();
-</script>
-
+</div>
 </body>
 </html>

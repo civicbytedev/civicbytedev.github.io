@@ -1,675 +1,200 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MV3SDWV3DV"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-MV3SDWV3DV');
-  </script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#080b1a" />
-  <title>NYC Eviction Records — CivicByte</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='2' y='2' width='30' height='30' rx='9' fill='%23080b1a' stroke='%2300f5c4' stroke-width='1.5'/%3E%3Crect x='9' y='18' width='3.5' height='8' rx='1.2' fill='%2300f5c4'/%3E%3Crect x='15.25' y='13' width='3.5' height='13' rx='1.2' fill='%2300f5c4' opacity='.7'/%3E%3Crect x='21.5' y='8' width='3.5' height='18' rx='1.2' fill='%2300f5c4' opacity='.5'/%3E%3C/svg%3E">
-  <meta name="description" content="Look up eviction history for any NYC address. Search executed marshal evictions by address, borough, or date range. Free, live data from NYC Open Data." />
-  <meta name="keywords" content="NYC eviction records, eviction history NYC, marshal evictions NYC, NYC housing evictions, tenant eviction lookup, NYC eviction search">
-  <link rel="canonical" href="https://civicbyte.dev/nyc-eviction-records/">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://civicbyte.dev/nyc-eviction-records/">
-  <meta property="og:title" content="NYC Eviction Records — Search by Address">
-  <meta property="og:description" content="Search executed marshal evictions for any NYC address. Free, live data from NYC Open Data.">
-  <meta property="og:image" content="https://civicbyte.dev/og-image.png">
-  <meta property="og:site_name" content="CivicByte">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="NYC Eviction Records — CivicByte">
-  <meta name="twitter:description" content="Look up eviction history for any NYC address. Free, live data.">
-  <meta name="twitter:image" content="https://civicbyte.dev/og-image.png">
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebApplication","name":"NYC Eviction Records","url":"https://civicbyte.dev/nyc-eviction-records/","description":"Search executed marshal evictions for any NYC address. Free, live data from NYC Open Data.","applicationCategory":"Utilities","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"provider":{"@type":"Organization","name":"CivicByte","url":"https://civicbyte.dev"}}
-  </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/styles.css" />
-  <style>
-    body { background: var(--bg); }
-    body::before {
-      content: ''; position: fixed; inset: 0;
-      background-image: linear-gradient(rgba(30,45,82,0.16) 1px,transparent 1px),linear-gradient(90deg,rgba(30,45,82,0.16) 1px,transparent 1px);
-      background-size: 56px 56px; pointer-events: none; z-index: 0;
-    }
-    .site-nav, .tool-hero, .tool-main, footer { position: relative; z-index: 1; }
-
-    /* ── Hero ── */
-    .tool-hero {
-      padding: 5.5rem 2rem 3.5rem; text-align: center;
-      max-width: 800px; margin: 0 auto; position: relative; overflow: hidden;
-    }
-    .tool-hero::before {
-      content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
-      width: 700px; height: 420px;
-      background: radial-gradient(ellipse,rgba(0,245,196,0.07) 0%,transparent 65%);
-      pointer-events: none; z-index: 0;
-    }
-    .tool-hero > * { position: relative; z-index: 1; }
-    .tool-eyebrow {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      background: rgba(0,245,196,0.06); border: 1px solid rgba(0,245,196,0.2);
-      border-radius: 100px; padding: 0.35rem 1rem 0.35rem 0.75rem;
-      font-size: 0.78rem; font-weight: 500; color: var(--text-secondary);
-      margin-bottom: 1.5rem; animation: fadeUp 0.45s ease-out both;
-    }
-    .tool-eyebrow .dot { width:6px;height:6px;background:var(--teal);border-radius:50%;box-shadow:0 0 7px var(--teal);flex-shrink:0; }
-    .tool-hero h1 {
-      font-size: clamp(2.2rem,5.5vw,3.5rem); font-weight: 700; line-height: 1.1;
-      letter-spacing: -0.04em; margin-bottom: 1rem; animation: fadeUp 0.45s ease-out 0.08s both;
-    }
-    .tool-hero .sub {
-      font-size: 1.05rem; color: var(--text-secondary); max-width: 560px;
-      margin: 0 auto 2.5rem; line-height: 1.75; animation: fadeUp 0.45s ease-out 0.16s both;
-    }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-
-    /* ── Search bar ── */
-    .search-wrap {
-      max-width: 680px; margin: 0 auto; animation: fadeUp 0.45s ease-out 0.24s both;
-    }
-    .search-box {
-      display: flex; align-items: center; gap: 0;
-      background: var(--surface); border: 1px solid var(--border-light);
-      border-radius: var(--radius); overflow: hidden;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .search-box:focus-within {
-      border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,245,196,0.08);
-    }
-    .search-icon { padding: 0 0.75rem 0 1.25rem; color: var(--text-dim); flex-shrink:0; display:flex;align-items:center; }
-    #searchInput {
-      flex: 1; background: transparent; border: none; outline: none;
-      color: var(--text); font-family: "DM Sans", sans-serif; font-size: 1rem;
-      padding: 1rem 0.5rem;
-    }
-    #searchInput::placeholder { color: var(--text-dim); }
-    .search-btn {
-      background: var(--teal); color: #000; border: none; cursor: pointer;
-      font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 0.9rem;
-      padding: 0.75rem 1.5rem; margin: 0.35rem; border-radius: 10px;
-      transition: background 0.18s, transform 0.18s; white-space: nowrap;
-    }
-    .search-btn:hover { background: #00c9a0; transform: translateY(-1px); }
-    .search-btn:active { transform: scale(0.98); }
-    .search-hint {
-      font-size: 0.78rem; color: var(--text-dim); margin-top: 0.75rem;
-      display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;
-    }
-    .example-btn {
-      background: rgba(0,245,196,0.06); border: 1px solid rgba(0,245,196,0.18);
-      color: var(--teal); font-family: "DM Sans", sans-serif; font-size: 0.75rem;
-      padding: 0.2rem 0.65rem; border-radius: 6px; cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-    }
-    .example-btn:hover { background: rgba(0,245,196,0.12); border-color: rgba(0,245,196,0.35); }
-
-    /* ── Main content ── */
-    .tool-main { max-width: 860px; margin: 0 auto; padding: 2rem 2rem 5rem; }
-
-    /* ── Filters ── */
-    .filter-row {
-      display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;
-      margin-bottom: 1.5rem;
-    }
-    .filter-select {
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text-secondary); font-family: "DM Sans", sans-serif; font-size: 0.85rem;
-      padding: 0.5rem 0.9rem; border-radius: 8px; cursor: pointer;
-      transition: border-color 0.18s;
-    }
-    .filter-select:focus { outline: none; border-color: var(--teal); }
-    .results-label { font-size: 0.8rem; color: var(--text-dim); margin-left: auto; }
-
-    /* ── States ── */
-    .state-panel { padding: 3rem 0; }
-    .hidden { display: none !important; }
-
-    /* idle */
-    .idle-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem; margin-bottom: 2rem;
-    }
-    .idle-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.5rem 1.25rem;
-    }
-    .idle-card-icon {
-      width: 40px; height: 40px; border-radius: 10px;
-      background: rgba(0,245,196,0.08); border: 1px solid rgba(0,245,196,0.15);
-      display: flex; align-items: center; justify-content: center; margin-bottom: 0.9rem;
-      color: var(--teal);
-    }
-    .idle-card-icon svg { width:18px;height:18px; }
-    .idle-card h4 { font-size:0.9rem;font-weight:600;margin-bottom:0.3rem; }
-    .idle-card p { font-size:0.8rem;color:var(--text-secondary);line-height:1.5; }
-    .data-note {
-      background: var(--surface); border: 1px solid var(--border);
-      border-left: 3px solid rgba(0,245,196,0.4);
-      border-radius: var(--radius-sm); padding: 1rem 1.25rem;
-      font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6;
-    }
-    .data-note strong { color: var(--text); }
-
-    /* loading */
-    .spinner-wrap { text-align:center;padding:4rem 0; }
-    .spinner {
-      width: 36px; height: 36px; border: 3px solid var(--border);
-      border-top-color: var(--teal); border-radius: 50%;
-      animation: spin 0.7s linear infinite; margin: 0 auto 1rem;
-    }
-    @keyframes spin { to{transform:rotate(360deg)} }
-    .spinner-text { color:var(--text-secondary);font-size:0.9rem; }
-
-    /* error */
-    .error-wrap { text-align:center;padding:3rem 0; }
-    .error-icon { font-size:2rem;margin-bottom:0.75rem; }
-    .error-title { font-size:1.1rem;font-weight:600;margin-bottom:0.5rem; }
-    .error-msg { color:var(--text-secondary);font-size:0.9rem;margin-bottom:1.5rem; }
-    .retry-btn {
-      background:transparent;border:1px solid var(--border-light);color:var(--text);
-      font-family:"DM Sans",sans-serif;font-size:0.9rem;padding:0.6rem 1.4rem;
-      border-radius:8px;cursor:pointer;transition:border-color 0.18s;
-    }
-    .retry-btn:hover{border-color:var(--teal);color:var(--teal);}
-
-    /* empty */
-    .empty-wrap { text-align:center;padding:3.5rem 0; }
-    .empty-icon {
-      width:56px;height:56px;border-radius:14px;
-      background:rgba(0,245,196,0.08);border:1px solid rgba(0,245,196,0.15);
-      display:flex;align-items:center;justify-content:center;
-      margin:0 auto 1rem; color:var(--teal);
-    }
-    .empty-icon svg{width:24px;height:24px;}
-    .empty-title{font-size:1.05rem;font-weight:600;margin-bottom:0.4rem;}
-    .empty-desc{color:var(--text-secondary);font-size:0.88rem;line-height:1.6;max-width:420px;margin:0 auto;}
-
-    /* summary bar */
-    .summary-bar {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.25rem 1.5rem;
-      display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
-      margin-bottom: 1.25rem;
-    }
-    .summary-addr { font-family:"Space Grotesk",sans-serif; font-size:1rem; font-weight:600; }
-    .summary-stats { display:flex;gap:1.5rem;flex-wrap:wrap;margin-left:auto; }
-    .summary-stat { text-align:center; }
-    .summary-stat-num { font-family:"Space Grotesk",sans-serif;font-size:1.5rem;font-weight:700;line-height:1; }
-    .summary-stat-label { font-size:0.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px; }
-    .s-total { color:var(--text); }
-    .s-res   { color:var(--teal); }
-    .s-com   { color:var(--amber); }
-
-    /* result cards */
-    .results-list { display:flex;flex-direction:column;gap:0.75rem; }
-    .ev-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.25rem 1.5rem;
-      display: grid; grid-template-columns: 1fr auto;
-      align-items: start; gap: 0.75rem 1.5rem;
-      transition: border-color 0.18s, transform 0.18s;
-    }
-    .ev-card:hover { border-color:var(--border-light);transform:translateY(-2px); }
-    .ev-card-left {}
-    .ev-addr { font-family:"Space Grotesk",sans-serif;font-size:0.95rem;font-weight:600;margin-bottom:0.35rem; }
-    .ev-addr span { color:var(--text-secondary);font-weight:400;font-size:0.85rem; }
-    .ev-meta { display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center; }
-    .ev-badge {
-      display:inline-flex;align-items:center;gap:0.35rem;
-      font-size:0.74rem;font-weight:500;padding:0.25rem 0.65rem;
-      border-radius:6px;border-width:1px;border-style:solid;
-    }
-    .ev-badge.res  { background:rgba(0,245,196,0.08);color:var(--teal);border-color:rgba(0,245,196,0.2); }
-    .ev-badge.com  { background:rgba(251,191,36,0.08);color:var(--amber);border-color:rgba(251,191,36,0.2); }
-    .ev-badge.boro { background:rgba(177,151,252,0.08);color:var(--purple);border-color:rgba(177,151,252,0.2); }
-    .ev-case { font-size:0.75rem;color:var(--text-dim);font-family:"Space Grotesk",sans-serif; }
-    .ev-date {
-      text-align:right;flex-shrink:0;
-      font-family:"Space Grotesk",sans-serif;
-    }
-    .ev-date-val { font-size:0.95rem;font-weight:600;color:var(--text); }
-    .ev-date-label { font-size:0.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.07em; }
-    .ev-marshal { font-size:0.75rem;color:var(--text-dim);margin-top:0.15rem; }
-
-    /* pagination */
-    .pagination { display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-top:1.5rem; }
-    .page-btn {
-      background:var(--surface);border:1px solid var(--border);color:var(--text-secondary);
-      font-family:"DM Sans",sans-serif;font-size:0.85rem;padding:0.5rem 1rem;
-      border-radius:8px;cursor:pointer;transition:border-color 0.18s,color 0.18s;
-    }
-    .page-btn:hover:not(:disabled){border-color:var(--teal);color:var(--teal);}
-    .page-btn:disabled{opacity:0.35;cursor:default;}
-    .page-info{font-size:0.82rem;color:var(--text-dim);padding:0 0.5rem;}
-
-    @media(max-width:600px){
-      .search-btn{padding:0.65rem 1rem;}
-      .summary-bar{flex-direction:column;align-items:flex-start;gap:1rem;}
-      .summary-stats{margin-left:0;}
-      .ev-card{grid-template-columns:1fr;gap:0.5rem;}
-      .ev-date{text-align:left;}
-      .filter-row{gap:0.5rem;}
-    }
-  </style>
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="/auth.js"></script>
+<meta charset="utf-8">
+<title>NYC Eviction Records — CivicByte</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/cb-icon-light.svg">
+<meta name="theme-color" content="#b8432b">
+<meta name="description" content="Look up executed marshal evictions for any NYC address. Know before you sign. Free, live NYC Open Data.">
+<script defer src="/civicbyte-fx.js"></script>
+<link rel="stylesheet" href="/civicbyte.css">
+<link rel="stylesheet" href="/tool-page.css">
+<style>
+  .state-panel{display:none}.state-panel.active{display:block}
+  .loading-wrap{padding:2rem 0;text-align:center}
+  .spinner{width:28px;height:28px;border:2.5px solid rgba(29,26,21,0.1);border-top-color:var(--brick);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-text{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:.06em}
+  .err-box{background:#fef2f0;border:1px solid rgba(184,67,43,.2);border-radius:12px;padding:18px 20px;margin-top:1rem}
+  .err-title{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:var(--brick);margin:0 0 6px}
+  .err-msg{font-size:13.5px;color:var(--ink-soft);margin:0}
+  .clean-wrap{padding:2rem 0;text-align:center}
+  .clean-icon{width:52px;height:52px;border-radius:14px;background:rgba(91,107,58,.1);border:1px solid rgba(91,107,58,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+  .clean-title{font-family:'Fraunces',serif;font-weight:600;font-size:20px;margin:0 0 6px}
+  .clean-desc{font-size:13.5px;color:var(--ink-soft);max-width:420px;margin:0 auto}
+  #mock-suggest{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin:-10px 0 16px;letter-spacing:.06em}
+  #mock-suggest a{color:var(--brick)}
+  .band-pill{display:inline-block;padding:4px 12px;border-radius:999px;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.08em}
+</style>
 </head>
 <body>
-<script>requireAuth();</script>
+<div class="page">
 
-<!-- NAV -->
-<header class="site-nav">
-  <nav class="nav">
-    <a href="/" class="logo">
-      <svg width="30" height="30" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lgNav" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00f5c4"/><stop offset="100%" stop-color="#b197fc"/></linearGradient></defs><rect width="1024" height="1024" rx="220" fill="#080b1a"/><rect x="170" y="573" width="72" height="144" rx="2" fill="url(#lgNav)"/><rect x="260" y="501" width="54" height="216" rx="2" fill="url(#lgNav)"/><rect x="332" y="393" width="90" height="324" rx="2" fill="url(#lgNav)"/><rect x="375" y="303" width="5" height="90" rx="2" fill="url(#lgNav)"/><rect x="440" y="465" width="108" height="252" rx="2" fill="url(#lgNav)"/><rect x="566" y="321" width="90" height="396" rx="2" fill="url(#lgNav)"/><rect x="609" y="213" width="5" height="108" rx="2" fill="url(#lgNav)"/><rect x="674" y="483" width="72" height="234" rx="2" fill="url(#lgNav)"/><rect x="764" y="555" width="54" height="162" rx="2" fill="url(#lgNav)"/><rect x="789" y="501" width="5" height="54" rx="2" fill="url(#lgNav)"/><rect x="818" y="609" width="36" height="108" rx="2" fill="url(#lgNav)"/><rect x="170" y="717" width="684" height="3" rx="1" fill="url(#lgNav)" opacity="0.6"/></svg>
-      <span class="logo-wordmark">civic<span class="cb">byte</span></span>
-    </a>
-    <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="cb-nav-links">
-      <span class="cb-ham" aria-hidden="true"><span></span><span></span><span></span></span>
-    </button>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/tools.html" class="active">Tools</a>
-      <a href="/about.html">About</a>
-      <a href="/submit.html">Submit a Tool</a>
-      <a href="https://github.com/civicbytedev" target="_blank" rel="noopener" class="nav-gh">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-        GitHub
-      </a>
-    </div>
-  </nav>
-</header>
+<nav class="nav">
+  <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/tools.html" class="active">Tools</a></li>
+    <li><a href="/about.html">About</a></li>
+    <li><a href="/impact.html">Impact</a></li>
+    <li><a href="https://github.com/civicbytedev">GitHub</a></li>
+  </ul>
+  <a href="/submit.html" class="cta">Submit a tool</a>
+</nav>
 
-<!-- HERO -->
-<div class="tool-hero">
-  <div class="tool-eyebrow"><div class="dot"></div>Live data &middot; NYC Open Data &middot; Free</div>
-  <h1>NYC Eviction <span class="grad">Records</span></h1>
-  <p class="sub">Search executed marshal evictions for any NYC address. Know before you sign — or look up your building's eviction history.</p>
-  <div class="search-wrap">
-    <div class="search-box">
-      <span class="search-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </span>
-      <input id="searchInput" type="text" placeholder="e.g. 1000 Southern Blvd, Bronx" autocomplete="off" autocorrect="off" spellcheck="false" />
-      <button class="search-btn" onclick="runSearch()">Search</button>
-    </div>
-    <div class="search-hint">
-      Try:
-      <button class="example-btn" onclick="tryExample('1000 Southern Blvd')">1000 Southern Blvd</button>
-      <button class="example-btn" onclick="tryExample('2770 Briggs Ave')">2770 Briggs Ave</button>
-      <button class="example-btn" onclick="tryExample('600 West 136 St')">600 W 136 St</button>
-    </div>
-  </div>
+<div class="crumb">
+  <a href="/">CivicByte</a><span class="sep">/</span>
+  <a href="/tools.html">Tools</a><span class="sep">/</span>
+  <span>NYC Eviction Records</span>
 </div>
 
-<!-- MAIN -->
-<div class="tool-main">
-
-  <!-- IDLE -->
-  <div id="state-idle" class="state-panel">
-    <div class="idle-grid">
-      <div class="idle-card">
-        <div class="idle-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        </div>
-        <h4>Search by address</h4>
-        <p>Enter any NYC street address to pull its full eviction history from official court records.</p>
-      </div>
-      <div class="idle-card">
-        <div class="idle-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        </div>
-        <h4>Executed evictions</h4>
-        <p>Records cover marshal carry-outs — the final stage of the eviction process — updated regularly.</p>
-      </div>
-      <div class="idle-card">
-        <div class="idle-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
-        <h4>100% free</h4>
-        <p>No account, no paywall. Powered by NYC Open Data and available to everyone.</p>
-      </div>
-    </div>
-    <div class="data-note">
-      <strong>Data note:</strong> This tool covers <em>executed</em> evictions (marshal carry-outs). It does not include all court filings or cases that were settled before execution. A result here means an eviction was physically carried out at that address.
+<section class="tool-hero">
+  <div>
+    <div class="meta-row"><span class="status">Live</span><span class="tag">Housing · Tenant Rights</span></div>
+    <h1>Know a building's <em>eviction history</em> — before you sign.</h1>
+    <p class="sub">Executed marshal evictions for every NYC address.</p>
+    <p class="desc">Look up any NYC building to see the executed residential evictions tied to it since 2017. A pattern of evictions tells you something a listing photo never will. Built for prospective tenants, organizers, and the lawyers who represent them.</p>
+    <div class="actions">
+      <a href="#try" class="btn btn-p">Try it below ↓</a>
+      <a href="https://github.com/civicbytedev" class="btn btn-s">Source on GitHub</a>
     </div>
   </div>
-
-  <!-- LOADING -->
-  <div id="state-loading" class="state-panel hidden">
-    <div class="spinner-wrap">
-      <div class="spinner"></div>
-      <div class="spinner-text">Searching eviction records&hellip;</div>
+  <aside class="info-card">
+    <div class="ih"><span>At a glance</span><span>v1.0</span></div>
+    <div class="ib">
+      <dl>
+        <dt>Coverage</dt><dd>All 5 boroughs</dd>
+        <dt>Records</dt><dd>100k+</dd>
+        <dt>Time range</dt><dd>2017 – present</dd>
+        <dt>Data source</dt><dd>DOI · NYC Open Data</dd>
+        <dt>License</dt><dd>MIT · Open</dd>
+        <dt>Cost to use</dt><dd>Free</dd>
+        <dt>Login</dt><dd>Not required</dd>
+      </dl>
     </div>
-  </div>
+    <a href="https://github.com/civicbytedev" class="repo-link">github.com/civicbytedev/nyc-eviction-records</a>
+  </aside>
+</section>
 
-  <!-- ERROR -->
-  <div id="state-error" class="state-panel hidden">
-    <div class="error-wrap">
-      <div class="error-icon">⚠️</div>
-      <div class="error-title">Something went wrong</div>
-      <div class="error-msg" id="errorMsg">Could not fetch eviction data. Please try again.</div>
-      <button class="retry-btn" onclick="runSearch()">Try again</button>
+<section class="preview-wrap" id="try">
+  <div class="preview-frame">
+    <div class="pf-bar">
+      <span class="d d1"></span><span class="d d2"></span><span class="d d3"></span>
+      <span class="url">civicbyte.dev/nyc-eviction-records</span>
     </div>
-  </div>
-
-  <!-- RESULTS -->
-  <div id="state-results" class="state-panel hidden">
-    <!-- filters -->
-    <div class="filter-row">
-      <select class="filter-select" id="filterBorough" onchange="applyFilters()">
-        <option value="">All boroughs</option>
-        <option value="MANHATTAN">Manhattan</option>
-        <option value="BRONX">Bronx</option>
-        <option value="BROOKLYN">Brooklyn</option>
-        <option value="QUEENS">Queens</option>
-        <option value="STATEN ISLAND">Staten Island</option>
-      </select>
-      <select class="filter-select" id="filterType" onchange="applyFilters()">
-        <option value="">Residential &amp; Commercial</option>
-        <option value="Residential">Residential only</option>
-        <option value="Commercial">Commercial only</option>
-      </select>
-      <select class="filter-select" id="filterYear" onchange="applyFilters()">
-        <option value="">All years</option>
-        <option value="2026">2026</option>
-        <option value="2025">2025</option>
-        <option value="2024">2024</option>
-        <option value="2023">2023</option>
-        <option value="2022">2022</option>
-        <option value="2021">2021 &amp; earlier</option>
-      </select>
-      <span class="results-label" id="resultsLabel"></span>
-    </div>
-
-    <!-- summary -->
-    <div class="summary-bar" id="summaryBar"></div>
-
-    <!-- list -->
-    <div class="results-list" id="resultsList"></div>
-
-    <!-- empty after filter -->
-    <div id="noFilterResults" class="hidden">
-      <div class="empty-wrap">
-        <div class="empty-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        </div>
-        <div class="empty-title">No results match your filters</div>
-        <div class="empty-desc">Try removing a filter to see more results.</div>
+    <div class="pf-body">
+      <div class="mock-search">
+        <span class="mag"></span>
+        <input id="ev-input" placeholder="Enter an NYC address, e.g. 2418 Creston Ave, Bronx" autocomplete="off" spellcheck="false">
+        <button class="submit" onclick="runEvict()">Check address</button>
+      </div>
+      <div id="mock-suggest">Try: <a href="#" onclick="qs('1000 Southern Blvd');return false;">1000 Southern Blvd</a> · <a href="#" onclick="qs('2770 Briggs Ave');return false;">2770 Briggs Ave</a> · <a href="#" onclick="qs('600 W 136 St');return false;">600 W 136 St</a></div>
+      <div id="result">
+        <div class="state-panel active" id="s-idle"><p style="font-size:14px;color:var(--ink-soft)">Enter an address above to pull its full eviction history — live from NYC Open Data.</p></div>
+        <div class="state-panel" id="s-loading"><div class="loading-wrap"><div class="spinner"></div><div class="loading-text">Fetching eviction records…</div></div></div>
+        <div class="state-panel" id="s-error"><div class="err-box"><div class="err-title">Couldn't load data</div><div class="err-msg" id="err-text"></div></div></div>
+        <div class="state-panel" id="s-clean"><div class="clean-wrap"><div class="clean-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5b6b3a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="clean-title">No evictions on record</div><div class="clean-desc" id="clean-desc"></div></div></div>
+        <div class="state-panel" id="s-results"><div id="result-head"></div><div id="stat-grid"></div><div id="dtable"></div></div>
       </div>
     </div>
-
-    <!-- pagination -->
-    <div class="pagination" id="pagination"></div>
   </div>
-
-  <!-- EMPTY (no records found) -->
-  <div id="state-empty" class="state-panel hidden">
-    <div class="empty-wrap">
-      <div class="empty-icon" style="background:rgba(0,245,196,0.08);border-color:rgba(0,245,196,0.15);color:var(--teal)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-      </div>
-      <div class="empty-title">No evictions on record</div>
-      <div class="empty-desc" id="emptyDesc">No executed evictions found for this address. This means no marshal carry-outs were recorded — a good sign for tenants.</div>
-    </div>
-  </div>
-
-</div><!-- /tool-main -->
-
-<!-- FOOTER -->
-<footer>
-  <div class="f-left">&copy; 2026 CivicByte &mdash; Open source under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.</div>
-  <div class="f-right">
-    <a href="/tools.html">Tools</a>
-    <a href="/about.html">About</a>
-    <a href="/submit.html">Submit</a>
-    <a href="https://github.com/civicbytedev" target="_blank" rel="noopener">GitHub</a>
-  </div>
-</footer>
+</section>
 
 <script>
-  const API = 'https://data.cityofnewyork.us/resource/6z8x-wfk4.json';
-  const APP_TOKEN = ''; // optional Socrata app token — add yours to avoid throttling
-  const PAGE_SIZE = 25;
-
-  let allResults   = [];
-  let filtered     = [];
-  let currentPage  = 1;
-  let lastQuery    = '';
-
-  // ── State helpers ──────────────────────────────────────────────────────────
-  function showState(id) {
-    ['state-idle','state-loading','state-error','state-results','state-empty']
-      .forEach(s => document.getElementById(s).classList.toggle('hidden', s !== id));
-  }
-
-  // ── Address normalization ──────────────────────────────────────────────────
-  // Expand common abbreviations so "Ave" matches "AVENUE" etc.
-  const ABBREVS = {
-    'STREET': 'ST', 'AVENUE': 'AVE', 'BOULEVARD': 'BLVD', 'DRIVE': 'DR',
-    'PLACE': 'PL', 'COURT': 'CT', 'LANE': 'LN', 'ROAD': 'RD',
-    'TERRACE': 'TER', 'PARKWAY': 'PKY', 'HIGHWAY': 'HWY',
-    'NORTH': 'N', 'SOUTH': 'S', 'EAST': 'E', 'WEST': 'W',
-  };
-  function normalizeAddr(s) {
-    let u = s.toUpperCase().replace(/[.,#]/g, ' ').replace(/\s+/g, ' ').trim();
-    // Expand abbreviations both ways (so "ST" doesn't need to expand, but "STREET" does)
-    Object.entries(ABBREVS).forEach(([long, short]) => {
-      u = u.replace(new RegExp(`\\b${long}\\b`, 'g'), short);
-    });
-    return u;
-  }
-
-  // ── Search ─────────────────────────────────────────────────────────────────
-  document.getElementById('searchInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') runSearch();
-  });
-
-  async function runSearch() {
-    const raw = document.getElementById('searchInput').value.trim();
-    if (!raw || raw.length < 3) {
-      document.getElementById('searchInput').focus();
-      return;
+const API='https://data.cityofnewyork.us/resource/6z8x-wfk4.json';
+function showState(id){document.querySelectorAll('.state-panel').forEach(el=>el.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function qs(addr){document.getElementById('ev-input').value=addr;runEvict();}
+document.getElementById('ev-input').addEventListener('keydown',e=>{if(e.key==='Enter')runEvict();});
+const ABBREVS={'STREET':'ST','AVENUE':'AVE','BOULEVARD':'BLVD','DRIVE':'DR','PLACE':'PL','COURT':'CT','LANE':'LN','ROAD':'RD','TERRACE':'TER','PARKWAY':'PKY','NORTH':'N','SOUTH':'S','EAST':'E','WEST':'W'};
+function normalizeAddr(s){let u=s.toUpperCase().replace(/[.,#]/g,' ').replace(/\s+/g,' ').trim();Object.entries(ABBREVS).forEach(([long,short])=>{u=u.replace(new RegExp('\\b'+long+'\\b','g'),short);});return u;}
+async function runEvict(){
+  const raw=document.getElementById('ev-input').value.trim();
+  if(!raw||raw.length<3){document.getElementById('ev-input').focus();return;}
+  showState('s-loading');
+  try{
+    const normalized=normalizeAddr(raw);
+    const words=normalized.split(' ').filter(w=>w.length>=2);
+    const safeWords=words.map(w=>w.replace(/'/g,"''"));
+    const whereClause=safeWords.map(w=>`upper(eviction_address) like '%${w}%'`).join(' AND ');
+    let url=`${API}?$where=${encodeURIComponent(whereClause)}&$limit=200`;
+    let res=await fetch(url);
+    if(!res.ok)throw new Error(`API error ${res.status}`);
+    let data=await res.json();
+    if(data.length===0&&words.length>2){
+      const shortWhere=safeWords.slice(0,2).map(w=>`upper(eviction_address) like '%${w}%'`).join(' AND ');
+      url=`${API}?$where=${encodeURIComponent(shortWhere)}&$limit=200`;
+      res=await fetch(url);
+      if(res.ok) data=await res.json();
     }
-    lastQuery = raw;
-    resetFilters();
-    showState('state-loading');
-
-    try {
-      const data = await fetchEvictions(raw);
-      allResults = data;
-      applyFilters(true);
-    } catch (err) {
-      document.getElementById('errorMsg').textContent = err.message || 'Could not load data. Please try again.';
-      showState('state-error');
+    data.sort((a,b)=>(b.executed_date||'').localeCompare(a.executed_date||''));
+    if(data.length===0){
+      document.getElementById('clean-desc').textContent=`No executed evictions found for "${raw}". A good sign — no marshal carry-outs on record. Note: this only covers executed evictions, not all court filings.`;
+      showState('s-clean');return;
     }
-  }
-
-  async function fetchEvictions(query) {
-    // Strategy 1: $where LIKE on eviction_address (most reliable for address search)
-    const normalized = normalizeAddr(query);
-    const words = normalized.split(' ').filter(w => w.length >= 2);
-
-    // Build WHERE: each word must appear somewhere in the address
-    const safeWords = words.map(w => w.replace(/'/g, "''"));
-    const whereClause = safeWords
-      .map(w => `upper(eviction_address) like '%${w}%'`)
-      .join(' AND ');
-
-    const headers = APP_TOKEN ? { 'X-App-Token': APP_TOKEN } : {};
-
-    let url = `${API}?$where=${encodeURIComponent(whereClause)}&$limit=500`;
-    let res = await fetch(url, { headers });
-
-    // Strategy 2: fall back to $q full-text if $where returned 0 or errored
-    if (!res.ok || (res.status === 200 && (await res.clone().json()).length === 0 && words.length > 2)) {
-      // Try a shorter, house-number + first street word query
-      const shortWhere = safeWords.slice(0, 2)
-        .map(w => `upper(eviction_address) like '%${w}%'`)
-        .join(' AND ');
-      url = `${API}?$where=${encodeURIComponent(shortWhere)}&$limit=500`;
-      res = await fetch(url, { headers });
-    }
-
-    if (!res.ok) {
-      const body = await res.text().catch(() => '');
-      throw new Error(`NYC Open Data returned ${res.status}. ${body.slice(0, 120)}`);
-    }
-
-    const data = await res.json();
-
-    // Sort newest first client-side (avoids $order field-name dependency)
-    data.sort((a, b) => {
-      const da = a.executed_date || '';
-      const db = b.executed_date || '';
-      return db.localeCompare(da);
-    });
-
-    return data;
-  }
-
-  function tryExample(addr) {
-    document.getElementById('searchInput').value = addr;
-    runSearch();
-  }
-
-  // ── Filters ────────────────────────────────────────────────────────────────
-  function resetFilters() {
-    document.getElementById('filterBorough').value = '';
-    document.getElementById('filterType').value    = '';
-    document.getElementById('filterYear').value    = '';
-  }
-
-  function applyFilters(resetPage) {
-    const borough = document.getElementById('filterBorough').value;
-    const type    = document.getElementById('filterType').value;
-    const year    = document.getElementById('filterYear').value;
-
-    filtered = allResults.filter(r => {
-      if (borough && (r.borough || '').toUpperCase() !== borough) return false;
-      if (type    && !(r.residential_commercial_ind || '').includes(type)) return false;
-      if (year) {
-        const y = (r.executed_date || '').slice(0, 4);
-        if (year === '2021') { if (parseInt(y) > 2021) return false; }
-        else if (y !== year) return false;
-      }
-      return true;
-    });
-
-    if (resetPage) currentPage = 1;
-    renderResults();
-  }
-
-  // ── Render ─────────────────────────────────────────────────────────────────
-  function renderResults() {
-    if (allResults.length === 0) {
-      showState('state-empty');
-      const addr = lastQuery;
-      document.getElementById('emptyDesc').textContent =
-        `No executed evictions found for "${addr}". A good sign — no marshal carry-outs on record.`;
-      return;
-    }
-
-    showState('state-results');
-
-    // Summary
-    const res = allResults.filter(r => (r.residential_commercial_ind||'').toLowerCase().includes('residential')).length;
-    const com = allResults.length - res;
-    document.getElementById('summaryBar').innerHTML = `
-      <div class="summary-addr">${escHtml(lastQuery)}</div>
-      <div class="summary-stats">
-        <div class="summary-stat"><div class="summary-stat-num s-total">${allResults.length}</div><div class="summary-stat-label">Total</div></div>
-        <div class="summary-stat"><div class="summary-stat-num s-res">${res}</div><div class="summary-stat-label">Residential</div></div>
-        ${com ? `<div class="summary-stat"><div class="summary-stat-num s-com">${com}</div><div class="summary-stat-label">Commercial</div></div>` : ''}
-      </div>
-    `;
-
-    // Results label
-    document.getElementById('resultsLabel').textContent =
-      filtered.length < allResults.length
-        ? `${filtered.length} of ${allResults.length} results`
-        : `${allResults.length} result${allResults.length !== 1 ? 's' : ''}`;
-
-    const noFilter = document.getElementById('noFilterResults');
-    const list     = document.getElementById('resultsList');
-
-    if (filtered.length === 0) {
-      list.innerHTML = '';
-      noFilter.classList.remove('hidden');
-      document.getElementById('pagination').innerHTML = '';
-      return;
-    }
-    noFilter.classList.add('hidden');
-
-    // Paginate
-    const start = (currentPage - 1) * PAGE_SIZE;
-    const page  = filtered.slice(start, start + PAGE_SIZE);
-
-    list.innerHTML = page.map(r => {
-      const addr   = [r.eviction_address, r.eviction_apt_num ? `Apt ${r.eviction_apt_num}` : ''].filter(Boolean).join(', ');
-      const boro   = titleCase(r.borough || '');
-      const date   = r.executed_date ? formatDate(r.executed_date) : '—';
-      const isRes  = (r.residential_commercial_ind || '').toLowerCase().includes('residential');
-      const marshal = [r.marshal_first_name, r.marshal_last_name].filter(Boolean).join(' ');
-      return `
-        <div class="ev-card">
-          <div class="ev-card-left">
-            <div class="ev-addr">${escHtml(addr)} <span>${escHtml(r.eviction_zip || '')}</span></div>
-            <div class="ev-meta">
-              <span class="ev-badge ${isRes ? 'res' : 'com'}">${isRes ? 'Residential' : 'Commercial'}</span>
-              ${boro ? `<span class="ev-badge boro">${escHtml(boro)}</span>` : ''}
-              ${r.court_index_number ? `<span class="ev-case">Case ${escHtml(r.court_index_number)}</span>` : ''}
-            </div>
-          </div>
-          <div class="ev-date">
-            <div class="ev-date-val">${date}</div>
-            <div class="ev-date-label">Executed</div>
-            ${marshal ? `<div class="ev-marshal">Marshal: ${escHtml(marshal)}</div>` : ''}
-          </div>
-        </div>`;
-    }).join('');
-
-    // Pagination
-    const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-    const pag = document.getElementById('pagination');
-    if (totalPages <= 1) { pag.innerHTML = ''; return; }
-    pag.innerHTML = `
-      <button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>← Prev</button>
-      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
-      <button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>Next →</button>
-    `;
-  }
-
-  function goPage(n) {
-    currentPage = n;
-    renderResults();
-    document.querySelector('.tool-main').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  // ── Utilities ──────────────────────────────────────────────────────────────
-  function escHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-  function titleCase(s) {
-    return s.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-  }
-  function formatDate(iso) {
-    const d = new Date(iso);
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  }
+    renderResults(raw,data);
+  }catch(err){document.getElementById('err-text').textContent=err.message;showState('s-error');}
+}
+function renderResults(query,data){
+  const d=data[0];
+  const addr=d.eviction_address||query;
+  const boro=d.borough||'';
+  const full=addr+(boro?` · ${boro.charAt(0)+boro.slice(1).toLowerCase()}`:'');
+  const res=data.filter(r=>(r.residential_commercial_ind||'').toLowerCase().includes('residential')).length;
+  const recent=data.filter(r=>{if(!r.executed_date)return false;const y=parseInt(r.executed_date.slice(0,4));return y>=new Date().getFullYear()-1;}).length;
+  document.getElementById('result-head').innerHTML=`<div class="result-head"><div><div class="addr">${esc(full)}</div><div class="meta-tag">${data.length} executed evictions · ${res} residential · via NYC Open Data</div></div><div class="meta-tag">DOI · NYC Open Data</div></div>`;
+  document.getElementById('stat-grid').innerHTML=`<div class="stat-grid"><div class="s"><div class="n ${data.length>5?'alert':'ok'}">${data.length}</div><div class="k">Executed since 2017</div></div><div class="s"><div class="n ${recent>0?'alert':''}">${recent}</div><div class="k">In last 12 months</div></div><div class="s"><div class="n">${res}</div><div class="k">Residential</div></div><div class="s"><div class="n">${data.length-res}</div><div class="k">Commercial</div></div></div>`;
+  const rows=data.slice(0,20);
+  document.getElementById('dtable').innerHTML=`<div class="dtable"><div class="dh" style="grid-template-columns:130px 90px 1fr 130px"><span>Date</span><span>Unit</span><span>Type</span><span>Marshal</span></div>${rows.map(r=>{const date=r.executed_date?new Date(r.executed_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';const type=(r.residential_commercial_ind||'—');const marshal=[r.marshal_first_name,r.marshal_last_name].filter(Boolean).join(' ')||'—';return`<div class="dr" style="grid-template-columns:130px 90px 1fr 130px"><span>${date}</span><span><strong>${esc(r.eviction_apt_num||'—')}</strong></span><span>${esc(type)}</span><span>${esc(marshal)}</span></div>`}).join('')}${data.length>20?`<div class="dr" style="grid-template-columns:1fr;color:var(--ink-soft);font-size:12px;font-family:'IBM Plex Mono',monospace">+ ${data.length-20} more records · source: NYC Open Data</div>`:''}</div>`;
+  showState('s-results');
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 </script>
+
+<section class="tool-section alt">
+  <div class="k">How it works</div>
+  <h2>Check a building <em>in 10 seconds</em>.</h2>
+  <div class="steps-row">
+    <div class="step-card"><div class="num">01</div><h4>Enter the address</h4><p>Any NYC address. We search for it directly in the city's eviction records database via NYC Open Data.</p></div>
+    <div class="step-card"><div class="num">02</div><h4>Read the history</h4><p>Date, unit, eviction type, and executing marshal for every filing. See the pattern at a glance.</p></div>
+    <div class="step-card"><div class="num">03</div><h4>Use it before you sign</h4><p>A persistent pattern of evictions is a signal. Bring it to a lease conversation, or cite it in a hearing.</p></div>
+  </div>
+</section>
+
+<section class="tool-section">
+  <div class="k">Where the data comes from</div>
+  <h2>All public. All cited.</h2>
+  <div class="src-list">
+    <div class="src-card"><span class="src-k">Primary</span><h4>NYC DOI Evictions · Open Dataset</h4><p>Department of Investigation. Executed residential evictions by city marshals, updated weekly (6z8x-wfk4).</p></div>
+    <div class="src-card"><span class="src-k">API</span><h4>NYC Open Data · Socrata</h4><p>All queries made live from your browser to the official NYC Open Data endpoint. No middleman, no caching.</p></div>
+    <div class="src-card"><span class="src-k">Coverage</span><h4>Executed evictions only</h4><p>This dataset covers marshal carry-outs — the final stage of the eviction process. It does not include all court filings or cases settled before execution.</p></div>
+    <div class="src-card"><span class="src-k">Reference</span><h4>HPD Registration Contacts</h4><p>Cross-linked so any eviction record can be traced back to the building's current ownership.</p></div>
+  </div>
+</section>
+
+<section class="related">
+  <div class="sec-head"><div class="l"><div class="k">Related tools</div><h2>Pairs well with.</h2></div></div>
+  <div class="related-grid">
+    <a class="related-card" href="/nyc-building-checker/"><span class="rc-k">Housing</span><h4>NYC Building Report</h4><p>HPD violations, severity breakdown, and registration for any NYC address.</p><span class="rc-go">VIEW TOOL →</span></a>
+    <a class="related-card" href="/nyc-landlord-watch/"><span class="rc-k">Housing</span><h4>NYC Landlord Watch</h4><p>Portfolio-wide violation record for any NYC landlord or LLC.</p><span class="rc-go">VIEW TOOL →</span></a>
+    <a class="related-card" href="/nyc-311-complaints/"><span class="rc-k">Municipal</span><h4>NYC 311 Complaint Lookup</h4><p>Every 311 service request ever filed at a given address.</p><span class="rc-go">VIEW TOOL →</span></a>
+  </div>
+</section>
+
+<footer>
+  <div class="fg">
+    <div><a href="/" class="mark"><span class="sq"></span> civicbyte</a><p>An open platform for free, community-facing civic tools built on public data.</p></div>
+    <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+    <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">Our story</a></li></ul></div>
+    <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="#">Newsletter</a></li><li><a href="#">Press</a></li></ul></div>
+  </div>
+  <div class="col2"><span>© 2026 CivicByte · MIT License</span><span>Made in NYC · By students, for everyone</span></div>
+</footer>
+
+</div>
 </body>
 </html>

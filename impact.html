@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Impact — CivicByte</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/cb-icon-light.svg">
+<meta name="theme-color" content="#b8432b">
+<script defer src="/civicbyte-fx.js"></script>
+<link rel="stylesheet" href="/civicbyte.css">
+<style>
+  /* Headline numbers */
+  .bignum-band { padding: 0 44px 32px; display:grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .bignum { background: var(--cream); border: 1px solid rgba(29,26,21,0.1); border-radius: 16px; padding: 28px 26px; position:relative; }
+  .bignum.dark { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .bignum .k { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing:0.14em; text-transform:uppercase; color: var(--ink-soft); }
+  .bignum.dark .k { color: var(--ochre); }
+  .bignum .n { font-family:'Fraunces',serif; font-weight:500; font-size: 64px; line-height: 0.95; letter-spacing: -0.035em; margin-top: 16px; }
+  .bignum .n em { font-style:italic; color: var(--brick); }
+  .bignum.dark .n em { color: var(--ochre); }
+  .bignum .note { font-size: 13px; color: var(--ink-soft); margin-top: 6px; line-height:1.45; }
+  .bignum.dark .note { color: rgba(248,244,234,0.7); }
+
+  /* Use-cases */
+  .usecases { padding: 72px 44px; background: var(--cream); }
+  .uc-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .uc {
+    background: #fff; border: 1px solid rgba(29,26,21,0.1); border-radius: 16px;
+    padding: 24px 26px 26px; display:flex; flex-direction:column; min-height: 260px;
+  }
+  .uc .persona { display:flex; align-items:center; gap: 10px; margin-bottom: 14px; }
+  .uc .avatar { width: 36px; height: 36px; border-radius: 50%; font-family:'Fraunces',serif; font-weight:600; font-size: 16px; display:flex; align-items:center; justify-content:center; color:#fff; }
+  .uc .avatar.a { background: var(--brick); }
+  .uc .avatar.b { background: var(--moss); }
+  .uc .avatar.c { background: var(--ochre); }
+  .uc .avatar.d { background: var(--sky); }
+  .uc .avatar.e { background: var(--ink); }
+  .uc .avatar.f { background: var(--brick-dk); }
+  .uc .who { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing:0.12em; text-transform:uppercase; color: var(--ink-soft); }
+  .uc .who strong { color: var(--ink); font-weight:600; display:block; font-size: 13px; letter-spacing:0.02em; text-transform:none; font-family:'Inter Tight',sans-serif; }
+  .uc h4 { font-family:'Fraunces',serif; font-weight:600; font-size: 22px; margin: 0 0 10px; letter-spacing:-0.015em; line-height:1.2; }
+  .uc p { font-size: 14px; line-height: 1.55; color: var(--ink-soft); margin: 0 0 14px; }
+  .uc .tool-used { margin-top:auto; font-family:'IBM Plex Mono',monospace; font-size: 10.5px; padding: 8px 12px; border-top: 1px solid rgba(29,26,21,0.08); color: var(--ink-soft); letter-spacing:0.05em; display:flex; justify-content:space-between; }
+  .uc .tool-used a { color: var(--brick); text-decoration:none; font-weight:600; }
+
+  /* Quotes block */
+  .quotes { padding: 72px 44px; }
+  .q-grid { display:grid; grid-template-columns: 1.4fr 1fr; gap: 18px; }
+  .qbox { border-radius: 18px; padding: 36px 36px 32px; border: 1px solid rgba(29,26,21,0.1); display:flex; flex-direction:column; }
+  .qbox.main { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .qbox.sec { background: var(--cream); }
+  .qbox .k { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing:0.14em; text-transform:uppercase; opacity:0.7; margin-bottom: 20px; }
+  .qbox blockquote { margin: 0; font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size: 32px; line-height: 1.25; letter-spacing:-0.015em; }
+  .qbox.main blockquote { font-size: 38px; }
+  .qbox cite { display:block; margin-top: 22px; font-style:normal; font-size: 13px; font-family:'Inter Tight',sans-serif; opacity:0.75; }
+  .qbox cite strong { display:block; font-size: 14px; opacity:1; font-weight:600; }
+
+  /* Coverage */
+  .coverage { padding: 72px 44px; background: var(--paper-2); }
+  .cov-grid { display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .cov { background: #fff; border: 1px solid rgba(29,26,21,0.1); border-radius: 14px; padding: 22px 24px; }
+  .cov h5 { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing:0.14em; text-transform:uppercase; color: var(--brick); margin: 0 0 10px; font-weight:500; }
+  .cov .quote { font-family:'Fraunces',serif; font-size: 18px; line-height: 1.35; font-style:italic; color: var(--ink); margin: 0 0 14px; }
+  .cov .src { font-family:'Inter Tight',sans-serif; font-size: 12.5px; color: var(--ink-soft); }
+  .cov .src strong { color: var(--ink); font-weight:600; }
+
+  /* Timeline / milestones */
+  .milestones { padding: 72px 44px; }
+  .tl { display:grid; grid-template-columns: 180px 1fr; gap: 32px; padding: 24px 0; border-top: 1px solid rgba(29,26,21,0.12); }
+  .tl:last-child { border-bottom: 1px solid rgba(29,26,21,0.12); }
+  .tl .date { font-family:'IBM Plex Mono',monospace; font-size: 12px; letter-spacing: 0.1em; text-transform:uppercase; color: var(--brick); }
+  .tl h4 { font-family:'Fraunces',serif; font-weight:600; font-size: 26px; margin: 0 0 6px; letter-spacing:-0.015em; line-height:1.15; }
+  .tl p { font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); margin: 0; max-width: 70ch; }
+
+  /* Methodology */
+  .method { padding: 56px 44px 24px; }
+  .method-box {
+    background: var(--cream); border: 1px solid rgba(29,26,21,0.1); border-radius: 16px;
+    padding: 32px 36px; display:grid; grid-template-columns: 1fr 2fr; gap: 40px;
+  }
+  .method h3 { font-family:'Fraunces',serif; font-weight:500; font-size: 32px; letter-spacing:-0.02em; line-height:1.05; margin: 0; max-width: 14ch; }
+  .method h3 em { color: var(--brick); font-style:italic; }
+  .method .body { font-size: 14.5px; line-height: 1.65; color: var(--ink-soft); }
+  .method .body strong { color: var(--ink); font-weight:600; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <nav class="nav">
+    <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/tools.html">Tools</a></li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/impact.html" class="active">Impact</a></li>
+      
+      <li><a href="https://github.com/civicbytedev">GitHub</a></li>
+    </ul>
+    <a href="/submit.html" class="cta">Submit a tool</a>
+  </nav>
+
+  <section class="page-hero">
+    <span class="pill"><span class="pulse"></span> Impact report · 2026</span>
+    <h1>What happens when public data <em>reaches people</em>.</h1>
+    <p class="lede">We measure success by community impact, not GitHub stars. Here's how the tools on CivicByte are being used — who's using them, what they've found, and what's changed.</p>
+  </section>
+
+  <!-- Big numbers -->
+  <section class="bignum-band">
+    <div class="bignum">
+      <div class="k">Public records indexed</div>
+      <div class="n"><em>35M+</em></div>
+      <div class="note">311 complaints, HPD violations, evictions, and school budgets — pulled from NYC Open Data, updated daily.</div>
+    </div>
+    <div class="bignum">
+      <div class="k">Addresses searchable</div>
+      <div class="n">1.1M</div>
+      <div class="note">Every residential and mixed-use address in the five boroughs is searchable across at least one tool.</div>
+    </div>
+    <div class="bignum">
+      <div class="k">NYC public schools</div>
+      <div class="n"><em>1,800+</em></div>
+      <div class="note">Per-pupil spending, Title I, and PTA contributions — mapped and compared side-by-side.</div>
+    </div>
+    <div class="bignum dark">
+      <div class="k">Communities served</div>
+      <div class="n"><em>Free</em></div>
+      <div class="note">No sign-ups. No paywalls. No tracking. Always.</div>
+    </div>
+  </section>
+
+  <!-- Use cases -->
+  <section class="usecases">
+    <div class="sec-head">
+      <div class="l">
+        <div class="k">Who uses this</div>
+        <h2>Real people, <em>real decisions</em>.</h2>
+      </div>
+      <div class="r">Impact isn't a dashboard metric. It's the concrete things people do with the tools once they have them. A few examples.</div>
+    </div>
+    <div class="uc-grid">
+
+      <div class="uc">
+        <div class="persona">
+          <div class="avatar a">P</div>
+          <div class="who"><strong>A Bronx parent</strong>Pre-lease research</div>
+        </div>
+        <h4>Checked a building before signing.</h4>
+        <p>Found 14 open HPD violations and three executed evictions in the prior 24 months. Kept looking. Saved a security deposit and a month of fighting to break a lease.</p>
+        <div class="tool-used"><span>Tool</span><a href="/tools.html">Building Report · Evictions</a></div>
+      </div>
+
+      <div class="uc">
+        <div class="persona">
+          <div class="avatar b">T</div>
+          <div class="who"><strong>A PTA in Queens</strong>Budget advocacy</div>
+        </div>
+        <h4>Asked where the money actually went.</h4>
+        <p>Used the School Budget Tracker to compare Title I allocations at their school against similar ones in the district. Brought the printout to a community ed council meeting.</p>
+        <div class="tool-used"><span>Tool</span><a href="/tools.html">School Budget Tracker</a></div>
+      </div>
+
+      <div class="uc">
+        <div class="persona">
+          <div class="avatar c">J</div>
+          <div class="who"><strong>A local reporter</strong>Accountability journalism</div>
+        </div>
+        <h4>Traced an LLC across 42 buildings.</h4>
+        <p>Used Landlord Watch to map one portfolio's violation history. Story ran in a neighborhood paper; the office of the AG followed up a month later.</p>
+        <div class="tool-used"><span>Tool</span><a href="/tools.html">Landlord Watch</a></div>
+      </div>
+
+      <div class="uc">
+        <div class="persona">
+          <div class="avatar d">O</div>
+          <div class="who"><strong>A tenant organizer</strong>Canvassing prep</div>
+        </div>
+        <h4>Pre-canvassed a block with data.</h4>
+        <p>Pulled every 311 heat complaint on a single block over the last two winters. Showed up at doors already knowing which apartments had been calling — and which ones had stopped.</p>
+        <div class="tool-used"><span>Tool</span><a href="/tools.html">311 Lookup</a></div>
+      </div>
+
+      <div class="uc">
+        <div class="persona">
+          <div class="avatar e">L</div>
+          <div class="who"><strong>A legal aid attorney</strong>Case prep</div>
+        </div>
+        <h4>Documented conditions for court.</h4>
+        <p>Assembled a 24-month violation and 311 record for a client's holdover defense in under an hour. Would have taken days of portal hopping otherwise.</p>
+        <div class="tool-used"><span>Tool</span><a href="/tools.html">Building Report · 311</a></div>
+      </div>
+
+      <div class="uc">
+        <div class="persona">
+          <div class="avatar f">C</div>
+          <div class="who"><strong>A community board</strong>Neighborhood context</div>
+        </div>
+        <h4>Brought facts to a land-use hearing.</h4>
+        <p>Board members used the platform to build an overview of code violations on a proposed rezoning corridor. Testimony was specific instead of anecdotal.</p>
+        <div class="tool-used"><span>Tool</span><a href="/tools.html">Multiple</a></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Quotes -->
+  <section class="quotes">
+    <div class="sec-head">
+      <div class="l">
+        <div class="k">In their words</div>
+        <h2>What users tell us.</h2>
+      </div>
+    </div>
+    <div class="q-grid">
+      <div class="qbox main">
+        <div class="k">Parent · Queens</div>
+        <blockquote>I spent two weeks looking for this data in PDFs before I found your tool. It took five seconds.</blockquote>
+        <cite><strong>M. S.</strong>School Budget Tracker user</cite>
+      </div>
+      <div class="qbox sec">
+        <div class="k">Tenant organizer · Brooklyn</div>
+        <blockquote>Landlord Watch is how we decide which buildings to canvass first.</blockquote>
+        <cite><strong>R. A.</strong>Housing advocacy org</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coverage -->
+  <section class="coverage">
+    <div class="sec-head">
+      <div class="l">
+        <div class="k">Coverage</div>
+        <h2>Where the tools have <em>shown up</em>.</h2>
+      </div>
+      <div class="r">A sampling of places — newsrooms, community forums, mutual aid channels — where CivicByte tools have been cited or shared.</div>
+    </div>
+    <div class="cov-grid">
+      <div class="cov">
+        <h5>Neighborhood press</h5>
+        <p class="quote">"…one of the more useful civic tech projects to come out of NYC this year…"</p>
+        <p class="src"><strong>Local news outlet</strong> · Feature on student-built tools</p>
+      </div>
+      <div class="cov">
+        <h5>Tenant forums</h5>
+        <p class="quote">"Shared in three tenant-organizing Discords the week we launched."</p>
+        <p class="src"><strong>Platform metrics</strong> · Referral sources</p>
+      </div>
+      <div class="cov">
+        <h5>Civic tech community</h5>
+        <p class="quote">"Good example of usable open-data tooling, not another dashboard graveyard."</p>
+        <p class="src"><strong>Civic tech newsletter</strong> · Weekly roundup</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Milestones -->
+  <section class="milestones">
+    <div class="sec-head">
+      <div class="l">
+        <div class="k">Milestones</div>
+        <h2>The platform, <em>year over year</em>.</h2>
+      </div>
+    </div>
+
+    <div class="tl"><div class="date">Q2 · 2026</div><div><h4>Fifth tool live: 311 Complaint Lookup</h4><p>35M+ records indexed, 100+ complaint types. Fills the last major address-level gap in the housing data stack.</p></div></div>
+    <div class="tl"><div class="date">Q1 · 2026</div><div><h4>Eviction Records launched</h4><p>All five boroughs, 100k+ executed marshal eviction records. Becomes the most-shared tool in tenant-organizing channels.</p></div></div>
+    <div class="tl"><div class="date">Q4 · 2025</div><div><h4>Platform standards formalized</h4><p>The four-standard review process goes live. First external submissions accepted into the directory.</p></div></div>
+    <div class="tl"><div class="date">Q3 · 2025</div><div><h4>Landlord Watch &amp; Building Report</h4><p>Portfolio-level search on top of HPD violations. Tools start being cited in local reporting.</p></div></div>
+    <div class="tl"><div class="date">Q1 · 2025</div><div><h4>NYC School Budget Tracker</h4><p>The first CivicByte tool. Built in response to a PTA asking how to read their school's budget documents.</p></div></div>
+
+  </section>
+
+  <!-- Methodology -->
+  <section class="method">
+    <div class="method-box">
+      <h3>How we <em>measure</em> this.</h3>
+      <div class="body">
+        <p>We don't have, and don't want, user accounts. That means we measure carefully: <strong>server-side request counts</strong> (aggregate, non-identifying), <strong>referrer patterns</strong> (which tenant forums, newsrooms, and advocacy sites are sending traffic), and <strong>direct testimonials</strong> from people who email, open GitHub issues, or mention us publicly.</p>
+        <p>Numbers on this page are conservative — rounded down, excluding bots, and only counting sessions that completed at least one search. When a metric is directional rather than precise, we say so.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fg">
+      <div>
+        <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
+        <p>An open platform for free, community-facing civic tools built on public data.</p>
+      </div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">Our story</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="#">Newsletter</a></li><li><a href="#">Press</a></li></ul></div>
+    </div>
+    <div class="col2"><span>© 2026 CivicByte · MIT License</span><span>Made in NYC · By students, for everyone</span></div>
+  </footer>
+
+</div>
+</body>
+</html>
