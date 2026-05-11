@@ -126,11 +126,69 @@
   .val h4 { font-family:'Fraunces',serif; font-weight:600; font-size: 20px; margin: 6px 0 8px; letter-spacing:-0.01em; }
   .val p { font-size: 13.5px; line-height: 1.5; color: var(--ink-soft); margin: 0; }
 
-  /* Quote */
-  .quote { padding: 64px 44px; background: var(--ink); color: var(--cream); }
-  .quote .k { font-family:'IBM Plex Mono',monospace; font-size: 11.5px; letter-spacing:0.16em; text-transform:uppercase; color: var(--ochre); margin-bottom: 20px; }
-  .quote blockquote { margin: 0; font-family:'Fraunces',serif; font-weight:400; font-style:italic; font-size: 44px; line-height: 1.2; letter-spacing:-0.015em; max-width: 22ch; }
-  .quote cite { display:block; margin-top: 24px; font-family:'Inter Tight',sans-serif; font-style:normal; font-size: 13.5px; color: rgba(248,244,234,0.7); }
+  /* Founding moment */
+  .founding { padding: 72px 44px; background: var(--ink); color: var(--cream); }
+  .founding-grid {
+    display: grid;
+    grid-template-columns: 0.95fr 1fr;
+    gap: 56px;
+    align-items: stretch;
+  }
+  .founding .k {
+    font-family:'IBM Plex Mono',monospace; font-size: 11.5px;
+    letter-spacing:0.16em; text-transform:uppercase; color: var(--ochre);
+    margin-bottom: 18px;
+  }
+  .founding h2 {
+    font-family:'Fraunces',serif; font-weight:500; font-style: italic;
+    font-size: 44px; line-height: 1.12; letter-spacing:-0.02em;
+    margin: 0 0 22px; color: var(--cream); max-width: 18ch;
+  }
+  .founding h2 em { color: var(--ochre); font-style: italic; }
+  .founding-body p {
+    font-family:'Fraunces',serif; font-weight: 400;
+    font-size: 18px; line-height: 1.55; color: rgba(248,244,234,0.86);
+    margin: 0 0 16px; max-width: 44ch;
+  }
+  .founding-body p.opener {
+    font-style: italic; font-size: 20px; color: var(--cream);
+  }
+  .founding-body p strong { font-weight: 600; color: var(--ochre); font-style: normal; }
+  .founding cite {
+    display:block; margin-top: 24px; font-family:'IBM Plex Mono',monospace;
+    font-style:normal; font-size: 11.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: rgba(248,244,234,0.55);
+  }
+  /* Pixel-art mail scene */
+  .founding-scene {
+    background: var(--ink-soft);
+    border: 1px solid rgba(248,244,234,0.08);
+    border-radius: 14px;
+    padding: 22px;
+    display: flex; flex-direction: column; gap: 14px;
+    position: relative; overflow: hidden;
+  }
+  .founding-scene::before {
+    content: "POSTMARKED · NYC · RETURN TO SENDER";
+    position: absolute; top: 14px; left: 22px; right: 22px;
+    font-family:'IBM Plex Mono',monospace; font-size: 9.5px;
+    letter-spacing: 0.18em; color: rgba(248,244,234,0.35);
+  }
+  .founding-scene svg { width: 100%; height: auto; image-rendering: pixelated; margin-top: 18px; }
+  .founding-caption {
+    font-family:'IBM Plex Mono',monospace; font-size: 10.5px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(248,244,234,0.5);
+    border-top: 1px dashed rgba(248,244,234,0.18);
+    padding-top: 12px;
+    display: flex; justify-content: space-between;
+  }
+  .founding-caption span:last-child { color: var(--ochre); }
+
+  /* Pixel glyphs on steps & values */
+  .pgly { width: 28px; height: 28px; image-rendering: pixelated; display:block; margin-bottom: 12px; }
+  .step .pgly { margin-bottom: 14px; }
+  .val .pgly { width: 24px; height: 24px; margin-bottom: 8px; }
 
   /* Paths */
   .paths { padding: 64px 44px 40px; }
@@ -278,7 +336,7 @@
       <li><a href="/tools.html">Tools</a></li>
       <li><a href="/about.html">About</a></li>
       <li><a href="/impact.html">Impact</a></li>
-      
+      <li><a href="/brand.html">Brand</a></li>
       <li><a href="https://github.com/civicbytedev">GitHub</a></li>
     </ul>
     <a href="/submit.html" class="cta">Submit a tool</a>
@@ -356,7 +414,7 @@
       </div>
     </div>
     <div class="pgrid">
-      <a class="proj reveal d1" href="/nyc-building-checker/">
+      <a class="proj reveal d1" href="tool-building-report.html">
         <div class="shot brick"><span class="shot-label">building report</span></div>
         <div class="pb">
           <span class="tag">Housing · NYC</span>
@@ -365,7 +423,7 @@
           <div class="ft"><span class="chip">HPD</span><span class="chip">Daily</span><span class="chip">MIT</span></div>
         </div>
       </a>
-      <a class="proj reveal d2" href="/nyc-landlord-watch/">
+      <a class="proj reveal d2" href="tool-landlord-watch.html">
         <div class="shot ochre"><span class="shot-label">landlord watch</span></div>
         <div class="pb">
           <span class="tag">Accountability · NYC</span>
@@ -374,7 +432,7 @@
           <div class="ft"><span class="chip">Portfolio</span><span class="chip">Risk score</span></div>
         </div>
       </a>
-      <a class="proj reveal d3" href="/nyc-school-budget/">
+      <a class="proj reveal d3" href="tool-school-budget.html">
         <div class="shot moss"><span class="shot-label">budget tracker</span></div>
         <div class="pb">
           <span class="tag">Education · NYC</span>
@@ -383,7 +441,7 @@
           <div class="ft"><span class="chip">1,800 schools</span><span class="chip">Dashboard</span></div>
         </div>
       </a>
-      <a class="proj reveal d1" href="/nyc-eviction-records/">
+      <a class="proj reveal d1" href="tool-eviction-records.html">
         <div class="shot sky"><span class="shot-label">eviction records</span></div>
         <div class="pb">
           <span class="tag">Tenant Rights · NYC</span>
@@ -392,7 +450,7 @@
           <div class="ft"><span class="chip">100k+</span><span class="chip">All boroughs</span></div>
         </div>
       </a>
-      <a class="proj reveal d2" href="/nyc-311-complaints/">
+      <a class="proj reveal d2" href="tool-311-lookup.html">
         <div class="shot ink"><span class="shot-label">311 lookup</span></div>
         <div class="pb">
           <span class="tag">Municipal Data · NYC</span>
@@ -402,7 +460,7 @@
         </div>
       </a>
       <a class="proj reveal d3" href="/tools.html" style="background: var(--cream);">
-        <div class="shot"><span class="shot-label">in development</span></div>
+        <div class="shot soon"><span class="shot-label">in development</span></div>
         <div class="pb">
           <span class="tag">Coming soon</span>
           <h3>Community Resource Finder</h3>
@@ -469,14 +527,133 @@
     </div>
   </section>
 
-  <!-- Quote -->
-  <section class="quote reveal">
-    <div class="k">Why we built this</div>
-    <blockquote>
-      Public data should serve the public. The communities that need transparency
-      most often have the least access to it.
-    </blockquote>
-    <cite>— CivicByte, founding note</cite>
+  <!-- Founding moment -->
+  <section class="founding reveal">
+    <div class="founding-grid">
+      <div class="founding-scene" aria-hidden="true">
+        <svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid meet">
+          <!-- kitchen table -->
+          <rect x="0" y="116" width="200" height="24" fill="#2a221c"></rect>
+          <rect x="0" y="116" width="200" height="2" fill="#3a342b"></rect>
+
+          <!-- stack of overdue notices, tilted -->
+          <!-- bottom notice -->
+          <g transform="rotate(-8 100 90)">
+            <rect x="32" y="74" width="120" height="46" fill="#f8f4ea"></rect>
+            <rect x="32" y="74" width="120" height="6" fill="#8f2f1d"></rect>
+            <rect x="36" y="86" width="60" height="2" fill="#3a2a20"></rect>
+            <rect x="36" y="92" width="84" height="1.5" fill="#3a2a20" opacity="0.6"></rect>
+            <rect x="36" y="97" width="72" height="1.5" fill="#3a2a20" opacity="0.6"></rect>
+            <rect x="36" y="102" width="56" height="1.5" fill="#3a2a20" opacity="0.6"></rect>
+            <rect x="36" y="110" width="32" height="6" fill="#8f2f1d" opacity="0.18"></rect>
+          </g>
+          <!-- middle notice -->
+          <g transform="rotate(3 100 80)">
+            <rect x="28" y="58" width="124" height="50" fill="#f8f4ea"></rect>
+            <rect x="28" y="58" width="124" height="7" fill="#b8432b"></rect>
+            <!-- "NOTICE" letters -->
+            <rect x="34" y="60" width="3" height="3" fill="#f8f4ea"></rect>
+            <rect x="39" y="60" width="3" height="3" fill="#f8f4ea"></rect>
+            <rect x="44" y="60" width="3" height="3" fill="#f8f4ea"></rect>
+            <rect x="49" y="60" width="3" height="3" fill="#f8f4ea"></rect>
+            <rect x="54" y="60" width="3" height="3" fill="#f8f4ea"></rect>
+            <rect x="59" y="60" width="3" height="3" fill="#f8f4ea"></rect>
+            <!-- addressee -->
+            <rect x="34" y="72" width="48" height="2" fill="#3a2a20"></rect>
+            <rect x="34" y="77" width="64" height="1.5" fill="#3a2a20" opacity="0.65"></rect>
+            <rect x="34" y="82" width="40" height="1.5" fill="#3a2a20" opacity="0.65"></rect>
+            <!-- amount stamp -->
+            <rect x="100" y="86" width="44" height="16" fill="#b8432b" opacity="0.16"></rect>
+            <rect x="104" y="91" width="3" height="6" fill="#8f2f1d"></rect>
+            <rect x="109" y="91" width="3" height="6" fill="#8f2f1d"></rect>
+            <rect x="114" y="91" width="3" height="6" fill="#8f2f1d"></rect>
+            <rect x="119" y="91" width="6" height="6" fill="#8f2f1d"></rect>
+            <rect x="127" y="91" width="3" height="6" fill="#8f2f1d"></rect>
+            <rect x="132" y="91" width="3" height="6" fill="#8f2f1d"></rect>
+            <rect x="137" y="91" width="3" height="6" fill="#8f2f1d"></rect>
+            <!-- circular seal -->
+            <circle cx="138" cy="76" r="7" fill="none" stroke="#8f2f1d" stroke-width="1.2"></circle>
+            <circle cx="138" cy="76" r="3" fill="none" stroke="#8f2f1d" stroke-width="0.8"></circle>
+            <rect x="137" y="75" width="2" height="2" fill="#8f2f1d"></rect>
+          </g>
+          <!-- top notice -->
+          <g transform="rotate(-2 100 60)">
+            <rect x="36" y="36" width="120" height="42" fill="#f8f4ea"></rect>
+            <rect x="36" y="36" width="120" height="6" fill="#b8432b"></rect>
+            <rect x="40" y="46" width="44" height="2" fill="#3a2a20"></rect>
+            <rect x="40" y="52" width="80" height="1.5" fill="#3a2a20" opacity="0.6"></rect>
+            <rect x="40" y="57" width="64" height="1.5" fill="#3a2a20" opacity="0.6"></rect>
+            <!-- PAST DUE stamp -->
+            <g transform="rotate(-14 124 62)">
+              <rect x="106" y="56" width="40" height="12" fill="none" stroke="#8f2f1d" stroke-width="1.5"></rect>
+              <rect x="110" y="60" width="3" height="4" fill="#8f2f1d"></rect>
+              <rect x="115" y="60" width="3" height="4" fill="#8f2f1d"></rect>
+              <rect x="120" y="60" width="3" height="4" fill="#8f2f1d"></rect>
+              <rect x="125" y="60" width="3" height="4" fill="#8f2f1d"></rect>
+              <rect x="132" y="60" width="3" height="4" fill="#8f2f1d"></rect>
+              <rect x="137" y="60" width="3" height="4" fill="#8f2f1d"></rect>
+            </g>
+          </g>
+
+          <!-- envelope corner peeking -->
+          <g transform="rotate(12 30 110)">
+            <rect x="6" y="94" width="40" height="24" fill="#c88733"></rect>
+            <path d="M6 94 L26 108 L46 94" fill="none" stroke="#8a5a1f" stroke-width="1.2"></path>
+            <rect x="32" y="98" width="10" height="6" fill="#8f2f1d"></rect>
+          </g>
+
+          <!-- pen on table -->
+          <g transform="rotate(-22 170 124)">
+            <rect x="158" y="120" width="28" height="3" fill="#1d1a15"></rect>
+            <rect x="184" y="119" width="4" height="5" fill="#c88733"></rect>
+            <rect x="156" y="120" width="3" height="3" fill="#5a5249"></rect>
+          </g>
+
+          <!-- coffee mug ring -->
+          <g fill="none" stroke="#5a4536" stroke-width="1" opacity="0.5">
+            <circle cx="172" cy="64" r="11"></circle>
+            <circle cx="172" cy="64" r="8"></circle>
+          </g>
+
+          <!-- top label: dataset code -->
+          <rect x="14" y="14" width="60" height="10" fill="#3a342b"></rect>
+          <rect x="18" y="17" width="3" height="4" fill="#e8a14a"></rect>
+          <rect x="23" y="17" width="3" height="4" fill="#e8a14a"></rect>
+          <rect x="28" y="17" width="3" height="4" fill="#e8a14a"></rect>
+          <rect x="35" y="17" width="3" height="4" fill="#f8f4ea" opacity="0.6"></rect>
+          <rect x="40" y="17" width="3" height="4" fill="#f8f4ea" opacity="0.6"></rect>
+          <rect x="45" y="17" width="3" height="4" fill="#f8f4ea" opacity="0.6"></rect>
+          <rect x="50" y="17" width="3" height="4" fill="#f8f4ea" opacity="0.6"></rect>
+          <rect x="55" y="17" width="3" height="4" fill="#f8f4ea" opacity="0.6"></rect>
+          <rect x="60" y="17" width="3" height="4" fill="#f8f4ea" opacity="0.6"></rect>
+        </svg>
+        <div class="founding-caption">
+          <span>Exhibit · 01</span>
+          <span>Public ≠ Usable</span>
+        </div>
+      </div>
+
+      <div class="founding-body">
+        <div class="k">Why we built this</div>
+        <h2>The notices kept coming, <em>even after he died</em>.</h2>
+        <p class="opener">
+          Overdue fees. Penalties stacked on penalties. Charges no one could explain —
+          addressed to a man who wasn't there to read them.
+        </p>
+        <p>
+          My grandmother tried to figure out why the city was billing him. She couldn't.
+          The records technically existed on NYC's open data portal — you just had to
+          know which dataset to pull, how to filter it, and what the codes meant.
+          <strong>Public, but not usable.</strong>
+        </p>
+        <p>
+          CivicByte exists in that gap. We turn the data the city already publishes into
+          tools a tenant, a parent, or a grandmother can actually use — and we treat the
+          work like it matters, because for someone out there, it does.
+        </p>
+        <cite>— Founding note · NYC, 2025</cite>
+      </div>
+    </div>
   </section>
 
   <!-- Paths -->

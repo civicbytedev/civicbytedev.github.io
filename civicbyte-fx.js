@@ -140,6 +140,7 @@
     }
   }
 
+
   // ─── Mobile hamburger nav ───
   // .cb-ham and .nav-drawer are display:none by default (set in civicbyte.css top-level).
   // The ≤960px media query shows .cb-ham and positions .nav-drawer.
@@ -180,6 +181,7 @@
     });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') toggle(false); });
   }
+
 
   // ─── Console easter egg (for the curious admissions reader) ───
   try {
