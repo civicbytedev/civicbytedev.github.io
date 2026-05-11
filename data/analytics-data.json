@@ -1,16 +1,16 @@
 {
-  "updatedAt": "2026-05-10T23:57:44.137485+00:00",
+  "updatedAt": "2026-05-11T04:16:56.997807+00:00",
   "realtime": 0,
   "7day": {
-    "users": 4926,
-    "views": 9837,
-    "sessions": 4987
+    "users": 1951,
+    "views": 3905,
+    "sessions": 1968
   },
   "30day": {
     "users": 60382,
-    "newUsers": 60901,
-    "views": 123633,
-    "sessions": 60951
+    "newUsers": 60893,
+    "views": 123619,
+    "sessions": 60923
   },
   "topPages": [
     {
@@ -23,11 +23,11 @@
     },
     {
       "label": "NYC Landlord Watch",
-      "count": 77
+      "count": 73
     },
     {
       "label": "Tools",
-      "count": 14
+      "count": 13
     },
     {
       "label": "NYC School Budget Tracker",
@@ -59,7 +59,7 @@
     },
     {
       "name": "Direct",
-      "count": 14655,
+      "count": 14627,
       "i": 2
     },
     {
@@ -69,7 +69,7 @@
     },
     {
       "name": "Organic Social",
-      "count": 73,
+      "count": 72,
       "i": 4
     },
     {
