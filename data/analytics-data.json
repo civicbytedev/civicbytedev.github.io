@@ -1,21 +1,21 @@
 {
-  "updatedAt": "2026-05-13T03:53:34.075226+00:00",
+  "updatedAt": "2026-05-13T06:51:32.303330+00:00",
   "realtime": 0,
   "7day": {
-    "users": 87,
-    "views": 195,
-    "sessions": 100
+    "users": 30,
+    "views": 75,
+    "sessions": 39
   },
   "30day": {
-    "users": 60357,
-    "newUsers": 60885,
-    "views": 123600,
+    "users": 60343,
+    "newUsers": 60882,
+    "views": 123592,
     "sessions": 60941
   },
   "topPages": [
     {
       "label": "Home",
-      "count": 59955
+      "count": 59940
     },
     {
       "label": "NYC Building Checker",
@@ -69,7 +69,7 @@
     },
     {
       "name": "Organic Social",
-      "count": 72,
+      "count": 71,
       "i": 4
     },
     {
