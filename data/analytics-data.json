@@ -1,21 +1,21 @@
 {
-  "updatedAt": "2026-05-15T03:57:04.182413+00:00",
+  "updatedAt": "2026-05-15T07:30:08.943464+00:00",
   "realtime": 0,
   "7day": {
-    "users": 7,
-    "views": 18,
-    "sessions": 11
+    "users": 5,
+    "views": 16,
+    "sessions": 9
   },
   "30day": {
-    "users": 60343,
-    "newUsers": 60879,
-    "views": 123516,
+    "users": 60333,
+    "newUsers": 60871,
+    "views": 123506,
     "sessions": 60941
   },
   "topPages": [
     {
       "label": "Home",
-      "count": 59940
+      "count": 59930
     },
     {
       "label": "NYC Building Checker",
@@ -23,7 +23,7 @@
     },
     {
       "label": "NYC Landlord Watch",
-      "count": 71
+      "count": 69
     },
     {
       "label": "Tools",
@@ -59,7 +59,7 @@
     },
     {
       "name": "Direct",
-      "count": 14608,
+      "count": 14607,
       "i": 2
     },
     {
