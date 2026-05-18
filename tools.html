@@ -54,6 +54,7 @@
     background: var(--moss); color: #fff;
   }
   .tool .status.dev { background: var(--ochre); }
+  .tool .status.demo { background: var(--sky); }
   .tool .tag { font-family:'IBM Plex Mono',monospace; font-size: 10.5px; letter-spacing:0.14em; text-transform:uppercase; color: var(--ink-soft); }
   .tool h3 { font-family:'Fraunces',serif; font-size: 28px; font-weight:600; letter-spacing:-0.02em; margin: 4px 0 6px; line-height:1.1; }
   .tool .sub-title { font-family:'Inter Tight',sans-serif; font-size: 13px; color: var(--ink-soft); font-style:italic; margin-bottom: 10px; }
@@ -67,6 +68,14 @@
   .tool .view { margin-top:auto; display:flex; justify-content:space-between; align-items:center; }
   .tool .view a { font-weight:600; font-size: 14px; color: var(--brick); text-decoration:none; }
   .tool .view a:hover { text-decoration: underline; }
+  .tool .view a.try-btn {
+    background: var(--brick); color: #fff;
+    padding: 9px 18px; border-radius: 999px;
+    font-size: 13.5px; font-weight: 600;
+  }
+  .tool .view a.try-btn:hover { background: var(--brick-dk); text-decoration: none; }
+  .tool .view a.preview-btn { color: var(--ink-soft); font-weight: 500; font-size: 13.5px; }
+  .tool .view a.preview-btn:hover { color: var(--ink); text-decoration: none; }
   .tool .view .repo { font-family:'IBM Plex Mono',monospace; font-size: 11px; color: var(--ink-soft); }
 
   /* Submit CTA */
@@ -150,7 +159,7 @@
         </div>
         <div class="ft"><span class="chip">NYC</span><span class="chip">Housing</span><span class="chip">Violations</span><span class="chip">Tenants</span></div>
         <div class="view">
-          <a href="/nyc-building-checker/">View tool →</a>
+          <a href="/nyc-building-checker/" class="try-btn">Try it →</a>
           <span class="repo">github.com/civicbytedev</span>
         </div>
       </div>
@@ -160,7 +169,7 @@
       <div class="shot ochre"><span class="shot-label">landlord watch</span></div>
       <div class="pb">
         <div class="status-row">
-          <span class="status">Live</span>
+          <span class="status demo">Demo</span>
           <span class="tag">Housing · Accountability</span>
         </div>
         <h3>NYC Landlord Watch</h3>
@@ -173,7 +182,7 @@
         </div>
         <div class="ft"><span class="chip">NYC</span><span class="chip">Housing</span><span class="chip">Landlords</span><span class="chip">Accountability</span></div>
         <div class="view">
-          <a href="/nyc-landlord-watch/">View tool →</a>
+          <a href="/nyc-landlord-watch/" class="preview-btn">Preview →</a>
           <span class="repo">github.com/civicbytedev</span>
         </div>
       </div>
@@ -183,7 +192,7 @@
       <div class="shot moss"><span class="shot-label">school budget</span></div>
       <div class="pb">
         <div class="status-row">
-          <span class="status">Live</span>
+          <span class="status demo">Demo</span>
           <span class="tag">Education</span>
         </div>
         <h3>NYC School Budget Tracker</h3>
@@ -196,7 +205,7 @@
         </div>
         <div class="ft"><span class="chip">NYC</span><span class="chip">Education</span><span class="chip">Budget</span><span class="chip">Dashboard</span></div>
         <div class="view">
-          <a href="/nyc-school-budget/">View tool →</a>
+          <a href="/nyc-school-budget/" class="preview-btn">Preview →</a>
           <span class="repo">github.com/civicbytedev</span>
         </div>
       </div>
@@ -219,7 +228,7 @@
         </div>
         <div class="ft"><span class="chip">NYC</span><span class="chip">Housing</span><span class="chip">Evictions</span><span class="chip">Tenants</span></div>
         <div class="view">
-          <a href="/nyc-eviction-records/">View tool →</a>
+          <a href="/nyc-eviction-records/" class="try-btn">Try it →</a>
           <span class="repo">github.com/civicbytedev</span>
         </div>
       </div>
@@ -242,7 +251,7 @@
         </div>
         <div class="ft"><span class="chip">NYC</span><span class="chip">311</span><span class="chip">Municipal</span><span class="chip">Tenants</span></div>
         <div class="view">
-          <a href="/nyc-311-complaints/">View tool →</a>
+          <a href="/nyc-311-complaints/" class="try-btn">Try it →</a>
           <span class="repo">github.com/civicbytedev</span>
         </div>
       </div>
