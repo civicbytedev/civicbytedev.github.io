@@ -116,6 +116,44 @@
   cursor: pointer;
 }
 
+/* ── Address autocomplete dropdown ───────────────────── */
+.cb-ac-dd {
+  position: fixed;
+  list-style: none;
+  margin: 0; padding: 6px;
+  background: #fff;
+  border: 1px solid rgba(29,26,21,0.12);
+  border-radius: 14px;
+  box-shadow: 0 4px 6px -2px rgba(29,26,21,0.05), 0 16px 32px -8px rgba(29,26,21,0.18);
+  z-index: 9999;
+  display: none;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.cb-ac-dd.open { display: block; }
+.cb-ac-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .12s;
+  list-style: none;
+}
+.cb-ac-item:hover,
+.cb-ac-item.active { background: var(--paper, #f8f4ea); }
+.cb-ac-main {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 13.5px; font-weight: 500;
+  color: var(--ink, #1d1a15);
+}
+.cb-ac-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--ink-soft, #6b6660);
+  letter-spacing: 0.03em;
+}
+
 /* Result header */
 .result-head {
   padding: 16px 20px; background: var(--cream); border: 1px solid rgba(29,26,21,0.1);

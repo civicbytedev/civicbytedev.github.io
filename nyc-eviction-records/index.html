@@ -11,6 +11,7 @@
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
 <meta name="theme-color" content="#b8432b">
 <meta name="description" content="Look up executed marshal evictions for any NYC address. Know before you sign. Free, live NYC Open Data.">
+<script src="/address-ac.js"></script>
 <script defer src="/civicbyte-fx.js"></script>
 <link rel="stylesheet" href="/civicbyte.css">
 <link rel="stylesheet" href="/tool-page.css">
@@ -93,10 +94,10 @@
     <div class="pf-body">
       <div class="mock-search">
         <span class="mag"></span>
-        <input id="ev-input" placeholder="Enter an NYC address, e.g. 2418 Creston Ave, Bronx" autocomplete="off" spellcheck="false">
+        <input id="ev-input" placeholder="Enter an NYC address, e.g. 1199 Boston Rd, Bronx" autocomplete="off" spellcheck="false">
         <button class="submit" onclick="runEvict()">Check address</button>
       </div>
-      <div id="mock-suggest">Try: <a href="#" onclick="qs('1000 Southern Blvd');return false;">1000 Southern Blvd</a> · <a href="#" onclick="qs('2770 Briggs Ave');return false;">2770 Briggs Ave</a> · <a href="#" onclick="qs('600 W 136 St');return false;">600 W 136 St</a></div>
+      <div id="mock-suggest">Try: <a href="#" onclick="qs('1199 Boston Rd, Bronx');return false;">1199 Boston Rd, Bronx</a> · <a href="#" onclick="qs('910 Thieriot Ave, Bronx');return false;">910 Thieriot Ave, Bronx</a> · <a href="#" onclick="qs('550 W 54th St, Manhattan');return false;">550 W 54th St, Manhattan</a></div>
       <div id="result">
         <div class="state-panel active" id="s-idle"><p style="font-size:14px;color:var(--ink-soft)">Enter an address above to pull its full eviction history — live from NYC Open Data.</p></div>
         <div class="state-panel" id="s-loading"><div class="loading-wrap"><div class="spinner"></div><div class="loading-text">Fetching eviction records…</div></div></div>
@@ -156,6 +157,7 @@ function renderResults(query,data){
   showState('s-results');
 }
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+cbAutocomplete('ev-input', function(){ runEvict(); });
 </script>
 
 <section class="tool-section alt">

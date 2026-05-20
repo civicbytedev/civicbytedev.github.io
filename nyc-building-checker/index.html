@@ -11,6 +11,7 @@
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
 <meta name="theme-color" content="#b8432b">
 <meta name="description" content="Look up HPD violations for any NYC address. Free, live data from NYC Open Data.">
+<script src="/address-ac.js"></script>
 <script defer src="/civicbyte-fx.js"></script>
 <link rel="stylesheet" href="/civicbyte.css">
 <link rel="stylesheet" href="/tool-page.css">
@@ -92,10 +93,10 @@
     <div class="pf-body">
       <div class="mock-search">
         <span class="mag"></span>
-        <input id="addr-input" placeholder="Enter an NYC address, e.g. 965 Longfellow Ave, Bronx" autocomplete="off" spellcheck="false">
+        <input id="addr-input" placeholder="Enter an NYC address, e.g. 226 W Tremont Ave, Bronx" autocomplete="off" spellcheck="false">
         <button class="submit" onclick="runSearch()">Check building</button>
       </div>
-      <div id="mock-suggest">Try: <a href="#" onclick="quickSearch('965 Longfellow Ave, Bronx');return false;">965 Longfellow Ave, Bronx</a> · <a href="#" onclick="quickSearch('350 W 56th St, Manhattan');return false;">350 W 56th St, Manhattan</a> · <a href="#" onclick="quickSearch('1248 Eastern Pkwy, Brooklyn');return false;">1248 Eastern Pkwy, Brooklyn</a></div>
+      <div id="mock-suggest">Try: <a href="#" onclick="quickSearch('226 W Tremont Ave, Bronx');return false;">226 W Tremont Ave, Bronx</a> · <a href="#" onclick="quickSearch('421 Crown St, Brooklyn');return false;">421 Crown St, Brooklyn</a> · <a href="#" onclick="quickSearch('40 St Nicholas Ave, Manhattan');return false;">40 St Nicholas Ave, Manhattan</a></div>
       <div id="result">
         <div class="state-panel active" id="s-idle"><p style="font-size:14px;color:var(--ink-soft)">Enter an address above to pull its HPD violation record — live from NYC Open Data.</p></div>
         <div class="state-panel" id="s-loading"><div class="loading-wrap"><div class="spinner"></div><div class="loading-text">Fetching HPD records…</div></div></div>
@@ -119,7 +120,7 @@ async function runSearch(){
   try{
     const parts=raw.replace(/,.*$/,'').trim();
     const m=parts.match(/^(\d+[a-zA-Z]?)\s+(.+)$/);
-    if(!m)throw new Error('Could not parse address — try "965 Longfellow Ave, Bronx"');
+    if(!m)throw new Error('Could not parse address — try "226 W Tremont Ave, Bronx"');
     const num=m[1];
     const street=m[2].toUpperCase()
       .replace(/\bSTREET\b/g,'ST').replace(/\bAVENUE\b/g,'AVE')
@@ -158,6 +159,7 @@ function renderResults(query,data){
   showState('s-results');
 }
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+cbAutocomplete('addr-input', function(){ runSearch(); });
 </script>
 
 <section class="tool-section alt">
