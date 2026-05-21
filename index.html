@@ -68,8 +68,8 @@
   /* ── Hero stage ──────────────────────────────── */
   .hero-stage {
     position: relative;
-    margin: 0 24px 24px;
-    border-radius: 24px;
+    margin: 0 0 24px;
+    border-radius: 0;
     overflow: hidden;
     background: linear-gradient(180deg,
       #d9d2c2 0%,
@@ -184,12 +184,13 @@
     margin: 36px 0 32px;
     font-family: 'Fraunces', serif;
     font-size: 19px; font-weight: 400; font-style: italic;
-    color: var(--ink); opacity: 0.78;
+    color: var(--cream); opacity: 0.92;
     letter-spacing: 0.01em;
+    text-shadow: 0 1px 4px rgba(29,26,21,0.35);
   }
   .hero-left .slash::before,
   .hero-left .slash::after {
-    content: " / "; color: var(--brick); font-style: normal; opacity: 0.7;
+    content: " / "; color: var(--ochre); font-style: normal; opacity: 0.85;
     margin: 0 6px;
   }
   .hero-left .slash::before { margin-left: 0; }
