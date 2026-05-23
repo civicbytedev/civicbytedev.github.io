@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>About — CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="CivicByte is a student-founded open platform that makes civic technology accessible, discoverable, and free for the communities that need it most.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,7 +14,6 @@
 <script defer src="/civicbyte-fx.js"></script>
 <link rel="stylesheet" href="/civicbyte.css">
 <style>
-  /* Mission */
   .mission { padding: 24px 44px 72px; display:grid; grid-template-columns: 1.4fr 1fr; gap: 56px; border-bottom: 1px solid rgba(29,26,21,0.1); }
   .mission .k { font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.16em; text-transform:uppercase; color: var(--brick); margin-bottom: 10px; }
   .mission h2 { font-family:'Fraunces',serif; font-weight:500; font-size: 52px; letter-spacing:-0.025em; line-height:1.02; margin: 0 0 24px; max-width: 16ch; }
@@ -31,7 +31,6 @@
   .mission .side .r .val { font-family:'Fraunces',serif; font-size: 28px; font-weight:500; letter-spacing:-0.015em; }
   .mission .side .r .val em { color: var(--brick); font-style:italic; }
 
-  /* Values grid */
   .values { padding: 64px 44px; }
   .values-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid rgba(29,26,21,0.1); border-radius: 16px; overflow:hidden; background: #fff; }
   .value { padding: 28px 28px 30px; border-right: 1px solid rgba(29,26,21,0.1); border-bottom: 1px solid rgba(29,26,21,0.1); }
@@ -41,7 +40,6 @@
   .value h4 { font-family:'Fraunces',serif; font-weight:600; font-size: 22px; margin: 8px 0 10px; letter-spacing:-0.015em; line-height:1.15; }
   .value p { font-size: 14px; line-height: 1.55; color: var(--ink-soft); margin: 0; }
 
-  /* Standards */
   .standards { padding: 64px 44px; background: var(--cream); }
   .std-list { display:flex; flex-direction:column; gap: 0; border-top: 1px solid rgba(29,26,21,0.15); }
   .std { display:grid; grid-template-columns: 100px 1fr 2fr; gap: 32px; padding: 28px 8px; border-bottom: 1px solid rgba(29,26,21,0.15); align-items:baseline; }
@@ -49,7 +47,6 @@
   .std h4 { font-family:'Fraunces',serif; font-weight:600; font-size: 26px; margin: 0; letter-spacing:-0.015em; line-height:1.15; }
   .std p { font-size: 15px; line-height: 1.6; color: var(--ink-soft); margin: 0; max-width: 60ch; }
 
-  /* Story */
   .story { padding: 72px 44px; display:grid; grid-template-columns: 1fr 1.4fr; gap: 56px; }
   .story .k { font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.16em; text-transform:uppercase; color: var(--brick); margin-bottom: 10px; }
   .story h2 { font-family:'Fraunces',serif; font-weight:500; font-size: 48px; letter-spacing:-0.025em; line-height:1.02; margin: 0; max-width: 12ch; }
@@ -61,7 +58,6 @@
   }
   .story .body a { color: var(--brick); }
 
-  /* CTA */
   .about-cta { padding: 48px 44px 64px; }
   .about-cta .box {
     background: var(--ink); color: var(--cream); border-radius: 20px;
@@ -74,6 +70,18 @@
   .about-cta .btns a { padding: 14px 22px; border-radius: 999px; text-align:center; text-decoration:none; font-weight:600; font-size: 14px; }
   .about-cta .btns a.primary { background: var(--cream); color: var(--ink); }
   .about-cta .btns a.secondary { border: 1px solid rgba(248,244,234,0.25); color: var(--cream); }
+
+  @media (max-width: 820px) {
+    .mission, .story { grid-template-columns: 1fr; gap: 32px; }
+    .values-grid { grid-template-columns: 1fr 1fr; }
+    .value:nth-child(3n) { border-right: 1px solid rgba(29,26,21,0.1); }
+    .value:nth-child(2n) { border-right: none; }
+    .value:nth-last-child(-n+3) { border-bottom: 1px solid rgba(29,26,21,0.1); }
+    .value:nth-last-child(-n+2) { border-bottom: none; }
+    .std { grid-template-columns: 50px 1fr; }
+    .std p { grid-column: 1 / -1; }
+    .about-cta .box { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -99,7 +107,6 @@
     <p class="lede">CivicByte is a student-founded open platform that makes civic technology accessible, discoverable, and free for the communities that need it most.</p>
   </section>
 
-  <!-- Mission -->
   <section class="mission">
     <div>
       <div class="k">Our mission</div>
@@ -118,7 +125,6 @@
     </aside>
   </section>
 
-  <!-- Values -->
   <section class="values">
     <div class="sec-head">
       <div class="l">
@@ -137,7 +143,6 @@
     </div>
   </section>
 
-  <!-- Standards -->
   <section class="standards">
     <div class="sec-head">
       <div class="l">
@@ -170,7 +175,6 @@
     </div>
   </section>
 
-  <!-- Story -->
   <section class="story">
     <div>
       <div class="k">Our story</div>
@@ -184,7 +188,6 @@
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="about-cta">
     <div class="box">
       <div>
@@ -206,7 +209,7 @@
       </div>
       <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
       <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">Our story</a></li></ul></div>
-      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="#">Newsletter</a></li><li><a href="#">Press</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
     </div>
     <div class="col2"><span>© 2026 CivicByte · MIT License</span><span>Made in NYC · By students, for everyone</span></div>
   </footer>

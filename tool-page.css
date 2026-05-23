@@ -116,44 +116,6 @@
   cursor: pointer;
 }
 
-/* ── Address autocomplete dropdown ───────────────────── */
-.cb-ac-dd {
-  position: fixed;
-  list-style: none;
-  margin: 0; padding: 6px;
-  background: #fff;
-  border: 1px solid rgba(29,26,21,0.12);
-  border-radius: 14px;
-  box-shadow: 0 4px 6px -2px rgba(29,26,21,0.05), 0 16px 32px -8px rgba(29,26,21,0.18);
-  z-index: 9999;
-  display: none;
-  max-height: 320px;
-  overflow-y: auto;
-}
-.cb-ac-dd.open { display: block; }
-.cb-ac-item {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background .12s;
-  list-style: none;
-}
-.cb-ac-item:hover,
-.cb-ac-item.active { background: var(--paper, #f8f4ea); }
-.cb-ac-main {
-  font-family: 'Inter Tight', sans-serif;
-  font-size: 13.5px; font-weight: 500;
-  color: var(--ink, #1d1a15);
-}
-.cb-ac-sub {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px; color: var(--ink-soft, #6b6660);
-  letter-spacing: 0.03em;
-}
-
 /* Result header */
 .result-head {
   padding: 16px 20px; background: var(--cream); border: 1px solid rgba(29,26,21,0.1);
@@ -251,44 +213,3 @@
 .bar-mini .bm-fill.moss { background: var(--moss); }
 .bar-mini .bm-fill.sky { background: var(--sky); }
 .bar-mini .bm-n { font-family:'IBM Plex Mono',monospace; font-size: 12px; color: var(--ink); font-weight: 600; width: 60px; text-align: right; }
-
-/* ═══ TOOL PAGE — MOBILE (all inside breakpoints, zero desktop change) ═══ */
-
-@media (max-width: 960px) {
-  .tool-hero { grid-template-columns: 1fr !important; gap: 28px; padding: 20px 24px 32px; }
-  .tool-hero h1 { font-size: 52px; max-width: none; }
-  .tool-hero .sub { font-size: 16px; }
-  .preview-wrap { padding: 0 24px 36px; }
-  .preview-frame .pf-body { padding: 24px 24px 28px; }
-  .tool-section { padding: 44px 24px; }
-  .steps-row { grid-template-columns: repeat(2, 1fr) !important; }
-  .related { padding: 36px 24px 48px; }
-  .related-grid { grid-template-columns: repeat(2, 1fr) !important; }
-  .stat-grid { grid-template-columns: repeat(2, 1fr) !important; }
-  .bar-mini .bm-label { width: 160px; }
-}
-
-@media (max-width: 600px) {
-  .crumb { padding: 14px 18px 0; }
-  .tool-hero { padding: 18px 18px 28px; gap: 20px; }
-  .tool-hero h1 { font-size: 36px; line-height: 1.05; }
-  .tool-hero .actions { flex-direction: column; gap: 10px; }
-  .tool-hero .actions .btn { justify-content: center; }
-  .preview-wrap { padding: 0 18px 28px; }
-  .preview-frame .pf-body { padding: 16px 16px 18px; min-height: 280px; }
-  .preview-frame .pf-bar .url { font-size: 10px; }
-  .mock-search { flex-wrap: wrap; gap: 8px; }
-  .mock-search input { min-width: 0; flex: 1 1 120px; }
-  .stat-grid .s .n { font-size: 24px; }
-  .dtable .dh, .dtable .dr { font-size: 12px; padding: 10px 12px; }
-  .steps-row { grid-template-columns: 1fr !important; gap: 10px; }
-  .src-list { grid-template-columns: 1fr !important; }
-  .related-grid { grid-template-columns: 1fr !important; gap: 10px; }
-  .related { padding: 28px 18px 40px; }
-  .tool-section { padding: 36px 18px; }
-  .tool-section h2 { font-size: 30px; }
-  .bar-mini .bm-label { width: 100%; font-size: 13px; }
-  .bar-mini .bm-n { width: auto; text-align: left; }
-  .result-head { flex-direction: column; align-items: flex-start; }
-  .result-head .addr { font-size: 18px; }
-}

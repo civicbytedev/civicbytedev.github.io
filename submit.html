@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>Submit a Tool — CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Submit a free, open-source civic tool for review and listing on CivicByte.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,7 +16,6 @@
 <style>
   .submit-layout { padding: 16px 44px 64px; display:grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items:start; }
 
-  /* Form */
   .form { background: #fff; border: 1px solid rgba(29,26,21,0.1); border-radius: 18px; padding: 36px 40px; }
   .form .k { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing:0.14em; text-transform:uppercase; color: var(--brick); }
   .form h2 { font-family:'Fraunces',serif; font-weight:500; font-size: 36px; letter-spacing:-0.025em; line-height:1.05; margin: 6px 0 10px; }
@@ -37,9 +37,11 @@
     font-family:'Inter Tight',sans-serif; font-size: 14px; color: var(--ink);
     padding: 12px 14px; background: var(--paper); border: 1px solid rgba(29,26,21,0.12);
     border-radius: 10px; outline: none; transition: border-color .15s, background .15s;
+    width: 100%;
   }
-  .field textarea { resize: vertical; min-height: 96px; line-height: 1.55; font-family:'Inter Tight',sans-serif; }
+  .field textarea { resize: vertical; min-height: 96px; line-height: 1.55; }
   .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--brick); background: #fff; }
+  .field input:invalid:not(:placeholder-shown), .field select:invalid { border-color: rgba(184,67,43,0.5); }
 
   .field-row { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
@@ -60,10 +62,24 @@
   .agree input { accent-color: var(--brick); margin-top: 3px; }
   .agree a { color: var(--brick); }
 
-  .submit-row { display:flex; justify-content:space-between; align-items:center; gap: 16px; padding-top: 8px; }
+  .submit-row { display:flex; justify-content:space-between; align-items:center; gap: 16px; padding-top: 8px; flex-wrap: wrap; }
   .submit-row .note { font-size: 12.5px; color: var(--ink-soft); max-width: 36ch; }
 
-  /* Aside: checklist + timeline */
+  .form-success {
+    margin-top: 18px;
+    padding: 18px 20px;
+    background: #ecefd8;
+    border: 1px solid rgba(91,107,58,0.3);
+    border-radius: 12px;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.55;
+    display: none;
+  }
+  .form-success.shown { display: block; }
+  .form-success strong { color: var(--moss); font-weight: 700; }
+  .form-success a { color: var(--brick); }
+
   .aside { display:flex; flex-direction:column; gap: 18px; position: sticky; top: 20px; }
   .card {
     background: var(--cream); border: 1px solid rgba(29,26,21,0.1); border-radius: 16px;
@@ -93,12 +109,19 @@
   .card.dark .desc { color: rgba(248,244,234,0.72); }
   .card.dark a { color: var(--ochre); }
 
-  /* FAQ */
   .faq-sec { padding: 24px 44px 64px; }
   .faq-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
   .faq { background: var(--cream); border: 1px solid rgba(29,26,21,0.1); border-radius: 14px; padding: 22px 26px; }
   .faq h4 { font-family:'Fraunces',serif; font-weight:600; font-size: 19px; margin: 0 0 8px; letter-spacing:-0.01em; }
   .faq p { font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); margin: 0; }
+
+  @media (max-width: 980px) {
+    .submit-layout { grid-template-columns: 1fr; }
+    .aside { position: static; }
+    .field-row { grid-template-columns: 1fr; }
+    .check-grid { grid-template-columns: 1fr 1fr; }
+    .faq-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -115,7 +138,7 @@
       <li><a href="/brand.html">Brand</a></li>
       <li><a href="https://github.com/civicbytedev">GitHub</a></li>
     </ul>
-    <a href="/submit.html" class="cta">Submit a tool</a>
+    <a href="/submit.html" class="cta active">Submit a tool</a>
   </nav>
 
   <section class="page-hero">
@@ -126,8 +149,7 @@
 
   <div class="submit-layout">
 
-    <!-- Form -->
-    <form class="form" onsubmit="event.preventDefault(); alert('Thanks — we\\'ll review your submission and email you within a week.');">
+    <form class="form" id="submit-form" novalidate>
       <div class="k">Submission form</div>
       <h2>Tell us about your <em>tool</em>.</h2>
       <p class="intro">Takes about 6 minutes. We'll respond within a week with a review decision or follow-up questions.</p>
@@ -136,26 +158,26 @@
         <legend>01 · The tool</legend>
         <div class="field">
           <label>Tool name <span class="req">*</span></label>
-          <input type="text" placeholder="NYC Rent Stabilization Lookup">
+          <input type="text" name="toolName" placeholder="NYC Rent Stabilization Lookup" required>
         </div>
         <div class="field-row">
           <div class="field">
             <label>Live URL <span class="req">*</span></label>
-            <input type="url" placeholder="https://yourtool.example.org">
+            <input type="url" name="liveUrl" placeholder="https://yourtool.example.org" required>
           </div>
           <div class="field">
             <label>Repository <span class="req">*</span></label>
-            <input type="url" placeholder="https://github.com/you/tool">
+            <input type="url" name="repoUrl" placeholder="https://github.com/you/tool" required>
             <span class="hint">Must be public and under an open license (MIT, Apache 2.0, etc.)</span>
           </div>
         </div>
         <div class="field">
           <label>One-sentence description <span class="req">*</span></label>
-          <input type="text" placeholder="Search any NYC address to see its rent stabilization status across the last 15 years.">
+          <input type="text" name="shortDesc" placeholder="Search any NYC address to see its rent stabilization status across the last 15 years." required>
         </div>
         <div class="field">
           <label>Longer description</label>
-          <textarea placeholder="What does it do? Who is it for? What data does it pull from? Anything you'd want a first-time visitor to understand."></textarea>
+          <textarea name="longDesc" placeholder="What does it do? Who is it for? What data does it pull from? Anything you'd want a first-time visitor to understand."></textarea>
         </div>
       </fieldset>
 
@@ -163,7 +185,8 @@
         <legend>02 · Category &amp; audience</legend>
         <div class="field">
           <label>Primary category <span class="req">*</span></label>
-          <select>
+          <select name="category" required>
+            <option value="" disabled selected>Choose one…</option>
             <option>Housing</option><option>Education</option><option>Municipal Data</option>
             <option>Social Services</option><option>Transit</option><option>Health</option>
             <option>Accountability</option><option>Other</option>
@@ -172,20 +195,20 @@
         <div class="field">
           <label>Tags (select all that apply)</label>
           <div class="check-grid">
-            <label class="check"><input type="checkbox" checked> NYC</label>
-            <label class="check"><input type="checkbox"> Statewide</label>
-            <label class="check"><input type="checkbox"> National</label>
-            <label class="check"><input type="checkbox" checked> Tenants</label>
-            <label class="check"><input type="checkbox"> Landlords</label>
-            <label class="check"><input type="checkbox"> Students</label>
-            <label class="check"><input type="checkbox"> Parents</label>
-            <label class="check"><input type="checkbox"> Advocates</label>
-            <label class="check"><input type="checkbox"> Journalists</label>
+            <label class="check"><input type="checkbox" name="tags" value="NYC"> NYC</label>
+            <label class="check"><input type="checkbox" name="tags" value="Statewide"> Statewide</label>
+            <label class="check"><input type="checkbox" name="tags" value="National"> National</label>
+            <label class="check"><input type="checkbox" name="tags" value="Tenants"> Tenants</label>
+            <label class="check"><input type="checkbox" name="tags" value="Landlords"> Landlords</label>
+            <label class="check"><input type="checkbox" name="tags" value="Students"> Students</label>
+            <label class="check"><input type="checkbox" name="tags" value="Parents"> Parents</label>
+            <label class="check"><input type="checkbox" name="tags" value="Advocates"> Advocates</label>
+            <label class="check"><input type="checkbox" name="tags" value="Journalists"> Journalists</label>
           </div>
         </div>
         <div class="field">
           <label>Who is the tool for? Describe the user in one line.</label>
-          <input type="text" placeholder="Renters signing a new lease in NYC who want to check their unit's legal rent history.">
+          <input type="text" name="audience" placeholder="Renters signing a new lease in NYC who want to check their unit's legal rent history.">
         </div>
       </fieldset>
 
@@ -193,13 +216,13 @@
         <legend>03 · Data &amp; upkeep</legend>
         <div class="field">
           <label>Primary data sources <span class="req">*</span></label>
-          <textarea placeholder="NYC Department of Housing Preservation & Development (HPD), NYC Open Data, NYS HCR…"></textarea>
+          <textarea name="dataSources" placeholder="NYC Department of Housing Preservation & Development (HPD), NYC Open Data, NYS HCR…" required></textarea>
           <span class="hint">List each dataset and where it comes from. Tools that don't cite sources get sent back.</span>
         </div>
         <div class="field-row">
           <div class="field">
             <label>Update cadence</label>
-            <select>
+            <select name="cadence">
               <option>Real-time / on request</option>
               <option>Daily</option><option>Weekly</option><option>Monthly</option>
               <option>Quarterly</option><option>Ad hoc</option>
@@ -207,7 +230,7 @@
           </div>
           <div class="field">
             <label>Current status</label>
-            <select>
+            <select name="status">
               <option>Live</option><option>In beta</option><option>In development</option>
             </select>
           </div>
@@ -219,31 +242,32 @@
         <div class="field-row">
           <div class="field">
             <label>Your name <span class="req">*</span></label>
-            <input type="text" placeholder="Maya Chen">
+            <input type="text" name="submitterName" placeholder="Maya Chen" required>
           </div>
           <div class="field">
             <label>Email <span class="req">*</span></label>
-            <input type="email" placeholder="you@example.org">
+            <input type="email" name="submitterEmail" placeholder="you@example.org" required>
           </div>
         </div>
         <div class="field">
           <label>Affiliation (optional)</label>
-          <input type="text" placeholder="Bronx Science, CS Club · Code for NY · Independent">
+          <input type="text" name="affiliation" placeholder="Bronx Science, CS Club · Code for NY · Independent">
         </div>
       </fieldset>
 
       <div class="agree">
-        <input type="checkbox" id="agree">
+        <input type="checkbox" id="agree" name="agree" required>
         <label for="agree">I confirm the tool meets the <a href="/about.html">four CivicByte standards</a>: it solves a real civic problem, is free and open-source, is usable by non-technical users, and I commit to keeping it maintained while it's listed.</label>
       </div>
 
       <div class="submit-row">
-        <span class="note">We'll reply from <strong>review@civicbyte.dev</strong> within 5–7 business days.</span>
+        <span class="note">We'll reply from <strong>hello@civicbyte.dev</strong> within 5–7 business days.</span>
         <button type="submit" class="btn btn-p">Submit for review →</button>
       </div>
+
+      <div class="form-success" id="form-success" role="status" aria-live="polite"></div>
     </form>
 
-    <!-- Aside -->
     <aside class="aside">
 
       <div class="card">
@@ -278,7 +302,6 @@
     </aside>
   </div>
 
-  <!-- FAQ -->
   <section class="faq-sec">
     <div class="sec-head">
       <div class="l">
@@ -304,11 +327,105 @@
       </div>
       <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
       <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">Our story</a></li></ul></div>
-      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="#">Newsletter</a></li><li><a href="#">Press</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
     </div>
     <div class="col2"><span>© 2026 CivicByte · MIT License</span><span>Made in NYC · By students, for everyone</span></div>
   </footer>
 
 </div>
+
+<script>
+(function(){
+  const form = document.getElementById('submit-form');
+  const okBox = document.getElementById('form-success');
+  if (!form) return;
+
+  function getValues() {
+    const fd = new FormData(form);
+    const out = {};
+    for (const [k, v] of fd.entries()) {
+      if (k === 'tags') { out.tags = out.tags || []; out.tags.push(v); continue; }
+      out[k] = v;
+    }
+    return out;
+  }
+
+  function validate(v) {
+    const required = ['toolName','liveUrl','repoUrl','shortDesc','category','dataSources','submitterName','submitterEmail'];
+    for (const k of required) if (!v[k] || String(v[k]).trim() === '') return 'Please fill in every required field — "' + k + '" is missing.';
+    if (!form.querySelector('#agree').checked) return 'Please confirm the four CivicByte standards before submitting.';
+    if (!/^https?:\/\//i.test(v.liveUrl)) return 'Live URL needs to start with http:// or https://.';
+    if (!/^https?:\/\//i.test(v.repoUrl)) return 'Repository URL needs to start with http:// or https://.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.submitterEmail)) return 'That email address doesn\'t look valid.';
+    return null;
+  }
+
+  function compose(v) {
+    const lines = [];
+    lines.push('CivicByte tool submission');
+    lines.push('=========================');
+    lines.push('');
+    lines.push('Tool: ' + (v.toolName || ''));
+    lines.push('Live URL: ' + (v.liveUrl || ''));
+    lines.push('Repo: ' + (v.repoUrl || ''));
+    lines.push('');
+    lines.push('Short description:');
+    lines.push(v.shortDesc || '');
+    lines.push('');
+    if (v.longDesc) { lines.push('Longer description:'); lines.push(v.longDesc); lines.push(''); }
+    lines.push('Category: ' + (v.category || ''));
+    if (v.tags && v.tags.length) lines.push('Tags: ' + v.tags.join(', '));
+    if (v.audience) lines.push('Audience: ' + v.audience);
+    lines.push('');
+    lines.push('Data sources:');
+    lines.push(v.dataSources || '');
+    lines.push('');
+    lines.push('Update cadence: ' + (v.cadence || ''));
+    lines.push('Status: ' + (v.status || ''));
+    lines.push('');
+    lines.push('— Submitted by —');
+    lines.push((v.submitterName || '') + ' <' + (v.submitterEmail || '') + '>');
+    if (v.affiliation) lines.push('Affiliation: ' + v.affiliation);
+    lines.push('');
+    lines.push('Confirmed the four CivicByte standards: yes');
+    return lines.join('\n');
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const v = getValues();
+    const err = validate(v);
+    if (err) {
+      okBox.classList.add('shown');
+      okBox.style.background = '#fef2f0';
+      okBox.style.borderColor = 'rgba(184,67,43,0.3)';
+      okBox.innerHTML = '<strong style="color:var(--brick)">Hold on —</strong> ' + err;
+      okBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
+    }
+    // Persist a local copy so the user can always retrieve their draft.
+    try {
+      const stored = JSON.parse(localStorage.getItem('cb_submissions') || '[]');
+      stored.push({ ts: new Date().toISOString(), data: v });
+      localStorage.setItem('cb_submissions', JSON.stringify(stored));
+    } catch (e) {}
+    // Open the user's mail client pre-filled to hello@civicbyte.dev so the submission
+    // actually goes somewhere even before we wire up a backend.
+    const body = compose(v);
+    const subject = 'CivicByte tool submission · ' + v.toolName;
+    const mailto = 'mailto:hello@civicbyte.dev?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    okBox.style.background = '#ecefd8';
+    okBox.style.borderColor = 'rgba(91,107,58,0.3)';
+    okBox.innerHTML =
+      '<strong>Got it.</strong> Your mail client should now open with the submission addressed to ' +
+      '<a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a>. ' +
+      'If nothing happened, copy the details from the form and send them manually — we\'ll respond within a week. ' +
+      '<a href="' + mailto + '">Re-open mail client →</a>';
+    okBox.classList.add('shown');
+    okBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    window.location.href = mailto;
+  });
+})();
+</script>
 </body>
 </html>

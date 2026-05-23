@@ -25,7 +25,7 @@
       <li><a href="/tools.html" class="active">Tools</a></li>
       <li><a href="/about.html">About</a></li>
       <li><a href="/impact.html">Impact</a></li>
-      
+      <li><a href="/brand.html">Brand</a></li>
       <li><a href="https://github.com/civicbytedev">GitHub</a></li>
     </ul>
     <a href="/submit.html" class="cta">Submit a tool</a>
@@ -40,7 +40,7 @@
   <section class="tool-hero">
     <div>
       <div class="meta-row">
-        <span class="status">Live</span>
+        <span class="status" style="background:var(--sky)">Demo mode</span>
         <span class="tag">Education</span>
       </div>
       <h1>Where the <em>school money</em> actually goes.</h1>
@@ -49,6 +49,9 @@
         An interactive dashboard over 1,800+ NYC public schools. Compare per-pupil budgets,
         see how much of a school's money is Title I versus PTA versus city, and benchmark
         against the district or borough average. Designed for parents and PTA members, not accountants.
+      </p>
+      <p class="desc" style="background:rgba(45,90,120,0.08);border-left:3px solid var(--sky);padding:10px 14px;border-radius:0 8px 8px 0;font-size:14px;margin-bottom:24px;max-width:60ch;">
+        <strong style="color:var(--sky)">Demo mode.</strong> The DOE Galaxy budget files publish per-school but in a flat-file format that takes a parser to use — we're finishing that ingestion now. While it lands, this tool returns sample data for three NYC schools so the layout and breakdown are reviewable. Search any of them or try your own to see the format.
       </p>
       <div class="actions">
         <a href="#try" class="btn btn-p">Try it below ↓</a>
@@ -81,10 +84,10 @@
       <div class="pf-body">
         <div class="mock-search">
           <span class="mag"></span>
-          <input id="sch-input" placeholder="School name, district, or neighborhood…" value="PS 321 — William Penn">
+          <input id="sch-input" placeholder="School name, district, or neighborhood…" autocomplete="off">
           <button class="submit" onclick="window.runSchool()">Look up</button>
         </div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin:-12px 0 16px;letter-spacing:0.06em;">Try: <a href="#" onclick="document.getElementById('sch-input').value='PS 321 William Penn';window.runSchool();return false;">PS 321 · Park Slope</a> · <a href="#" onclick="document.getElementById('sch-input').value='PS 188 The Island School';window.runSchool();return false;">PS 188 · LES</a> · <a href="#" onclick="document.getElementById('sch-input').value='Stuyvesant High School';window.runSchool();return false;">Stuyvesant HS</a></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin:-12px 0 16px;letter-spacing:0.06em;">Demo set: <a href="#" onclick="document.getElementById('sch-input').value='PS 321 William Penn';window.runSchool();return false;">PS 321 · Park Slope</a> · <a href="#" onclick="document.getElementById('sch-input').value='PS 188 The Island School';window.runSchool();return false;">PS 188 · LES</a> · <a href="#" onclick="document.getElementById('sch-input').value='Stuyvesant High School';window.runSchool();return false;">Stuyvesant HS</a></div>
         <div id="sch-result"></div>
       </div>
     </div>
@@ -102,19 +105,22 @@
       stats: [["$42.1M","Total budget",""],["$12,523","Per pupil",""],["$2.8M","PTA contribution","ok"],["$0.4M","Title I",""]],
       bars: [["City tax-levy", 82, "brick", "$34.5M"], ["State Foundation Aid", 10, "sky", "$4.2M"], ["PTA · private fundraising", 7, "moss", "$2.8M"], ["Title I · Federal", 1, "ochre", "$0.4M"]] }
   };
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
   window.runSchool = function() {
-    const q = (document.getElementById('sch-input').value || '').toLowerCase().trim();
+    const raw = (document.getElementById('sch-input').value || '').trim();
+    const q = raw.toLowerCase();
+    const out = document.getElementById('sch-result');
+    if (!raw) { document.getElementById('sch-input').focus(); return; }
     const key = Object.keys(SCHOOLS).find(k => q && q.includes(k));
     const data = key ? SCHOOLS[key] : null;
-    const out = document.getElementById('sch-result');
     if (!data) {
-      out.innerHTML = '<div class="result-head"><div><div class="addr">No match</div><div class="meta-tag">Try one of the suggestions — this is a demo with three sample schools.</div></div></div>';
+      out.innerHTML = `<div class="result-head"><div><div class="addr">"${esc(raw)}" — not in the demo set</div><div class="meta-tag">Demo mode: this tool will return real DOE Galaxy data once ingestion is finished. For now the working samples are <strong>PS 321</strong>, <strong>PS 188</strong>, and <strong>Stuyvesant</strong>.</div></div></div>`;
       return;
     }
     out.innerHTML = `
       <div class="result-head">
-        <div><div class="addr">${data.name}</div><div class="meta-tag">${data.meta}</div></div>
-        <div class="meta-tag">${data.bench}</div>
+        <div><div class="addr">${esc(data.name)} <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);font-weight:400;margin-left:8px;">· demo data</span></div><div class="meta-tag">${esc(data.meta)}</div></div>
+        <div class="meta-tag">${esc(data.bench)}</div>
       </div>
       <div class="stat-grid">
         ${data.stats.map(s => `<div class="s"><div class="n ${s[2]}">${s[0]}</div><div class="k">${s[1]}</div></div>`).join('')}
@@ -124,7 +130,8 @@
         ${data.bars.map(b => `<div class="bar-mini"><span class="bm-label">${b[0]}</span><div class="bm-bar"><div class="bm-fill ${b[2]==='brick'?'':b[2]}" style="width:${b[1]}%;"></div></div><span class="bm-n">${b[3]}</span></div>`).join('')}
       </div>`;
   };
-  document.addEventListener('DOMContentLoaded', () => window.runSchool());
+  document.getElementById('sch-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); window.runSchool(); } });
+  document.getElementById('sch-result').innerHTML = '<div style="padding:24px 8px;color:var(--ink-soft);font-size:14px;line-height:1.55;">Type a school name above and hit <strong>Look up</strong>. Demo mode currently knows three schools — listed below the input.</div>';
   </script>
 
   <section class="tool-section alt">
