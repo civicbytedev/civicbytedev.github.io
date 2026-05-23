@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NYC School Budget Tracker &mdash; CivicByte</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Per-pupil spending, Title I, and PTA contributions for NYC public schools.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/cb-icon-light.svg">
+<meta name="theme-color" content="#B33E16">
+<script defer src="/civicbyte-fx.js"></script>
+<link rel="stylesheet" href="/civicbyte-editorial.css">
+<style>
+  .demo-note { padding: 14px 0 14px 20px; border-left: 2px solid var(--ember); margin-top: 14px; font-family: var(--serif); font-size: 15.5px; line-height: 1.5; color: var(--ink); max-width: 60ch; }
+  .demo-note b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); font-weight: 500; display: block; margin-bottom: 6px; }
+  .state-none, .state-results { display: none; }
+  .state-none.on, .state-results.on { display: block; }
+  .state-none { padding: 28px 0; border-left: 2px solid var(--rule-2); padding-left: 28px; font-family: var(--serif); font-size: 19px; line-height: 1.4; color: var(--ink); max-width: 56ch; }
+  .state-none b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); display: block; margin-bottom: 8px; font-weight: 500; }
+  .state-none a { color: var(--ember); cursor: pointer; }
+  .suggest { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--mute); margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--rule); }
+  .suggest a { color: var(--ember); cursor: pointer; }
+  .bar-row { display: flex; align-items: center; gap: 14px; padding: 11px 16px 11px 0; border-bottom: 1px solid var(--rule); }
+  .bar-row:last-child { border-bottom: none; }
+  .bar-row .lbl { font-family: var(--serif); font-size: 15.5px; color: var(--ink); width: 240px; flex-shrink: 0; }
+  .bar-row .bar { flex: 1; height: 8px; background: var(--paper-2); border: 1px solid var(--rule); position: relative; overflow: hidden; }
+  .bar-row .bar .fill { height: 100%; background: var(--ink); }
+  .bar-row .bar .fill.ember { background: var(--ember); }
+  .bar-row .amt { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--ink); font-feature-settings: "tnum" 1; width: 88px; text-align: right; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="l">
+      <span><span class="tick"></span>Vol. 01 &nbsp;&middot;&nbsp; No. 18</span>
+      <span class="sep">&middot;</span>
+      <span>Saturday, May 23, 2026</span>
+    </div>
+    <a href="/" class="wordmark">CivicByte<span class="amp">.</span></a>
+    <div class="r">
+      <span>An independent NYC civic data project</span>
+      <span class="sep">&middot;</span>
+      <span>Open source &middot; MIT</span>
+    </div>
+  </header>
+
+  <nav class="secnav">
+    <ul>
+      <li><a href="/">Front Page</a></li>
+      <li><a href="/tools.html" class="is-active">Tools</a></li>
+      <li><a href="/story.html">The Story</a></li>
+      <li><a href="/about.html">About</a></li>
+    </ul>
+    <div class="right">
+      <span>Built something?</span>
+      <a href="/submit.html" class="open">Submit a tool &rarr;</a>
+    </div>
+  </nav>
+
+  <section class="hero compact">
+    <div class="dateline">
+      <span>Tool &middot; 03</span>
+      <span class="sep">&middot;</span>
+      <span>NYC School Budget Tracker</span>
+      <span class="sep">&middot;</span>
+      <span>Source &middot; DOE Galaxy budgets, annual</span>
+    </div>
+    <h1>Where the <span class="em">school money</span> actually goes.</h1>
+
+    <form class="lookup" id="sch-form">
+      <label class="label" for="sch">Search</label>
+      <input id="sch" class="input" type="text" placeholder="School name or district &mdash; e.g. PS 321" autocomplete="off" />
+      <button type="submit" class="submit">Read the budget <span class="arr">&rarr;</span></button>
+    </form>
+    <div class="demo-note">
+      <b>Demo mode</b>
+      DOE Galaxy budget files publish per-school but in a flat-file format that needs parsing &mdash; we're finishing that ingestion now. While it lands, this tool returns sample budgets for three NYC schools so the layout is reviewable.
+    </div>
+    <div class="suggest">
+      Demo set: <a data-q="PS 321 William Penn">PS 321 William Penn &middot; Park Slope</a> &middot;
+      <a data-q="PS 188 The Island School">PS 188 &middot; LES</a> &middot;
+      <a data-q="Stuyvesant High School">Stuyvesant HS</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Readout</div>
+        <h2>One school, <em>where the dollars come from</em>.</h2>
+      </div>
+      <div class="meta">Sample data &middot; demo mode</div>
+    </header>
+
+    <div class="state-none on" id="s-none">
+      <b>Demo set</b>
+      Type a school above and hit <strong>Read the budget</strong>. Demo mode currently knows three:
+      <a data-q="PS 321 William Penn">PS 321</a>,
+      <a data-q="PS 188 The Island School">PS 188</a>, and
+      <a data-q="Stuyvesant High School">Stuyvesant HS</a>.
+    </div>
+
+    <div class="state-results" id="s-results">
+      <div class="readout-grid">
+        <aside class="address-block">
+          <p class="alabel">School</p>
+          <p class="address" id="r-name"></p>
+
+          <div class="keystat">
+            <p class="k">Total budget &middot; FY26</p>
+            <div class="n ember" id="r-total">&mdash;</div>
+            <div class="sub" id="r-totalsub"></div>
+          </div>
+
+          <div class="keystat">
+            <p class="k">Per-pupil spending</p>
+            <div class="n small" id="r-pp">&mdash;</div>
+            <div class="sub" id="r-ppsub"></div>
+          </div>
+
+          <div class="keystat">
+            <p class="k">PTA contribution</p>
+            <div class="n small" id="r-pta">&mdash;</div>
+            <div class="sub" id="r-ptasub"></div>
+          </div>
+
+          <div class="keystat last">
+            <p class="k">Source</p>
+            <div class="n small">DOE Galaxy</div>
+            <div class="sub">Demo data &middot; ingestion in build</div>
+          </div>
+        </aside>
+
+        <div>
+          <p style="font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); margin: 0 0 14px;">Funding sources</p>
+          <div id="r-bars" style="border-top: 1px solid var(--rule-2);"></div>
+
+          <div class="readout-foot">
+            <span class="source">Source &middot; <b>NYC DOE Galaxy budget</b> &middot; sample schools &middot; full ingest in build</span>
+            <a href="https://infohub.nyced.org/reports/financial/financial-data-and-reports" class="cta-link muted" target="_blank" rel="noopener">View DOE source <span class="arr">&rarr;</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="endslug">
+    <p>Look up a different school, or <em>read the next tool</em> in the index.</p>
+    <div class="actions">
+      <a href="/tool-eviction-records.html" class="cta-link">Next &middot; Eviction Records <span class="arr">&rarr;</span></a>
+      <a href="/tools.html" class="cta-link muted">Back to the index <span class="arr">&rarr;</span></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fwrap">
+      <div>
+        <p class="fmark">CivicByte<span class="amp">.</span></p>
+        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
+      </div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">About</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+    </div>
+    <div class="colophon">
+      <span>&copy; 2026 CivicByte &middot; MIT License</span>
+      <span>Set in Newsreader, Inter Tight &amp; IBM Plex Mono &middot; Made in NYC</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+const SCHOOLS = {
+  "ps 321": {
+    name: "PS 321 William Penn",
+    sub: "District 15 &middot; Park Slope &middot; K&ndash;5 &middot; 1,465 students",
+    total: "$26.4M", totalsub: "vs. district avg +12%",
+    pp: "$18,017", ppsub: "Per pupil &middot; FY26",
+    pta: "$1.2M", ptasub: "Private fundraising &middot; FY26",
+    bars: [
+      ["City tax-levy", 72, "$19.0M", false],
+      ["Title I &middot; Federal", 14, "$3.8M", false],
+      ["State Foundation Aid", 9, "$2.4M", false],
+      ["PTA &middot; private", 5, "$1.2M", true]
+    ]
+  },
+  "ps 188": {
+    name: "PS 188 The Island School",
+    sub: "District 1 &middot; LES &middot; K&ndash;8 &middot; 642 students",
+    total: "$14.8M", totalsub: "vs. district avg &ndash;4%",
+    pp: "$23,053", ppsub: "Per pupil &middot; FY26",
+    pta: "$42K", ptasub: "Private fundraising &middot; FY26",
+    bars: [
+      ["City tax-levy", 55, "$8.1M", false],
+      ["Title I &middot; Federal", 34, "$5.1M", true],
+      ["State Foundation Aid", 10, "$1.5M", false],
+      ["PTA &middot; private", 1, "$42K", false]
+    ]
+  },
+  "stuyvesant": {
+    name: "Stuyvesant High School",
+    sub: "District 2 &middot; Battery Park &middot; 9&ndash;12 &middot; 3,362 students",
+    total: "$42.1M", totalsub: "vs. district avg +3%",
+    pp: "$12,523", ppsub: "Per pupil &middot; FY26",
+    pta: "$2.8M", ptasub: "Private fundraising &middot; FY26",
+    bars: [
+      ["City tax-levy", 82, "$34.5M", false],
+      ["State Foundation Aid", 10, "$4.2M", false],
+      ["PTA &middot; private", 7, "$2.8M", true],
+      ["Title I &middot; Federal", 1, "$0.4M", false]
+    ]
+  }
+};
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function show(state){['s-none','s-results'].forEach(id => $(id).classList.toggle('on', id === state));}
+
+function run(){
+  const raw = $('sch').value.trim();
+  if(!raw){ $('sch').focus(); return; }
+  const q = raw.toLowerCase();
+  const key = Object.keys(SCHOOLS).find(k => q && q.includes(k));
+  const data = key ? SCHOOLS[key] : null;
+  if(!data){
+    $('s-none').innerHTML = '<b>Not in the demo set</b>"' + esc(raw) + '" — demo mode currently knows three schools: <a data-q="PS 321 William Penn">PS 321</a>, <a data-q="PS 188 The Island School">PS 188</a>, and <a data-q="Stuyvesant High School">Stuyvesant HS</a>. Full DOE ingestion is in build.';
+    rebindSuggest();
+    show('s-none');
+    return;
+  }
+  $('r-name').innerHTML = esc(data.name) + `<span class="borough">${data.sub}</span>`;
+  $('r-total').textContent = data.total;
+  $('r-totalsub').textContent = data.totalsub;
+  $('r-pp').textContent = data.pp;
+  $('r-ppsub').textContent = data.ppsub;
+  $('r-pta').textContent = data.pta;
+  $('r-ptasub').textContent = data.ptasub;
+  $('r-bars').innerHTML = data.bars.map(b =>
+    `<div class="bar-row">
+      <span class="lbl">${b[0]}</span>
+      <div class="bar"><div class="fill ${b[3] ? 'ember' : ''}" style="width: ${b[1]}%;"></div></div>
+      <span class="amt">${b[2]}</span>
+    </div>`).join('');
+  show('s-results');
+}
+
+function rebindSuggest(){
+  document.querySelectorAll('[data-q]').forEach(a => {
+    a.addEventListener('click', e => { e.preventDefault(); $('sch').value = a.dataset.q; run(); });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  $('sch-form').addEventListener('submit', e => { e.preventDefault(); run(); });
+  rebindSuggest();
+});
+</script>
+</body>
+</html>

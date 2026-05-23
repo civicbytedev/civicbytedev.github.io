@@ -2,217 +2,186 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Privacy &middot; CivicByte</title>
+<title>Privacy &mdash; CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Privacy policy for CivicByte. We collect no personal data — by design.">
+<meta name="description" content="Privacy at CivicByte. We collect no personal data — by design.">
 <link rel="canonical" href="https://civicbyte.dev/privacy.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500;1,9..144,600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
-<meta name="theme-color" content="#b8432b">
+<meta name="theme-color" content="#B33E16">
 <script defer src="/civicbyte-fx.js"></script>
-<link rel="stylesheet" href="/civicbyte.css">
-<style>
-  .privacy { padding: 36px 48px 56px; display:grid; grid-template-columns: 1fr 2.5fr; gap: 56px; align-items: start; background: var(--cream); border-bottom: 1px solid var(--ink); }
-
-  .tldr {
-    position: sticky; top: 28px;
-    background: var(--paper-2); border: 1px solid var(--ink);
-    padding: 26px 28px;
-  }
-  .tldr .k {
-    font-family:'IBM Plex Mono', monospace; font-size: 11px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--brick); margin-bottom: 10px;
-  }
-  .tldr h3 {
-    font-family:'Fraunces', serif; font-weight: 600; font-size: 24px;
-    letter-spacing: -0.01em; line-height: 1.15; margin: 0 0 12px;
-  }
-  .tldr p {
-    font-family:'Newsreader', serif; font-size: 14.5px; line-height: 1.55;
-    color: var(--ink); margin: 0 0 12px;
-  }
-  .tldr .meta {
-    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft);
-    padding-top: 12px; border-top: 1px dotted rgba(29,26,21,0.3);
-  }
-
-  .privacy article section { padding: 28px 0; border-bottom: 1px solid var(--ink); }
-  .privacy article section:first-child { padding-top: 0; }
-  .privacy article section:last-child { border-bottom: none; }
-  .privacy article h2 {
-    font-family:'Fraunces', serif; font-weight: 600; font-size: 28px;
-    letter-spacing: -0.015em; line-height: 1.15; margin: 0 0 14px;
-    display: flex; align-items: baseline; gap: 16px;
-  }
-  .privacy article h2 .nm {
-    font-family:'IBM Plex Mono', monospace; font-size: 12px;
-    letter-spacing: 0.12em; color: var(--brick); font-weight: 500;
-  }
-  .privacy article p {
-    font-family:'Newsreader', serif; font-size: 16.5px; line-height: 1.7;
-    color: var(--ink); margin: 0 0 14px;
-  }
-  .privacy article p strong { color: var(--ink); font-weight: 600; }
-  .privacy article ul { padding-left: 22px; margin: 8px 0 14px; }
-  .privacy article li {
-    font-family:'Newsreader', serif; font-size: 15.5px; line-height: 1.65;
-    color: var(--ink); margin-bottom: 4px;
-  }
-  .privacy article a { color: var(--brick); }
-
-  .contact-card {
-    background: var(--paper-2); border: 1px solid var(--ink); padding: 18px 22px;
-    display: flex; align-items: center; gap: 18px; margin-top: 8px;
-  }
-  .contact-card .icon {
-    width: 40px; height: 40px; background: var(--ink); color: var(--cream);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
-  }
-  .contact-card .lbl {
-    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft);
-  }
-  .contact-card .val {
-    font-family:'Inter Tight', sans-serif; font-size: 15px; color: var(--ink);
-  }
-  .contact-card .val a { color: var(--brick); text-decoration: none; }
-
-  @media (max-width: 980px) {
-    .privacy { padding: 28px 24px 40px; grid-template-columns: 1fr; gap: 24px; }
-    .tldr { position: static; }
-    .privacy article h2 { font-size: 22px; gap: 10px; }
-    .privacy article h2 .nm { font-size: 11px; }
-  }
-</style>
+<link rel="stylesheet" href="/civicbyte-editorial.css">
 </head>
 <body>
 
 <div class="page">
 
-  <div class="masthead">
-    <span>Vol. 01 &middot; No. 18 &middot; Saturday, May 23, 2026</span>
-    <span>Legal &middot; Last updated May 23, 2026</span>
-    <span>Free &middot; Open Source</span>
-  </div>
-
-  <nav class="nav">
-    <div class="nav-left">
-      <a href="/" class="mark">civic<em>byte</em>.</a>
-      <span class="tag">Est. 2024 &middot; New York</span>
+  <header class="masthead">
+    <div class="l">
+      <span><span class="tick"></span>Vol. 01 &nbsp;&middot;&nbsp; No. 18</span>
+      <span class="sep">&middot;</span>
+      <span>Saturday, May 23, 2026</span>
     </div>
+    <a href="/" class="wordmark">CivicByte<span class="amp">.</span></a>
+    <div class="r">
+      <span>An independent NYC civic data project</span>
+      <span class="sep">&middot;</span>
+      <span>Open source &middot; MIT</span>
+    </div>
+  </header>
+
+  <nav class="secnav">
     <ul>
       <li><a href="/">Front Page</a></li>
       <li><a href="/tools.html">Tools</a></li>
       <li><a href="/story.html">The Story</a></li>
       <li><a href="/about.html">About</a></li>
     </ul>
-    <a href="/submit.html" class="cta">Submit a tool</a>
+    <div class="right">
+      <span>Built something?</span>
+      <a href="/submit.html" class="open">Submit a tool &rarr;</a>
+    </div>
   </nav>
 
-  <section class="page-hero">
-    <div class="kicker">&sect;01 &mdash; Legal &middot; Privacy</div>
-    <h1>Privacy, <em>by design</em>.</h1>
-    <p class="lede">
-      CivicByte is built on a simple principle: public data should serve the public, not the
-      other way around. We don't collect your personal information.
-    </p>
+  <section class="hero compact">
+    <div class="dateline">
+      <span>Privacy</span>
+      <span class="sep">&middot;</span>
+      <span>Last updated &middot; 23 May 2026</span>
+      <span class="sep">&middot;</span>
+      <span>Legal</span>
+    </div>
+    <h1>You aren't the <span class="em">product.</span></h1>
   </section>
 
-  <div class="privacy">
-    <aside class="tldr">
-      <div class="k">TL;DR</div>
-      <h3>You aren't the product.</h3>
-      <p>CivicByte does not collect, store, or sell any personal data. No accounts, no tracking, no ads. The tools and website are free &mdash; that's the whole arrangement.</p>
-      <div class="meta">Last updated &middot; 2026-05-23</div>
-    </aside>
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Short Version</div>
+        <h2>We collect <em>no personal data</em>.</h2>
+      </div>
+      <div class="meta">By design</div>
+    </header>
 
-    <article>
-      <section>
-        <h2><span class="nm">01</span> What we collect</h2>
-        <p>We collect <strong>no personal information</strong> from users of the CivicByte website or any of the tools listed on it.</p>
-        <p>Specifically, we do not collect:</p>
-        <ul>
-          <li>Names, email addresses, or contact information</li>
-          <li>Device identifiers or advertising IDs</li>
-          <li>Location data</li>
-          <li>Behavioral or usage analytics tied to you</li>
-          <li>Cookies or tracking pixels</li>
-          <li>Any form of account or login data &mdash; no accounts exist</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2><span class="nm">02</span> How the tools work</h2>
-        <p>Every CivicByte tool runs in your own browser, talking directly to the public-data API behind it &mdash; NYC Open Data, HPD, DOI, and so on. The search happens on your device, and the response is rendered in your browser. We sit in the middle as the static page that loads the code; we are not on the path of your queries.</p>
+    <div class="article-grid">
+      <aside class="byline">
+        <div><b>What we don't have</b></div>
+        <div>Names &middot; emails</div>
+        <div>IP addresses</div>
+        <div>Cookies &middot; sessions</div>
+        <div>Device IDs</div>
+        <div>Location data</div>
+        <div class="sec"><b>What we keep</b></div>
+        <div>Aggregate request counts</div>
+        <div>Referrer patterns</div>
+        <div>Direct emails to us</div>
+      </aside>
+      <article class="prose">
+        <p class="lead drop">CivicByte does not collect, store, or sell any personal data. No accounts, no tracking, no ads. The tools and website are free &mdash; that's the whole arrangement.</p>
+        <p>Every CivicByte tool runs in your own browser, talking directly to the public-data API behind it &mdash; NYC Open Data, HPD, DOI. The search happens on your device. The response renders in your browser. We sit in the middle only as the static page that loads the code; we are not on the path of your queries.</p>
         <p>We do not intercept, log, or store anything you type or pull back. There is no server-side database.</p>
-      </section>
+        <p class="cite">Editorial board &middot; NYC, 2026</p>
+      </article>
+    </div>
+  </section>
 
-      <section>
-        <h2><span class="nm">03</span> Submissions and email</h2>
-        <p>If you use the <a href="/submit.html">Submit a tool</a> form, that opens your own mail client addressed to <a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a> with the submission contents pre-filled. You choose whether to send. We only see what arrives in the inbox &mdash; same as any email &mdash; and we use it solely to review the submission.</p>
-      </section>
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Details</div>
+        <h2>The whole policy, <em>numbered</em>.</h2>
+      </div>
+      <div class="meta">Eight sections</div>
+    </header>
 
-      <section>
-        <h2><span class="nm">04</span> Third-party tools listed on the directory</h2>
-        <p>CivicByte lists civic tools built and maintained by third parties. Those tools are independent services with their own privacy practices &mdash; review each tool's policy when you use it. We do not act as a data processor for them.</p>
-      </section>
+    <ol class="ilist">
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">01</span>
+        <span class="ititle">What we collect</span>
+        <span class="idesc">We collect no personal information from users of the CivicByte website or any of the tools listed on it. No names, no emails, no device identifiers, no location data, no cookies, no tracking pixels, no account or login data.</span>
+        <span class="imeta"><span class="st">Section</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">02</span>
+        <span class="ititle">How the tools work</span>
+        <span class="idesc">Every tool runs in your browser, querying NYC Open Data directly. Your searches do not pass through our servers. There is no database to leak.</span>
+        <span class="imeta"><span class="st">Section</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">03</span>
+        <span class="ititle">Submissions &amp; email</span>
+        <span class="idesc">The Submit form opens your own mail client addressed to hello@civicbyte.dev with the contents pre-filled. You choose whether to send. We only see what arrives in the inbox.</span>
+        <span class="imeta"><span class="st">Section</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">04</span>
+        <span class="ititle">Third-party tools listed in the directory</span>
+        <span class="idesc">Some tools we list are built and maintained by third parties. Those are independent services with their own privacy practices &mdash; review each one as you use it. We are not their data processor.</span>
+        <span class="imeta"><span class="st">Section</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">05</span>
+        <span class="ititle">Open source</span>
+        <span class="idesc">All CivicByte code is open source under MIT. The website is at github.com/civicbytedev/civicbytedev.github.io. You can inspect exactly what runs in your browser.</span>
+        <span class="imeta"><span class="st">Section</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">06</span>
+        <span class="ititle">Children's privacy</span>
+        <span class="idesc">CivicByte does not knowingly collect any information from anyone, including children under 13. Because we collect no personal data, we comply with COPPA by design.</span>
+        <span class="imeta"><span class="st">Section</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">07</span>
+        <span class="ititle">Changes to this policy</span>
+        <span class="idesc">If we ever update this policy, the new version replaces this page with a fresh "last updated" date. Because we collect no data, material changes are unlikely.</span>
+        <span class="imeta"><span class="st">Section</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="mailto:hello@civicbyte.dev">
+        <span class="inum">08</span>
+        <span class="ititle">Contact</span>
+        <span class="idesc">Questions about this policy? Email hello@civicbyte.dev. We read every message.</span>
+        <span class="imeta"><span class="st">Section</span></span>
+        <span class="iarr">&rarr;</span>
+      </a></li>
+    </ol>
+  </section>
 
-      <section>
-        <h2><span class="nm">05</span> Open source</h2>
-        <p>All CivicByte code is open source under the <a href="https://opensource.org/licenses/MIT">MIT License</a>. You can inspect exactly what runs in your browser:</p>
-        <ul>
-          <li>Website: <a href="https://github.com/civicbytedev/civicbytedev.github.io">github.com/civicbytedev/civicbytedev.github.io</a></li>
-          <li>All tools: <a href="https://github.com/civicbytedev">github.com/civicbytedev</a></li>
-        </ul>
-      </section>
-
-      <section>
-        <h2><span class="nm">06</span> Children's privacy</h2>
-        <p>CivicByte does not knowingly collect any information from anyone, including children under 13. Because we collect no personal data, we comply with COPPA by design.</p>
-      </section>
-
-      <section>
-        <h2><span class="nm">07</span> Changes to this policy</h2>
-        <p>If we ever update this policy, the new version replaces this page with a fresh "last updated" date. Because we collect no data, material changes are unlikely.</p>
-      </section>
-
-      <section>
-        <h2><span class="nm">08</span> Contact</h2>
-        <p>Questions about this policy? Reach out:</p>
-        <div class="contact-card">
-          <div class="icon">&#9993;</div>
-          <div>
-            <div class="lbl">Email</div>
-            <div class="val"><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></div>
-          </div>
-        </div>
-      </section>
-    </article>
-  </div>
+  <section class="endslug">
+    <p>Read the founding note, or <em>browse the tools</em> we built around it.</p>
+    <div class="actions">
+      <a href="/story.html" class="cta-link">The Story <span class="arr">&rarr;</span></a>
+      <a href="/tools.html" class="cta-link muted">Browse the tools <span class="arr">&rarr;</span></a>
+    </div>
+  </section>
 
   <footer>
-    <div class="foot-grid">
+    <div class="fwrap">
       <div>
-        <a href="/" class="mark">civic<em>byte</em>.</a>
-        <p>An independent NYC civic-data project. Free, open-source tools built on public records. Released under MIT.</p>
+        <p class="fmark">CivicByte<span class="amp">.</span></p>
+        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
       </div>
-      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/about.html">About</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
-      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/brand.html">Brand</a></li></ul></div>
-      <div><h5>Contact</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">About</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
     </div>
     <div class="colophon">
       <span>&copy; 2026 CivicByte &middot; MIT License</span>
-      <span>Set in Fraunces &middot; Newsreader &middot; IBM Plex Mono</span>
-      <span>Printed on the open web</span>
+      <span>Set in Newsreader, Inter Tight &amp; IBM Plex Mono &middot; Made in NYC</span>
     </div>
-    <div class="col2"><span>© 2026 CivicByte · MIT License</span><span>Made in NYC · By students, for everyone</span></div>
   </footer>
 
 </div>
+
 </body>
 </html>

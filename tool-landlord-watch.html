@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NYC Landlord Watch &mdash; CivicByte</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Search any NYC landlord or LLC to see portfolio size, violation history, and risk score.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/cb-icon-light.svg">
+<meta name="theme-color" content="#B33E16">
+<script defer src="/civicbyte-fx.js"></script>
+<link rel="stylesheet" href="/civicbyte-editorial.css">
+<style>
+  .demo-note { padding: 14px 0 14px 20px; border-left: 2px solid var(--ember); margin-top: 14px; font-family: var(--serif); font-size: 15.5px; line-height: 1.5; color: var(--ink); max-width: 60ch; }
+  .demo-note b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); font-weight: 500; display: block; margin-bottom: 6px; }
+  .state-none, .state-results { display: none; }
+  .state-none.on, .state-results.on { display: block; }
+  .state-none { padding: 28px 0; border-left: 2px solid var(--rule-2); padding-left: 28px; font-family: var(--serif); font-size: 19px; line-height: 1.4; color: var(--ink); max-width: 56ch; }
+  .state-none b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); display: block; margin-bottom: 8px; font-weight: 500; }
+  .state-none a { color: var(--ember); cursor: pointer; }
+  .suggest { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--mute); margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--rule); }
+  .suggest a { color: var(--ember); cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="l">
+      <span><span class="tick"></span>Vol. 01 &nbsp;&middot;&nbsp; No. 18</span>
+      <span class="sep">&middot;</span>
+      <span>Saturday, May 23, 2026</span>
+    </div>
+    <a href="/" class="wordmark">CivicByte<span class="amp">.</span></a>
+    <div class="r">
+      <span>An independent NYC civic data project</span>
+      <span class="sep">&middot;</span>
+      <span>Open source &middot; MIT</span>
+    </div>
+  </header>
+
+  <nav class="secnav">
+    <ul>
+      <li><a href="/">Front Page</a></li>
+      <li><a href="/tools.html" class="is-active">Tools</a></li>
+      <li><a href="/story.html">The Story</a></li>
+      <li><a href="/about.html">About</a></li>
+    </ul>
+    <div class="right">
+      <span>Built something?</span>
+      <a href="/submit.html" class="open">Submit a tool &rarr;</a>
+    </div>
+  </nav>
+
+  <section class="hero compact">
+    <div class="dateline">
+      <span>Tool &middot; 02</span>
+      <span class="sep">&middot;</span>
+      <span>NYC Landlord Watch</span>
+      <span class="sep">&middot;</span>
+      <span>Source &middot; HPD registrations &amp; violations</span>
+    </div>
+    <h1>The whole portfolio, <span class="em">in one record.</span></h1>
+
+    <form class="lookup" id="ll-form">
+      <label class="label" for="ll">Search</label>
+      <input id="ll" class="input" type="text" placeholder="Landlord or LLC name &mdash; e.g. Longfellow Realty LLC" autocomplete="off" />
+      <button type="submit" class="submit">Pull the file <span class="arr">&rarr;</span></button>
+    </form>
+    <div class="demo-note">
+      <b>Demo mode</b>
+      Resolving LLCs back to their parent landlords needs an ACRIS-deed ingestion pipeline we're still building. While it lands, this tool returns sample portfolios for three known landlords. Live HPD-only ingest goes in next.
+    </div>
+    <div class="suggest">
+      Demo set: <a data-q="Longfellow Realty LLC">Longfellow Realty LLC</a> &middot;
+      <a data-q="Parkchester Holdings">Parkchester Holdings</a> &middot;
+      <a data-q="Sunset Park Co-op">Sunset Park Co-op</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Readout</div>
+        <h2>One landlord, <em>their whole record</em>.</h2>
+      </div>
+      <div class="meta">Sample data &middot; demo mode</div>
+    </header>
+
+    <div class="state-none on" id="s-none">
+      <b>Demo set</b>
+      Type a landlord above and hit <strong>Pull the file</strong>. Demo mode currently knows three landlords:
+      <a data-q="Longfellow Realty LLC">Longfellow Realty LLC</a>,
+      <a data-q="Parkchester Holdings">Parkchester Holdings</a>, and
+      <a data-q="Sunset Park Co-op">Sunset Park Co-op</a>.
+    </div>
+
+    <div class="state-results" id="s-results">
+      <div class="readout-grid">
+        <aside class="address-block">
+          <p class="alabel">Landlord of record</p>
+          <p class="address" id="r-name"></p>
+
+          <div class="keystat">
+            <p class="k">Portfolio size</p>
+            <div class="n" id="r-props">0 <span style="font-size: 22px; letter-spacing: 0; font-family: var(--sans); font-weight: 500;">buildings</span></div>
+            <div class="breakdown" id="r-pbreak"></div>
+          </div>
+
+          <div class="keystat">
+            <p class="k">Total open violations</p>
+            <div class="n ember" id="r-violations">0</div>
+            <div class="breakdown" id="r-vbreak"></div>
+          </div>
+
+          <div class="keystat">
+            <p class="k">CivicByte risk index</p>
+            <div class="n ember" id="r-risk">&mdash;</div>
+            <div class="sub" id="r-risksub"></div>
+          </div>
+
+          <div class="keystat last">
+            <p class="k">Source</p>
+            <div class="n small">HPD &middot; ACRIS</div>
+            <div class="sub">Demo data &middot; ingestion in build</div>
+          </div>
+        </aside>
+
+        <div>
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Building</th>
+                <th class="right" style="width: 80px;">Units</th>
+                <th class="right" style="width: 88px;">Open V.</th>
+                <th class="right" style="width: 76px;">Class C</th>
+                <th class="right" style="width: 84px;">Flagged</th>
+              </tr>
+            </thead>
+            <tbody id="r-rows"></tbody>
+          </table>
+
+          <div class="readout-foot">
+            <span class="source">Source &middot; <b>HPD violations + registrations</b> &middot; sample portfolios &middot; ACRIS deed-graph ingestion in build</span>
+            <a href="https://data.cityofnewyork.us/Housing-Development/Registration-Contacts/feu5-w2e2" class="cta-link muted" target="_blank" rel="noopener">View HPD dataset <span class="arr">&rarr;</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="endslug">
+    <p>Look up a different landlord, or <em>read the next tool</em> in the index.</p>
+    <div class="actions">
+      <a href="/tool-school-budget.html" class="cta-link">Next &middot; School Budget Tracker <span class="arr">&rarr;</span></a>
+      <a href="/tools.html" class="cta-link muted">Back to the index <span class="arr">&rarr;</span></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fwrap">
+      <div>
+        <p class="fmark">CivicByte<span class="amp">.</span></p>
+        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
+      </div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">About</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+    </div>
+    <div class="colophon">
+      <span>&copy; 2026 CivicByte &middot; MIT License</span>
+      <span>Set in Newsreader, Inter Tight &amp; IBM Plex Mono &middot; Made in NYC</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+const LANDLORDS = {
+  "longfellow realty llc": {
+    name: "Longfellow Realty LLC", regsub: "Registered · Delaware · 2019",
+    props: 14, pbreak: [["11","Bronx"],["2","Brooklyn"],["1","Queens"]],
+    violations: 218, vbreak: [["54","Class C"],["121","Class B"],["43","Class A"]],
+    risk: "94", risksub: "High &middot; Top 3% citywide",
+    rows: [
+      ["965 Longfellow Ave, Bronx", 14, 14, 6, true],
+      ["2103 Crotona Pkwy, Bronx", 22, 31, 9, true],
+      ["847 Hoe Ave, Bronx", 18, 26, 7, true],
+      ["410 E 156th St, Bronx", 12, 19, 4, true],
+      ["1224 Faile St, Bronx", 9, 7, 1, false],
+      ["312 Stockton St, Brooklyn", 8, 5, 0, false],
+      ["+ 8 more", 183, 116, 27, null]
+    ]
+  },
+  "parkchester holdings": {
+    name: "Parkchester Holdings", regsub: "Registered · NY · 2014",
+    props: 12, pbreak: [["12","Bronx"]],
+    violations: 248, vbreak: [["41","Class C"],["134","Class B"],["73","Class A"]],
+    risk: "78", risksub: "Medium &middot; Top 12% citywide",
+    rows: [
+      ["1745 Unionport Rd, Bronx", 48, 62, 14, true],
+      ["2021 Westchester Ave, Bronx", 36, 44, 9, true],
+      ["1590 Metropolitan Ave, Bronx", 28, 28, 6, false],
+      ["+ 9 more", 312, 114, 12, null]
+    ]
+  },
+  "sunset park co-op": {
+    name: "Sunset Park Co-op", regsub: "Co-op &middot; Brooklyn &middot; 2008",
+    props: 3, pbreak: [["3","Brooklyn"]],
+    violations: 14, vbreak: [["0","Class C"],["5","Class B"],["9","Class A"]],
+    risk: "12", risksub: "Low &middot; Below borough average",
+    rows: [
+      ["5510 5th Ave, Brooklyn", 22, 6, 0, false],
+      ["448 49th St, Brooklyn", 18, 5, 0, false],
+      ["612 46th St, Brooklyn", 14, 3, 0, false]
+    ]
+  }
+};
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function show(state){['s-none','s-results'].forEach(id => $(id).classList.toggle('on', id === state));}
+
+function run(){
+  const raw = $('ll').value.trim();
+  if(!raw){ $('ll').focus(); return; }
+  const q = raw.toLowerCase();
+  const data = LANDLORDS[q] || LANDLORDS[Object.keys(LANDLORDS).find(k => q && (k.includes(q) || k.includes(q.split(' ')[0])))] || null;
+  if(!data){
+    $('s-none').innerHTML = '<b>Not in the demo set</b>"' + esc(raw) + '" — demo mode currently knows three landlords: <a data-q="Longfellow Realty LLC">Longfellow Realty LLC</a>, <a data-q="Parkchester Holdings">Parkchester Holdings</a>, and <a data-q="Sunset Park Co-op">Sunset Park Co-op</a>. Real ACRIS-graph ingestion is in build.';
+    rebindSuggest();
+    show('s-none');
+    return;
+  }
+  $('r-name').innerHTML = esc(data.name) + `<span class="borough">${data.regsub}</span>`;
+  $('r-props').innerHTML = `${data.props} <span style="font-size: 22px; letter-spacing: 0; font-family: var(--sans); font-weight: 500;">buildings</span>`;
+  $('r-pbreak').innerHTML = data.pbreak.map(p => `<span><b>${p[0]}</b> ${esc(p[1])}</span>`).join('');
+  $('r-violations').textContent = data.violations;
+  $('r-vbreak').innerHTML = data.vbreak.map(v => `<span><b>${v[0]}</b> ${esc(v[1])}</span>`).join('');
+  $('r-risk').innerHTML = `${data.risk}<span style="font-family: var(--mono); font-size: 18px; color: var(--mute); letter-spacing: 0.06em;"> / 100</span>`;
+  $('r-risksub').innerHTML = data.risksub;
+  $('r-rows').innerHTML = data.rows.map(r => {
+    const flagged = r[4] === true;
+    const isMore = r[4] === null;
+    if (isMore) {
+      return `<tr>
+        <td class="mono" style="color: var(--mute);">${esc(r[0])}</td>
+        <td class="num" style="color: var(--mute);">${r[1]}</td>
+        <td class="num" style="color: var(--mute);">${r[2]}</td>
+        <td class="num" style="color: var(--mute);">${r[3]}</td>
+        <td class="mono right" style="color: var(--mute);">&middot;</td>
+      </tr>`;
+    }
+    return `<tr>
+      <td class="serif">${esc(r[0])}</td>
+      <td class="num">${r[1]}</td>
+      <td class="num"><span style="color: ${flagged ? 'var(--ember)' : 'var(--ink)'}; font-weight: 500;">${r[2]}</span></td>
+      <td class="num">${r[3]}</td>
+      <td class="mono right" style="color: ${flagged ? 'var(--ember)' : 'var(--mute)'};">${flagged ? '●' : '·'}</td>
+    </tr>`;
+  }).join('');
+  show('s-results');
+}
+
+function rebindSuggest(){
+  document.querySelectorAll('[data-q]').forEach(a => {
+    a.addEventListener('click', e => { e.preventDefault(); $('ll').value = a.dataset.q; run(); }, { once: false });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  $('ll-form').addEventListener('submit', e => { e.preventDefault(); run(); });
+  rebindSuggest();
+});
+</script>
+</body>
+</html>

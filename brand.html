@@ -2,129 +2,80 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Brand &middot; CivicByte</title>
+<title>Brand &mdash; CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="CivicByte brand system: wordmark, typography, color palette, app icons.">
+<meta name="description" content="CivicByte brand reference — the mark, the palette, the type.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500;1,9..144,600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
-<meta name="theme-color" content="#b8432b">
+<meta name="theme-color" content="#B33E16">
 <script defer src="/civicbyte-fx.js"></script>
-<link rel="stylesheet" href="/civicbyte.css">
+<link rel="stylesheet" href="/civicbyte-editorial.css">
 <style>
-  .brand-section { padding: 48px 48px; border-bottom: 1px solid var(--ink); }
-  .brand-section.alt { background: var(--paper); }
-  .brand-section.dark { background: var(--ink); color: var(--cream); }
-  .brand-section.dark h2 { color: var(--cream); }
-  .brand-section.dark .meta { color: rgba(248,244,234,0.6); }
-
-  .wordmark-display {
-    font-family:'Fraunces', serif; font-weight: 500; font-size: 144px;
-    line-height: 0.9; letter-spacing: -0.04em; margin: 24px 0 0;
+  .mark-show {
+    padding: 64px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    border-bottom: 1px solid var(--rule);
+  }
+  .mark-show .wordmark-xl {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(72px, 11vw, 160px);
+    line-height: 0.9;
+    letter-spacing: -0.035em;
     color: var(--ink);
+    margin: 0;
   }
-  .wordmark-display em { font-style: italic; color: var(--brick); font-weight: 500; }
-  .wordmark-display .dot { color: var(--brick); }
+  .mark-show .wordmark-xl .amp { color: var(--ember); }
+  .mark-show .specs { border-left: 1px solid var(--rule); padding-left: 40px; }
+  .mark-show .specs dl { display: grid; grid-template-columns: 1fr 1fr; margin: 0; row-gap: 14px; }
+  .mark-show .specs dt {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--mute); margin: 0;
+  }
+  .mark-show .specs dd {
+    margin: 0; font-family: var(--mono); font-size: 12px;
+    letter-spacing: 0.06em; color: var(--ink); text-align: right;
+  }
 
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: stretch; }
+  .palette {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .swatch {
+    display: grid; grid-template-columns: 96px 1fr auto; gap: 24px;
+    padding: 22px 0; border-bottom: 1px solid var(--rule); align-items: center;
+  }
+  .swatch:nth-child(odd) { border-right: 1px solid var(--rule); padding-right: 32px; }
+  .swatch:nth-child(even) { padding-left: 32px; }
+  .swatch .chip { width: 80px; height: 56px; border: 1px solid var(--rule); }
+  .swatch .name { font-family: var(--serif); font-size: 19px; line-height: 1.2; color: var(--ink); letter-spacing: -0.01em; }
+  .swatch .name .sub {
+    display: block; font-family: var(--mono); font-size: 10.5px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--mute); margin-top: 4px; font-weight: 400;
+  }
+  .swatch .hex { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--mute); text-transform: uppercase; text-align: right; }
 
-  .ana-card { background: #fff; border: 1px solid var(--ink); padding: 32px 32px 28px; }
-  .ana-card h4 {
-    font-family:'IBM Plex Mono', monospace; font-size: 11px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--brick);
-    margin: 0 0 18px; font-weight: 500;
-  }
-  .ana-card p {
-    font-family:'Newsreader', serif; font-size: 15px; line-height: 1.6;
-    color: var(--ink); margin: 18px 0 0; max-width: 40ch;
-  }
-  .ana-card .demo-wordmark {
-    font-family:'Fraunces', serif; font-weight: 500; font-size: 84px;
-    line-height: 0.9; letter-spacing: -0.035em;
-  }
-  .ana-card .demo-wordmark em { font-style: italic; color: var(--brick); }
+  .typeset { display: grid; grid-template-columns: 200px 1fr; gap: 64px; padding-top: 32px; }
+  .typeset .sample { padding: 22px 0; border-top: 1px solid var(--rule); }
+  .typeset .sample:last-child { border-bottom: 1px solid var(--rule); }
+  .typeset .sample .meta { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); margin-bottom: 14px; }
+  .typeset .sample .a-serif { font-family: var(--serif); font-weight: 500; font-size: 56px; line-height: 1; letter-spacing: -0.028em; color: var(--ink); }
+  .typeset .sample .a-sans { font-family: var(--sans); font-size: 22px; line-height: 1.4; color: var(--ink); }
+  .typeset .sample .a-mono { font-family: var(--mono); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); }
 
-  /* Color swatches */
-  .swatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; border: 1px solid var(--ink); }
-  .sw {
-    aspect-ratio: 1; padding: 18px 16px; display: flex; flex-direction: column;
-    justify-content: flex-end; border-right: 1px solid var(--ink);
-  }
-  .sw:last-child { border-right: none; }
-  .sw .nm { font-family:'Fraunces', serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
-  .sw .hx {
-    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.06em; opacity: 0.75; margin-top: 4px;
-  }
-  .sw .role {
-    font-family:'IBM Plex Mono', monospace; font-size: 10px;
-    letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.6; margin-top: 8px;
-  }
-  .sw.brick { background: var(--brick); color: #fff; }
-  .sw.ochre { background: var(--ochre); color: var(--ink); }
-  .sw.moss  { background: var(--moss);  color: var(--cream); }
-  .sw.sky   { background: var(--sky);   color: var(--cream); }
-  .sw.ink   { background: var(--ink);   color: var(--cream); }
-  .sw.cream { background: var(--cream); color: var(--ink); }
-
-  /* Type specimens */
-  .type-grid { display: grid; grid-template-columns: 220px 1fr; gap: 0; border-top: 2px solid var(--ink); }
-  .type-row {
-    display: contents;
-  }
-  .type-row > .label, .type-row > .demo {
-    padding: 28px 0; border-bottom: 1px solid var(--ink);
-  }
-  .type-row > .label {
-    font-family:'IBM Plex Mono', monospace; font-size: 11px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft);
-    padding-right: 32px;
-  }
-  .type-row > .label strong { display: block; color: var(--ink); font-weight: 600; font-size: 13px; margin-bottom: 6px; }
-  .type-row > .demo { color: var(--ink); }
-  .type-row .demo.serif-display { font-family: 'Fraunces', serif; font-size: 56px; line-height: 1; letter-spacing: -0.025em; font-weight: 500; }
-  .type-row .demo.serif-display em { font-style: italic; color: var(--brick); }
-  .type-row .demo.serif-body { font-family: 'Newsreader', serif; font-size: 18px; line-height: 1.55; }
-  .type-row .demo.sans-ui { font-family: 'Inter Tight', sans-serif; font-size: 16px; line-height: 1.45; }
-  .type-row .demo.mono-label { font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.06em; }
-
-  /* Icon scale */
-  .scale-row {
-    display: flex; gap: 40px; align-items: flex-end; padding: 32px;
-    background: var(--cream); border: 1px solid var(--ink); flex-wrap: wrap;
-  }
-  .iw { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-  .iw .ic {
-    border-radius: 22%; background: #fff; overflow: hidden;
-    box-shadow: 0 0 0 1px rgba(29,26,21,0.1);
-  }
-  .iw .ic img { width: 100%; height: 100%; display: block; }
-  .iw .lb {
-    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft);
-  }
-  .ic.s256 { width: 256px; height: 256px; }
-  .ic.s120 { width: 120px; height: 120px; }
-  .ic.s80  { width: 80px;  height: 80px;  }
-  .ic.s60  { width: 60px;  height: 60px;  }
-  .ic.s32  { width: 32px;  height: 32px;  border-radius: 8px; }
-
-  @media (max-width: 980px) {
-    .brand-section { padding: 36px 24px; }
-    .wordmark-display { font-size: 80px; }
-    .grid-2 { grid-template-columns: 1fr; gap: 18px; }
-    .swatches { grid-template-columns: repeat(2, 1fr); }
-    .sw { border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); aspect-ratio: 1.3; }
-    .sw:nth-child(2n) { border-right: none; }
-    .sw:nth-last-child(-n+2) { border-bottom: none; }
-    .type-grid { grid-template-columns: 1fr; }
-    .type-row > .label, .type-row > .demo { padding: 16px 0; }
-    .type-row > .demo { border-top: none; padding-top: 0; }
-    .type-row > .label { border-bottom: none; padding-bottom: 8px; }
-    .type-row .demo.serif-display { font-size: 36px; }
-    .ana-card .demo-wordmark { font-size: 56px; }
+  @media (max-width: 880px) {
+    .mark-show { grid-template-columns: 1fr; gap: 32px; padding: 32px 0; }
+    .mark-show .specs { border-left: none; padding-left: 0; border-top: 1px solid var(--rule); padding-top: 24px; }
+    .palette { grid-template-columns: 1fr; }
+    .swatch:nth-child(odd) { border-right: none; padding-right: 0; }
+    .swatch:nth-child(even) { padding-left: 0; }
+    .typeset { grid-template-columns: 1fr; gap: 24px; }
   }
 </style>
 </head>
@@ -132,133 +83,183 @@
 
 <div class="page">
 
-  <div class="masthead">
-    <span>Vol. 01 &middot; No. 18 &middot; Saturday, May 23, 2026</span>
-    <span>Brand system &middot; v1.0</span>
-    <span>Open Source &middot; MIT</span>
-  </div>
-
-  <nav class="nav">
-    <div class="nav-left">
-      <a href="/" class="mark">civic<em>byte</em>.</a>
-      <span class="tag">Est. 2024 &middot; New York</span>
+  <header class="masthead">
+    <div class="l">
+      <span><span class="tick"></span>Vol. 01 &nbsp;&middot;&nbsp; No. 18</span>
+      <span class="sep">&middot;</span>
+      <span>Saturday, May 23, 2026</span>
     </div>
+    <a href="/" class="wordmark">CivicByte<span class="amp">.</span></a>
+    <div class="r">
+      <span>An independent NYC civic data project</span>
+      <span class="sep">&middot;</span>
+      <span>Open source &middot; MIT</span>
+    </div>
+  </header>
+
+  <nav class="secnav">
     <ul>
       <li><a href="/">Front Page</a></li>
       <li><a href="/tools.html">Tools</a></li>
       <li><a href="/story.html">The Story</a></li>
       <li><a href="/about.html">About</a></li>
     </ul>
-    <a href="/submit.html" class="cta">Submit a tool</a>
+    <div class="right">
+      <span>Built something?</span>
+      <a href="/submit.html" class="open">Submit a tool &rarr;</a>
+    </div>
   </nav>
 
-  <section class="page-hero">
-    <div class="kicker">&sect;01 &mdash; Brand system &middot; v1.0</div>
-    <h1>One wordmark. <em>Three families. Six colors.</em></h1>
-    <p class="lede">
-      CivicByte reads like a newspaper of record. A serif wordmark with an italic ochre-brick
-      "byte," set on warm cream with double black rules. Used at sixteen pixels and on a
-      billboard the same way.
-    </p>
+  <section class="hero compact">
+    <div class="dateline">
+      <span>The Brand</span>
+      <span class="sep">&middot;</span>
+      <span>Version 1.0 &middot; 2026</span>
+      <span class="sep">&middot;</span>
+      <span>Editorial reference</span>
+    </div>
+    <h1>The mark, the palette, <span class="em">the type</span>.</h1>
   </section>
 
-  <!-- Wordmark -->
-  <section class="brand-section">
-    <div class="sec-head">
-      <h2>The <em>wordmark</em>.</h2>
-      <span class="meta">&sect;02 &middot; Identity</span>
-    </div>
-    <div class="wordmark-display">civic<em>byte</em><span class="dot">.</span></div>
-    <p style="font-family:'Newsreader', serif; font-size: 16px; line-height: 1.6; color: var(--ink-soft); max-width: 60ch; margin: 32px 0 0;">
-      Set in Fraunces, 800 italic. The "byte" half is brick (#B8432B); the trailing period
-      is brick too &mdash; a small civic flag at the end of the name. Reads as one word but the
-      eye separates the civic mission from the technical means &mdash; by design.
-    </p>
-  </section>
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Mark</div>
+        <h2>One wordmark, <em>one period</em>.</h2>
+      </div>
+      <div class="meta">v1.0 &middot; 2026</div>
+    </header>
 
-  <!-- Type system -->
-  <section class="brand-section alt">
-    <div class="sec-head">
-      <h2>The <em>type system</em>.</h2>
-      <span class="meta">&sect;03 &middot; Three families</span>
-    </div>
-    <div class="type-grid">
-      <div class="type-row">
-        <div class="label"><strong>Fraunces</strong>Display serif &middot; Headlines &middot; Wordmark</div>
-        <div class="demo serif-display">Public data, <em>made usable</em>.</div>
-      </div>
-      <div class="type-row">
-        <div class="label"><strong>Newsreader</strong>Body serif &middot; Article copy &middot; Ledes</div>
-        <div class="demo serif-body">The records your city already publishes &mdash; HPD violations, 311 calls, marshal evictions, school budgets &mdash; turned into tools a tenant, a parent, or a grandmother can actually use.</div>
-      </div>
-      <div class="type-row">
-        <div class="label"><strong>Inter Tight</strong>UI sans &middot; Buttons &middot; Forms &middot; Side copy</div>
-        <div class="demo sans-ui">Submit a tool &middot; Browse the directory &middot; Read the standards</div>
-      </div>
-      <div class="type-row">
-        <div class="label"><strong>IBM Plex Mono</strong>Labels &middot; Datelines &middot; Eyebrows &middot; Metadata</div>
-        <div class="demo mono-label">VOL. 01 &middot; NO. 18 &middot; SATURDAY, MAY 23, 2026 &middot; OPEN SOURCE &middot; MIT</div>
+    <div class="mark-show">
+      <p class="wordmark-xl">CivicByte<span class="amp">.</span></p>
+      <div class="specs">
+        <dl>
+          <dt>Setting</dt><dd>Newsreader &middot; 500</dd>
+          <dt>Letterspacing</dt><dd>&minus;0.02em</dd>
+          <dt>Period color</dt><dd>Ember &middot; #B33E16</dd>
+          <dt>Lowercase</dt><dd>civicbyte.</dd>
+          <dt>Allowed sizes</dt><dd>16 &ndash; 200 px</dd>
+          <dt>Clear space</dt><dd>&ge; 1&times; cap height</dd>
+        </dl>
       </div>
     </div>
   </section>
 
-  <!-- Color palette -->
-  <section class="brand-section">
-    <div class="sec-head">
-      <h2>The <em>palette</em>.</h2>
-      <span class="meta">&sect;04 &middot; Six colors, earned</span>
-    </div>
-    <p style="font-family:'Newsreader', serif; font-size: 15.5px; line-height: 1.6; color: var(--ink-soft); max-width: 60ch; margin: 0 0 28px;">
-      A warm civic palette &mdash; closer to terracotta and clay than to slick startup blue.
-      Public-archive feeling, but legible at small sizes on a phone.
-    </p>
-    <div class="swatches">
-      <div class="sw brick"><div class="nm">Brick</div><div class="hx">#B8432B</div><div class="role">Primary &middot; CTAs</div></div>
-      <div class="sw ochre"><div class="nm">Ochre</div><div class="hx">#C88733</div><div class="role">Accent &middot; The byte</div></div>
-      <div class="sw moss"><div class="nm">Moss</div><div class="hx">#5B6B3A</div><div class="role">Live &middot; OK</div></div>
-      <div class="sw sky"><div class="nm">Sky</div><div class="hx">#2D5A78</div><div class="role">Demo &middot; Municipal</div></div>
-      <div class="sw ink"><div class="nm">Ink</div><div class="hx">#1D1A15</div><div class="role">Text &middot; Rules</div></div>
-      <div class="sw cream"><div class="nm">Cream</div><div class="hx">#F8F4EA</div><div class="role">Paper &middot; Bg</div></div>
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Palette</div>
+        <h2>Six colors. <em>Earned.</em></h2>
+      </div>
+      <div class="meta">Used in this order, this often</div>
+    </header>
+
+    <div class="palette">
+      <div class="swatch"><span class="chip" style="background: #F4F1E9;"></span><span class="name">Paper<span class="sub">Background &middot; everything</span></span><span class="hex">#F4F1E9</span></div>
+      <div class="swatch"><span class="chip" style="background: #14110D;"></span><span class="name">Ink<span class="sub">Type &middot; 4px masthead bar</span></span><span class="hex">#14110D</span></div>
+      <div class="swatch"><span class="chip" style="background: #2A2620;"></span><span class="name">Ink&nbsp;&middot;&nbsp;Second<span class="sub">Body text &middot; prose</span></span><span class="hex">#2A2620</span></div>
+      <div class="swatch"><span class="chip" style="background: #6B6660;"></span><span class="name">Mute<span class="sub">Meta &middot; datelines &middot; descriptions</span></span><span class="hex">#6B6660</span></div>
+      <div class="swatch"><span class="chip" style="background: #B33E16;"></span><span class="name">Ember<span class="sub">One accent &middot; five places only</span></span><span class="hex">#B33E16</span></div>
+      <div class="swatch"><span class="chip" style="background: #ECE7D9;"></span><span class="name">Paper&nbsp;&middot;&nbsp;Second<span class="sub">Sparingly &middot; tonal shift</span></span><span class="hex">#ECE7D9</span></div>
     </div>
   </section>
 
-  <!-- Mark anatomy & wordmark anatomy -->
-  <section class="brand-section alt">
-    <div class="sec-head">
-      <h2>Anatomy of <em>the mark</em>.</h2>
-      <span class="meta">&sect;05 &middot; Construction</span>
-    </div>
-    <div class="grid-2">
-      <div class="ana-card">
-        <h4>The construction</h4>
-        <div class="demo-wordmark">civic<em>byte</em>.</div>
-        <p>Fraunces 800 italic. The "byte" half is set in brick (#B8432B); the period is brick. No grid, no underline &mdash; the wordmark is a single typographic gesture, not an icon-plus-text lockup.</p>
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Rule</div>
+        <h2>Where ember goes. <em>Nowhere else.</em></h2>
       </div>
-      <div class="ana-card">
-        <h4>The dot</h4>
-        <div class="demo-wordmark" style="text-align: center;"><em style="font-size:96px">.</em></div>
-        <p>The period after "byte" is intentional. It signals that the name is a complete unit &mdash; a publication, a record &mdash; not a verb or an instruction. Always present. Always brick.</p>
+      <div class="meta">Five places &middot; this is the whole rule</div>
+    </header>
+
+    <ol class="ilist">
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">01</span>
+        <span class="ititle">The italic accent word in each headline</span>
+        <span class="idesc">Exactly one word per headline, set italic, set ember. <code style="font-family: var(--mono); font-size: 13px; color: var(--ember);">&lt;span class="em"&gt;</code> does it.</span>
+        <span class="imeta"><span class="st">Use</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">02</span>
+        <span class="ititle">The date tick in the masthead</span>
+        <span class="idesc">The 6px ember square next to Vol/No. The only solid color in the masthead row.</span>
+        <span class="imeta"><span class="st">Use</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">03</span>
+        <span class="ititle">Key numbers in readouts</span>
+        <span class="idesc">The single most important number in a keystat. Open violations. Per-pupil dollars. Risk score. One per readout &mdash; never every number.</span>
+        <span class="imeta"><span class="st">Use</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">04</span>
+        <span class="ititle">CTA arrows and section kickers</span>
+        <span class="idesc">The arrow inside a <code style="font-family: var(--mono); font-size: 13px; color: var(--ember);">.cta-link</code>; the mono kicker above each section h2. That's it.</span>
+        <span class="imeta"><span class="st">Use</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">05</span>
+        <span class="ititle">Drop cap &amp; pull-quote rules</span>
+        <span class="idesc">The 72px drop cap in longform articles; the 2px left border on pull quotes; the 28px tick before a citation. Editorial flourishes only.</span>
+        <span class="imeta"><span class="st">Use</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+    </ol>
+  </section>
+
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Type</div>
+        <h2>Three families. <em>No more.</em></h2>
+      </div>
+      <div class="meta">Headlines &middot; UI &middot; Labels</div>
+    </header>
+
+    <div class="typeset">
+      <aside class="byline">
+        <div><b>Newsreader</b></div>
+        <div>Serif &middot; 400 / 500 / 600</div>
+        <div>Italic where called</div>
+        <div class="sec"><b>Inter Tight</b></div>
+        <div>Sans &middot; 400 / 500 / 600</div>
+        <div>Body UI &middot; small text</div>
+        <div class="sec"><b>IBM Plex Mono</b></div>
+        <div>Mono &middot; 400 / 500</div>
+        <div>Labels &middot; datelines &middot; meta</div>
+      </aside>
+
+      <div>
+        <div class="sample">
+          <div class="meta">Newsreader &middot; 500 &middot; Headlines &amp; prose</div>
+          <div class="a-serif">Public data,&nbsp; <span style="color: var(--ember); font-style: italic;">made usable.</span></div>
+        </div>
+        <div class="sample">
+          <div class="meta">Newsreader &middot; 400 &middot; Body editorial</div>
+          <div class="a-sans" style="font-family: var(--serif); font-size: 22px; line-height: 1.45;">The records your city already publishes &mdash; turned into tools a tenant, a parent, or a grandmother can actually use.</div>
+        </div>
+        <div class="sample">
+          <div class="meta">Inter Tight &middot; 500 &middot; Body &amp; UI</div>
+          <div class="a-sans">Enter any address to pull HPD maintenance violations &mdash; class breakdown, registration, owner. Updated daily.</div>
+        </div>
+        <div class="sample">
+          <div class="meta">IBM Plex Mono &middot; 500 &middot; Labels, datelines, meta</div>
+          <div class="a-mono">Vol. 01&nbsp; &middot;&nbsp; No. 18&nbsp; &middot;&nbsp; Saturday, May 23, 2026</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- App icon -->
-  <section class="brand-section">
-    <div class="sec-head">
-      <h2>Where it <em>scales</em>.</h2>
-      <span class="meta">&sect;06 &middot; App icons &middot; Favicons</span>
-    </div>
-    <p style="font-family:'Newsreader', serif; font-size: 15.5px; line-height: 1.6; color: var(--ink-soft); max-width: 60ch; margin: 0 0 28px;">
-      The companion app icon: a pixel "C" with a single ochre "byte" pixel on a brick field.
-      The same shape from 16 px to 1024 px &mdash; never blurs, never breaks.
-    </p>
-    <div class="scale-row">
-      <div class="iw"><div class="ic s256"><img src="/cb-icon-light.svg" alt="CivicByte icon at 1024px"></div><div class="lb">1024</div></div>
-      <div class="iw"><div class="ic s120"><img src="/cb-icon-light.svg" alt="CivicByte icon at 512px"></div><div class="lb">512</div></div>
-      <div class="iw"><div class="ic s80"><img src="/cb-icon-light.svg" alt="CivicByte icon at 180px"></div><div class="lb">180</div></div>
-      <div class="iw"><div class="ic s60"><img src="/cb-icon-light.svg" alt="CivicByte icon at 120px"></div><div class="lb">120</div></div>
-      <div class="iw"><div class="ic s32"><img src="/cb-icon-light.svg" alt="CivicByte icon at 60px"></div><div class="lb">60</div></div>
-      <div class="iw"><div style="width:16px;height:16px;border-radius:3px;overflow:hidden;box-shadow:0 0 0 1px rgba(29,26,21,0.1);"><img src="/favicon.svg" alt="16px favicon" style="width:100%;height:100%"></div><div class="lb">16</div></div>
+  <section class="endslug">
+    <p>That's the whole system. <em>Everything else</em> is hairlines and whitespace.</p>
+    <div class="actions">
+      <a href="/tools.html" class="cta-link">See it in use <span class="arr">&rarr;</span></a>
+      <a href="/about.html" class="cta-link muted">Read the standards <span class="arr">&rarr;</span></a>
     </div>
   </section>
 
@@ -277,22 +278,22 @@
   </section>
 
   <footer>
-    <div class="foot-grid">
+    <div class="fwrap">
       <div>
-        <a href="/" class="mark">civic<em>byte</em>.</a>
-        <p>An independent NYC civic-data project. Free, open-source tools built on public records. Released under MIT.</p>
+        <p class="fmark">CivicByte<span class="amp">.</span></p>
+        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
       </div>
-      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/about.html">About</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
-      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/brand.html">Brand</a></li></ul></div>
-      <div><h5>Contact</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">About</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
     </div>
     <div class="colophon">
       <span>&copy; 2026 CivicByte &middot; MIT License</span>
-      <span>Set in Fraunces &middot; Newsreader &middot; IBM Plex Mono</span>
-      <span>Printed on the open web</span>
+      <span>Set in Newsreader, Inter Tight &amp; IBM Plex Mono &middot; Made in NYC</span>
     </div>
   </footer>
 
 </div>
+
 </body>
 </html>

@@ -7,258 +7,130 @@
 <meta name="description" content="An independent NYC civic-data project. Free, open-source tools that turn public records into things tenants, parents, and organizers can actually use.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500;1,9..144,600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
-<meta name="theme-color" content="#b8432b">
+<meta name="theme-color" content="#B33E16">
 <script defer src="/civicbyte-fx.js"></script>
-<link rel="stylesheet" href="/civicbyte.css">
-<style>
-  /* Front-page–specific tweaks */
-  .front-kicker {
-    padding: 22px 48px 8px;
-    font-family:'IBM Plex Mono', monospace; font-size:11px;
-    letter-spacing:0.16em; text-transform:uppercase; color: var(--ink-soft);
-    display:flex; justify-content:space-between; gap: 16px;
-  }
-  .front-kicker .l { color: var(--brick); }
-  .front-kicker .r { color: var(--ink-soft); }
-
-  /* Quote on front page sits inside .page (cream surround); make it span edge-to-edge */
-  .quote-section { padding: 56px 48px; }
-
-  @media (max-width: 980px) {
-    .front-kicker { padding: 16px 24px 4px; flex-direction: column; gap: 6px; }
-    .quote-section { padding: 36px 24px; }
-  }
-</style>
+<link rel="stylesheet" href="/civicbyte-editorial.css">
 </head>
 <body>
 
 <div class="page">
 
-  <!-- Masthead -->
-  <div class="masthead">
-    <span>Vol. 01 &middot; No. 18 &middot; Saturday, May 23, 2026</span>
-    <span>An Independent NYC Civic Data Project</span>
-    <span>Open Source &middot; MIT</span>
-  </div>
-
-  <!-- Nav -->
-  <nav class="nav">
-    <div class="nav-left">
-      <a href="/" class="mark">civic<em>byte</em>.</a>
-      <span class="tag">Est. 2024 &middot; New York</span>
+  <header class="masthead">
+    <div class="l">
+      <span><span class="tick"></span>Vol. 01 &nbsp;&middot;&nbsp; No. 18</span>
+      <span class="sep">&middot;</span>
+      <span>Saturday, May 23, 2026</span>
     </div>
+    <a href="/" class="wordmark">CivicByte<span class="amp">.</span></a>
+    <div class="r">
+      <span>An independent NYC civic data project</span>
+      <span class="sep">&middot;</span>
+      <span>Open source &middot; MIT</span>
+    </div>
+  </header>
+
+  <nav class="secnav">
     <ul>
-      <li><a href="/" class="active">Front Page</a></li>
+      <li><a href="/" class="is-active">Front Page</a></li>
       <li><a href="/tools.html">Tools</a></li>
       <li><a href="/story.html">The Story</a></li>
       <li><a href="/about.html">About</a></li>
     </ul>
-    <a href="/submit.html" class="cta">Submit a tool</a>
+    <div class="right">
+      <span>Built something?</span>
+      <a href="/submit.html" class="open">Submit a tool &rarr;</a>
+    </div>
   </nav>
 
-  <div class="front-kicker">
-    <span class="l">The Front Page &middot; Edition for the Five Boroughs</span>
-    <span class="r">All records public &middot; All sources cited</span>
-  </div>
-
-  <!-- Hero -->
   <section class="hero">
-    <div>
-      <div class="kicker">A reader's edition for public data</div>
-      <h1>Public data, <em>made usable</em>.</h1>
+    <div class="dateline">
+      <span>The Front Page</span>
+      <span class="sep">&middot;</span>
+      <span>Edition for the five boroughs</span>
+    </div>
+    <h1>Public data,<br>made <span class="em">usable</span>.</h1>
+
+    <div class="hero-foot">
       <p class="lede">
-        The records your city already publishes &mdash; HPD violations, 311 calls,
-        marshal evictions, school budgets &mdash; turned into tools a tenant, a parent,
-        or a grandmother can actually use. Free. No logins. No spreadsheets.
+        The records your city already publishes &mdash; turned into tools a tenant, a parent, or a grandmother can actually use. Free. No logins. No spreadsheets.
       </p>
-      <div class="actions">
-        <a href="/tools.html" class="btn-primary">Browse the tools</a>
-        <a href="/story.html" class="btn-ghost">Read our charter &rarr;</a>
-      </div>
-      <div class="meta-line">
-        <span class="dot"></span> Five live &middot; one in development &middot; 35M+ records indexed
-      </div>
-    </div>
-    <aside class="datasheet">
-      <div class="dh">
-        <span><span class="live-dot"></span>Live tool &middot; HPD Violations</span>
-        <span>v1.0</span>
-      </div>
-      <div class="db">
-        <h3>NYC Building Report</h3>
-        <div class="sub">Type an NYC address. We query HPD live and return open violations, severity classes, and registration status.</div>
-        <form class="lookup" id="hero-form" action="/nyc-building-checker/" method="get">
-          <input id="hero-search" name="q" placeholder="226 W Tremont Ave, Bronx" aria-label="Search NYC address">
-          <button type="submit">Check &rarr;</button>
-        </form>
-        <table>
-          <tbody>
-            <tr><td>Records indexed</td><td>900k+ HPD violations</td></tr>
-            <tr><td>Coverage</td><td>All 5 boroughs</td></tr>
-            <tr><td>Source</td><td>HPD &middot; NYC Open Data</td></tr>
-            <tr><td>Updates</td><td>Daily</td></tr>
-            <tr><td>License</td><td>MIT &middot; Open</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="cap">
-        <span>file: nyc-building-checker / v1.0</span>
-        <span>github.com/civicbytedev</span>
-      </div>
-    </aside>
-  </section>
-
-  <!-- The Index -->
-  <section class="index-section">
-    <div class="sec-head">
-      <h2>Five tools, <em>in the field</em>.</h2>
-      <span class="meta">&sect;02 &middot; The Index &middot; 06 listings, this edition</span>
-    </div>
-    <div class="index-list">
-
-      <a class="idx" href="/nyc-building-checker/">
-        <span class="num">01</span>
-        <h3>NYC Building Report</h3>
-        <p class="desc">Enter any address to pull HPD violations &mdash; class breakdown, registration, owner. Updated daily.</p>
-        <div class="status-col"><strong>&#9679; LIVE</strong><br>900k records</div>
-        <span class="arrow">&rarr;</span>
-      </a>
-
-      <a class="idx" href="/nyc-landlord-watch/">
-        <span class="num">02</span>
-        <h3>NYC Landlord Watch</h3>
-        <p class="desc">Search any landlord or LLC to see portfolio size, violation history, and a portfolio-wide risk score.</p>
-        <div class="status-col demo"><strong>&#9679; DEMO</strong><br>3 sample landlords</div>
-        <span class="arrow">&rarr;</span>
-      </a>
-
-      <a class="idx" href="/nyc-school-budget/">
-        <span class="num">03</span>
-        <h3>NYC School Budget Tracker</h3>
-        <p class="desc">Per-pupil spending, Title I funding, and PTA contributions for 1,800+ NYC public schools.</p>
-        <div class="status-col demo"><strong>&#9679; DEMO</strong><br>3 sample schools</div>
-        <span class="arrow">&rarr;</span>
-      </a>
-
-      <a class="idx" href="/nyc-eviction-records/">
-        <span class="num">04</span>
-        <h3>NYC Eviction Records</h3>
-        <p class="desc">Look up executed marshal evictions for any address across all five boroughs. Know before you sign.</p>
-        <div class="status-col"><strong>&#9679; LIVE</strong><br>100k+ records</div>
-        <span class="arrow">&rarr;</span>
-      </a>
-
-      <a class="idx" href="/nyc-311-complaints/">
-        <span class="num">05</span>
-        <h3>NYC 311 Complaint Lookup</h3>
-        <p class="desc">Every 311 request filed at an address &mdash; heat, noise, pests, plumbing &mdash; with agency &amp; resolution.</p>
-        <div class="status-col"><strong>&#9679; LIVE</strong><br>35M+ records</div>
-        <span class="arrow">&rarr;</span>
-      </a>
-
-      <a class="idx" href="/submit.html">
-        <span class="num">06</span>
-        <h3>Community Resource Finder</h3>
-        <p class="desc">Searchable directory of free and low-cost services &mdash; food pantries, legal aid, after-school programs.</p>
-        <div class="status-col dev"><strong>&#9679; IN DEV</strong><br>Help wanted</div>
-        <span class="arrow">&rarr;</span>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- Principles -->
-  <section class="principles">
-    <div>
-      <div class="st">&sect;03 &mdash; What we stand for</div>
-      <h2>Six rules we <em>don't bend on</em>.</h2>
-    </div>
-    <div class="pr-grid">
-      <div class="pr">
-        <div class="n">01</div>
-        <h4>Radical transparency.</h4>
-        <p>Every line of code is public. Every dataset is cited. Civic tech built behind closed doors defeats its own purpose.</p>
-      </div>
-      <div class="pr">
-        <div class="n">02</div>
-        <h4>Community-first design.</h4>
-        <p>Every project starts with a real problem identified by a real community &mdash; not by us, not by a dataset.</p>
-      </div>
-      <div class="pr">
-        <div class="n">03</div>
-        <h4>Accessible by default.</h4>
-        <p>If a tool needs technical expertise to use, it has failed. Built for parents, organizers, advocates.</p>
-      </div>
-      <div class="pr">
-        <div class="n">04</div>
-        <h4>Open platform.</h4>
-        <p>CivicByte isn't one team's portfolio. It's a shelf where anyone can contribute tools that serve the public.</p>
-      </div>
-      <div class="pr">
-        <div class="n">05</div>
-        <h4>Impact over portfolio.</h4>
-        <p>A tool used by one PTA is worth more than a demo with a thousand GitHub stars. We count uses, not views.</p>
-      </div>
-      <div class="pr">
-        <div class="n">06</div>
-        <h4>Student-led, not limited.</h4>
-        <p>Being student-founded doesn't mean amateur. Production standards because communities depend on us.</p>
+      <div class="cta-col">
+        <a href="/tools.html" class="cta-link">Browse the tools <span class="arr">&rarr;</span></a>
+        <span class="cta-sub">Five live &middot; One in development</span>
       </div>
     </div>
   </section>
 
-  <!-- Quote -->
-  <section class="quote-section">
-    <div class="k">From the founding note</div>
-    <blockquote>
-      Public data should serve the public. The communities that need transparency
-      most often have the least access to it.
-    </blockquote>
-    <cite>&mdash; CivicByte, founding charter &middot; 2024</cite>
-  </section>
-
-  <!-- Split CTA -->
-  <section class="split">
-    <div>
-      <h3>If you <em>build</em> things.</h3>
-      <p>Built a civic tool &mdash; or want to? Submit it for review against our four standards, and we'll help communities find it.</p>
-      <ul>
-        <li><span>Cost to list</span><span>$0</span></li>
-        <li><span>Review window</span><span>5&ndash;7 days</span></li>
-        <li><span>License required</span><span>Open source</span></li>
-        <li><span>You own the tool</span><span>Always</span></li>
-      </ul>
-      <a href="/submit.html" class="btn-primary">Submit a tool &rarr;</a>
-    </div>
-    <div>
-      <h3>If you <em>organize</em>.</h3>
-      <p>If your community is stuck working around an open-data gap, tell us. We prioritize problems already being solved by hand.</p>
-      <ul>
-        <li><span>Partner cost</span><span>$0</span></li>
-        <li><span>Typical commitment</span><span>3 hrs / week</span></li>
-        <li><span>Tool ownership</span><span>Yours</span></li>
-        <li><span>Bandwidth</span><span>2 slots, 2026</span></li>
-      </ul>
-      <a href="/about.html" class="btn-primary">Read the standards &rarr;</a>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <div class="foot-grid">
+  <section class="section">
+    <header class="section-head">
       <div>
-        <a href="/" class="mark">civic<em>byte</em>.</a>
-        <p>An independent NYC civic-data project. Free, open-source tools built on public records. Released under MIT.</p>
+        <div class="kicker">The Index</div>
+        <h2>Five tools, <em>in the field.</em></h2>
+      </div>
+      <div class="meta"><b>06</b> &middot; Listings, this edition</div>
+    </header>
+
+    <ol class="ilist">
+      <li><a href="/tool-building-report.html">
+        <span class="inum">01</span>
+        <span class="ititle">NYC Building Report</span>
+        <span class="idesc">Enter any address to pull HPD violations &mdash; class breakdown, registration, owner. Updated daily from NYC Open Data.</span>
+        <span class="imeta"><span class="st">Live</span><span class="records">1.1M addresses</span></span>
+        <span class="iarr">&rarr;</span>
+      </a></li>
+      <li><a href="/tool-landlord-watch.html">
+        <span class="inum">02</span>
+        <span class="ititle">NYC Landlord Watch</span>
+        <span class="idesc">Search any landlord or LLC to see violation history, portfolio size, and risk score across every property they own.</span>
+        <span class="imeta"><span class="st">Live</span><span class="records">36k owners</span></span>
+        <span class="iarr">&rarr;</span>
+      </a></li>
+      <li><a href="/tool-school-budget.html">
+        <span class="inum">03</span>
+        <span class="ititle">NYC School Budget Tracker</span>
+        <span class="idesc">Per-pupil spending, Title I funding, and PTA contributions across 1,800+ public schools.</span>
+        <span class="imeta"><span class="st">Live</span><span class="records">1,800 schools</span></span>
+        <span class="iarr">&rarr;</span>
+      </a></li>
+      <li><a href="/tool-eviction-records.html">
+        <span class="inum">04</span>
+        <span class="ititle">NYC Eviction Records</span>
+        <span class="idesc">Look up executed marshal evictions for any address across all five boroughs. Know before you sign.</span>
+        <span class="imeta"><span class="st">Live</span><span class="records">100k records</span></span>
+        <span class="iarr">&rarr;</span>
+      </a></li>
+      <li><a href="/tool-311-lookup.html">
+        <span class="inum">05</span>
+        <span class="ititle">NYC 311 Complaint Lookup</span>
+        <span class="idesc">Every 311 request filed at an address &mdash; noise, heat, pests, plumbing &mdash; with agency assignments and resolutions.</span>
+        <span class="imeta"><span class="st">Live</span><span class="records">35M complaints</span></span>
+        <span class="iarr">&rarr;</span>
+      </a></li>
+      <li><a href="/tools.html">
+        <span class="inum">06</span>
+        <span class="ititle">Community Resource Finder</span>
+        <span class="idesc">Searchable directory of free and low-cost services &mdash; food pantries, legal aid, after-school &mdash; indexed by neighborhood.</span>
+        <span class="imeta"><span class="st dev">In dev</span><span class="records">Q3 2026</span></span>
+        <span class="iarr">&rarr;</span>
+      </a></li>
+    </ol>
+  </section>
+
+  <footer>
+    <div class="fwrap">
+      <div>
+        <p class="fmark">CivicByte<span class="amp">.</span></p>
+        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
       </div>
       <div>
         <h5>Browse</h5>
         <ul>
           <li><a href="/tools.html">All tools</a></li>
           <li><a href="/story.html">The Story</a></li>
-          <li><a href="/about.html">About</a></li>
+          <li><a href="/impact.html">Impact</a></li>
           <li><a href="https://github.com/civicbytedev">GitHub</a></li>
         </ul>
       </div>
@@ -267,7 +139,7 @@
         <ul>
           <li><a href="/submit.html">Submit a tool</a></li>
           <li><a href="/about.html">Standards</a></li>
-          <li><a href="/brand.html">Brand</a></li>
+          <li><a href="/about.html">About</a></li>
         </ul>
       </div>
       <div>
@@ -281,26 +153,11 @@
     </div>
     <div class="colophon">
       <span>&copy; 2026 CivicByte &middot; MIT License</span>
-      <span>Set in Fraunces &middot; Newsreader &middot; IBM Plex Mono</span>
-      <span>Printed on the open web</span>
+      <span>Set in Newsreader, Inter Tight &amp; IBM Plex Mono &middot; Made in NYC</span>
     </div>
   </footer>
 
 </div>
 
-<script>
-(function(){
-  const heroForm = document.getElementById('hero-form');
-  const heroInput = document.getElementById('hero-search');
-  if (heroForm && heroInput) {
-    heroForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const q = heroInput.value.trim();
-      const target = '/nyc-building-checker/' + (q ? '?q=' + encodeURIComponent(q) : '');
-      window.location.href = target;
-    });
-  }
-})();
-</script>
 </body>
 </html>

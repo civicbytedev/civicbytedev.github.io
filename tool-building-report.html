@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NYC Building Report &mdash; CivicByte</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Look up HPD violations for any NYC address — free, live from NYC Open Data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/cb-icon-light.svg">
+<meta name="theme-color" content="#B33E16">
+<script defer src="/civicbyte-fx.js"></script>
+<script src="/address-ac.js"></script>
+<link rel="stylesheet" href="/civicbyte-editorial.css">
+<style>
+  .state-idle, .state-loading, .state-error, .state-clean, .state-results { display: none; }
+  .state-idle.on, .state-loading.on, .state-error.on, .state-clean.on, .state-results.on { display: block; }
+  .state-idle { padding: 48px 0; font-family: var(--serif); font-size: 19px; color: var(--mute); }
+  .state-loading { padding: 48px 0; text-align: center; }
+  .spinner { display: inline-block; width: 22px; height: 22px; border: 2px solid var(--rule-2); border-top-color: var(--ember); border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .state-loading .txt { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); vertical-align: middle; }
+  .state-error { padding: 28px 0; border-left: 2px solid var(--ember); padding-left: 28px; font-family: var(--serif); }
+  .state-error b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); display: block; margin-bottom: 8px; font-weight: 500; }
+  .state-clean { padding: 28px 0; border-left: 2px solid var(--rule-2); padding-left: 28px; }
+  .state-clean b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); display: block; margin-bottom: 8px; font-weight: 500; }
+  .state-clean p { font-family: var(--serif); font-size: 19px; line-height: 1.4; color: var(--ink); margin: 0; max-width: 56ch; }
+  .suggest { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--mute); margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--rule); }
+  .suggest a { color: var(--ember); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="l">
+      <span><span class="tick"></span>Vol. 01 &nbsp;&middot;&nbsp; No. 18</span>
+      <span class="sep">&middot;</span>
+      <span>Saturday, May 23, 2026</span>
+    </div>
+    <a href="/" class="wordmark">CivicByte<span class="amp">.</span></a>
+    <div class="r">
+      <span>An independent NYC civic data project</span>
+      <span class="sep">&middot;</span>
+      <span>Open source &middot; MIT</span>
+    </div>
+  </header>
+
+  <nav class="secnav">
+    <ul>
+      <li><a href="/">Front Page</a></li>
+      <li><a href="/tools.html" class="is-active">Tools</a></li>
+      <li><a href="/story.html">The Story</a></li>
+      <li><a href="/about.html">About</a></li>
+    </ul>
+    <div class="right">
+      <span>Built something?</span>
+      <a href="/submit.html" class="open">Submit a tool &rarr;</a>
+    </div>
+  </nav>
+
+  <section class="hero compact">
+    <div class="dateline">
+      <span>Tool &middot; 01</span>
+      <span class="sep">&middot;</span>
+      <span>NYC Building Report</span>
+      <span class="sep">&middot;</span>
+      <span>Source &middot; HPD violations, daily</span>
+    </div>
+    <h1>What the city already knows <span class="em">about your building.</span></h1>
+
+    <form class="lookup" id="addr-form">
+      <label class="label" for="addr">Lookup</label>
+      <input id="addr" class="input" type="text" placeholder="Enter an NYC address &mdash; e.g. 226 W Tremont Ave, Bronx" autocomplete="off" />
+      <button type="submit" class="submit">Read the record <span class="arr">&rarr;</span></button>
+    </form>
+    <div class="suggest">
+      Try: <a href="#" data-q="226 W Tremont Ave, Bronx">226 W Tremont Ave, Bronx</a> &middot;
+      <a href="#" data-q="421 Crown St, Brooklyn">421 Crown St, Brooklyn</a> &middot;
+      <a href="#" data-q="40 St Nicholas Ave, Manhattan">40 St Nicholas Ave, Manhattan</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Readout</div>
+        <h2>A typeset record, <em>not a dashboard.</em></h2>
+      </div>
+      <div class="meta" id="refreshed">Pulled live from NYC Open Data</div>
+    </header>
+
+    <div class="state-idle on" id="s-idle">
+      Enter an NYC address above to pull the building's full HPD violation record &mdash; class breakdown, registration, owner.
+    </div>
+
+    <div class="state-loading" id="s-loading">
+      <span class="spinner"></span><span class="txt">Fetching HPD records&hellip;</span>
+    </div>
+
+    <div class="state-error" id="s-error">
+      <b>Couldn't load</b>
+      <span id="err-msg" style="font-family: var(--serif); font-size: 19px; line-height: 1.45;"></span>
+    </div>
+
+    <div class="state-clean" id="s-clean">
+      <b>No HPD violations on file</b>
+      <p id="clean-msg"></p>
+    </div>
+
+    <div class="state-results" id="s-results">
+      <div class="readout-grid">
+        <aside class="address-block">
+          <p class="alabel">Property</p>
+          <p class="address" id="r-addr"></p>
+
+          <div class="keystat">
+            <p class="k">Open violations</p>
+            <div class="n ember" id="r-open">0</div>
+            <div class="breakdown" id="r-breakdown"></div>
+          </div>
+
+          <div class="keystat">
+            <p class="k">Total on file</p>
+            <div class="n small" id="r-total">0 records</div>
+            <div class="sub" id="r-totalsub"></div>
+          </div>
+
+          <div class="keystat last">
+            <p class="k">Source</p>
+            <div class="n small">HPD &middot; NYC Open Data</div>
+            <div class="sub">Dataset wvxf-dwi5 &middot; live</div>
+          </div>
+        </aside>
+
+        <div>
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th style="width: 96px;">Date</th>
+                <th style="width: 56px;">Class</th>
+                <th>Violation</th>
+                <th class="right" style="width: 80px;">Status</th>
+              </tr>
+            </thead>
+            <tbody id="r-rows"></tbody>
+          </table>
+
+          <div class="readout-foot">
+            <span class="source">Source &middot; <b>NYC HPD violations dataset</b> &middot; updated daily from NYC Open Data</span>
+            <a href="https://data.cityofnewyork.us/Housing-Development/Housing-Maintenance-Code-Violations/wvxf-dwi5" class="cta-link muted" target="_blank" rel="noopener">View dataset <span class="arr">&rarr;</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="endslug">
+    <p>Look up a different address, or <em>read the next tool</em> in the index.</p>
+    <div class="actions">
+      <a href="/tool-landlord-watch.html" class="cta-link">Next &middot; Landlord Watch <span class="arr">&rarr;</span></a>
+      <a href="/tools.html" class="cta-link muted">Back to the index <span class="arr">&rarr;</span></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fwrap">
+      <div>
+        <p class="fmark">CivicByte<span class="amp">.</span></p>
+        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
+      </div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">About</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+    </div>
+    <div class="colophon">
+      <span>&copy; 2026 CivicByte &middot; MIT License</span>
+      <span>Set in Newsreader, Inter Tight &amp; IBM Plex Mono &middot; Made in NYC</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+const HPD_API = 'https://data.cityofnewyork.us/resource/wvxf-dwi5.json';
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function show(state){['s-idle','s-loading','s-error','s-clean','s-results'].forEach(id => $(id).classList.toggle('on', id === state));}
+
+async function runSearch(){
+  const raw = $('addr').value.trim();
+  if(!raw || raw.length < 4){ $('addr').focus(); return; }
+  show('s-loading');
+  try {
+    const parts = raw.replace(/,.*$/, '').trim();
+    const m = parts.match(/^(\d+[a-zA-Z]?)\s+(.+)$/);
+    if (!m) throw new Error('Could not parse address — try "226 W Tremont Ave, Bronx".');
+    const num = m[1];
+    const street = m[2].toUpperCase()
+      .replace(/\bSTREET\b/g,'ST').replace(/\bAVENUE\b/g,'AVE')
+      .replace(/\bBOULEVARD\b/g,'BLVD').replace(/\bDRIVE\b/g,'DR')
+      .replace(/\bPLACE\b/g,'PL').replace(/\bROAD\b/g,'RD')
+      .replace(/\bPARKWAY\b/g,'PKWY').replace(/\bTERRACE\b/g,'TER')
+      .replace(/\bCOURT\b/g,'CT').replace(/\bLANE\b/g,'LN')
+      .replace(/\bEAST\b/g,'E').replace(/\bWEST\b/g,'W')
+      .replace(/\bNORTH\b/g,'N').replace(/\bSOUTH\b/g,'S').trim();
+    const where = `housenumber='${num.replace(/'/g,"''")}' AND streetname='${street.replace(/'/g,"''")}'`;
+    const url = `${HPD_API}?$where=${encodeURIComponent(where)}&$limit=200&$order=inspectiondate DESC`;
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('API error ' + res.status);
+    const data = await res.json();
+    if(data.length === 0){
+      $('clean-msg').textContent = `No HPD violations found for "${raw}". This may mean no violations on record, or the address wasn't matched. Try including the borough (Bronx, Brooklyn, Manhattan, Queens, Staten Island).`;
+      show('s-clean');
+      return;
+    }
+    render(raw, data);
+  } catch (err) {
+    $('err-msg').textContent = err.message;
+    show('s-error');
+  }
+}
+
+function render(query, data){
+  const open = data.filter(r => (r.currentstatus || '').toLowerCase().includes('open'));
+  const c = open.filter(r => (r.class||'').toLowerCase()==='c').length;
+  const b = open.filter(r => (r.class||'').toLowerCase()==='b').length;
+  const a = open.filter(r => (r.class||'').toLowerCase()==='a').length;
+  const d = data[0];
+  const street = [d.housenumber, d.streetname].filter(Boolean).join(' ');
+  const boro = d.borough ? d.borough.charAt(0) + d.borough.slice(1).toLowerCase() : '';
+  $('r-addr').innerHTML = esc(street) + (boro ? `<span class="borough">${esc(boro)}, NY${d.zip ? ' ' + esc(d.zip) : ''}</span>` : '');
+  $('r-open').textContent = open.length;
+  $('r-breakdown').innerHTML = `<span><b>${c}</b> Class C</span><span><b>${b}</b> Class B</span><span><b>${a}</b> Class A</span>`;
+  $('r-total').innerHTML = `${data.length.toLocaleString()} <span style="font-size: 22px; letter-spacing: 0; font-family: var(--sans); font-weight: 500;">records</span>`;
+  $('r-totalsub').textContent = open.length === 0 ? 'All closed' : `${open.length} open, ${data.length - open.length} closed`;
+  const rows = data.slice(0, 18);
+  const SEV = { c: 'sev c', b: 'sev', a: 'sev', i: 'sev' };
+  $('r-rows').innerHTML = rows.map(r => {
+    const cls = (r.class || '').toLowerCase();
+    const status = (r.currentstatus || '').toLowerCase().includes('open') ? 'Open' : 'Closed';
+    const date = r.inspectiondate ? new Date(r.inspectiondate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—';
+    const desc = (r.novdescription || r.violationdescription || r.maintenancecode || '').toString().slice(0, 140);
+    return `<tr>
+      <td class="date">${esc(date)}</td>
+      <td><span class="${SEV[cls] || 'sev'}">${esc((r.class || '?').toUpperCase())}</span></td>
+      <td class="serif">${esc(desc)}${r.apartment ? ` &middot; Apt ${esc(r.apartment)}` : ''}</td>
+      <td class="mono right" style="color: ${status === 'Open' ? 'var(--ember)' : 'var(--mute)'};">${esc(status)}</td>
+    </tr>`;
+  }).join('');
+  $('refreshed').textContent = 'Refreshed · just now · live from NYC Open Data';
+  show('s-results');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  $('addr-form').addEventListener('submit', e => { e.preventDefault(); runSearch(); });
+  document.querySelectorAll('.suggest a').forEach(a => {
+    a.addEventListener('click', e => { e.preventDefault(); $('addr').value = a.dataset.q; runSearch(); });
+  });
+  // Auto-search from URL param
+  const params = new URLSearchParams(location.search);
+  const q = params.get('q') || params.get('addr');
+  if (q) { $('addr').value = q; runSearch(); }
+  // Wire autocomplete
+  if (window.cbAutocomplete) cbAutocomplete('addr', () => runSearch());
+});
+</script>
+</body>
+</html>

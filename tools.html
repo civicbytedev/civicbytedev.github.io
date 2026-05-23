@@ -2,157 +2,60 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Tools &middot; CivicByte</title>
+<title>Tools &mdash; CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="The full tool directory. Free, open-source civic tools built on NYC public data.">
+<meta name="description" content="The full directory of CivicByte tools — every one free, open source, and built on NYC public data.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500;1,9..144,600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
-<meta name="theme-color" content="#b8432b">
+<meta name="theme-color" content="#B33E16">
 <script defer src="/civicbyte-fx.js"></script>
-<link rel="stylesheet" href="/civicbyte.css">
+<link rel="stylesheet" href="/civicbyte-editorial.css">
 <style>
-  .filter-strip {
-    display: flex; align-items: stretch; gap: 0;
-    padding: 0; margin: 0 48px 0;
-    border-bottom: 1px solid var(--ink);
-  }
-  .filter-strip .search-box {
-    flex: 1 1 auto;
-    display: flex; align-items: center; gap: 12px;
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 0;
+    margin-top: 56px;
     padding: 16px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
-  .filter-strip .search-box label {
-    font-family:'IBM Plex Mono', monospace; font-size:11px;
-    letter-spacing:0.14em; text-transform:uppercase; color: var(--ink-soft);
+  .filters .label { color: var(--mute); margin-right: 24px; }
+  .filters button {
+    background: transparent; border: none; cursor: pointer;
+    font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--ink);
+    padding: 4px 16px;
+    border-right: 1px solid var(--rule);
+    transition: color .18s, background .18s;
   }
-  .filter-strip .search-box input {
-    flex: 1;
-    border:none; background:transparent; outline:none;
-    font-family:'Newsreader', Georgia, serif; font-size: 17px;
-    color: var(--ink); padding: 6px 0;
-    border-bottom: 1px solid transparent;
-    transition: border-color .15s;
+  .filters button:first-of-type { border-left: 1px solid var(--rule); }
+  .filters button:hover { color: var(--ember); background: rgba(20,17,13,0.025); }
+  .filters button.is-active { color: var(--ember); }
+  .filters .count {
+    margin-left: auto;
+    color: var(--mute);
+    align-self: center;
   }
-  .filter-strip .search-box input:focus { border-bottom-color: var(--brick); }
-  .filter-strip .search-box input::placeholder { color: var(--ink-soft); font-style: italic; }
-  .filter-strip .count {
-    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft);
-    padding: 16px 0 16px 24px; border-left: 1px solid var(--ink); white-space: nowrap;
-  }
+  .filters .count b { color: var(--ember); font-weight: 500; }
 
-  .cat-rule {
-    padding: 14px 48px; border-bottom: 1px solid var(--ink);
-    display: flex; gap: 18px; flex-wrap: wrap; align-items: center;
-    font-family:'IBM Plex Mono', monospace; font-size: 11px;
-    letter-spacing: 0.14em; text-transform: uppercase;
+  .empty {
+    padding: 56px 0;
+    border-bottom: 1px solid var(--rule);
+    text-align: center;
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--mute);
   }
-  .cat-rule .lbl { color: var(--ink-soft); margin-right: 4px; }
-  .cat-rule .cat {
-    background: none; border: none; padding: 0;
-    font-family: inherit; font-size: inherit; letter-spacing: inherit; text-transform: inherit;
-    color: var(--ink); cursor: pointer; position: relative;
-    padding-bottom: 2px;
-  }
-  .cat:hover { color: var(--brick); }
-  .cat.active { color: var(--brick); }
-  .cat.active::after {
-    content:""; position: absolute; left:0; right:0; bottom:-3px;
-    height: 2px; background: var(--brick);
-  }
+  .empty b { color: var(--ink); font-weight: 500; display: block; margin-bottom: 6px; }
+  .empty a { color: var(--ember); }
 
-  /* Tool list — newspaper dossier */
-  .tools-section {
-    padding: 36px 48px 64px;
-    border-bottom: 1px solid var(--ink); background: var(--cream);
-  }
-  .tools-list {
-    border-top: 2px solid var(--ink);
-  }
-  .tool-row {
-    display: grid;
-    grid-template-columns: 56px 1.4fr 1fr 200px 60px;
-    gap: 28px;
-    padding: 28px 0;
-    border-bottom: 1px solid var(--ink);
-    align-items: start;
-    color: var(--ink); text-decoration: none;
-  }
-  .tool-row:hover { background: var(--paper-2); }
-  .tool-row:hover h3 { color: var(--brick); }
-  .tool-row:hover .arrow { transform: translateX(4px); }
-  .tool-row .num {
-    font-family:'IBM Plex Mono', monospace; font-size: 12px;
-    letter-spacing: 0.12em; color: var(--ink-soft); padding-top: 6px;
-  }
-  .tool-row .main h3 {
-    font-family:'Fraunces', serif; font-weight:600; font-size: 28px;
-    letter-spacing:-0.015em; line-height: 1.1; margin: 0 0 6px;
-    transition: color .2s;
-  }
-  .tool-row .main .tag {
-    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--brick);
-    margin-bottom: 10px; display: block;
-  }
-  .tool-row .main p {
-    font-family:'Newsreader', Georgia, serif; font-size: 15px;
-    line-height: 1.55; color: var(--ink); margin: 0;
-  }
-  .tool-row .stats {
-    font-family:'IBM Plex Mono', monospace; font-size: 11px;
-    color: var(--ink-soft); letter-spacing: 0.06em; line-height: 1.6;
-  }
-  .tool-row .stats strong { display:block; color: var(--ink); font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-  .tool-row .stats .row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dotted rgba(29,26,21,0.2); }
-  .tool-row .stats .row:last-child { border-bottom: none; }
-  .tool-row .stats .row span:first-child { text-transform: uppercase; letter-spacing: 0.1em; font-size: 10px; }
-  .tool-row .status-col {
-    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    text-align: right; padding-top: 6px;
-  }
-  .tool-row .status-col .pill {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--moss); color: #fff;
-    padding: 4px 10px; border-radius: 999px;
-    font-weight: 600; margin-bottom: 6px;
-  }
-  .tool-row .status-col.demo .pill { background: var(--sky); }
-  .tool-row .status-col.dev  .pill { background: var(--ochre); color: var(--ink); }
-  .tool-row .status-col .pill::before {
-    content:""; width:6px; height:6px; background:#fff; border-radius:50%;
-  }
-  .tool-row .status-col.dev .pill::before { background: var(--ink); }
-  .tool-row .status-col .records {
-    display: block; color: var(--ink); font-size: 11px; font-weight: 600;
-  }
-  .tool-row .status-col .repo {
-    display: block; color: var(--ink-soft); font-size: 10px; margin-top: 4px;
-  }
-  .tool-row .arrow {
-    font-family:'Fraunces', serif; font-size: 28px; color: var(--brick);
-    text-align: right; padding-top: 2px; transition: transform .2s;
-  }
-
-  .empty-row {
-    padding: 48px 0; text-align: center;
-    border-bottom: 1px solid var(--ink);
-    font-family:'Newsreader', serif; font-size: 17px; color: var(--ink-soft);
-  }
-  .empty-row strong { display: block; font-weight: 600; font-size: 20px; color: var(--ink); margin-bottom: 6px; font-family:'Fraunces', serif; }
-  .empty-row a { color: var(--brick); }
-
-  @media (max-width: 980px) {
-    .filter-strip { margin: 0 24px; }
-    .cat-rule { padding: 12px 24px; }
-    .tools-section { padding: 28px 24px 48px; }
-    .tool-row { grid-template-columns: 32px 1fr 60px; gap: 16px; padding: 22px 0; }
-    .tool-row .stats, .tool-row .status-col { display: none; }
-    .tool-row .main h3 { font-size: 22px; }
+  @media (max-width: 880px) {
+    .filters .count { width: 100%; margin: 8px 0 0; }
   }
 </style>
 </head>
@@ -160,224 +63,120 @@
 
 <div class="page">
 
-  <div class="masthead">
-    <span>Vol. 01 &middot; No. 18 &middot; Saturday, May 23, 2026</span>
-    <span>The Index &middot; A directory of working tools</span>
-    <span>Free &middot; Open Source</span>
-  </div>
-
-  <nav class="nav">
-    <div class="nav-left">
-      <a href="/" class="mark">civic<em>byte</em>.</a>
-      <span class="tag">Est. 2024 &middot; New York</span>
+  <header class="masthead">
+    <div class="l">
+      <span><span class="tick"></span>Vol. 01 &nbsp;&middot;&nbsp; No. 18</span>
+      <span class="sep">&middot;</span>
+      <span>Saturday, May 23, 2026</span>
     </div>
+    <a href="/" class="wordmark">CivicByte<span class="amp">.</span></a>
+    <div class="r">
+      <span>An independent NYC civic data project</span>
+      <span class="sep">&middot;</span>
+      <span>Open source &middot; MIT</span>
+    </div>
+  </header>
+
+  <nav class="secnav">
     <ul>
       <li><a href="/">Front Page</a></li>
-      <li><a href="/tools.html" class="active">Tools</a></li>
+      <li><a href="/tools.html" class="is-active">Tools</a></li>
       <li><a href="/story.html">The Story</a></li>
       <li><a href="/about.html">About</a></li>
     </ul>
-    <a href="/submit.html" class="cta">Submit a tool</a>
+    <div class="right">
+      <span>Built something?</span>
+      <a href="/submit.html" class="open">Submit a tool &rarr;</a>
+    </div>
   </nav>
 
-  <section class="page-hero">
-    <div class="kicker">&sect;01 &mdash; The Directory</div>
-    <h1>Browse every <em>civic tool</em> on the shelf.</h1>
-    <p class="lede">
-      Six tools, sorted by most recent. Search by name, topic, or borough. Every entry is
-      free, every source is cited, every line of code is open.
-    </p>
-  </section>
+  <section class="hero compact">
+    <div class="dateline">
+      <span>The Directory</span>
+      <span class="sep">&middot;</span>
+      <span>Edition for the five boroughs</span>
+    </div>
+    <h1>Every tool, <span class="em">in the field.</span></h1>
 
-  <div class="filter-strip">
-    <label class="search-box">
-      <span>Search &rarr;</span>
-      <input id="tool-search" type="search" placeholder="By name, topic, or borough..." autocomplete="off">
-    </label>
-    <span class="count" id="count-label">Showing 6 of 6</span>
-  </div>
-
-  <div class="cat-rule" id="cat-chips">
-    <span class="lbl">Filter:</span>
-    <button class="cat active" data-cat="all">All</button>
-    <button class="cat" data-cat="housing">Housing</button>
-    <button class="cat" data-cat="education">Education</button>
-    <button class="cat" data-cat="municipal">Municipal</button>
-    <button class="cat" data-cat="accountability">Accountability</button>
-    <button class="cat" data-cat="social">Social Services</button>
-  </div>
-
-  <section class="tools-section">
-    <div class="tools-list" id="tools-list">
-
-      <a class="tool-row" href="/nyc-building-checker/" data-cats="housing" data-keywords="building hpd violations housing nyc bronx brooklyn manhattan queens">
-        <span class="num">01</span>
-        <div class="main">
-          <span class="tag">Housing &middot; Infrastructure</span>
-          <h3>NYC Building Report</h3>
-          <p>Enter any NYC address to pull HPD maintenance violations &mdash; open violations, severity breakdown, building registration, and owner info. Queries NYC Open Data live; no caching, no middleman.</p>
-        </div>
-        <div class="stats">
-          <strong>At a glance</strong>
-          <div class="row"><span>Records</span><span>900k+</span></div>
-          <div class="row"><span>Source</span><span>HPD</span></div>
-          <div class="row"><span>Updates</span><span>Daily</span></div>
-        </div>
-        <div class="status-col">
-          <span class="pill">Live</span>
-          <span class="records">All 5 boroughs</span>
-          <span class="repo">/nyc-building-checker</span>
-        </div>
-        <span class="arrow">&rarr;</span>
-      </a>
-
-      <a class="tool-row" href="/nyc-landlord-watch/" data-cats="housing accountability" data-keywords="landlord watch llc portfolio risk housing accountability">
-        <span class="num">02</span>
-        <div class="main">
-          <span class="tag">Housing &middot; Accountability</span>
-          <h3>NYC Landlord Watch</h3>
-          <p>Search any landlord or LLC to see their full portfolio, total violations, and a risk score across every property. ACRIS-deed ingestion still in build; demo set covers three known landlords for now.</p>
-        </div>
-        <div class="stats">
-          <strong>At a glance</strong>
-          <div class="row"><span>Indexed</span><span>40k+ landlords</span></div>
-          <div class="row"><span>Risk bands</span><span>Low &rarr; High</span></div>
-          <div class="row"><span>Source</span><span>HPD &middot; ACRIS</span></div>
-        </div>
-        <div class="status-col demo">
-          <span class="pill">Demo</span>
-          <span class="records">3 samples</span>
-          <span class="repo">/nyc-landlord-watch</span>
-        </div>
-        <span class="arrow">&rarr;</span>
-      </a>
-
-      <a class="tool-row" href="/nyc-school-budget/" data-cats="education" data-keywords="school budget tracker doe education title pta">
-        <span class="num">03</span>
-        <div class="main">
-          <span class="tag">Education</span>
-          <h3>NYC School Budget Tracker</h3>
-          <p>Interactive dashboard mapping per-pupil spending, Title I funding, and PTA contributions across 1,800+ NYC public schools. Demo set in place while DOE Galaxy ingestion is being wired up.</p>
-        </div>
-        <div class="stats">
-          <strong>At a glance</strong>
-          <div class="row"><span>Schools</span><span>1,800+</span></div>
-          <div class="row"><span>Years</span><span>FY22&ndash;FY26</span></div>
-          <div class="row"><span>Source</span><span>DOE Galaxy</span></div>
-        </div>
-        <div class="status-col demo">
-          <span class="pill">Demo</span>
-          <span class="records">3 samples</span>
-          <span class="repo">/nyc-school-budget</span>
-        </div>
-        <span class="arrow">&rarr;</span>
-      </a>
-
-      <a class="tool-row" href="/nyc-eviction-records/" data-cats="housing" data-keywords="eviction marshal records housing tenant">
-        <span class="num">04</span>
-        <div class="main">
-          <span class="tag">Housing &middot; Tenant Rights</span>
-          <h3>NYC Eviction Records</h3>
-          <p>Look up executed marshal evictions for any NYC address since 2017. Know a building's eviction history before signing a lease. Queries NYC Open Data live.</p>
-        </div>
-        <div class="stats">
-          <strong>At a glance</strong>
-          <div class="row"><span>Records</span><span>100k+</span></div>
-          <div class="row"><span>Range</span><span>2017&ndash;now</span></div>
-          <div class="row"><span>Source</span><span>DOI Marshal</span></div>
-        </div>
-        <div class="status-col">
-          <span class="pill">Live</span>
-          <span class="records">All 5 boroughs</span>
-          <span class="repo">/nyc-eviction-records</span>
-        </div>
-        <span class="arrow">&rarr;</span>
-      </a>
-
-      <a class="tool-row" href="/nyc-311-complaints/" data-cats="municipal housing" data-keywords="311 complaint lookup municipal heat noise pests plumbing">
-        <span class="num">05</span>
-        <div class="main">
-          <span class="tag">Municipal Data &middot; Housing</span>
-          <h3>NYC 311 Complaint Lookup</h3>
-          <p>Type any NYC address to see every 311 service request tied to it &mdash; heat, noise, pests, plumbing. Filter by type, see agency and resolution notes. Queries NYC Open Data live.</p>
-        </div>
-        <div class="stats">
-          <strong>At a glance</strong>
-          <div class="row"><span>Records</span><span>35M+</span></div>
-          <div class="row"><span>Types</span><span>100+</span></div>
-          <div class="row"><span>Source</span><span>NYC 311</span></div>
-        </div>
-        <div class="status-col">
-          <span class="pill">Live</span>
-          <span class="records">Citywide</span>
-          <span class="repo">/nyc-311-complaints</span>
-        </div>
-        <span class="arrow">&rarr;</span>
-      </a>
-
-      <a class="tool-row" href="/submit.html" data-cats="social" data-keywords="community resource finder food pantry legal aid after-school services directory">
-        <span class="num">06</span>
-        <div class="main">
-          <span class="tag">Social Services &middot; In Build</span>
-          <h3>Community Resource Finder</h3>
-          <p>A searchable directory of free and low-cost services &mdash; food pantries, legal aid, after-school programs &mdash; organized by neighborhood and borough. Help us build it.</p>
-        </div>
-        <div class="stats">
-          <strong>At a glance</strong>
-          <div class="row"><span>Coverage</span><span>NYC</span></div>
-          <div class="row"><span>Status</span><span>Recruiting</span></div>
-          <div class="row"><span>ETA</span><span>Cycle 2026</span></div>
-        </div>
-        <div class="status-col dev">
-          <span class="pill">In dev</span>
-          <span class="records">Help wanted</span>
-          <span class="repo">/civicbytedev</span>
-        </div>
-        <span class="arrow">&rarr;</span>
-      </a>
-
+    <div class="filters" id="filters" role="tablist">
+      <span class="label">Filter</span>
+      <button class="is-active" data-cat="all" type="button">All</button>
+      <button data-cat="housing" type="button">Housing</button>
+      <button data-cat="education" type="button">Education</button>
+      <button data-cat="municipal" type="button">Municipal</button>
+      <button data-cat="dev" type="button">In development</button>
+      <span class="count" id="count"><b>06</b> &nbsp;Listings</span>
     </div>
   </section>
 
-  <!-- Split CTA -->
-  <section class="split">
-    <div>
-      <h3>Have a tool to <em>submit</em>?</h3>
-      <p>If it's free, open-source, and solves a real civic problem, we'll review it against our four standards and add it to the directory.</p>
-      <ul>
-        <li><span>Cost to list</span><span>$0</span></li>
-        <li><span>Review window</span><span>5&ndash;7 days</span></li>
-        <li><span>Required</span><span>Open license</span></li>
-      </ul>
-      <a href="/submit.html" class="btn-primary">Submit a tool &rarr;</a>
-    </div>
-    <div>
-      <h3>Looking for the <em>standards</em>?</h3>
-      <p>Every tool in the directory has to clear four checks before being listed. They aren't suggestions &mdash; they're the floor.</p>
-      <ul>
-        <li><span>01</span><span>Real civic problem</span></li>
-        <li><span>02</span><span>Free and open source</span></li>
-        <li><span>03</span><span>Usable by non-technical users</span></li>
-        <li><span>04</span><span>Maintained and reliable</span></li>
-      </ul>
-      <a href="/about.html" class="btn-primary">Read the standards &rarr;</a>
+  <section class="section" style="margin-top: 64px;">
+    <ol class="ilist" id="ilist">
+      <li data-cats="housing"><a href="/tool-building-report.html">
+        <span class="inum">01</span>
+        <span class="ititle">NYC Building Report</span>
+        <span class="idesc">Enter any address to pull HPD maintenance violations &mdash; class breakdown, registration, owner of record. Updated daily from NYC Open Data.</span>
+        <span class="imeta"><span class="st">Live &middot; Housing</span><span class="records">1.1M addresses</span></span>
+        <span class="iarr">&rarr;</span>
+      </a></li>
+      <li data-cats="housing"><a href="/tool-landlord-watch.html">
+        <span class="inum">02</span>
+        <span class="ititle">NYC Landlord Watch</span>
+        <span class="idesc">Search any landlord or LLC to see violation history, portfolio size, and risk score across every property they own in the five boroughs.</span>
+        <span class="imeta"><span class="st">Live &middot; Housing</span><span class="records">36k owners</span></span>
+        <span class="iarr">&rarr;</span>
+      </a></li>
+      <li data-cats="education"><a href="/tool-school-budget.html">
+        <span class="inum">03</span>
+        <span class="ititle">NYC School Budget Tracker</span>
+        <span class="idesc">Per-pupil spending, Title I funding, and PTA contributions &mdash; mapped across 1,800+ NYC public schools. Search, filter, compare.</span>
+        <span class="imeta"><span class="st">Live &middot; Education</span><span class="records">1,800 schools</span></span>
+        <span class="iarr">&rarr;</span>
+      </a></li>
+      <li data-cats="housing"><a href="/tool-eviction-records.html">
+        <span class="inum">04</span>
+        <span class="ititle">NYC Eviction Records</span>
+        <span class="idesc">Look up executed marshal evictions for any NYC address across all five boroughs. Know a building's history before you sign a lease.</span>
+        <span class="imeta"><span class="st">Live &middot; Housing</span><span class="records">100k records</span></span>
+        <span class="iarr">&rarr;</span>
+      </a></li>
+      <li data-cats="municipal"><a href="/tool-311-lookup.html">
+        <span class="inum">05</span>
+        <span class="ititle">NYC 311 Complaint Lookup</span>
+        <span class="idesc">Every 311 service request filed at an address &mdash; noise, heat, pests, plumbing &mdash; with agency assignment and resolution notes.</span>
+        <span class="imeta"><span class="st">Live &middot; Municipal</span><span class="records">35M complaints</span></span>
+        <span class="iarr">&rarr;</span>
+      </a></li>
+      <li data-cats="dev municipal"><a href="/submit.html">
+        <span class="inum">06</span>
+        <span class="ititle">Community Resource Finder</span>
+        <span class="idesc">Searchable directory of free and low-cost services &mdash; food pantries, legal aid, after-school programs &mdash; indexed by neighborhood and borough.</span>
+        <span class="imeta"><span class="st dev">In dev &middot; Municipal</span><span class="records">Q3 2026</span></span>
+        <span class="iarr">&rarr;</span>
+      </a></li>
+    </ol>
+  </section>
+
+  <section class="endslug">
+    <p>Built something useful, or <em>stuck on a problem</em> the city won't explain?</p>
+    <div class="actions">
+      <a href="/submit.html" class="cta-link">Submit a tool <span class="arr">&rarr;</span></a>
+      <a href="/about.html" class="cta-link muted">Read our standards <span class="arr">&rarr;</span></a>
     </div>
   </section>
 
   <footer>
-    <div class="foot-grid">
+    <div class="fwrap">
       <div>
-        <a href="/" class="mark">civic<em>byte</em>.</a>
-        <p>An independent NYC civic-data project. Free, open-source tools built on public records. Released under MIT.</p>
+        <p class="fmark">CivicByte<span class="amp">.</span></p>
+        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
       </div>
-      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/about.html">About</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
-      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/brand.html">Brand</a></li></ul></div>
-      <div><h5>Contact</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">About</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
     </div>
     <div class="colophon">
       <span>&copy; 2026 CivicByte &middot; MIT License</span>
-      <span>Set in Fraunces &middot; Newsreader &middot; IBM Plex Mono</span>
-      <span>Printed on the open web</span>
+      <span>Set in Newsreader, Inter Tight &amp; IBM Plex Mono &middot; Made in NYC</span>
     </div>
   </footer>
 
@@ -385,41 +184,35 @@
 
 <script>
 (function(){
-  const tools = Array.from(document.querySelectorAll('#tools-list .tool-row'));
-  const search = document.getElementById('tool-search');
-  const chips = Array.from(document.querySelectorAll('#cat-chips .cat'));
-  const countLabel = document.getElementById('count-label');
-  const list = document.getElementById('tools-list');
+  const list  = document.getElementById('ilist');
+  const items = Array.from(list.querySelectorAll('li'));
+  const total = items.length;
+  const buttons = Array.from(document.querySelectorAll('#filters button'));
+  const count = document.getElementById('count');
   let activeCat = 'all';
 
   const params = new URLSearchParams(location.search);
-  if (params.get('q')) search.value = params.get('q');
-  if (params.get('cat')) {
-    const initCat = params.get('cat');
-    const match = chips.find(c => c.dataset.cat === initCat);
-    if (match) { chips.forEach(c => c.classList.remove('active')); match.classList.add('active'); activeCat = initCat; }
+  const initCat = params.get('cat');
+  if (initCat) {
+    const m = buttons.find(b => b.dataset.cat === initCat);
+    if (m) { buttons.forEach(b => b.classList.remove('is-active')); m.classList.add('is-active'); activeCat = initCat; }
   }
 
-  function applyFilter() {
-    const q = (search.value || '').trim().toLowerCase();
-    let visible = 0;
-    tools.forEach(t => {
-      const cats = (t.dataset.cats || '').split(/\s+/);
-      const keywords = (t.dataset.keywords || '').toLowerCase();
-      const text = (t.textContent || '').toLowerCase();
-      const matchesCat = activeCat === 'all' || cats.includes(activeCat);
-      const matchesQ = !q || keywords.includes(q) || text.includes(q);
-      const show = matchesCat && matchesQ;
-      t.style.display = show ? '' : 'none';
-      if (show) visible++;
+  function apply() {
+    let shown = 0;
+    items.forEach(li => {
+      const cats = (li.dataset.cats || '').split(/\s+/);
+      const show = activeCat === 'all' || cats.includes(activeCat);
+      li.style.display = show ? '' : 'none';
+      if (show) shown++;
     });
-    countLabel.textContent = 'Showing ' + visible + ' of ' + tools.length;
-    let empty = list.querySelector('.empty-row');
-    if (visible === 0) {
+    count.innerHTML = '<b>' + String(shown).padStart(2,'0') + '</b> &nbsp;' + (shown === total ? 'Listings' : 'of ' + total);
+    let empty = list.querySelector('.empty');
+    if (shown === 0) {
       if (!empty) {
-        empty = document.createElement('div');
-        empty.className = 'empty-row';
-        empty.innerHTML = '<strong>No tools match that filter.</strong>Try a different category, clear the search, or <a href="/submit.html">submit a tool</a> that fills the gap.';
+        empty = document.createElement('li');
+        empty.className = 'empty';
+        empty.innerHTML = '<b>No tools in this section yet.</b><a href="/submit.html">Submit one &rarr;</a>';
         list.appendChild(empty);
       }
     } else if (empty) {
@@ -427,15 +220,14 @@
     }
   }
 
-  search.addEventListener('input', applyFilter);
-  chips.forEach(c => c.addEventListener('click', () => {
-    chips.forEach(x => x.classList.remove('active'));
-    c.classList.add('active');
-    activeCat = c.dataset.cat;
-    applyFilter();
+  buttons.forEach(b => b.addEventListener('click', () => {
+    buttons.forEach(x => x.classList.remove('is-active'));
+    b.classList.add('is-active');
+    activeCat = b.dataset.cat;
+    apply();
   }));
 
-  applyFilter();
+  apply();
 })();
 </script>
 </body>
