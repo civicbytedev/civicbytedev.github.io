@@ -2,85 +2,70 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>About — CivicByte</title>
+<title>About &middot; CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="CivicByte is a student-founded open platform that makes civic technology accessible, discoverable, and free for the communities that need it most.">
+<meta name="description" content="The four standards every CivicByte tool must clear, and the values behind the platform.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500;1,9..144,600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
 <meta name="theme-color" content="#b8432b">
 <script defer src="/civicbyte-fx.js"></script>
 <link rel="stylesheet" href="/civicbyte.css">
 <style>
-  .mission { padding: 24px 44px 72px; display:grid; grid-template-columns: 1.4fr 1fr; gap: 56px; border-bottom: 1px solid rgba(29,26,21,0.1); }
-  .mission .k { font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.16em; text-transform:uppercase; color: var(--brick); margin-bottom: 10px; }
-  .mission h2 { font-family:'Fraunces',serif; font-weight:500; font-size: 52px; letter-spacing:-0.025em; line-height:1.02; margin: 0 0 24px; max-width: 16ch; }
-  .mission h2 em { color: var(--brick); font-style:italic; }
-  .mission p { font-size: 16px; line-height: 1.65; color: var(--ink-soft); margin: 0 0 18px; max-width: 56ch; }
-  .mission p.big { font-size: 18px; color: var(--ink); }
-  .mission .pull {
-    border-left: 3px solid var(--brick); padding: 6px 0 6px 22px;
-    font-family:'Fraunces',serif; font-style:italic; font-size: 24px; line-height: 1.35;
-    color: var(--ink); margin: 0; max-width: 40ch;
+  .standards { padding: 48px 48px 56px; background: var(--cream); border-bottom: 1px solid var(--ink); }
+  .std-list { border-top: 2px solid var(--ink); }
+  .std {
+    display: grid; grid-template-columns: 120px 1fr 2fr; gap: 36px;
+    padding: 32px 0; border-bottom: 1px solid var(--ink); align-items: baseline;
   }
-  .mission .side { display:flex; flex-direction:column; gap: 1px; border-radius: 16px; overflow:hidden; border: 1px solid rgba(29,26,21,0.1); background: rgba(29,26,21,0.1); align-self:start; }
-  .mission .side .r { background: var(--cream); padding: 20px 24px; display:flex; justify-content:space-between; align-items:baseline; }
-  .mission .side .r .lbl { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing: 0.14em; text-transform:uppercase; color: var(--ink-soft); }
-  .mission .side .r .val { font-family:'Fraunces',serif; font-size: 28px; font-weight:500; letter-spacing:-0.015em; }
-  .mission .side .r .val em { color: var(--brick); font-style:italic; }
-
-  .values { padding: 64px 44px; }
-  .values-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid rgba(29,26,21,0.1); border-radius: 16px; overflow:hidden; background: #fff; }
-  .value { padding: 28px 28px 30px; border-right: 1px solid rgba(29,26,21,0.1); border-bottom: 1px solid rgba(29,26,21,0.1); }
-  .value:nth-child(3n) { border-right: none; }
-  .value:nth-last-child(-n+3) { border-bottom: none; }
-  .value .num { font-family:'IBM Plex Mono',monospace; font-size: 11px; color: var(--brick); letter-spacing:0.14em; }
-  .value h4 { font-family:'Fraunces',serif; font-weight:600; font-size: 22px; margin: 8px 0 10px; letter-spacing:-0.015em; line-height:1.15; }
-  .value p { font-size: 14px; line-height: 1.55; color: var(--ink-soft); margin: 0; }
-
-  .standards { padding: 64px 44px; background: var(--cream); }
-  .std-list { display:flex; flex-direction:column; gap: 0; border-top: 1px solid rgba(29,26,21,0.15); }
-  .std { display:grid; grid-template-columns: 100px 1fr 2fr; gap: 32px; padding: 28px 8px; border-bottom: 1px solid rgba(29,26,21,0.15); align-items:baseline; }
-  .std .n { font-family:'IBM Plex Mono',monospace; font-size: 14px; color: var(--brick); letter-spacing:0.1em; }
-  .std h4 { font-family:'Fraunces',serif; font-weight:600; font-size: 26px; margin: 0; letter-spacing:-0.015em; line-height:1.15; }
-  .std p { font-size: 15px; line-height: 1.6; color: var(--ink-soft); margin: 0; max-width: 60ch; }
-
-  .story { padding: 72px 44px; display:grid; grid-template-columns: 1fr 1.4fr; gap: 56px; }
-  .story .k { font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.16em; text-transform:uppercase; color: var(--brick); margin-bottom: 10px; }
-  .story h2 { font-family:'Fraunces',serif; font-weight:500; font-size: 48px; letter-spacing:-0.025em; line-height:1.02; margin: 0; max-width: 12ch; }
-  .story h2 em { color: var(--brick); font-style:italic; }
-  .story .body p { font-size: 16px; line-height: 1.7; color: var(--ink-soft); margin: 0 0 20px; }
-  .story .body p:first-child::first-letter {
-    font-family:'Fraunces',serif; font-weight:700; font-size: 64px;
-    float:left; line-height:0.88; padding: 6px 10px 0 0; color: var(--ink);
+  .std .n {
+    font-family:'IBM Plex Mono', monospace; font-size: 14px;
+    letter-spacing: 0.14em; color: var(--brick); font-weight: 600;
   }
-  .story .body a { color: var(--brick); }
-
-  .about-cta { padding: 48px 44px 64px; }
-  .about-cta .box {
-    background: var(--ink); color: var(--cream); border-radius: 20px;
-    padding: 48px; display:grid; grid-template-columns: 1.5fr 1fr; gap: 40px; align-items:center;
+  .std h3 {
+    font-family:'Fraunces', serif; font-weight: 600; font-size: 30px;
+    margin: 0; letter-spacing: -0.015em; line-height: 1.1;
   }
-  .about-cta h3 { font-family:'Fraunces',serif; font-weight:500; font-size: 44px; letter-spacing:-0.025em; margin: 0 0 14px; line-height:1.02; }
-  .about-cta h3 em { color: var(--ochre); font-style:italic; }
-  .about-cta p { font-size: 15px; line-height:1.6; margin: 0; color: rgba(248,244,234,0.78); max-width: 46ch; }
-  .about-cta .btns { display:flex; flex-direction:column; gap: 10px; }
-  .about-cta .btns a { padding: 14px 22px; border-radius: 999px; text-align:center; text-decoration:none; font-weight:600; font-size: 14px; }
+  .std p {
+    font-family:'Newsreader', Georgia, serif; font-size: 17px;
+    line-height: 1.6; color: var(--ink); margin: 0; max-width: 60ch;
+  }
+
+  .about-cta { padding: 48px; background: var(--ink); color: var(--cream); border-bottom: 1px solid var(--ink); }
+  .about-cta .grid {
+    display: grid; grid-template-columns: 2fr 1fr; gap: 48px; align-items: center;
+  }
+  .about-cta h3 {
+    font-family:'Fraunces', serif; font-weight: 500; font-size: 38px;
+    line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 14px;
+  }
+  .about-cta h3 em { color: var(--ochre); font-style: italic; }
+  .about-cta p {
+    font-family:'Newsreader', serif; font-size: 17px; line-height: 1.55;
+    color: rgba(248,244,234,0.85); margin: 0; max-width: 50ch;
+  }
+  .about-cta .btns { display:flex; flex-direction:column; gap: 12px; }
+  .about-cta .btns a {
+    padding: 14px 22px; text-align: center; border-radius: 2px;
+    text-decoration: none; font-weight: 600; font-size: 14px;
+    font-family:'Inter Tight', sans-serif;
+  }
   .about-cta .btns a.primary { background: var(--cream); color: var(--ink); }
-  .about-cta .btns a.secondary { border: 1px solid rgba(248,244,234,0.25); color: var(--cream); }
+  .about-cta .btns a.primary:hover { background: var(--brick); color: #fff; }
+  .about-cta .btns a.ghost {
+    border: 1px solid rgba(248,244,234,0.3); color: var(--cream);
+  }
+  .about-cta .btns a.ghost:hover { border-color: var(--cream); }
 
-  @media (max-width: 820px) {
-    .mission, .story { grid-template-columns: 1fr; gap: 32px; }
-    .values-grid { grid-template-columns: 1fr 1fr; }
-    .value:nth-child(3n) { border-right: 1px solid rgba(29,26,21,0.1); }
-    .value:nth-child(2n) { border-right: none; }
-    .value:nth-last-child(-n+3) { border-bottom: 1px solid rgba(29,26,21,0.1); }
-    .value:nth-last-child(-n+2) { border-bottom: none; }
-    .std { grid-template-columns: 50px 1fr; }
-    .std p { grid-column: 1 / -1; }
-    .about-cta .box { grid-template-columns: 1fr; }
+  @media (max-width: 980px) {
+    .standards { padding: 36px 24px; }
+    .std { grid-template-columns: 1fr; gap: 8px; padding: 24px 0; }
+    .std h3 { font-size: 24px; }
+    .about-cta { padding: 36px 24px; }
+    .about-cta .grid { grid-template-columns: 1fr; gap: 24px; }
+    .about-cta h3 { font-size: 28px; }
   }
 </style>
 </head>
@@ -88,130 +73,145 @@
 
 <div class="page">
 
+  <div class="masthead">
+    <span>Vol. 01 &middot; No. 18 &middot; Saturday, May 23, 2026</span>
+    <span>About &middot; Standards and values</span>
+    <span>Free &middot; Open Source</span>
+  </div>
+
   <nav class="nav">
-    <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
+    <div class="nav-left">
+      <a href="/" class="mark">civic<em>byte</em>.</a>
+      <span class="tag">Est. 2024 &middot; New York</span>
+    </div>
     <ul>
-      <li><a href="/">Home</a></li>
+      <li><a href="/">Front Page</a></li>
       <li><a href="/tools.html">Tools</a></li>
+      <li><a href="/story.html">The Story</a></li>
       <li><a href="/about.html" class="active">About</a></li>
-      <li><a href="/impact.html">Impact</a></li>
-      <li><a href="/brand.html">Brand</a></li>
-      <li><a href="https://github.com/civicbytedev">GitHub</a></li>
     </ul>
     <a href="/submit.html" class="cta">Submit a tool</a>
   </nav>
 
   <section class="page-hero">
-    <span class="pill"><span class="pulse"></span> About CivicByte</span>
-    <h1>Technology should <em>serve the public</em>.</h1>
-    <p class="lede">CivicByte is a student-founded open platform that makes civic technology accessible, discoverable, and free for the communities that need it most.</p>
+    <div class="kicker">&sect;01 &mdash; About CivicByte</div>
+    <h1>Four <em>standards</em>, six <em>rules</em>, one <em>principle</em>.</h1>
+    <p class="lede">
+      Every tool listed on CivicByte has to clear the same four checks before it ships.
+      These aren't suggestions &mdash; they're the floor. The six rules underneath them are
+      how we work; the one principle is why.
+    </p>
   </section>
 
-  <section class="mission">
-    <div>
-      <div class="k">Our mission</div>
-      <h2>Making public data <em>work for everyone</em>.</h2>
-      <p class="big">Governments collect enormous amounts of data about schools, housing, public services, and infrastructure. But that data is often locked in formats inaccessible to the communities it's supposed to serve.</p>
-      <p>CivicByte exists to close that gap. We're an open platform where developers and students build free tools that translate complex public data into resources anyone can use — regardless of their technical background.</p>
-      <p>Every tool on our platform is open-source, free to use, and designed with the communities it serves in mind.</p>
-      <blockquote class="pull">Public data should serve the public. The communities that need transparency the most often have the least access to it. We're here to change that.</blockquote>
-    </div>
-    <aside class="side">
-      <div class="r"><span class="lbl">Cost to use</span><span class="val"><em>$0</em></span></div>
-      <div class="r"><span class="lbl">License</span><span class="val">MIT</span></div>
-      <div class="r"><span class="lbl">Paywalls</span><span class="val">Zero</span></div>
-      <div class="r"><span class="lbl">Data collection</span><span class="val">None</span></div>
-      <div class="r"><span class="lbl">Always free</span><span class="val"><em>Yes</em></span></div>
-    </aside>
-  </section>
-
-  <section class="values">
-    <div class="sec-head">
-      <div class="l">
-        <div class="k">Our values</div>
-        <h2>What guides <em>everything</em> we build.</h2>
-      </div>
-      <div class="r">These aren't platitudes — they're design constraints that shape every decision we make, and every tool we list.</div>
-    </div>
-    <div class="values-grid">
-      <div class="value"><div class="num">01</div><h4>Radical transparency</h4><p>Every line of code is public. Every decision is documented. Civic technology built behind closed doors defeats its own purpose.</p></div>
-      <div class="value"><div class="num">02</div><h4>Community-first design</h4><p>We don't build tools and hope someone uses them. Every project starts with a real problem identified by a real community.</p></div>
-      <div class="value"><div class="num">03</div><h4>Accessible by default</h4><p>If a tool requires technical expertise to use, it has failed. We design for parents, organizers, and advocates — not other developers.</p></div>
-      <div class="value"><div class="num">04</div><h4>Open platform</h4><p>CivicByte isn't a single team's portfolio. It's a platform where anyone can contribute tools that serve the public good.</p></div>
-      <div class="value"><div class="num">05</div><h4>Impact over portfolio</h4><p>We measure success by community impact, not GitHub stars. A tool used by one PTA is worth more than a demo with a thousand visitors.</p></div>
-      <div class="value"><div class="num">06</div><h4>Student-led, not limited</h4><p>Being student-founded doesn't mean being amateur. We hold ourselves to production standards because communities depend on our tools.</p></div>
-    </div>
-  </section>
-
+  <!-- Standards -->
   <section class="standards">
     <div class="sec-head">
-      <div class="l">
-        <div class="k">Platform standards</div>
-        <h2>What we expect from <em>every tool</em>.</h2>
-      </div>
-      <div class="r">Tools submitted to CivicByte are reviewed against these four standards before being listed in the directory.</div>
+      <h2>The <em>four standards</em>.</h2>
+      <span class="meta">&sect;02 &middot; Platform &middot; Non-negotiable</span>
     </div>
     <div class="std-list">
       <div class="std">
-        <div class="n">01</div>
-        <h4>Solves a real civic problem</h4>
-        <p>Every tool must address a specific, documented need identified by or validated with a community. "Interesting dataset" doesn't qualify on its own.</p>
+        <div class="n">Standard 01</div>
+        <h3>Solves a real civic problem.</h3>
+        <p>Every tool must address a specific, documented need identified by or validated with a community. "Interesting dataset" doesn't qualify on its own. We want to know who is stuck and what we're unsticking.</p>
       </div>
       <div class="std">
-        <div class="n">02</div>
-        <h4>Free and open source</h4>
-        <p>Freely accessible with no paywalls or sign-ups. Source code must be public under an open license, with data sources cited.</p>
+        <div class="n">Standard 02</div>
+        <h3>Free and open source.</h3>
+        <p>Freely accessible with no paywalls or sign-ups. Source code must be public under an open license, with data sources cited. If a user has to pay, it won't be listed.</p>
       </div>
       <div class="std">
-        <div class="n">03</div>
-        <h4>Usable by non-technical users</h4>
-        <p>Tools are for community members, not developers. Clear interfaces, plain language, mobile-friendly — no CLI, no auth maze.</p>
+        <div class="n">Standard 03</div>
+        <h3>Usable by non-technical users.</h3>
+        <p>Tools are for community members, not developers. Clear interfaces, plain language, mobile-friendly. No CLI, no auth maze, no spreadsheets to download and parse.</p>
       </div>
       <div class="std">
-        <div class="n">04</div>
-        <h4>Maintained and reliable</h4>
-        <p>Submitters commit to keeping tools functional and data current. Abandoned tools are archived with a note, not quietly deleted.</p>
+        <div class="n">Standard 04</div>
+        <h3>Maintained and reliable.</h3>
+        <p>Submitters commit to keeping tools functional and data current. Abandoned tools are archived with a note, not quietly deleted. The platform's value is in things that still work next year.</p>
       </div>
     </div>
   </section>
 
-  <section class="story">
+  <!-- Principles (six rules) -->
+  <section class="principles">
     <div>
-      <div class="k">Our story</div>
-      <h2>Built <em>in public</em>, from day one.</h2>
+      <div class="st">&sect;03 &mdash; The six rules</div>
+      <h2>How we work, <em>day to day</em>.</h2>
     </div>
-    <div class="body">
-      <p>CivicByte started as a student initiative to make public data actually useful to the communities it's supposed to serve. We noticed that governments collect enormous amounts of data — about schools, housing, public services, infrastructure — but that data almost never reaches the people it affects in any usable form.</p>
-      <p>Our first tool, the NYC School Budget Tracker, was built to change that for one specific problem: helping parents, advocates, and community members understand how money flows through NYC public schools. We heard from PTAs, teachers, and journalists who used it to find answers they couldn't get from official documents.</p>
-      <p>That experience showed us the model. The problem isn't data availability — most of it is technically public. The problem is usability. CivicByte exists to close that gap, tool by tool, community by community.</p>
-      <p><a href="https://github.com/civicbytedev">Follow our progress on GitHub →</a></p>
+    <div class="pr-grid">
+      <div class="pr">
+        <div class="n">01</div>
+        <h4>Radical transparency.</h4>
+        <p>Every line of code is public. Every dataset is cited. Civic tech built behind closed doors defeats its own purpose.</p>
+      </div>
+      <div class="pr">
+        <div class="n">02</div>
+        <h4>Community-first design.</h4>
+        <p>Every project starts with a real problem identified by a real community &mdash; not by us, not by a dataset.</p>
+      </div>
+      <div class="pr">
+        <div class="n">03</div>
+        <h4>Accessible by default.</h4>
+        <p>If a tool needs technical expertise to use, it has failed. Built for parents, organizers, advocates &mdash; not other developers.</p>
+      </div>
+      <div class="pr">
+        <div class="n">04</div>
+        <h4>Open platform.</h4>
+        <p>CivicByte isn't one team's portfolio. It's a shelf where anyone can contribute tools that serve the public good.</p>
+      </div>
+      <div class="pr">
+        <div class="n">05</div>
+        <h4>Impact over portfolio.</h4>
+        <p>A tool used by one PTA is worth more than a demo with a thousand GitHub stars. We count uses, not views.</p>
+      </div>
+      <div class="pr">
+        <div class="n">06</div>
+        <h4>Student-led, not limited.</h4>
+        <p>Being student-founded doesn't mean amateur. Production standards because communities depend on us.</p>
+      </div>
     </div>
   </section>
 
+  <!-- The principle -->
+  <section class="quote-section">
+    <div class="k">&sect;04 &middot; The principle</div>
+    <blockquote>
+      Public data should serve the public. The communities that need transparency
+      most often have the least access to it.
+    </blockquote>
+    <cite>&mdash; CivicByte, founding charter &middot; 2024</cite>
+  </section>
+
+  <!-- CTA -->
   <section class="about-cta">
-    <div class="box">
+    <div class="grid">
       <div>
         <h3>Want to <em>contribute</em>?</h3>
-        <p>CivicByte is open to developers, students, nonprofits, and community organizations. There are many ways to get involved — build, submit, report a data gap, or just use the tools and share them.</p>
+        <p>CivicByte is open to developers, students, nonprofits, and community organizations. Build something, submit it, report a data gap, or just use the tools and share them with someone who needs them.</p>
       </div>
       <div class="btns">
-        <a href="/submit.html" class="primary">Submit a tool →</a>
-        <a href="https://github.com/civicbytedev" class="secondary">View on GitHub</a>
+        <a href="/submit.html" class="primary">Submit a tool &rarr;</a>
+        <a href="https://github.com/civicbytedev" class="ghost">View on GitHub</a>
       </div>
     </div>
   </section>
 
   <footer>
-    <div class="fg">
+    <div class="foot-grid">
       <div>
-        <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
-        <p>An open platform for free, community-facing civic tools built on public data.</p>
+        <a href="/" class="mark">civic<em>byte</em>.</a>
+        <p>An independent NYC civic-data project. Free, open-source tools built on public records. Released under MIT.</p>
       </div>
-      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
-      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">Our story</a></li></ul></div>
-      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/about.html">About</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/brand.html">Brand</a></li></ul></div>
+      <div><h5>Contact</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
     </div>
-    <div class="col2"><span>© 2026 CivicByte · MIT License</span><span>Made in NYC · By students, for everyone</span></div>
+    <div class="colophon">
+      <span>&copy; 2026 CivicByte &middot; MIT License</span>
+      <span>Set in Fraunces &middot; Newsreader &middot; IBM Plex Mono</span>
+      <span>Printed on the open web</span>
+    </div>
   </footer>
 
 </div>
