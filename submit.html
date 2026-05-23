@@ -2,182 +2,133 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Submit a Tool &middot; CivicByte</title>
+<title>Submit a tool &mdash; CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Submit a free, open-source civic tool for review and listing on CivicByte.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500;1,9..144,600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
-<meta name="theme-color" content="#b8432b">
+<meta name="theme-color" content="#B33E16">
 <script defer src="/civicbyte-fx.js"></script>
-<link rel="stylesheet" href="/civicbyte.css">
+<link rel="stylesheet" href="/civicbyte-editorial.css">
 <style>
-  .submit-layout {
-    padding: 36px 48px 56px;
-    display: grid; grid-template-columns: 1.5fr 1fr; gap: 48px;
-    align-items: start; border-bottom: 1px solid var(--ink);
-    background: var(--cream);
+  .form-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 64px;
+    padding-top: 32px;
   }
-
-  .form {
-    background: #fff; border: 1px solid var(--ink); padding: 36px 40px;
+  .form-grid .form {
+    max-width: 64ch;
   }
-  .form .kicker { margin-bottom: 4px; }
-  .form h2 {
-    font-family:'Fraunces', serif; font-weight: 500; font-size: 38px;
-    letter-spacing: -0.025em; line-height: 1.05; margin: 4px 0 10px;
+  .field {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
-  .form h2 em { color: var(--brick); font-style: italic; }
-  .form .intro {
-    font-family:'Newsreader', serif; font-size: 15.5px; line-height: 1.55;
-    color: var(--ink); margin: 0 0 28px; max-width: 50ch;
-  }
-
-  .fieldset {
-    border: none; padding: 0; margin: 0 0 26px;
-    display: flex; flex-direction: column; gap: 16px;
-  }
-  .fieldset legend {
-    font-family:'IBM Plex Mono', monospace; font-size: 11px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--brick);
-    padding: 0; margin-bottom: 4px;
-  }
-  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field:first-child { border-top: 1px solid var(--rule); }
   .field label {
-    font-family:'Inter Tight', sans-serif; font-size: 13px; font-weight: 600;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .field label .req { color: var(--ember); }
+  .field input,
+  .field textarea,
+  .field select {
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.3;
     color: var(--ink);
+    letter-spacing: -0.01em;
+    border: none;
+    background: transparent;
+    padding: 0;
+    outline: none;
+    width: 100%;
+    resize: vertical;
   }
-  .field label .req { color: var(--brick); margin-left: 2px; }
+  .field textarea { min-height: 80px; font-size: 17px; line-height: 1.45; }
+  .field input::placeholder,
+  .field textarea::placeholder,
+  .field select::placeholder { color: var(--faint); }
   .field .hint {
-    font-family:'Inter Tight', sans-serif; font-size: 12px;
-    color: var(--ink-soft); line-height: 1.45;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--mute);
   }
-  .field input[type="text"],
-  .field input[type="url"],
-  .field input[type="email"],
-  .field select,
-  .field textarea {
-    font-family:'Inter Tight', sans-serif; font-size: 14px; color: var(--ink);
-    padding: 11px 14px; background: var(--paper);
-    border: 1px solid var(--ink); border-radius: 0;
-    outline: none; width: 100%; transition: background .15s;
+  .field .row {
+    display: flex; flex-wrap: wrap; gap: 8px;
   }
-  .field input:focus, .field select:focus, .field textarea:focus { background: #fff; }
-  .field textarea { resize: vertical; min-height: 88px; line-height: 1.55; }
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .check-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  .check {
-    display: flex; align-items: center; gap: 8px; padding: 10px 12px;
-    background: var(--paper); border: 1px solid var(--ink);
-    font-family:'Inter Tight', sans-serif; font-size: 12.5px; cursor: pointer;
+  .field .row label {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 4px 12px;
+    border: 1px solid var(--rule-2);
+    border-radius: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    transition: border-color .18s, color .18s, background .18s;
   }
-  .check input { accent-color: var(--brick); }
-  .check:has(input:checked) { background: var(--brick); color: #fff; }
-  .check:has(input:checked) input { accent-color: #fff; }
+  .field .row label:hover { border-color: var(--ink); }
+  .field .row input { display: none; }
+  .field .row label:has(input:checked) { border-color: var(--ember); color: var(--ember); background: var(--ember-soft); }
 
-  .agree {
-    display: flex; gap: 12px; align-items: flex-start;
-    padding: 16px 20px; background: var(--paper-2); border: 1px solid var(--ink);
-    font-family:'Newsreader', serif; font-size: 14px; line-height: 1.55; color: var(--ink);
+  .form-actions {
+    margin-top: 32px;
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    flex-wrap: wrap;
   }
-  .agree input { accent-color: var(--brick); margin-top: 4px; }
-  .agree a { color: var(--brick); }
-
-  .submit-row {
-    display: flex; justify-content: space-between; align-items: center;
-    gap: 16px; padding-top: 12px; flex-wrap: wrap;
+  .form-submit {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--ink);
+    border: none;
+    padding: 14px 24px;
+    cursor: pointer;
+    transition: background .18s;
   }
-  .submit-row .note {
-    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft);
-    max-width: 36ch;
-  }
-
-  .form-success {
-    margin-top: 18px;
-    padding: 18px 20px;
-    border: 1px solid var(--moss); background: #ecefd8;
-    font-family:'Newsreader', serif; font-size: 14px; line-height: 1.55;
-    color: var(--ink); display: none;
-  }
-  .form-success.shown { display: block; }
-  .form-success.error { border-color: var(--brick); background: #fef2f0; }
-  .form-success strong { color: var(--moss); font-weight: 700; }
-  .form-success.error strong { color: var(--brick); }
-  .form-success a { color: var(--brick); }
-
-  /* Aside */
-  .aside { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 20px; }
-  .card { background: var(--cream); border: 1px solid var(--ink); padding: 24px 26px; }
-  .card h3 {
-    font-family:'Fraunces', serif; font-weight: 600; font-size: 22px;
-    letter-spacing: -0.01em; margin: 0 0 6px;
-  }
-  .card .desc {
-    font-family:'Newsreader', serif; font-size: 13.5px; color: var(--ink);
-    line-height: 1.55; margin: 0 0 16px;
-  }
-  .card.dark { background: var(--ink); color: var(--cream); border-color: var(--ink); }
-  .card.dark h3 { color: var(--cream); }
-  .card.dark .desc { color: rgba(248,244,234,0.78); }
-  .card.dark a { color: var(--ochre); }
-
-  .checklist { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
-  .checklist li {
-    display: flex; gap: 12px; align-items: flex-start;
-    font-family:'Inter Tight', sans-serif; font-size: 13.5px; line-height: 1.45;
-  }
-  .checklist .tick {
-    flex-shrink: 0; width: 18px; height: 18px; background: var(--brick); color: #fff;
-    font-size: 11px; display: flex; align-items: center; justify-content: center;
-    font-weight: 700; margin-top: 1px;
-  }
-  .checklist li strong { font-weight: 600; display: block; }
-  .checklist li span { color: var(--ink-soft); font-size: 12.5px; }
-
-  .timeline-mini { list-style: none; padding: 0; margin: 0; }
-  .timeline-mini li {
-    display: grid; grid-template-columns: 80px 1fr; gap: 14px;
-    padding: 12px 0; border-bottom: 1px solid rgba(29,26,21,0.2);
-  }
-  .timeline-mini li:last-child { border-bottom: none; }
-  .timeline-mini .when {
-    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.1em; text-transform: uppercase; color: var(--brick);
-    padding-top: 3px;
-  }
-  .timeline-mini strong {
-    display: block; font-family:'Inter Tight', sans-serif; font-weight: 600;
-    font-size: 13.5px; margin-bottom: 3px;
-  }
-  .timeline-mini span {
-    font-family:'Inter Tight', sans-serif; font-size: 12.5px;
-    color: var(--ink-soft); line-height: 1.5;
+  .form-submit:hover { background: var(--ember); }
+  .form-actions .note {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--mute);
+    text-transform: uppercase;
   }
 
-  /* FAQ */
-  .faq-section { padding: 48px 48px 64px; background: var(--paper); border-bottom: 1px solid var(--ink); }
-  .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 2px solid var(--ink); border-left: 1px solid var(--ink); }
-  .faq { padding: 24px 28px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); background: var(--cream); }
-  .faq h4 {
-    font-family:'Fraunces', serif; font-weight: 600; font-size: 20px;
-    letter-spacing: -0.01em; margin: 0 0 8px;
+  .form-feedback {
+    margin-top: 22px;
+    padding: 18px 22px;
+    border-left: 2px solid var(--ember);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink);
+    display: none;
   }
-  .faq p {
-    font-family:'Newsreader', serif; font-size: 14.5px; line-height: 1.55;
-    color: var(--ink); margin: 0;
-  }
+  .form-feedback.shown { display: block; }
+  .form-feedback.ok { border-left-color: var(--ember); }
+  .form-feedback.error { border-left-color: var(--ember); color: var(--ember); }
+  .form-feedback a { color: var(--ember); }
 
-  @media (max-width: 980px) {
-    .submit-layout { padding: 28px 24px 40px; grid-template-columns: 1fr; gap: 28px; }
-    .form { padding: 24px 22px; }
-    .form h2 { font-size: 28px; }
-    .aside { position: static; }
-    .field-row, .check-grid { grid-template-columns: 1fr; }
-    .faq-section { padding: 36px 24px; }
-    .faq-grid { grid-template-columns: 1fr; }
+  @media (max-width: 880px) {
+    .form-grid { grid-template-columns: 1fr; gap: 28px; padding-top: 24px; }
   }
 </style>
 </head>
@@ -185,217 +136,175 @@
 
 <div class="page">
 
-  <div class="masthead">
-    <span>Vol. 01 &middot; No. 18 &middot; Saturday, May 23, 2026</span>
-    <span>Open submissions &middot; Free to list</span>
-    <span>Free &middot; Open Source</span>
-  </div>
-
-  <nav class="nav">
-    <div class="nav-left">
-      <a href="/" class="mark">civic<em>byte</em>.</a>
-      <span class="tag">Est. 2024 &middot; New York</span>
+  <header class="masthead">
+    <div class="l">
+      <span><span class="tick"></span>Vol. 01 &nbsp;&middot;&nbsp; No. 18</span>
+      <span class="sep">&middot;</span>
+      <span>Saturday, May 23, 2026</span>
     </div>
+    <a href="/" class="wordmark">CivicByte<span class="amp">.</span></a>
+    <div class="r">
+      <span>An independent NYC civic data project</span>
+      <span class="sep">&middot;</span>
+      <span>Open source &middot; MIT</span>
+    </div>
+  </header>
+
+  <nav class="secnav">
     <ul>
       <li><a href="/">Front Page</a></li>
       <li><a href="/tools.html">Tools</a></li>
       <li><a href="/story.html">The Story</a></li>
       <li><a href="/about.html">About</a></li>
     </ul>
-    <a href="/submit.html" class="cta active">Submit a tool</a>
+    <div class="right">
+      <span>Built something?</span>
+      <a href="/submit.html" class="open">Submit a tool &rarr;</a>
+    </div>
   </nav>
 
-  <section class="page-hero">
-    <div class="kicker">&sect;01 &mdash; Submit</div>
-    <h1>Built a civic tool? <em>Get it listed</em>.</h1>
-    <p class="lede">
-      If your tool is free, open-source, and solves a real civic problem, we'll review it
-      against our four standards and &mdash; if it clears &mdash; add it to the directory.
-    </p>
+  <section class="hero compact">
+    <div class="dateline">
+      <span>Submissions</span>
+      <span class="sep">&middot;</span>
+      <span>Open &middot; Free to list</span>
+      <span class="sep">&middot;</span>
+      <span>Reviewed within one week</span>
+    </div>
+    <h1>Built a civic tool? <span class="em">Get it listed.</span></h1>
   </section>
 
-  <div class="submit-layout">
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Form</div>
+        <h2>Tell us about <em>the tool</em>.</h2>
+      </div>
+      <div class="meta">Takes about six minutes</div>
+    </header>
 
-    <form class="form" id="submit-form" novalidate>
-      <div class="kicker">Submission form</div>
-      <h2>Tell us about your <em>tool</em>.</h2>
-      <p class="intro">Takes about 6 minutes. We respond within a week with a review decision or follow-up questions.</p>
+    <form class="form-grid" id="submit-form" novalidate>
+      <aside class="byline">
+        <div><b>Before you start</b></div>
+        <div>Have a public URL ready</div>
+        <div>And the source repo link</div>
+        <div>And a 1&ndash;2 line problem statement</div>
+        <div class="sec"><b>We respond in</b></div>
+        <div>About one week</div>
+        <div class="sec"><b>What clears review</b></div>
+        <div>Tools that match the four standards</div>
+        <div class="sec"><b>Stuck?</b></div>
+        <div><a href="mailto:hello@civicbyte.dev" style="color: var(--ember);">hello@civicbyte.dev</a></div>
+      </aside>
 
-      <fieldset class="fieldset">
-        <legend>01 &middot; The tool</legend>
+      <div class="form">
         <div class="field">
           <label>Tool name <span class="req">*</span></label>
-          <input type="text" name="toolName" placeholder="NYC Rent Stabilization Lookup" required>
+          <input type="text" name="name" placeholder="NYC Permit Tracker" required />
         </div>
-        <div class="field-row">
-          <div class="field">
-            <label>Live URL <span class="req">*</span></label>
-            <input type="url" name="liveUrl" placeholder="https://yourtool.example.org" required>
-          </div>
-          <div class="field">
-            <label>Repository <span class="req">*</span></label>
-            <input type="url" name="repoUrl" placeholder="https://github.com/you/tool" required>
-            <span class="hint">Must be public and under an open license (MIT, Apache 2.0, etc.)</span>
+        <div class="field">
+          <label>One-line problem statement <span class="req">*</span></label>
+          <input type="text" name="problem" placeholder="Tenants can't tell whether construction work in their building is permitted." required />
+          <span class="hint">Who has the problem? What does the tool let them do that they couldn't before?</span>
+        </div>
+        <div class="field">
+          <label>Live URL <span class="req">*</span></label>
+          <input type="url" name="live" placeholder="https://example.dev/permit-tracker" required />
+        </div>
+        <div class="field">
+          <label>Source repository <span class="req">*</span></label>
+          <input type="url" name="repo" placeholder="https://github.com/your-org/your-tool" required />
+          <span class="hint">Public repo, OSI-approved license, README present.</span>
+        </div>
+        <div class="field">
+          <label>Category <span class="req">*</span></label>
+          <div class="row">
+            <label><input type="radio" name="cat" value="Housing" required /><span>Housing</span></label>
+            <label><input type="radio" name="cat" value="Education" /><span>Education</span></label>
+            <label><input type="radio" name="cat" value="Municipal" /><span>Municipal</span></label>
+            <label><input type="radio" name="cat" value="Health" /><span>Health</span></label>
+            <label><input type="radio" name="cat" value="Transit" /><span>Transit</span></label>
+            <label><input type="radio" name="cat" value="Other" /><span>Other</span></label>
           </div>
         </div>
         <div class="field">
-          <label>One-sentence description <span class="req">*</span></label>
-          <input type="text" name="shortDesc" placeholder="Search any NYC address to see its rent stabilization status." required>
+          <label>Data sources <span class="req">*</span></label>
+          <textarea name="data" placeholder="NYC DOB permit dataset, NYC Open Data — updated daily." required></textarea>
+          <span class="hint">Name each dataset. Link if possible. Note the refresh schedule.</span>
         </div>
         <div class="field">
-          <label>Longer description</label>
-          <textarea name="longDesc" placeholder="What does it do? Who is it for? What data does it pull from?"></textarea>
+          <label>How is it maintained?</label>
+          <textarea name="upkeep" placeholder="Cron job pulls fresh data each morning. Issues monitored daily. One human on call."></textarea>
         </div>
-      </fieldset>
+        <div class="field">
+          <label>Your name &amp; email <span class="req">*</span></label>
+          <input type="text" name="contact" placeholder="Maya Castillo · maya@example.org" required />
+        </div>
 
-      <fieldset class="fieldset">
-        <legend>02 &middot; Category &amp; audience</legend>
-        <div class="field">
-          <label>Primary category <span class="req">*</span></label>
-          <select name="category" required>
-            <option value="" disabled selected>Choose one...</option>
-            <option>Housing</option><option>Education</option><option>Municipal Data</option>
-            <option>Social Services</option><option>Transit</option><option>Health</option>
-            <option>Accountability</option><option>Other</option>
-          </select>
+        <div class="form-actions">
+          <button type="submit" class="form-submit">Submit for review &rarr;</button>
+          <span class="note">Reviewed within one week &middot; No tracking</span>
         </div>
-        <div class="field">
-          <label>Tags (select all that apply)</label>
-          <div class="check-grid">
-            <label class="check"><input type="checkbox" name="tags" value="NYC"> NYC</label>
-            <label class="check"><input type="checkbox" name="tags" value="Statewide"> Statewide</label>
-            <label class="check"><input type="checkbox" name="tags" value="National"> National</label>
-            <label class="check"><input type="checkbox" name="tags" value="Tenants"> Tenants</label>
-            <label class="check"><input type="checkbox" name="tags" value="Landlords"> Landlords</label>
-            <label class="check"><input type="checkbox" name="tags" value="Students"> Students</label>
-            <label class="check"><input type="checkbox" name="tags" value="Parents"> Parents</label>
-            <label class="check"><input type="checkbox" name="tags" value="Advocates"> Advocates</label>
-            <label class="check"><input type="checkbox" name="tags" value="Journalists"> Journalists</label>
-          </div>
-        </div>
-        <div class="field">
-          <label>Who is the tool for? One line.</label>
-          <input type="text" name="audience" placeholder="Renters signing a new lease in NYC.">
-        </div>
-      </fieldset>
-
-      <fieldset class="fieldset">
-        <legend>03 &middot; Data &amp; upkeep</legend>
-        <div class="field">
-          <label>Primary data sources <span class="req">*</span></label>
-          <textarea name="dataSources" placeholder="NYC Open Data, HPD, NYS HCR..." required></textarea>
-          <span class="hint">List each dataset and where it comes from. Tools that don't cite sources get sent back.</span>
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label>Update cadence</label>
-            <select name="cadence">
-              <option>Real-time / on request</option>
-              <option>Daily</option><option>Weekly</option><option>Monthly</option>
-              <option>Quarterly</option><option>Ad hoc</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Current status</label>
-            <select name="status">
-              <option>Live</option><option>In beta</option><option>In development</option>
-            </select>
-          </div>
-        </div>
-      </fieldset>
-
-      <fieldset class="fieldset">
-        <legend>04 &middot; Submitter</legend>
-        <div class="field-row">
-          <div class="field">
-            <label>Your name <span class="req">*</span></label>
-            <input type="text" name="submitterName" placeholder="Maya Chen" required>
-          </div>
-          <div class="field">
-            <label>Email <span class="req">*</span></label>
-            <input type="email" name="submitterEmail" placeholder="you@example.org" required>
-          </div>
-        </div>
-        <div class="field">
-          <label>Affiliation (optional)</label>
-          <input type="text" name="affiliation" placeholder="Bronx Science CS Club &middot; Code for NY &middot; Independent">
-        </div>
-      </fieldset>
-
-      <div class="agree">
-        <input type="checkbox" id="agree" name="agree" required>
-        <label for="agree">I confirm the tool meets the <a href="/about.html">four CivicByte standards</a>: it solves a real civic problem, is free and open-source, is usable by non-technical users, and I commit to keeping it maintained while it's listed.</label>
+        <div class="form-feedback" id="feedback" role="status" aria-live="polite"></div>
       </div>
-
-      <div class="submit-row">
-        <span class="note">We reply from <strong>hello@civicbyte.dev</strong> within 5&ndash;7 business days.</span>
-        <button type="submit" class="btn-primary">Submit for review &rarr;</button>
-      </div>
-
-      <div class="form-success" id="form-success" role="status" aria-live="polite"></div>
     </form>
+  </section>
 
-    <aside class="aside">
-      <div class="card">
-        <h3>Before you submit</h3>
-        <p class="desc">Tools that clear review tend to have these in place. Takes 20 minutes to check.</p>
-        <ul class="checklist">
-          <li><span class="tick">&#10003;</span><div><strong>Public repository with open license</strong><span>MIT or Apache 2.0 is typical. GPL works too.</span></div></li>
-          <li><span class="tick">&#10003;</span><div><strong>Data sources documented in the README</strong><span>Which datasets, from where, with a last-updated date.</span></div></li>
-          <li><span class="tick">&#10003;</span><div><strong>Works on a phone</strong><span>Most users find us from a social post on mobile.</span></div></li>
-          <li><span class="tick">&#10003;</span><div><strong>Plain-language interface</strong><span>No jargon unless the term is what the user is searching for.</span></div></li>
-          <li><span class="tick">&#10003;</span><div><strong>No sign-ups or paywalls</strong><span>Tools are for communities, not leads lists.</span></div></li>
-        </ul>
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">What Happens Next</div>
+        <h2>One human. <em>One week.</em></h2>
       </div>
+      <div class="meta">Review process</div>
+    </header>
 
-      <div class="card">
-        <h3>What happens next</h3>
-        <p class="desc">Every submission gets reviewed by a human &mdash; usually within a week.</p>
-        <ol class="timeline-mini">
-          <li><span class="when">Day 0</span><div><strong>You submit</strong><span>Confirmation email lands in your inbox within 5 minutes.</span></div></li>
-          <li><span class="when">Day 1&ndash;2</span><div><strong>First-pass review</strong><span>Open source, working URL, sources cited.</span></div></li>
-          <li><span class="when">Day 3&ndash;5</span><div><strong>Deeper review</strong><span>Usability on a phone. A reviewer runs a real query.</span></div></li>
-          <li><span class="when">Day 5&ndash;7</span><div><strong>Decision</strong><span>Listed, listed with notes, or sent back with feedback.</span></div></li>
-        </ol>
-      </div>
+    <ol class="ilist">
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">01</span>
+        <span class="ititle">A person reads it</span>
+        <span class="idesc">Every submission is read end-to-end by a member of the editorial board. No keyword filters, no auto-replies, no triage queues you can't see.</span>
+        <span class="imeta"><span class="st">Day 1&ndash;2</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">02</span>
+        <span class="ititle">We try the tool</span>
+        <span class="idesc">On a real device, with a real address or query. Timed against the four standards. Notes filed back if anything blocks a non-technical user.</span>
+        <span class="imeta"><span class="st">Day 3&ndash;5</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">03</span>
+        <span class="ititle">A decision, in writing</span>
+        <span class="idesc">Listed, listed-with-revisions, or not-yet &mdash; with specific reasons either way, and an open invitation to resubmit.</span>
+        <span class="imeta"><span class="st">By day 7</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+    </ol>
+  </section>
 
-      <div class="card dark">
-        <h3>Need help?</h3>
-        <p class="desc">Stuck on a data source, scope, or the "last 20%"? Email us before you submit and we'll pair on it.</p>
-        <p style="font-family:'IBM Plex Mono',monospace; font-size:13px; margin:0;"><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev &rarr;</a></p>
-      </div>
-    </aside>
-  </div>
-
-  <section class="faq-section">
-    <div class="sec-head">
-      <h2>Things <em>people ask</em>.</h2>
-      <span class="meta">&sect;02 &middot; FAQ</span>
-    </div>
-    <div class="faq-grid">
-      <div class="faq"><h4>Do I have to be a student?</h4><p>No. CivicByte is student-founded, but anyone building free, open-source civic tools can submit &mdash; developers, nonprofits, other students, community orgs.</p></div>
-      <div class="faq"><h4>Does it have to be NYC?</h4><p>Not forever. NYC is where we started because it's where we live, but we actively list tools that serve other cities, states, or the whole country.</p></div>
-      <div class="faq"><h4>Can I submit a tool that isn't finished?</h4><p>If it's in beta and usable by a real person, yes. If it's a README and a Figma file, not yet &mdash; come back when it runs.</p></div>
-      <div class="faq"><h4>What if my tool uses paid APIs?</h4><p>Users should never pay or sign up. If your infra cost is covered by you (or a grant), that's fine. If the user has to pay, it won't be listed.</p></div>
-      <div class="faq"><h4>What if I can't keep maintaining it?</h4><p>Tell us. We archive tools with a note &mdash; we don't silently delete them &mdash; and we might be able to hand maintenance to another contributor.</p></div>
-      <div class="faq"><h4>Is this a non-profit?</h4><p>We're operating as an independent project while we establish 501(c)(3) status. All tools are and will stay free regardless.</p></div>
+  <section class="endslug">
+    <p>Stuck on the last 20%? <em>Email us</em> before you submit.</p>
+    <div class="actions">
+      <a href="mailto:hello@civicbyte.dev" class="cta-link">hello@civicbyte.dev <span class="arr">&rarr;</span></a>
+      <a href="/about.html" class="cta-link muted">Read the four standards <span class="arr">&rarr;</span></a>
     </div>
   </section>
 
   <footer>
-    <div class="foot-grid">
+    <div class="fwrap">
       <div>
-        <a href="/" class="mark">civic<em>byte</em>.</a>
-        <p>An independent NYC civic-data project. Free, open-source tools built on public records. Released under MIT.</p>
+        <p class="fmark">CivicByte<span class="amp">.</span></p>
+        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
       </div>
-      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/about.html">About</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
-      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/brand.html">Brand</a></li></ul></div>
-      <div><h5>Contact</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">About</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
     </div>
     <div class="colophon">
       <span>&copy; 2026 CivicByte &middot; MIT License</span>
-      <span>Set in Fraunces &middot; Newsreader &middot; IBM Plex Mono</span>
-      <span>Printed on the open web</span>
+      <span>Set in Newsreader, Inter Tight &amp; IBM Plex Mono &middot; Made in NYC</span>
     </div>
   </footer>
 
@@ -404,81 +313,56 @@
 <script>
 (function(){
   const form = document.getElementById('submit-form');
-  const okBox = document.getElementById('form-success');
+  const fb = document.getElementById('feedback');
   if (!form) return;
-  function getValues() {
-    const fd = new FormData(form);
-    const out = {};
-    for (const [k, v] of fd.entries()) {
-      if (k === 'tags') { out.tags = out.tags || []; out.tags.push(v); continue; }
-      out[k] = v;
-    }
-    return out;
-  }
-  function validate(v) {
-    const required = ['toolName','liveUrl','repoUrl','shortDesc','category','dataSources','submitterName','submitterEmail'];
-    for (const k of required) if (!v[k] || String(v[k]).trim() === '') return 'Please fill in every required field — "' + k + '" is missing.';
-    if (!form.querySelector('#agree').checked) return 'Please confirm the four CivicByte standards before submitting.';
-    if (!/^https?:\/\//i.test(v.liveUrl)) return 'Live URL needs to start with http:// or https://.';
-    if (!/^https?:\/\//i.test(v.repoUrl)) return 'Repository URL needs to start with http:// or https://.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.submitterEmail)) return 'That email address doesn\'t look valid.';
+
+  function valid(d) {
+    const need = ['name','problem','live','repo','cat','data','contact'];
+    for (const k of need) if (!d[k] || String(d[k]).trim() === '') return 'Missing required field: ' + k + '.';
+    if (!/^https?:\/\//i.test(d.live)) return 'Live URL needs to start with http:// or https://.';
+    if (!/^https?:\/\//i.test(d.repo)) return 'Source repository needs to start with http:// or https://.';
     return null;
   }
-  function compose(v) {
-    const lines = [];
-    lines.push('CivicByte tool submission');
-    lines.push('=========================');
-    lines.push('');
-    lines.push('Tool: ' + (v.toolName || ''));
-    lines.push('Live URL: ' + (v.liveUrl || ''));
-    lines.push('Repo: ' + (v.repoUrl || ''));
-    lines.push('');
-    lines.push('Short description:');
-    lines.push(v.shortDesc || '');
-    lines.push('');
-    if (v.longDesc) { lines.push('Longer description:'); lines.push(v.longDesc); lines.push(''); }
-    lines.push('Category: ' + (v.category || ''));
-    if (v.tags && v.tags.length) lines.push('Tags: ' + v.tags.join(', '));
-    if (v.audience) lines.push('Audience: ' + v.audience);
-    lines.push('');
-    lines.push('Data sources:');
-    lines.push(v.dataSources || '');
-    lines.push('');
-    lines.push('Update cadence: ' + (v.cadence || ''));
-    lines.push('Status: ' + (v.status || ''));
-    lines.push('');
-    lines.push('— Submitted by —');
-    lines.push((v.submitterName || '') + ' <' + (v.submitterEmail || '') + '>');
-    if (v.affiliation) lines.push('Affiliation: ' + v.affiliation);
-    lines.push('');
-    lines.push('Confirmed the four CivicByte standards: yes');
-    return lines.join('\n');
-  }
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const v = getValues();
-    const err = validate(v);
+    const fd = new FormData(form);
+    const d = {};
+    for (const [k,v] of fd.entries()) d[k] = v;
+    const err = valid(d);
     if (err) {
-      okBox.className = 'form-success error shown';
-      okBox.innerHTML = '<strong>Hold on —</strong> ' + err;
-      okBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      fb.className = 'form-feedback error shown';
+      fb.textContent = err;
+      fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       return;
     }
     try {
       const stored = JSON.parse(localStorage.getItem('cb_submissions') || '[]');
-      stored.push({ ts: new Date().toISOString(), data: v });
+      stored.push({ ts: new Date().toISOString(), data: d });
       localStorage.setItem('cb_submissions', JSON.stringify(stored));
     } catch (e) {}
-    const body = compose(v);
-    const subject = 'CivicByte tool submission · ' + v.toolName;
-    const mailto = 'mailto:hello@civicbyte.dev?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    okBox.className = 'form-success shown';
-    okBox.innerHTML =
-      '<strong>Got it.</strong> Your mail client should now open with the submission addressed to ' +
-      '<a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a>. ' +
-      'If nothing happened, copy the details from the form and send them manually &mdash; we will respond within a week. ' +
-      '<a href="' + mailto + '">Re-open mail client &rarr;</a>';
-    okBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const lines = [
+      'CivicByte tool submission',
+      '=========================',
+      '',
+      'Tool: ' + d.name,
+      'Problem: ' + d.problem,
+      'Live URL: ' + d.live,
+      'Repo: ' + d.repo,
+      'Category: ' + d.cat,
+      '',
+      'Data sources:',
+      d.data,
+      '',
+      'Upkeep: ' + (d.upkeep || '—'),
+      '',
+      'Submitted by: ' + d.contact,
+    ].join('\n');
+    const subject = 'CivicByte tool submission · ' + d.name;
+    const mailto = 'mailto:hello@civicbyte.dev?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines);
+    fb.className = 'form-feedback ok shown';
+    fb.innerHTML = 'Your mail client should open with the submission addressed to <a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a>. If nothing happens, <a href="' + mailto + '">re-open it here</a> — we will respond within a week.';
+    fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     window.location.href = mailto;
   });
 })();

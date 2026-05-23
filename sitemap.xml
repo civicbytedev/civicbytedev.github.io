@@ -13,37 +13,43 @@
     <lastmod>2026-05-23</lastmod>
   </url>
   <url>
-    <loc>https://civicbyte.dev/nyc-building-checker/</loc>
+    <loc>https://civicbyte.dev/tool-building-report.html</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <lastmod>2026-05-23</lastmod>
   </url>
   <url>
-    <loc>https://civicbyte.dev/nyc-landlord-watch/</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2026-05-23</lastmod>
-  </url>
-  <url>
-    <loc>https://civicbyte.dev/nyc-311-complaints/</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-23</lastmod>
-  </url>
-  <url>
-    <loc>https://civicbyte.dev/nyc-eviction-records/</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-23</lastmod>
-  </url>
-  <url>
-    <loc>https://civicbyte.dev/nyc-school-budget/</loc>
+    <loc>https://civicbyte.dev/tool-landlord-watch.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <lastmod>2026-05-23</lastmod>
   </url>
   <url>
+    <loc>https://civicbyte.dev/tool-school-budget.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-05-23</lastmod>
+  </url>
+  <url>
+    <loc>https://civicbyte.dev/tool-eviction-records.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-05-23</lastmod>
+  </url>
+  <url>
+    <loc>https://civicbyte.dev/tool-311-lookup.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-05-23</lastmod>
+  </url>
+  <url>
     <loc>https://civicbyte.dev/story.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-05-23</lastmod>
+  </url>
+  <url>
+    <loc>https://civicbyte.dev/impact.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <lastmod>2026-05-23</lastmod>

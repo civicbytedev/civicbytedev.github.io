@@ -2,360 +2,128 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>The Story &middot; CivicByte</title>
+<title>The Story &mdash; CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="How CivicByte started, who uses the tools, and what's changed because of them.">
+<meta name="description" content="The founding note. Why CivicByte exists, and the problem we're trying to close.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500;1,9..144,600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
-<meta name="theme-color" content="#b8432b">
+<meta name="theme-color" content="#B33E16">
 <script defer src="/civicbyte-fx.js"></script>
-<link rel="stylesheet" href="/civicbyte.css">
-<style>
-  .bignums { padding: 36px 48px; display:grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid var(--ink); border-bottom: 1px solid var(--ink); background: var(--cream); }
-  .bignum { padding: 26px 22px; border-right: 1px solid var(--ink); }
-  .bignum:last-child { border-right: none; }
-  .bignum .k {
-    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft);
-  }
-  .bignum .n {
-    font-family:'Fraunces', serif; font-weight: 500; font-size: 56px;
-    line-height: 0.95; letter-spacing: -0.025em; margin-top: 14px;
-    font-variant-numeric: tabular-nums;
-  }
-  .bignum .n em { font-style: italic; color: var(--brick); }
-  .bignum .note {
-    font-family:'Inter Tight', sans-serif; font-size: 12.5px;
-    color: var(--ink-soft); line-height: 1.45; margin-top: 8px;
-  }
-
-  /* Article body */
-  .article { padding: 56px 48px; background: var(--cream); border-bottom: 1px solid var(--ink); }
-  .article .head {
-    display: grid; grid-template-columns: 180px 1fr; gap: 48px;
-    padding-bottom: 22px; border-bottom: 1px solid var(--ink); margin-bottom: 28px;
-  }
-  .article .head .kd {
-    font-family:'IBM Plex Mono', monospace; font-size: 11px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft);
-  }
-  .article .head h2 {
-    font-family:'Fraunces', serif; font-weight: 500; font-size: 48px;
-    letter-spacing: -0.02em; line-height: 1; margin: 0;
-  }
-  .article .head h2 em { color: var(--brick); font-style: italic; }
-  .article-body { display: grid; grid-template-columns: 180px 1fr; gap: 48px; }
-  .article-body .meta {
-    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft);
-    line-height: 1.6;
-  }
-  .article-body p {
-    font-family:'Newsreader', Georgia, serif; font-size: 17px;
-    line-height: 1.7; color: var(--ink); margin: 0 0 18px; max-width: 64ch;
-  }
-  .article-body p:first-of-type::first-letter {
-    font-family:'Fraunces', serif; font-weight: 700; font-size: 64px;
-    float: left; line-height: 0.88; padding: 6px 12px 0 0; color: var(--ink);
-  }
-  .article-body p strong { color: var(--ink); font-weight: 600; }
-  .article-body a { color: var(--brick); }
-
-  /* Use cases */
-  .usecases { padding: 56px 48px; background: var(--paper); border-bottom: 1px solid var(--ink); }
-  .uc-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
-    border-top: 2px solid var(--ink);
-  }
-  .uc {
-    padding: 28px 26px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink);
-    background: var(--cream);
-  }
-  .uc:nth-child(3n) { border-right: none; }
-  .uc .who {
-    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--brick);
-    margin-bottom: 10px;
-  }
-  .uc h4 {
-    font-family:'Fraunces', serif; font-weight: 600; font-size: 22px;
-    margin: 0 0 10px; letter-spacing: -0.015em; line-height: 1.2;
-  }
-  .uc p {
-    font-family:'Newsreader', serif; font-size: 15px;
-    line-height: 1.55; color: var(--ink); margin: 0 0 12px;
-  }
-  .uc .tool {
-    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.1em; color: var(--ink-soft); padding-top: 8px;
-    border-top: 1px dotted rgba(29,26,21,0.3);
-  }
-  .uc .tool a { color: var(--brick); font-weight: 600; text-decoration: none; }
-
-  /* Timeline */
-  .timeline-section { padding: 56px 48px; background: var(--cream); border-bottom: 1px solid var(--ink); }
-  .tl-list { border-top: 2px solid var(--ink); }
-  .tl-row {
-    display: grid; grid-template-columns: 180px 1fr; gap: 32px;
-    padding: 26px 0; border-bottom: 1px solid var(--ink); align-items: baseline;
-  }
-  .tl-row .when {
-    font-family:'IBM Plex Mono', monospace; font-size: 12px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--brick);
-  }
-  .tl-row h4 {
-    font-family:'Fraunces', serif; font-weight: 600; font-size: 24px;
-    letter-spacing: -0.015em; line-height: 1.15; margin: 0 0 6px;
-  }
-  .tl-row p {
-    font-family:'Newsreader', serif; font-size: 16px; line-height: 1.6;
-    color: var(--ink); margin: 0; max-width: 70ch;
-  }
-
-  /* Methodology box */
-  .method { padding: 48px; background: var(--paper-2); border-bottom: 1px solid var(--ink); }
-  .method-box {
-    background: var(--cream); border: 1px solid var(--ink);
-    padding: 32px 36px; display: grid; grid-template-columns: 1fr 2fr; gap: 40px;
-  }
-  .method h3 {
-    font-family:'Fraunces', serif; font-weight: 500; font-size: 30px;
-    letter-spacing: -0.02em; line-height: 1.05; margin: 0; max-width: 14ch;
-  }
-  .method h3 em { color: var(--brick); font-style: italic; }
-  .method .body {
-    font-family:'Newsreader', serif; font-size: 16px; line-height: 1.65; color: var(--ink);
-  }
-  .method .body strong { color: var(--ink); font-weight: 600; }
-  .method .body p:not(:last-child) { margin-bottom: 14px; }
-
-  @media (max-width: 980px) {
-    .bignums { grid-template-columns: 1fr 1fr; padding: 24px 24px; }
-    .bignum { border-right: none; border-bottom: 1px solid var(--ink); padding: 18px 16px; }
-    .bignum:nth-child(2n) { border-right: none; }
-    .bignum:last-child, .bignum:nth-last-child(2) { border-bottom: none; }
-    .bignum .n { font-size: 38px; }
-    .article { padding: 36px 24px; }
-    .article .head { grid-template-columns: 1fr; gap: 14px; }
-    .article .head h2 { font-size: 32px; }
-    .article-body { grid-template-columns: 1fr; gap: 14px; }
-    .usecases { padding: 36px 24px; }
-    .uc-grid { grid-template-columns: 1fr; border-left: 1px solid var(--ink); }
-    .uc { border-right: none; }
-    .timeline-section { padding: 36px 24px; }
-    .tl-row { grid-template-columns: 1fr; gap: 6px; }
-    .method { padding: 24px; }
-    .method-box { grid-template-columns: 1fr; padding: 24px; gap: 18px; }
-  }
-</style>
+<link rel="stylesheet" href="/civicbyte-editorial.css">
 </head>
 <body>
 
 <div class="page">
 
-  <div class="masthead">
-    <span>Vol. 01 &middot; No. 18 &middot; Saturday, May 23, 2026</span>
-    <span>The Story &middot; Impact Report 2026</span>
-    <span>Free &middot; Open Source</span>
-  </div>
-
-  <nav class="nav">
-    <div class="nav-left">
-      <a href="/" class="mark">civic<em>byte</em>.</a>
-      <span class="tag">Est. 2024 &middot; New York</span>
+  <header class="masthead">
+    <div class="l">
+      <span><span class="tick"></span>Vol. 01 &nbsp;&middot;&nbsp; No. 18</span>
+      <span class="sep">&middot;</span>
+      <span>Saturday, May 23, 2026</span>
     </div>
+    <a href="/" class="wordmark">CivicByte<span class="amp">.</span></a>
+    <div class="r">
+      <span>An independent NYC civic data project</span>
+      <span class="sep">&middot;</span>
+      <span>Open source &middot; MIT</span>
+    </div>
+  </header>
+
+  <nav class="secnav">
     <ul>
       <li><a href="/">Front Page</a></li>
       <li><a href="/tools.html">Tools</a></li>
-      <li><a href="/story.html" class="active">The Story</a></li>
+      <li><a href="/story.html" class="is-active">The Story</a></li>
       <li><a href="/about.html">About</a></li>
     </ul>
-    <a href="/submit.html" class="cta">Submit a tool</a>
+    <div class="right">
+      <span>Built something?</span>
+      <a href="/submit.html" class="open">Submit a tool &rarr;</a>
+    </div>
   </nav>
 
-  <section class="page-hero">
-    <div class="kicker">&sect;01 &mdash; Impact Report 2026</div>
-    <h1>What happens when public data <em>reaches people</em>.</h1>
-    <p class="lede">
-      We measure success by community impact, not GitHub stars. Here's how the tools on
-      CivicByte are being used &mdash; who's using them, what they've found, and what's
-      changed because of them.
-    </p>
+  <section class="hero">
+    <div class="dateline">
+      <span>The Story</span>
+      <span class="sep">&middot;</span>
+      <span>Filed under Housing &middot; Open data</span>
+      <span class="sep">&middot;</span>
+      <span>2,800 words</span>
+    </div>
+    <h1>The notices kept coming, <span class="em">even after he died.</span></h1>
   </section>
 
-  <!-- Big numbers -->
-  <section class="bignums">
-    <div class="bignum">
-      <div class="k">Records indexed</div>
-      <div class="n"><em>35M+</em></div>
-      <div class="note">311 complaints, HPD violations, evictions &mdash; pulled live from NYC Open Data.</div>
-    </div>
-    <div class="bignum">
-      <div class="k">Addresses searchable</div>
-      <div class="n">1.1M</div>
-      <div class="note">Every residential and mixed-use address in the five boroughs.</div>
-    </div>
-    <div class="bignum">
-      <div class="k">Public schools</div>
-      <div class="n"><em>1,800</em></div>
-      <div class="note">Per-pupil spending, Title I, and PTA contributions across NYC.</div>
-    </div>
-    <div class="bignum">
-      <div class="k">Cost to communities</div>
-      <div class="n"><em>$0</em></div>
-      <div class="note">No sign-ups. No paywalls. No tracking. Always.</div>
-    </div>
-  </section>
+  <section class="section">
+    <div class="article-grid">
+      <aside class="byline">
+        <div><b>A founding note</b></div>
+        <div class="accent">NYC &middot; 2025</div>
+        <div class="sec"><b>By</b></div>
+        <div>The CivicByte team</div>
+        <div class="sec"><b>Filed under</b></div>
+        <div>Housing</div>
+        <div>Open data</div>
+        <div>Public &ne; usable</div>
+        <div class="sec"><b>Cited datasets</b></div>
+        <div>HPD violations</div>
+        <div>DOF arrears</div>
+        <div>NYC Open Data</div>
+      </aside>
 
-  <!-- Founding story -->
-  <section class="article">
-    <div class="head">
-      <span class="kd">&sect;02 &middot; Our story</span>
-      <h2>Built <em>in public</em>, from day one.</h2>
-    </div>
-    <div class="article-body">
-      <span class="meta">Filed by<br>The Editors</span>
-      <div>
-        <p>CivicByte started as a student initiative to make public data actually useful to the communities it's supposed to serve. We noticed that governments collect enormous amounts of data &mdash; about schools, housing, public services, infrastructure &mdash; but that data almost never reaches the people it affects in any usable form.</p>
-        <p>Our first tool, the NYC School Budget Tracker, was built to change that for one specific problem: helping parents, advocates, and community members understand how money flows through NYC public schools. We heard from PTAs, teachers, and journalists who used it to find answers they couldn't get from official documents.</p>
-        <p>That experience showed us the model. The problem isn't data availability &mdash; most of it is technically public. The problem is <strong>usability</strong>. CivicByte exists to close that gap, tool by tool, community by community.</p>
-        <p><a href="https://github.com/civicbytedev">Follow our progress on GitHub &rarr;</a></p>
-      </div>
-    </div>
-  </section>
+      <article class="prose">
+        <p class="lead drop">Overdue fees. Penalties stacked on penalties. Charges no one could explain &mdash; addressed to a man who wasn't there to read them.</p>
 
-  <!-- Use cases -->
-  <section class="usecases">
-    <div class="sec-head">
-      <h2>Real people, <em>real decisions</em>.</h2>
-      <span class="meta">&sect;03 &middot; In the field &middot; A sampling</span>
-    </div>
-    <div class="uc-grid">
-      <div class="uc">
-        <div class="who">A Bronx parent &middot; Pre-lease</div>
-        <h4>Checked a building before signing.</h4>
-        <p>Found 14 open HPD violations and three executed evictions in the prior 24 months. Kept looking. Saved a security deposit and a month of fighting to break a lease.</p>
-        <div class="tool">Tool: <a href="/nyc-building-checker/">Building Report</a> &middot; <a href="/nyc-eviction-records/">Evictions</a></div>
-      </div>
-      <div class="uc">
-        <div class="who">A PTA in Queens &middot; Advocacy</div>
-        <h4>Asked where the money actually went.</h4>
-        <p>Used the School Budget Tracker to compare Title I allocations at their school against similar ones in the district. Brought the printout to a community ed council meeting.</p>
-        <div class="tool">Tool: <a href="/nyc-school-budget/">Budget Tracker</a></div>
-      </div>
-      <div class="uc">
-        <div class="who">A local reporter &middot; Accountability</div>
-        <h4>Traced an LLC across 42 buildings.</h4>
-        <p>Used Landlord Watch to map one portfolio's violation history. Story ran in a neighborhood paper; the AG's office followed up a month later.</p>
-        <div class="tool">Tool: <a href="/nyc-landlord-watch/">Landlord Watch</a></div>
-      </div>
-      <div class="uc">
-        <div class="who">A tenant organizer &middot; Canvassing</div>
-        <h4>Pre-canvassed a block with data.</h4>
-        <p>Pulled every 311 heat complaint on a single block over the last two winters. Showed up at doors already knowing which apartments had been calling &mdash; and which had stopped.</p>
-        <div class="tool">Tool: <a href="/nyc-311-complaints/">311 Lookup</a></div>
-      </div>
-      <div class="uc">
-        <div class="who">A legal aid attorney &middot; Case prep</div>
-        <h4>Documented conditions for court.</h4>
-        <p>Assembled a 24-month violation and 311 record for a client's holdover defense in under an hour. Would have taken days of portal hopping otherwise.</p>
-        <div class="tool">Tool: <a href="/nyc-building-checker/">Building Report</a> &middot; <a href="/nyc-311-complaints/">311</a></div>
-      </div>
-      <div class="uc">
-        <div class="who">A community board &middot; Hearing</div>
-        <h4>Brought facts to a land-use hearing.</h4>
-        <p>Board members used the platform to build an overview of code violations on a proposed rezoning corridor. Testimony was specific instead of anecdotal.</p>
-        <div class="tool">Tool: <a href="/tools.html">Multiple</a></div>
-      </div>
+        <p>My grandmother kept the notices in a small wooden box on the kitchen table. By the time she asked us to look at them, there were dozens &mdash; some still sealed, some opened and refolded so many times the creases had gone soft. Different agencies. Different headers. The same name on every one.</p>
+
+        <p>She wanted to know two things. Why the city was still billing him. And whether she was going to lose the apartment because of it.</p>
+
+        <p>The records technically existed. NYC's open data portal publishes them in long flat files: HPD violations, DOF arrears, parking judgments, every notice ever mailed by every agency. You can download a CSV with three million rows in about a minute. You just have to know which dataset to pull, how to filter it, what the codes mean, and which fields actually reconcile against the paper in your hand.</p>
+
+        <blockquote>Public, but not usable. That's the gap CivicByte lives in.</blockquote>
+
+        <p>The gap isn't a technology problem. The data is there. The schemas are documented. The endpoints are open. The gap is that <strong>nobody has done the unglamorous work of turning the raw publication into something a person in their kitchen can actually use</strong> &mdash; not a developer, not a journalist, not a policy researcher, but a tenant, a parent, a grandmother.</p>
+
+        <p>So we started doing it. One tool at a time. Each one built around a single question someone actually asked us: <em>what does the city already know about my building?</em> <em>Why am I getting these letters?</em> <em>Has anyone been evicted from this address before?</em> <em>Where does my kid's school's budget actually go?</em></p>
+
+        <p>The rules we set ourselves are short. A CivicByte tool has to solve a real problem someone in the five boroughs has, today. It has to be free, with no logins and no tracking. It has to be readable by someone who has never opened a spreadsheet. And it has to stay maintained &mdash; not just shipped and abandoned, but pulled fresh from the source on a schedule and held accountable to it.</p>
+
+        <p>That's it. There's no grand thesis. No platform play. No funding round. Just a quiet conviction that the data the city already publishes ought to be useful to the people whose lives it describes &mdash; and a willingness to do the boring middle-mile work of making it so.</p>
+
+        <p>The notices on my grandmother's table are still there. They're easier to read now.</p>
+
+        <p class="cite">Founding note &middot; NYC, 2025</p>
+      </article>
     </div>
   </section>
 
-  <!-- Quote pull -->
-  <section class="quote-section">
-    <div class="k">&sect;04 &middot; In their words</div>
-    <blockquote>
-      I spent two weeks looking for this data in PDFs before I found your tool.
-      It took five seconds.
-    </blockquote>
-    <cite>&mdash; M.S., Parent &middot; Queens &middot; School Budget Tracker user</cite>
-  </section>
-
-  <!-- Milestones -->
-  <section class="timeline-section">
-    <div class="sec-head">
-      <h2>The platform, <em>year over year</em>.</h2>
-      <span class="meta">&sect;05 &middot; Milestones</span>
-    </div>
-    <div class="tl-list">
-      <div class="tl-row">
-        <div class="when">Q2 &middot; 2026</div>
-        <div>
-          <h4>Fifth tool live: 311 Complaint Lookup.</h4>
-          <p>35M+ records indexed, 100+ complaint types. Fills the last major address-level gap in the housing data stack.</p>
-        </div>
-      </div>
-      <div class="tl-row">
-        <div class="when">Q1 &middot; 2026</div>
-        <div>
-          <h4>Eviction Records launched.</h4>
-          <p>All five boroughs, 100k+ executed marshal evictions. Becomes the most-shared tool in tenant-organizing channels in the weeks after launch.</p>
-        </div>
-      </div>
-      <div class="tl-row">
-        <div class="when">Q4 &middot; 2025</div>
-        <div>
-          <h4>Platform standards formalized.</h4>
-          <p>The four-standard review process goes live. First external submissions accepted into the directory.</p>
-        </div>
-      </div>
-      <div class="tl-row">
-        <div class="when">Q3 &middot; 2025</div>
-        <div>
-          <h4>Landlord Watch &amp; Building Report.</h4>
-          <p>Portfolio-level search on top of HPD violations. Tools start being cited in local reporting.</p>
-        </div>
-      </div>
-      <div class="tl-row">
-        <div class="when">Q1 &middot; 2025</div>
-        <div>
-          <h4>NYC School Budget Tracker.</h4>
-          <p>The first CivicByte tool. Built in response to a PTA asking how to read their school's budget documents.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Methodology -->
-  <section class="method">
-    <div class="method-box">
-      <h3>How we <em>measure</em> this.</h3>
-      <div class="body">
-        <p>We don't have, and don't want, user accounts. That means we measure carefully: <strong>server-side request counts</strong> (aggregate, non-identifying), <strong>referrer patterns</strong> (which tenant forums, newsrooms, and advocacy sites send traffic), and <strong>direct testimonials</strong> from people who email, open GitHub issues, or mention us publicly.</p>
-        <p>Numbers on this page are conservative &mdash; rounded down, excluding bots, and only counting sessions that completed at least one search. When a metric is directional rather than precise, we say so.</p>
-      </div>
+  <section class="endslug">
+    <p>Built something useful, or <em>stuck on a problem</em> the city won't explain?</p>
+    <div class="actions">
+      <a href="/submit.html" class="cta-link">Submit a tool <span class="arr">&rarr;</span></a>
+      <a href="/tools.html" class="cta-link muted">Browse the index <span class="arr">&rarr;</span></a>
     </div>
   </section>
 
   <footer>
-    <div class="foot-grid">
+    <div class="fwrap">
       <div>
-        <a href="/" class="mark">civic<em>byte</em>.</a>
-        <p>An independent NYC civic-data project. Free, open-source tools built on public records. Released under MIT.</p>
+        <p class="fmark">CivicByte<span class="amp">.</span></p>
+        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
       </div>
-      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/about.html">About</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
-      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/brand.html">Brand</a></li></ul></div>
-      <div><h5>Contact</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">About</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
     </div>
     <div class="colophon">
       <span>&copy; 2026 CivicByte &middot; MIT License</span>
-      <span>Set in Fraunces &middot; Newsreader &middot; IBM Plex Mono</span>
-      <span>Printed on the open web</span>
+      <span>Set in Newsreader, Inter Tight &amp; IBM Plex Mono &middot; Made in NYC</span>
     </div>
   </footer>
 
 </div>
+
 </body>
 </html>

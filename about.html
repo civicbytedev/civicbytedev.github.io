@@ -2,217 +2,163 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>About &middot; CivicByte</title>
+<title>About &mdash; CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="The four standards every CivicByte tool must clear, and the values behind the platform.">
+<meta name="description" content="The four standards every CivicByte tool must clear — and the mission behind them.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500;1,9..144,600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
-<meta name="theme-color" content="#b8432b">
+<meta name="theme-color" content="#B33E16">
 <script defer src="/civicbyte-fx.js"></script>
-<link rel="stylesheet" href="/civicbyte.css">
-<style>
-  .standards { padding: 48px 48px 56px; background: var(--cream); border-bottom: 1px solid var(--ink); }
-  .std-list { border-top: 2px solid var(--ink); }
-  .std {
-    display: grid; grid-template-columns: 120px 1fr 2fr; gap: 36px;
-    padding: 32px 0; border-bottom: 1px solid var(--ink); align-items: baseline;
-  }
-  .std .n {
-    font-family:'IBM Plex Mono', monospace; font-size: 14px;
-    letter-spacing: 0.14em; color: var(--brick); font-weight: 600;
-  }
-  .std h3 {
-    font-family:'Fraunces', serif; font-weight: 600; font-size: 30px;
-    margin: 0; letter-spacing: -0.015em; line-height: 1.1;
-  }
-  .std p {
-    font-family:'Newsreader', Georgia, serif; font-size: 17px;
-    line-height: 1.6; color: var(--ink); margin: 0; max-width: 60ch;
-  }
-
-  .about-cta { padding: 48px; background: var(--ink); color: var(--cream); border-bottom: 1px solid var(--ink); }
-  .about-cta .grid {
-    display: grid; grid-template-columns: 2fr 1fr; gap: 48px; align-items: center;
-  }
-  .about-cta h3 {
-    font-family:'Fraunces', serif; font-weight: 500; font-size: 38px;
-    line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 14px;
-  }
-  .about-cta h3 em { color: var(--ochre); font-style: italic; }
-  .about-cta p {
-    font-family:'Newsreader', serif; font-size: 17px; line-height: 1.55;
-    color: rgba(248,244,234,0.85); margin: 0; max-width: 50ch;
-  }
-  .about-cta .btns { display:flex; flex-direction:column; gap: 12px; }
-  .about-cta .btns a {
-    padding: 14px 22px; text-align: center; border-radius: 2px;
-    text-decoration: none; font-weight: 600; font-size: 14px;
-    font-family:'Inter Tight', sans-serif;
-  }
-  .about-cta .btns a.primary { background: var(--cream); color: var(--ink); }
-  .about-cta .btns a.primary:hover { background: var(--brick); color: #fff; }
-  .about-cta .btns a.ghost {
-    border: 1px solid rgba(248,244,234,0.3); color: var(--cream);
-  }
-  .about-cta .btns a.ghost:hover { border-color: var(--cream); }
-
-  @media (max-width: 980px) {
-    .standards { padding: 36px 24px; }
-    .std { grid-template-columns: 1fr; gap: 8px; padding: 24px 0; }
-    .std h3 { font-size: 24px; }
-    .about-cta { padding: 36px 24px; }
-    .about-cta .grid { grid-template-columns: 1fr; gap: 24px; }
-    .about-cta h3 { font-size: 28px; }
-  }
-</style>
+<link rel="stylesheet" href="/civicbyte-editorial.css">
 </head>
 <body>
 
 <div class="page">
 
-  <div class="masthead">
-    <span>Vol. 01 &middot; No. 18 &middot; Saturday, May 23, 2026</span>
-    <span>About &middot; Standards and values</span>
-    <span>Free &middot; Open Source</span>
-  </div>
-
-  <nav class="nav">
-    <div class="nav-left">
-      <a href="/" class="mark">civic<em>byte</em>.</a>
-      <span class="tag">Est. 2024 &middot; New York</span>
+  <header class="masthead">
+    <div class="l">
+      <span><span class="tick"></span>Vol. 01 &nbsp;&middot;&nbsp; No. 18</span>
+      <span class="sep">&middot;</span>
+      <span>Saturday, May 23, 2026</span>
     </div>
+    <a href="/" class="wordmark">CivicByte<span class="amp">.</span></a>
+    <div class="r">
+      <span>An independent NYC civic data project</span>
+      <span class="sep">&middot;</span>
+      <span>Open source &middot; MIT</span>
+    </div>
+  </header>
+
+  <nav class="secnav">
     <ul>
       <li><a href="/">Front Page</a></li>
       <li><a href="/tools.html">Tools</a></li>
       <li><a href="/story.html">The Story</a></li>
-      <li><a href="/about.html" class="active">About</a></li>
+      <li><a href="/about.html" class="is-active">About</a></li>
     </ul>
-    <a href="/submit.html" class="cta">Submit a tool</a>
+    <div class="right">
+      <span>Built something?</span>
+      <a href="/submit.html" class="open">Submit a tool &rarr;</a>
+    </div>
   </nav>
 
-  <section class="page-hero">
-    <div class="kicker">&sect;01 &mdash; About CivicByte</div>
-    <h1>Four <em>standards</em>, six <em>rules</em>, one <em>principle</em>.</h1>
-    <p class="lede">
-      Every tool listed on CivicByte has to clear the same four checks before it ships.
-      These aren't suggestions &mdash; they're the floor. The six rules underneath them are
-      how we work; the one principle is why.
-    </p>
+  <section class="hero compact">
+    <div class="dateline">
+      <span>About</span>
+      <span class="sep">&middot;</span>
+      <span>The standards &middot; The mission &middot; The masthead</span>
+    </div>
+    <h1>Technology should <span class="em">serve</span> the public.</h1>
   </section>
 
-  <section class="standards">
-    <div class="sec-head">
-      <h2>The <em>four standards</em>.</h2>
-      <span class="meta">&sect;02 &middot; Platform &middot; Non-negotiable</span>
-    </div>
-    <div class="std-list">
-      <div class="std">
-        <div class="n">Standard 01</div>
-        <h3>Solves a real civic problem.</h3>
-        <p>Every tool must address a specific, documented need identified by or validated with a community. "Interesting dataset" doesn't qualify on its own. We want to know who is stuck and what we're unsticking.</p>
-      </div>
-      <div class="std">
-        <div class="n">Standard 02</div>
-        <h3>Free and open source.</h3>
-        <p>Freely accessible with no paywalls or sign-ups. Source code must be public under an open license, with data sources cited. If a user has to pay, it won't be listed.</p>
-      </div>
-      <div class="std">
-        <div class="n">Standard 03</div>
-        <h3>Usable by non-technical users.</h3>
-        <p>Tools are for community members, not developers. Clear interfaces, plain language, mobile-friendly. No CLI, no auth maze, no spreadsheets to download and parse.</p>
-      </div>
-      <div class="std">
-        <div class="n">Standard 04</div>
-        <h3>Maintained and reliable.</h3>
-        <p>Submitters commit to keeping tools functional and data current. Abandoned tools are archived with a note, not quietly deleted. The platform's value is in things that still work next year.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Principles (six rules) -->
-  <section class="principles">
-    <div>
-      <div class="st">&sect;03 &mdash; The six rules</div>
-      <h2>How we work, <em>day to day</em>.</h2>
-    </div>
-    <div class="pr-grid">
-      <div class="pr">
-        <div class="n">01</div>
-        <h4>Radical transparency.</h4>
-        <p>Every line of code is public. Every dataset is cited. Civic tech built behind closed doors defeats its own purpose.</p>
-      </div>
-      <div class="pr">
-        <div class="n">02</div>
-        <h4>Community-first design.</h4>
-        <p>Every project starts with a real problem identified by a real community &mdash; not by us, not by a dataset.</p>
-      </div>
-      <div class="pr">
-        <div class="n">03</div>
-        <h4>Accessible by default.</h4>
-        <p>If a tool needs technical expertise to use, it has failed. Built for parents, organizers, advocates &mdash; not other developers.</p>
-      </div>
-      <div class="pr">
-        <div class="n">04</div>
-        <h4>Open platform.</h4>
-        <p>CivicByte isn't one team's portfolio. It's a shelf where anyone can contribute tools that serve the public good.</p>
-      </div>
-      <div class="pr">
-        <div class="n">05</div>
-        <h4>Impact over portfolio.</h4>
-        <p>A tool used by one PTA is worth more than a demo with a thousand GitHub stars. We count uses, not views.</p>
-      </div>
-      <div class="pr">
-        <div class="n">06</div>
-        <h4>Student-led, not limited.</h4>
-        <p>Being student-founded doesn't mean amateur. Production standards because communities depend on us.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- The principle -->
-  <section class="quote-section">
-    <div class="k">&sect;04 &middot; The principle</div>
-    <blockquote>
-      Public data should serve the public. The communities that need transparency
-      most often have the least access to it.
-    </blockquote>
-    <cite>&mdash; CivicByte, founding charter &middot; 2024</cite>
-  </section>
-
-  <!-- CTA -->
-  <section class="about-cta">
-    <div class="grid">
+  <section class="section">
+    <header class="section-head">
       <div>
-        <h3>Want to <em>contribute</em>?</h3>
-        <p>CivicByte is open to developers, students, nonprofits, and community organizations. Build something, submit it, report a data gap, or just use the tools and share them with someone who needs them.</p>
+        <div class="kicker">The Standards</div>
+        <h2>Four rules, for <em>every tool</em> we list.</h2>
       </div>
-      <div class="btns">
-        <a href="/submit.html" class="primary">Submit a tool &rarr;</a>
-        <a href="https://github.com/civicbytedev" class="ghost">View on GitHub</a>
+      <div class="meta">Reviewed by hand &middot; Always</div>
+    </header>
+
+    <ol class="ilist">
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">01</span>
+        <span class="ititle">Solves a real problem</span>
+        <span class="idesc">A specific civic question someone in the five boroughs actually asks. Not a demo. Not a data-viz exercise. Not a portfolio piece. If you can't name the person who needs this and what they'd do with it, it's not ready.</span>
+        <span class="imeta"><span class="st">Standard</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">02</span>
+        <span class="ititle">Free and open</span>
+        <span class="idesc">Free to use, no logins, no tracking, no paywalls &mdash; ever. Source published under an OSI-approved license. Anyone can fork it, audit it, run their own copy of it.</span>
+        <span class="imeta"><span class="st">Standard</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">03</span>
+        <span class="ititle">Usable without a degree</span>
+        <span class="idesc">A non-technical person can complete the primary task in under sixty seconds. Plain language. Real units. No jargon, no spreadsheets, no codes left unexplained.</span>
+        <span class="imeta"><span class="st">Standard</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">04</span>
+        <span class="ititle">Actively maintained</span>
+        <span class="idesc">Data pulled fresh on a documented schedule. Source datasets named and linked. A human you can email if it breaks. Tools that go stale come off the directory.</span>
+        <span class="imeta"><span class="st">Standard</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+    </ol>
+  </section>
+
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Mission</div>
+        <h2>Public data, <em>made usable</em> &mdash; and kept that way.</h2>
       </div>
+      <div class="meta">Founded &middot; NYC, 2025</div>
+    </header>
+
+    <div class="article-grid">
+      <aside class="byline">
+        <div><b>The masthead</b></div>
+        <div class="accent">NYC &middot; 2025</div>
+        <div class="sec"><b>Founded by</b></div>
+        <div>Students, neighbors</div>
+        <div class="sec"><b>Headquartered</b></div>
+        <div>The Bronx</div>
+        <div class="sec"><b>Funded by</b></div>
+        <div>Nobody, yet</div>
+        <div class="sec"><b>License</b></div>
+        <div>MIT</div>
+        <div class="sec"><b>Get in touch</b></div>
+        <div><a href="mailto:hello@civicbyte.dev" style="color: var(--ember);">hello@civicbyte.dev</a></div>
+      </aside>
+
+      <article class="prose">
+        <p class="lead drop">Governments collect enormous amounts of data about schools, housing, public services, and the infrastructure of daily life &mdash; and most of it sits in formats the public can't actually read.</p>
+
+        <p>The data exists. The portals are live. The schemas are documented. What's missing is the unglamorous middle mile: turning a thirty-million-row CSV into something a tenant, a parent, or a grandmother can actually use.</p>
+
+        <p>CivicByte is an open platform for closing that gap. Developers, students, and nonprofits build free tools on top of public data. We review each one against the four standards above. If it clears, we list it in the directory and help the communities who need it find it.</p>
+
+        <p>We're <strong>independent, unfunded, and small on purpose</strong>. The work belongs to the people whose lives the data describes &mdash; not to a vendor, not to a platform, not to whoever bought the domain last.</p>
+
+        <p class="cite">Editorial board &middot; NYC, 2026</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="endslug">
+    <p>Built a civic tool, or <em>want to help</em> review the next one?</p>
+    <div class="actions">
+      <a href="/submit.html" class="cta-link">Submit a tool <span class="arr">&rarr;</span></a>
+      <a href="/story.html" class="cta-link muted">Read the founding story <span class="arr">&rarr;</span></a>
     </div>
   </section>
 
   <footer>
-    <div class="foot-grid">
+    <div class="fwrap">
       <div>
-        <a href="/" class="mark">civic<em>byte</em>.</a>
-        <p>An independent NYC civic-data project. Free, open-source tools built on public records. Released under MIT.</p>
+        <p class="fmark">CivicByte<span class="amp">.</span></p>
+        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
       </div>
-      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/about.html">About</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
-      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/brand.html">Brand</a></li></ul></div>
-      <div><h5>Contact</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">About</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
     </div>
     <div class="colophon">
       <span>&copy; 2026 CivicByte &middot; MIT License</span>
-      <span>Set in Fraunces &middot; Newsreader &middot; IBM Plex Mono</span>
-      <span>Printed on the open web</span>
+      <span>Set in Newsreader, Inter Tight &amp; IBM Plex Mono &middot; Made in NYC</span>
     </div>
   </footer>
 
 </div>
+
 </body>
 </html>
