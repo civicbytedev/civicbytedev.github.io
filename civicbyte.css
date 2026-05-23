@@ -12,54 +12,43 @@ html, body { margin:0; padding:0; background:#f4f0e7; }
    5) faint vignette
    The grain SVGs are stretched horizontally (baseFrequency x is tiny,
    y is moderate) so the noise reads as parallel wood fibres. */
-/* ── Page canvas: NYC blueprint / civic plan ──────────────────
-   Deep prussian-blue field with a precise drafting grid (major + minor),
-   subtle vignette, and a faint paper-grain overlay. Civic, technical,
-   library-of-record — without leaning rustic. */
 body {
-  background-color: #18324a;
+  background-color: #b48a5e;
   background-image:
-    /* major grid lines (every 96px) */
-    linear-gradient(rgba(255,255,255,0.10) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.10) 1px, transparent 1px),
-    /* minor grid lines (every 16px) */
-    linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px),
-    /* soft vignette */
-    radial-gradient(1500px 1100px at 50% 30%, transparent 35%, rgba(8,18,30,0.55) 100%),
-    /* warm corner glow */
-    radial-gradient(900px 700px at 12% -10%, rgba(200,135,51,0.10), transparent 60%),
-    /* base gradient */
-    linear-gradient(180deg, #1d3b58 0%, #16304a 55%, #0f2236 100%);
+    /* sharp grain ticks */
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1400' height='200'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.014 1.0' numOctaves='2' seed='9' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.20  0 0 0 0 0.10  0 0 0 0 0.04  0 0 0 0.22 0'/></filter><rect width='100%25' height='100%25' filter='url(%23w)'/></svg>"),
+    /* mid-grain streaks */
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1600' height='400'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.005 0.36' numOctaves='3' seed='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.28  0 0 0 0 0.14  0 0 0 0 0.06  0 0 0 0.32 0'/></filter><rect width='100%25' height='100%25' filter='url(%23w)'/></svg>"),
+    /* warm rim light + soft vignette */
+    radial-gradient(1400px 900px at 12% -10%, rgba(255,222,170,0.22), transparent 55%),
+    radial-gradient(1400px 1100px at 50% 50%, transparent 45%, rgba(40,20,8,0.28) 100%),
+    /* base honey-oak gradient */
+    linear-gradient(180deg, #c9a172 0%, #b48a5e 60%, #9c724a 100%);
   background-size:
-    96px 96px, 96px 96px,
-    16px 16px, 16px 16px,
+    1400px 200px,
+    1600px 400px,
     auto, auto, auto;
-  background-position:
-    0 0, 0 0,
-    0 0, 0 0,
-    0 0, 0 0, 0 0;
-  background-attachment: fixed, fixed, fixed, fixed, fixed, fixed, fixed;
+  background-attachment: fixed, fixed, fixed, fixed, fixed;
 }
 body::before {
   content: "";
   position: fixed; inset: 0;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.22;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.30;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.14  0 0 0 0 0.07  0 0 0 0 0.03  0 0 0 0.14 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
-/* The .page sits ON the blueprint like a cream document */
+/* The .page sits ON the wood like a sheet of archival paper */
 .page {
   background:
     radial-gradient(1200px 700px at 50% 0%, #faf3e1 0%, #f4ecd6 60%, #efe5c7 100%);
   box-shadow:
-    0 0 0 1px rgba(8,18,30,0.6),
+    0 0 0 1px rgba(40,20,8,0.25),
     inset 0 0 0 1px rgba(255,240,210,0.35),
-    0 30px 70px -25px rgba(0,0,0,0.55),
-    0 70px 140px -45px rgba(0,0,0,0.45);
+    0 30px 70px -25px rgba(40,20,8,0.45),
+    0 70px 130px -45px rgba(40,20,8,0.35);
   margin-top: 22px;
   margin-bottom: 22px;
   border-radius: 4px;
@@ -131,7 +120,7 @@ a { color: var(--ink); }
 .mark:hover .wm-byte { color: var(--brick-dk); }
 .mark .sq {
   width: 26px; height: 26px;
-  background: url("/cb-mark.svg") center/contain no-repeat;
+  background: url("cb-mark.svg") center/contain no-repeat;
   border-radius: 7px;
   flex-shrink: 0;
   transition: transform .35s cubic-bezier(.2,.8,.2,1.2);
@@ -231,20 +220,19 @@ footer ul a { color: var(--ink); text-decoration:none; }
 footer ul a:hover { color: var(--brick); }
 .col2 { display:flex; justify-content:space-between; padding-top: 18px; font-family:'IBM Plex Mono',monospace; font-size: 10.5px; letter-spacing:0.1em; color: var(--ink-soft); }
 
-/* Tool screenshots — pixel-art NYC fragments */
+/* Placeholder screenshot */
 .shot {
   position:relative; overflow:hidden;
-  background: var(--paper-2) center/cover no-repeat;
+  background:
+    repeating-linear-gradient(135deg, rgba(29,26,21,0.07) 0 1px, transparent 1px 9px),
+    var(--paper-2);
   border-bottom: 1px solid rgba(29,26,21,0.1);
-  image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
 }
-.shot.brick { background-image: url("/shot-building.svg"); background-color: #b8432b; background-size: cover; }
-.shot.ochre { background-image: url("/shot-portfolio.svg"); background-color: #c88733; background-size: cover; }
-.shot.moss  { background-image: url("/shot-school.svg"); background-color: #5b6b3a; background-size: cover; }
-.shot.sky   { background-image: url("/shot-eviction.svg"); background-color: #2d5a78; background-size: cover; }
-.shot.ink   { background-image: url("/shot-311.svg"); background-color: #1d1a15; background-size: cover; }
-.shot.soon  { background-image: url("/shot-soon.svg"); background-color: #ebe6d9; background-size: cover; }
+.shot.brick { background: repeating-linear-gradient(135deg, rgba(184,67,43,0.12) 0 1px, transparent 1px 9px), #fbe8dd; }
+.shot.moss  { background: repeating-linear-gradient(135deg, rgba(91,107,58,0.16) 0 1px, transparent 1px 9px), #ecefd8; }
+.shot.ochre { background: repeating-linear-gradient(135deg, rgba(200,135,51,0.16) 0 1px, transparent 1px 9px), #f6ead2; }
+.shot.sky   { background: repeating-linear-gradient(135deg, rgba(45,90,120,0.14) 0 1px, transparent 1px 9px), #d9e7f0; }
+.shot.ink   { background: repeating-linear-gradient(135deg, rgba(29,26,21,0.14) 0 1px, transparent 1px 9px), #d8d3c3; }
 .shot .shot-label {
   position:absolute; inset:auto 10px 10px auto;
   font-family:'IBM Plex Mono',monospace; font-size: 10px;
@@ -434,158 +422,4 @@ footer ul a:hover { color: var(--brick); }
   [data-reveal] { opacity: 1; transform: none; clip-path: none; transition: none; }
   .cb-letter { opacity: 1; transform: none; }
   .cb-marquee > .track, .live-dot, .pixel-bg::before, .byte-halo { animation: none !important; }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   MOBILE — these two rules are the ONLY top-level additions.
-   They ensure the hamburger + drawer are invisible on desktop.
-   Everything else lives inside @media blocks below.
-   ═══════════════════════════════════════════════════════════ */
-.cb-ham    { display: none; }  /* hidden on desktop, shown by media query */
-.nav-drawer { display: none; }  /* hidden always; JS + media query open it */
-
-/* ── iOS Safari: background-attachment:fixed is broken on mobile ── */
-@supports (-webkit-touch-callout: none) {
-  body { background-attachment: scroll, scroll, scroll, scroll, scroll; }
-}
-
-/* ── Tablet ≤ 960px ── */
-@media (max-width: 960px) {
-  .page { margin-top: 10px; margin-bottom: 10px; border-radius: 3px; }
-
-  /* Nav: hide desktop links + CTA, reveal hamburger */
-  .nav { padding: 16px 24px; position: relative; flex-wrap: nowrap; }
-  .nav > ul  { display: none; }
-  .nav > .cta { display: none; }
-  .cb-ham {
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    gap: 5px; cursor: pointer; background: none; border: none; padding: 8px;
-    border-radius: 8px; margin-left: auto; width: 40px; height: 40px;
-  }
-  .cb-ham span {
-    display: block; width: 20px; height: 2px;
-    background: var(--ink); border-radius: 2px;
-    transition: transform .25s, opacity .2s, width .25s;
-    transform-origin: center;
-  }
-  .nav.nav-open .cb-ham span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .nav.nav-open .cb-ham span:nth-child(2) { opacity: 0; width: 0; }
-  .nav.nav-open .cb-ham span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-  /* Drawer — positioned below nav bar */
-  .nav-drawer {
-    position: absolute; top: 100%; left: 0; right: 0; z-index: 200;
-    background: var(--cream);
-    border-top: 1px solid rgba(29,26,21,0.1);
-    border-bottom: 1px solid rgba(29,26,21,0.1);
-    box-shadow: 0 12px 32px -8px rgba(29,26,21,0.18);
-    padding: 8px 24px 20px;
-  }
-  .nav-drawer.open { display: block; }
-  .nav-drawer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
-  .nav-drawer ul a {
-    display: block; padding: 14px 0; font-size: 17px; font-weight: 500;
-    color: var(--ink); text-decoration: none;
-    border-bottom: 1px solid rgba(29,26,21,0.08);
-  }
-  .nav-drawer ul a.active { color: var(--brick); }
-  .nav-drawer .nd-cta {
-    display: block; margin-top: 14px;
-    background: var(--ink); color: var(--cream);
-    padding: 14px 20px; border-radius: 999px; text-align: center;
-    text-decoration: none; font-size: 15px; font-weight: 600;
-  }
-
-  /* Hero */
-  .page-hero { padding: 28px 24px 44px; }
-  .page-hero h1 { font-size: 52px; margin: 14px 0 16px; }
-  .page-hero .lede { font-size: 16px; }
-
-  /* Section heads */
-  .sec-head { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 28px; }
-  .sec-head h2 { font-size: 40px; }
-  .sec-head .r { max-width: none; }
-
-  /* Footer */
-  footer { padding: 40px 24px 24px; margin-top: 40px; }
-  .fg { grid-template-columns: 1fr 1fr; gap: 28px; }
-  .col2 { flex-direction: column; gap: 6px; }
-}
-
-/* ── Phone ≤ 600px ── */
-@media (max-width: 600px) {
-  /* Strip wood-panel texture — full-bleed cream, no margin */
-  body { background-color: var(--paper); background-image: none; }
-  body::before { display: none; }
-  .page { margin: 0; border-radius: 0; box-shadow: none; }
-  .page::before, .page::after, footer::before, footer::after { display: none; }
-
-  .nav { padding: 14px 18px; }
-  .mark { font-size: 20px; }
-  .mark .sq { width: 22px; height: 22px; }
-
-  /* Hero */
-  .page-hero { padding: 22px 18px 36px; }
-  .page-hero h1 { font-size: 40px; letter-spacing: -0.03em; max-width: none; }
-  .page-hero .lede { font-size: 15px; }
-
-  /* Buttons stack */
-  .hero-actions, .actions { flex-direction: column; gap: 10px; }
-  .btn { padding: 15px 20px; font-size: 15px; justify-content: center; text-align: center; }
-
-  /* Section heads */
-  .sec-head { margin-bottom: 20px; }
-  .sec-head h2 { font-size: 32px; }
-  .sec-head .r { font-size: 14px; }
-
-  /* Section padding */
-  .values, .standards { padding: 40px 18px !important; }
-  .mission  { padding: 20px 18px 48px !important; grid-template-columns: 1fr !important; gap: 28px !important; }
-  .story    { padding: 48px 18px !important; grid-template-columns: 1fr !important; gap: 20px !important; }
-  .about-cta { padding: 24px 18px 40px !important; }
-  .about-cta .box { grid-template-columns: 1fr !important; padding: 28px 20px !important; gap: 20px !important; }
-  .about-cta h3 { font-size: 32px !important; }
-  .about-cta .btns { flex-direction: column; }
-
-  /* Mission stats → horizontal scroll strip */
-  .mission .side {
-    display: flex !important; flex-direction: row !important; overflow-x: auto;
-    -webkit-overflow-scrolling: touch; scrollbar-width: none; border-radius: 12px;
-  }
-  .mission .side::-webkit-scrollbar { display: none; }
-  .mission .side .r {
-    flex: 0 0 auto; min-width: 120px;
-    flex-direction: column !important; align-items: flex-start !important; gap: 4px;
-    padding: 14px 16px;
-  }
-  .mission .side .r .val { font-size: 22px !important; }
-  .mission h2 { font-size: 34px !important; }
-  .mission p.big { font-size: 16px !important; }
-  .mission .pull { font-size: 19px !important; }
-
-  /* Values → 1 col */
-  .values-grid { grid-template-columns: 1fr !important; }
-  .value { border-right: none !important; }
-  .value:nth-last-child(-n+3) { border-bottom: 1px solid rgba(29,26,21,0.1) !important; }
-  .value:last-child { border-bottom: none !important; }
-
-  /* Standards → simplified */
-  .std { grid-template-columns: 52px 1fr !important; gap: 14px !important; }
-  .std p { display: none; }
-
-  /* Story */
-  .story h2 { font-size: 32px !important; }
-  .story .body p:first-child::first-letter { font-size: 48px; }
-
-  /* Footer → 1 col */
-  footer { padding: 32px 18px 20px; margin-top: 32px; }
-  .fg { grid-template-columns: 1fr !important; gap: 24px; }
-}
-
-/* ── iPhone mini / SE ≤ 390px ── */
-@media (max-width: 390px) {
-  .page-hero h1 { font-size: 34px; }
-  .sec-head h2 { font-size: 28px !important; }
-  .mission h2 { font-size: 28px !important; }
-  .nav { padding: 12px 16px; }
 }

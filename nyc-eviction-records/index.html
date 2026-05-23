@@ -46,6 +46,7 @@
     <li><a href="/tools.html" class="active">Tools</a></li>
     <li><a href="/about.html">About</a></li>
     <li><a href="/impact.html">Impact</a></li>
+    <li><a href="/brand.html">Brand</a></li>
     <li><a href="https://github.com/civicbytedev">GitHub</a></li>
   </ul>
   <a href="/submit.html" class="cta">Submit a tool</a>
@@ -158,6 +159,11 @@ function renderResults(query,data){
 }
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 cbAutocomplete('ev-input', function(){ runEvict(); });
+(function(){
+  const params=new URLSearchParams(location.search);
+  const q=params.get('q')||params.get('addr');
+  if(q){document.getElementById('ev-input').value=q;runEvict();}
+})();
 </script>
 
 <section class="tool-section alt">

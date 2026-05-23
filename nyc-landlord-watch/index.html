@@ -25,7 +25,7 @@
       <li><a href="/tools.html" class="active">Tools</a></li>
       <li><a href="/about.html">About</a></li>
       <li><a href="/impact.html">Impact</a></li>
-      
+      <li><a href="/brand.html">Brand</a></li>
       <li><a href="https://github.com/civicbytedev">GitHub</a></li>
     </ul>
     <a href="/submit.html" class="cta">Submit a tool</a>
@@ -40,7 +40,7 @@
   <section class="tool-hero">
     <div>
       <div class="meta-row">
-        <span class="status">Live</span>
+        <span class="status" style="background:var(--sky)">Demo mode</span>
         <span class="tag">Housing · Accountability</span>
       </div>
       <h1>One search. A <em>landlord's entire record</em>.</h1>
@@ -49,6 +49,9 @@
         Type a landlord or LLC name to pull every property they own across NYC, the
         total violations on file, and a risk score that surfaces chronic offenders.
         Built for tenants, organizers, and reporters who need the whole picture, not one building.
+      </p>
+      <p class="desc" style="background:rgba(45,90,120,0.08);border-left:3px solid var(--sky);padding:10px 14px;border-radius:0 8px 8px 0;font-size:14px;margin-bottom:24px;max-width:60ch;">
+        <strong style="color:var(--sky)">Demo mode.</strong> Resolving LLCs back to their parent landlords requires an ACRIS-deed pipeline we're still building. While that lands, this tool returns sample portfolios for three known landlords — search any of them or try your own name to see the format.
       </p>
       <div class="actions">
         <a href="#try" class="btn btn-p">Try it below ↓</a>
@@ -81,10 +84,10 @@
       <div class="pf-body">
         <div class="mock-search">
           <span class="mag"></span>
-          <input id="ll-input" placeholder="Landlord or LLC name…" value="Croman Realty LLC">
+          <input id="ll-input" placeholder="Type any landlord or LLC name…" autocomplete="off">
           <button class="submit" onclick="window.runLandlord()">Search landlord</button>
         </div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin:-12px 0 16px;letter-spacing:0.06em;">Try: <a href="#" onclick="document.getElementById('ll-input').value='Croman Realty LLC';window.runLandlord();return false;">Croman Realty LLC</a> · <a href="#" onclick="document.getElementById('ll-input').value='Parkchester Holdings';window.runLandlord();return false;">Parkchester Holdings</a> · <a href="#" onclick="document.getElementById('ll-input').value='Sunset Park Co-op';window.runLandlord();return false;">Sunset Park Co-op</a></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin:-12px 0 16px;letter-spacing:0.06em;">Demo set: <a href="#" onclick="document.getElementById('ll-input').value='Croman Realty LLC';window.runLandlord();return false;">Croman Realty LLC</a> · <a href="#" onclick="document.getElementById('ll-input').value='Parkchester Holdings';window.runLandlord();return false;">Parkchester Holdings</a> · <a href="#" onclick="document.getElementById('ll-input').value='Sunset Park Co-op';window.runLandlord();return false;">Sunset Park Co-op</a></div>
         <div id="ll-result"></div>
       </div>
     </div>
@@ -112,17 +115,20 @@
         { b: "612 46th St", boro: "Brooklyn", units: 14, v: 3, vAlert: false, r: "LOW", rc: "a" }
       ] }
   };
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
   window.runLandlord = function() {
-    const q = (document.getElementById('ll-input').value || '').toLowerCase().trim();
-    const data = LANDLORDS[q] || LANDLORDS[Object.keys(LANDLORDS).find(k => q && k.includes(q.split(' ')[0]))] || null;
+    const raw = (document.getElementById('ll-input').value || '').trim();
+    const q = raw.toLowerCase();
     const out = document.getElementById('ll-result');
+    if (!raw) { document.getElementById('ll-input').focus(); return; }
+    const data = LANDLORDS[q] || LANDLORDS[Object.keys(LANDLORDS).find(k => q && (k.includes(q) || k.includes(q.split(' ')[0])))] || null;
     if (!data) {
-      out.innerHTML = '<div class="result-head"><div><div class="addr">No match</div><div class="meta-tag">Try one of the suggestions — this is a demo with three sample landlords.</div></div></div>';
+      out.innerHTML = `<div class="result-head"><div><div class="addr">"${esc(raw)}" — not in the demo set</div><div class="meta-tag">Demo mode: this tool can return real portfolio data once our ACRIS pipeline lands. For now, the working samples are <strong>Croman Realty LLC</strong>, <strong>Parkchester Holdings</strong>, and <strong>Sunset Park Co-op</strong>.</div></div></div>`;
       return;
     }
     out.innerHTML = `
       <div class="result-head">
-        <div><div class="addr">${data.name} <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);font-weight:400;margin-left:8px;">· sample data</span></div><div class="meta-tag">${data.foot}</div></div>
+        <div><div class="addr">${esc(data.name)} <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);font-weight:400;margin-left:8px;">· demo data</span></div><div class="meta-tag">${esc(data.foot)}</div></div>
         <div class="meta-tag" style="background:${data.riskColor};color:#fff;padding:4px 12px;border-radius:999px;">${data.risk}</div>
       </div>
       <div class="stat-grid">
@@ -133,10 +139,12 @@
       </div>
       <div class="dtable">
         <div class="dh" style="grid-template-columns: 2fr 120px 120px 120px;"><span>Building</span><span>Units</span><span>Violations</span><span>Risk</span></div>
-        ${data.rows.map(r => `<div class="dr" style="grid-template-columns: 2fr 120px 120px 120px;"><span><strong>${r.b}</strong> · ${r.boro}</span><span>${r.units}</span><span style="${r.vAlert?'color:var(--brick);font-weight:600;':''}">${r.v}</span><span><span class="sev sev-${r.rc}">${r.r}</span></span></div>`).join('')}
+        ${data.rows.map(r => `<div class="dr" style="grid-template-columns: 2fr 120px 120px 120px;"><span><strong>${esc(r.b)}</strong> · ${esc(r.boro)}</span><span>${r.units}</span><span style="${r.vAlert?'color:var(--brick);font-weight:600;':''}">${r.v}</span><span><span class="sev sev-${r.rc}">${r.r}</span></span></div>`).join('')}
       </div>`;
   };
-  document.addEventListener('DOMContentLoaded', () => window.runLandlord());
+  document.getElementById('ll-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); window.runLandlord(); } });
+  // Idle state — no auto-run with a hardcoded value
+  document.getElementById('ll-result').innerHTML = '<div style="padding:24px 8px;color:var(--ink-soft);font-size:14px;line-height:1.55;">Type a landlord or LLC name above and hit <strong>Search</strong>. Demo mode currently knows three landlords — listed below the input.</div>';
   </script>
 
   <section class="tool-section alt">

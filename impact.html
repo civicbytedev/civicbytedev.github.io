@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>Impact — CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="What happens when public data reaches people. Real users, real decisions, measurable civic impact.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,19 +14,17 @@
 <script defer src="/civicbyte-fx.js"></script>
 <link rel="stylesheet" href="/civicbyte.css">
 <style>
-  /* Headline numbers */
   .bignum-band { padding: 0 44px 32px; display:grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
   .bignum { background: var(--cream); border: 1px solid rgba(29,26,21,0.1); border-radius: 16px; padding: 28px 26px; position:relative; }
   .bignum.dark { background: var(--ink); color: var(--cream); border-color: var(--ink); }
   .bignum .k { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing:0.14em; text-transform:uppercase; color: var(--ink-soft); }
   .bignum.dark .k { color: var(--ochre); }
-  .bignum .n { font-family:'Fraunces',serif; font-weight:500; font-size: 64px; line-height: 0.95; letter-spacing: -0.035em; margin-top: 16px; }
+  .bignum .n { font-family:'Fraunces',serif; font-weight:500; font-size: 64px; line-height: 0.95; letter-spacing: -0.035em; margin-top: 16px; font-variant-numeric: tabular-nums; }
   .bignum .n em { font-style:italic; color: var(--brick); }
   .bignum.dark .n em { color: var(--ochre); }
   .bignum .note { font-size: 13px; color: var(--ink-soft); margin-top: 6px; line-height:1.45; }
   .bignum.dark .note { color: rgba(248,244,234,0.7); }
 
-  /* Use-cases */
   .usecases { padding: 72px 44px; background: var(--cream); }
   .uc-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
   .uc {
@@ -47,7 +46,6 @@
   .uc .tool-used { margin-top:auto; font-family:'IBM Plex Mono',monospace; font-size: 10.5px; padding: 8px 12px; border-top: 1px solid rgba(29,26,21,0.08); color: var(--ink-soft); letter-spacing:0.05em; display:flex; justify-content:space-between; }
   .uc .tool-used a { color: var(--brick); text-decoration:none; font-weight:600; }
 
-  /* Quotes block */
   .quotes { padding: 72px 44px; }
   .q-grid { display:grid; grid-template-columns: 1.4fr 1fr; gap: 18px; }
   .qbox { border-radius: 18px; padding: 36px 36px 32px; border: 1px solid rgba(29,26,21,0.1); display:flex; flex-direction:column; }
@@ -59,7 +57,6 @@
   .qbox cite { display:block; margin-top: 22px; font-style:normal; font-size: 13px; font-family:'Inter Tight',sans-serif; opacity:0.75; }
   .qbox cite strong { display:block; font-size: 14px; opacity:1; font-weight:600; }
 
-  /* Coverage */
   .coverage { padding: 72px 44px; background: var(--paper-2); }
   .cov-grid { display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
   .cov { background: #fff; border: 1px solid rgba(29,26,21,0.1); border-radius: 14px; padding: 22px 24px; }
@@ -68,7 +65,6 @@
   .cov .src { font-family:'Inter Tight',sans-serif; font-size: 12.5px; color: var(--ink-soft); }
   .cov .src strong { color: var(--ink); font-weight:600; }
 
-  /* Timeline / milestones */
   .milestones { padding: 72px 44px; }
   .tl { display:grid; grid-template-columns: 180px 1fr; gap: 32px; padding: 24px 0; border-top: 1px solid rgba(29,26,21,0.12); }
   .tl:last-child { border-bottom: 1px solid rgba(29,26,21,0.12); }
@@ -76,7 +72,6 @@
   .tl h4 { font-family:'Fraunces',serif; font-weight:600; font-size: 26px; margin: 0 0 6px; letter-spacing:-0.015em; line-height:1.15; }
   .tl p { font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); margin: 0; max-width: 70ch; }
 
-  /* Methodology */
   .method { padding: 56px 44px 24px; }
   .method-box {
     background: var(--cream); border: 1px solid rgba(29,26,21,0.1); border-radius: 16px;
@@ -86,6 +81,16 @@
   .method h3 em { color: var(--brick); font-style:italic; }
   .method .body { font-size: 14.5px; line-height: 1.65; color: var(--ink-soft); }
   .method .body strong { color: var(--ink); font-weight:600; }
+
+  @media (max-width: 980px) {
+    .bignum-band { grid-template-columns: 1fr 1fr; }
+    .uc-grid { grid-template-columns: 1fr; }
+    .q-grid { grid-template-columns: 1fr; }
+    .qbox.main blockquote { font-size: 28px; }
+    .cov-grid { grid-template-columns: 1fr; }
+    .tl { grid-template-columns: 1fr; gap: 6px; }
+    .method-box { grid-template-columns: 1fr; gap: 18px; }
+  }
 </style>
 </head>
 <body>
@@ -111,7 +116,6 @@
     <p class="lede">We measure success by community impact, not GitHub stars. Here's how the tools on CivicByte are being used — who's using them, what they've found, and what's changed.</p>
   </section>
 
-  <!-- Big numbers -->
   <section class="bignum-band">
     <div class="bignum">
       <div class="k">Public records indexed</div>
@@ -135,7 +139,6 @@
     </div>
   </section>
 
-  <!-- Use cases -->
   <section class="usecases">
     <div class="sec-head">
       <div class="l">
@@ -209,7 +212,6 @@
     </div>
   </section>
 
-  <!-- Quotes -->
   <section class="quotes">
     <div class="sec-head">
       <div class="l">
@@ -231,7 +233,6 @@
     </div>
   </section>
 
-  <!-- Coverage -->
   <section class="coverage">
     <div class="sec-head">
       <div class="l">
@@ -259,7 +260,6 @@
     </div>
   </section>
 
-  <!-- Milestones -->
   <section class="milestones">
     <div class="sec-head">
       <div class="l">
@@ -276,7 +276,6 @@
 
   </section>
 
-  <!-- Methodology -->
   <section class="method">
     <div class="method-box">
       <h3>How we <em>measure</em> this.</h3>
@@ -295,11 +294,23 @@
       </div>
       <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
       <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">Our story</a></li></ul></div>
-      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="#">Newsletter</a></li><li><a href="#">Press</a></li></ul></div>
+      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
     </div>
     <div class="col2"><span>© 2026 CivicByte · MIT License</span><span>Made in NYC · By students, for everyone</span></div>
   </footer>
 
 </div>
+
+<script>
+(function(){
+  const fmt = (v, prefix, suffix, em) => {
+    const s = (prefix || '') + Math.round(v).toLocaleString() + (suffix || '');
+    return em ? '<em>' + s + '</em>' : s;
+  };
+  document.querySelectorAll('.bignum .n[data-count]').forEach(n => {
+    // not all numbers are countable in the static layout; this hook is here in case data-count is added
+  });
+})();
+</script>
 </body>
 </html>
