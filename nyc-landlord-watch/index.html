@@ -18,15 +18,22 @@
 
 <div class="page">
 
+  <div class="masthead">
+    <span>Vol. 01 &middot; No. 18 &middot; Saturday, May 23, 2026</span>
+    <span>Demo tool &middot; Portfolio Lookup</span>
+    <span>Free &middot; Open Source</span>
+  </div>
+
   <nav class="nav">
-    <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
+    <div class="nav-left">
+      <a href="/" class="mark">civic<em>byte</em>.</a>
+      <span class="tag">Est. 2024 &middot; New York</span>
+    </div>
     <ul>
-      <li><a href="/">Home</a></li>
+      <li><a href="/">Front Page</a></li>
       <li><a href="/tools.html" class="active">Tools</a></li>
+      <li><a href="/story.html">The Story</a></li>
       <li><a href="/about.html">About</a></li>
-      <li><a href="/impact.html">Impact</a></li>
-      <li><a href="/brand.html">Brand</a></li>
-      <li><a href="https://github.com/civicbytedev">GitHub</a></li>
     </ul>
     <a href="/submit.html" class="cta">Submit a tool</a>
   </nav>
@@ -40,8 +47,8 @@
   <section class="tool-hero">
     <div>
       <div class="meta-row">
-        <span class="status" style="background:var(--sky)">Demo mode</span>
-        <span class="tag">Housing · Accountability</span>
+        <span class="status demo">Demo mode</span>
+        <span class="tag">Housing &middot; Accountability</span>
       </div>
       <h1>One search. A <em>landlord's entire record</em>.</h1>
       <p class="sub">Portfolio-wide violation history for any NYC landlord.</p>
@@ -50,8 +57,8 @@
         total violations on file, and a risk score that surfaces chronic offenders.
         Built for tenants, organizers, and reporters who need the whole picture, not one building.
       </p>
-      <p class="desc" style="background:rgba(45,90,120,0.08);border-left:3px solid var(--sky);padding:10px 14px;border-radius:0 8px 8px 0;font-size:14px;margin-bottom:24px;max-width:60ch;">
-        <strong style="color:var(--sky)">Demo mode.</strong> Resolving LLCs back to their parent landlords requires an ACRIS-deed pipeline we're still building. While that lands, this tool returns sample portfolios for three known landlords — search any of them or try your own name to see the format.
+      <p class="desc demo-note">
+        <strong>Demo mode.</strong> Resolving LLCs back to their parent landlords requires an ACRIS-deed pipeline we're still building. While that lands, this tool returns sample portfolios for three known landlords &mdash; search any of them or try your own name to see the format.
       </p>
       <div class="actions">
         <a href="#try" class="btn btn-p">Try it below ↓</a>
@@ -226,16 +233,20 @@
   </section>
 
   <footer>
-    <div class="fg">
+    <div class="foot-grid">
       <div>
-        <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
-        <p>An open platform for free, community-facing civic tools built on public data.</p>
+        <a href="/" class="mark">civic<em>byte</em>.</a>
+        <p>An independent NYC civic-data project. Free, open-source tools built on public records. Released under MIT.</p>
       </div>
-      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
-      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">Our story</a></li></ul></div>
-      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="#">Newsletter</a></li><li><a href="#">Press</a></li></ul></div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/about.html">About</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/brand.html">Brand</a></li></ul></div>
+      <div><h5>Contact</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
     </div>
-    <div class="col2"><span>© 2026 CivicByte · MIT License</span><span>Made in NYC · By students, for everyone</span></div>
+    <div class="colophon">
+      <span>&copy; 2026 CivicByte &middot; MIT License</span>
+      <span>Set in Fraunces &middot; Newsreader &middot; IBM Plex Mono</span>
+      <span>Printed on the open web</span>
+    </div>
   </footer>
 
 </div>

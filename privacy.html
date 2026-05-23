@@ -2,57 +2,91 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Privacy — CivicByte</title>
+<title>Privacy &middot; CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Privacy policy for CivicByte. We collect no personal data — by design.">
 <link rel="canonical" href="https://civicbyte.dev/privacy.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500;1,9..144,600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
 <meta name="theme-color" content="#b8432b">
 <script defer src="/civicbyte-fx.js"></script>
 <link rel="stylesheet" href="/civicbyte.css">
 <style>
-  .privacy { padding: 16px 44px 64px; display:grid; grid-template-columns: 1fr 2.4fr; gap: 56px; align-items:start; }
-  .privacy aside.tldr { position: sticky; top: 28px; background: var(--cream); border: 1px solid rgba(29,26,21,0.1); border-radius: 16px; padding: 24px 26px; }
-  .privacy aside.tldr .k { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing:0.14em; text-transform:uppercase; color: var(--brick); margin-bottom: 10px; }
-  .privacy aside.tldr h3 { font-family:'Fraunces',serif; font-weight:600; font-size: 22px; margin: 0 0 10px; letter-spacing:-0.01em; }
-  .privacy aside.tldr p { font-size: 14px; line-height: 1.55; color: var(--ink-soft); margin: 0 0 12px; }
-  .privacy aside.tldr .meta { font-family:'IBM Plex Mono',monospace; font-size: 10.5px; color: var(--ink-soft); letter-spacing: 0.1em; text-transform: uppercase; padding-top: 12px; border-top: 1px dotted rgba(29,26,21,0.2); }
+  .privacy { padding: 36px 48px 56px; display:grid; grid-template-columns: 1fr 2.5fr; gap: 56px; align-items: start; background: var(--cream); border-bottom: 1px solid var(--ink); }
 
-  .privacy article section { padding: 28px 0; border-bottom: 1px solid rgba(29,26,21,0.12); }
+  .tldr {
+    position: sticky; top: 28px;
+    background: var(--paper-2); border: 1px solid var(--ink);
+    padding: 26px 28px;
+  }
+  .tldr .k {
+    font-family:'IBM Plex Mono', monospace; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--brick); margin-bottom: 10px;
+  }
+  .tldr h3 {
+    font-family:'Fraunces', serif; font-weight: 600; font-size: 24px;
+    letter-spacing: -0.01em; line-height: 1.15; margin: 0 0 12px;
+  }
+  .tldr p {
+    font-family:'Newsreader', serif; font-size: 14.5px; line-height: 1.55;
+    color: var(--ink); margin: 0 0 12px;
+  }
+  .tldr .meta {
+    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft);
+    padding-top: 12px; border-top: 1px dotted rgba(29,26,21,0.3);
+  }
+
+  .privacy article section { padding: 28px 0; border-bottom: 1px solid var(--ink); }
   .privacy article section:first-child { padding-top: 0; }
   .privacy article section:last-child { border-bottom: none; }
   .privacy article h2 {
-    font-family:'Fraunces',serif; font-weight:600; font-size: 26px;
-    letter-spacing:-0.015em; margin: 0 0 12px; display:flex; align-items:baseline; gap: 14px;
+    font-family:'Fraunces', serif; font-weight: 600; font-size: 28px;
+    letter-spacing: -0.015em; line-height: 1.15; margin: 0 0 14px;
+    display: flex; align-items: baseline; gap: 16px;
   }
-  .privacy article h2 .nm { font-family:'IBM Plex Mono',monospace; font-size: 12px; color: var(--brick); letter-spacing:0.12em; font-weight: 500; }
-  .privacy article p { font-size: 15.5px; line-height: 1.7; color: var(--ink-soft); margin: 0 0 12px; }
+  .privacy article h2 .nm {
+    font-family:'IBM Plex Mono', monospace; font-size: 12px;
+    letter-spacing: 0.12em; color: var(--brick); font-weight: 500;
+  }
+  .privacy article p {
+    font-family:'Newsreader', serif; font-size: 16.5px; line-height: 1.7;
+    color: var(--ink); margin: 0 0 14px;
+  }
   .privacy article p strong { color: var(--ink); font-weight: 600; }
-  .privacy article ul { padding-left: 20px; margin: 6px 0 12px; }
-  .privacy article li { font-size: 15px; line-height: 1.65; color: var(--ink-soft); margin: 0 0 4px; }
+  .privacy article ul { padding-left: 22px; margin: 8px 0 14px; }
+  .privacy article li {
+    font-family:'Newsreader', serif; font-size: 15.5px; line-height: 1.65;
+    color: var(--ink); margin-bottom: 4px;
+  }
   .privacy article a { color: var(--brick); }
 
   .contact-card {
-    background: var(--cream); border: 1px solid rgba(29,26,21,0.1); border-radius: 14px;
-    padding: 18px 22px; display:flex; align-items:center; gap: 16px;
+    background: var(--paper-2); border: 1px solid var(--ink); padding: 18px 22px;
+    display: flex; align-items: center; gap: 18px; margin-top: 8px;
   }
   .contact-card .icon {
-    width: 40px; height: 40px; border-radius: 10px;
-    background: var(--paper); border: 1px solid rgba(29,26,21,0.1);
-    display:flex; align-items:center; justify-content:center; color: var(--brick); font-size: 18px;
-    flex-shrink: 0;
+    width: 40px; height: 40px; background: var(--ink); color: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
   }
-  .contact-card .lbl { font-family:'IBM Plex Mono',monospace; font-size: 10.5px; color: var(--ink-soft); letter-spacing: 0.12em; text-transform: uppercase; }
-  .contact-card .val { font-family:'Inter Tight',sans-serif; font-size: 15px; color: var(--ink); }
+  .contact-card .lbl {
+    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft);
+  }
+  .contact-card .val {
+    font-family:'Inter Tight', sans-serif; font-size: 15px; color: var(--ink);
+  }
   .contact-card .val a { color: var(--brick); text-decoration: none; }
 
-  @media (max-width: 820px) {
-    .privacy { grid-template-columns: 1fr; gap: 24px; }
-    .privacy aside.tldr { position: static; }
+  @media (max-width: 980px) {
+    .privacy { padding: 28px 24px 40px; grid-template-columns: 1fr; gap: 24px; }
+    .tldr { position: static; }
+    .privacy article h2 { font-size: 22px; gap: 10px; }
+    .privacy article h2 .nm { font-size: 11px; }
   }
 </style>
 </head>
@@ -60,32 +94,41 @@
 
 <div class="page">
 
+  <div class="masthead">
+    <span>Vol. 01 &middot; No. 18 &middot; Saturday, May 23, 2026</span>
+    <span>Legal &middot; Last updated May 23, 2026</span>
+    <span>Free &middot; Open Source</span>
+  </div>
+
   <nav class="nav">
-    <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
+    <div class="nav-left">
+      <a href="/" class="mark">civic<em>byte</em>.</a>
+      <span class="tag">Est. 2024 &middot; New York</span>
+    </div>
     <ul>
-      <li><a href="/">Home</a></li>
+      <li><a href="/">Front Page</a></li>
       <li><a href="/tools.html">Tools</a></li>
+      <li><a href="/story.html">The Story</a></li>
       <li><a href="/about.html">About</a></li>
-      <li><a href="/impact.html">Impact</a></li>
-      <li><a href="/brand.html">Brand</a></li>
-      <li><a href="https://github.com/civicbytedev">GitHub</a></li>
     </ul>
     <a href="/submit.html" class="cta">Submit a tool</a>
   </nav>
 
   <section class="page-hero">
-    <span class="pill"><span class="pulse"></span> Legal · Last updated May 23, 2026</span>
-    <h1>Privacy, by <em>design</em>.</h1>
-    <p class="lede">CivicByte is built on a simple principle: public data should serve the public, not the other way around. We don't collect your personal information.</p>
+    <div class="kicker">&sect;01 &mdash; Legal &middot; Privacy</div>
+    <h1>Privacy, <em>by design</em>.</h1>
+    <p class="lede">
+      CivicByte is built on a simple principle: public data should serve the public, not the
+      other way around. We don't collect your personal information.
+    </p>
   </section>
 
   <div class="privacy">
-
     <aside class="tldr">
       <div class="k">TL;DR</div>
       <h3>You aren't the product.</h3>
-      <p>CivicByte does not collect, store, or sell any personal data. No accounts, no tracking, no ads. The tools and website are free — that's the whole arrangement.</p>
-      <div class="meta">Last updated · 2026-05-23</div>
+      <p>CivicByte does not collect, store, or sell any personal data. No accounts, no tracking, no ads. The tools and website are free &mdash; that's the whole arrangement.</p>
+      <div class="meta">Last updated &middot; 2026-05-23</div>
     </aside>
 
     <article>
@@ -99,24 +142,24 @@
           <li>Location data</li>
           <li>Behavioral or usage analytics tied to you</li>
           <li>Cookies or tracking pixels</li>
-          <li>Any form of account or login data — no accounts exist</li>
+          <li>Any form of account or login data &mdash; no accounts exist</li>
         </ul>
       </section>
 
       <section>
         <h2><span class="nm">02</span> How the tools work</h2>
-        <p>Every CivicByte tool runs in your own browser, talking directly to the public-data API behind it — NYC Open Data, HPD, DOI, and so on. The search happens on your device, and the response is rendered in your browser. We sit in the middle as the static page that loads the code; we are not on the path of your queries.</p>
+        <p>Every CivicByte tool runs in your own browser, talking directly to the public-data API behind it &mdash; NYC Open Data, HPD, DOI, and so on. The search happens on your device, and the response is rendered in your browser. We sit in the middle as the static page that loads the code; we are not on the path of your queries.</p>
         <p>We do not intercept, log, or store anything you type or pull back. There is no server-side database.</p>
       </section>
 
       <section>
         <h2><span class="nm">03</span> Submissions and email</h2>
-        <p>If you use the <a href="/submit.html">Submit a tool</a> form, that opens your own mail client addressed to <a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a> with the submission contents pre-filled. You choose whether to send. We only see what arrives in the inbox — same as any email — and we use it solely to review the submission.</p>
+        <p>If you use the <a href="/submit.html">Submit a tool</a> form, that opens your own mail client addressed to <a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a> with the submission contents pre-filled. You choose whether to send. We only see what arrives in the inbox &mdash; same as any email &mdash; and we use it solely to review the submission.</p>
       </section>
 
       <section>
         <h2><span class="nm">04</span> Third-party tools listed on the directory</h2>
-        <p>CivicByte lists civic tools built and maintained by third parties. Those tools are independent services with their own privacy practices — review each tool's policy when you use it. We do not act as a data processor for them.</p>
+        <p>CivicByte lists civic tools built and maintained by third parties. Those tools are independent services with their own privacy practices &mdash; review each tool's policy when you use it. We do not act as a data processor for them.</p>
       </section>
 
       <section>
@@ -142,7 +185,7 @@
         <h2><span class="nm">08</span> Contact</h2>
         <p>Questions about this policy? Reach out:</p>
         <div class="contact-card">
-          <div class="icon">✉</div>
+          <div class="icon">&#9993;</div>
           <div>
             <div class="lbl">Email</div>
             <div class="val"><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></div>
@@ -150,18 +193,22 @@
         </div>
       </section>
     </article>
-
   </div>
 
   <footer>
-    <div class="fg">
+    <div class="foot-grid">
       <div>
-        <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
-        <p>An open platform for free, community-facing civic tools built on public data.</p>
+        <a href="/" class="mark">civic<em>byte</em>.</a>
+        <p>An independent NYC civic-data project. Free, open-source tools built on public records. Released under MIT.</p>
       </div>
-      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
-      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">Our story</a></li></ul></div>
-      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/about.html">About</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/brand.html">Brand</a></li></ul></div>
+      <div><h5>Contact</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+    </div>
+    <div class="colophon">
+      <span>&copy; 2026 CivicByte &middot; MIT License</span>
+      <span>Set in Fraunces &middot; Newsreader &middot; IBM Plex Mono</span>
+      <span>Printed on the open web</span>
     </div>
     <div class="col2"><span>© 2026 CivicByte · MIT License</span><span>Made in NYC · By students, for everyone</span></div>
   </footer>

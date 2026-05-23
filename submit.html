@@ -2,124 +2,181 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Submit a Tool — CivicByte</title>
+<title>Submit a Tool &middot; CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Submit a free, open-source civic tool for review and listing on CivicByte.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500;1,9..144,600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
 <meta name="theme-color" content="#b8432b">
 <script defer src="/civicbyte-fx.js"></script>
 <link rel="stylesheet" href="/civicbyte.css">
 <style>
-  .submit-layout { padding: 16px 44px 64px; display:grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items:start; }
+  .submit-layout {
+    padding: 36px 48px 56px;
+    display: grid; grid-template-columns: 1.5fr 1fr; gap: 48px;
+    align-items: start; border-bottom: 1px solid var(--ink);
+    background: var(--cream);
+  }
 
-  .form { background: #fff; border: 1px solid rgba(29,26,21,0.1); border-radius: 18px; padding: 36px 40px; }
-  .form .k { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing:0.14em; text-transform:uppercase; color: var(--brick); }
-  .form h2 { font-family:'Fraunces',serif; font-weight:500; font-size: 36px; letter-spacing:-0.025em; line-height:1.05; margin: 6px 0 10px; }
-  .form h2 em { color: var(--brick); font-style:italic; }
-  .form .intro { font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); margin: 0 0 26px; max-width: 50ch; }
+  .form {
+    background: #fff; border: 1px solid var(--ink); padding: 36px 40px;
+  }
+  .form .kicker { margin-bottom: 4px; }
+  .form h2 {
+    font-family:'Fraunces', serif; font-weight: 500; font-size: 38px;
+    letter-spacing: -0.025em; line-height: 1.05; margin: 4px 0 10px;
+  }
+  .form h2 em { color: var(--brick); font-style: italic; }
+  .form .intro {
+    font-family:'Newsreader', serif; font-size: 15.5px; line-height: 1.55;
+    color: var(--ink); margin: 0 0 28px; max-width: 50ch;
+  }
 
-  .fieldset { border: none; padding: 0; margin: 0 0 28px; display:flex; flex-direction:column; gap: 16px; }
-  .fieldset legend { font-family:'IBM Plex Mono',monospace; font-size: 11px; letter-spacing:0.14em; text-transform:uppercase; color: var(--ink-soft); margin-bottom: 4px; padding: 0; }
-
-  .field { display:flex; flex-direction:column; gap: 6px; }
-  .field label { font-family:'Inter Tight',sans-serif; font-size: 13.5px; font-weight:600; color: var(--ink); }
-  .field label .req { color: var(--brick); }
-  .field .hint { font-size: 12.5px; color: var(--ink-soft); line-height:1.45; }
+  .fieldset {
+    border: none; padding: 0; margin: 0 0 26px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .fieldset legend {
+    font-family:'IBM Plex Mono', monospace; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--brick);
+    padding: 0; margin-bottom: 4px;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-family:'Inter Tight', sans-serif; font-size: 13px; font-weight: 600;
+    color: var(--ink);
+  }
+  .field label .req { color: var(--brick); margin-left: 2px; }
+  .field .hint {
+    font-family:'Inter Tight', sans-serif; font-size: 12px;
+    color: var(--ink-soft); line-height: 1.45;
+  }
   .field input[type="text"],
   .field input[type="url"],
   .field input[type="email"],
   .field select,
   .field textarea {
-    font-family:'Inter Tight',sans-serif; font-size: 14px; color: var(--ink);
-    padding: 12px 14px; background: var(--paper); border: 1px solid rgba(29,26,21,0.12);
-    border-radius: 10px; outline: none; transition: border-color .15s, background .15s;
-    width: 100%;
+    font-family:'Inter Tight', sans-serif; font-size: 14px; color: var(--ink);
+    padding: 11px 14px; background: var(--paper);
+    border: 1px solid var(--ink); border-radius: 0;
+    outline: none; width: 100%; transition: background .15s;
   }
-  .field textarea { resize: vertical; min-height: 96px; line-height: 1.55; }
-  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--brick); background: #fff; }
-  .field input:invalid:not(:placeholder-shown), .field select:invalid { border-color: rgba(184,67,43,0.5); }
-
-  .field-row { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-  .check-grid { display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .field input:focus, .field select:focus, .field textarea:focus { background: #fff; }
+  .field textarea { resize: vertical; min-height: 88px; line-height: 1.55; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
   .check {
-    display:flex; align-items:center; gap: 8px; padding: 10px 14px;
-    background: var(--paper); border: 1px solid rgba(29,26,21,0.1); border-radius: 10px;
-    font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+    background: var(--paper); border: 1px solid var(--ink);
+    font-family:'Inter Tight', sans-serif; font-size: 12.5px; cursor: pointer;
   }
   .check input { accent-color: var(--brick); }
-  .check:has(input:checked) { background: #fbe8dd; border-color: var(--brick); }
+  .check:has(input:checked) { background: var(--brick); color: #fff; }
+  .check:has(input:checked) input { accent-color: #fff; }
 
   .agree {
-    display:flex; gap: 12px; align-items:flex-start;
-    padding: 16px; background: var(--cream); border-radius: 12px;
-    font-size: 13.5px; line-height: 1.5; color: var(--ink-soft);
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 16px 20px; background: var(--paper-2); border: 1px solid var(--ink);
+    font-family:'Newsreader', serif; font-size: 14px; line-height: 1.55; color: var(--ink);
   }
-  .agree input { accent-color: var(--brick); margin-top: 3px; }
+  .agree input { accent-color: var(--brick); margin-top: 4px; }
   .agree a { color: var(--brick); }
 
-  .submit-row { display:flex; justify-content:space-between; align-items:center; gap: 16px; padding-top: 8px; flex-wrap: wrap; }
-  .submit-row .note { font-size: 12.5px; color: var(--ink-soft); max-width: 36ch; }
+  .submit-row {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px; padding-top: 12px; flex-wrap: wrap;
+  }
+  .submit-row .note {
+    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft);
+    max-width: 36ch;
+  }
 
   .form-success {
     margin-top: 18px;
     padding: 18px 20px;
-    background: #ecefd8;
-    border: 1px solid rgba(91,107,58,0.3);
-    border-radius: 12px;
-    color: var(--ink);
-    font-size: 14px;
-    line-height: 1.55;
-    display: none;
+    border: 1px solid var(--moss); background: #ecefd8;
+    font-family:'Newsreader', serif; font-size: 14px; line-height: 1.55;
+    color: var(--ink); display: none;
   }
   .form-success.shown { display: block; }
+  .form-success.error { border-color: var(--brick); background: #fef2f0; }
   .form-success strong { color: var(--moss); font-weight: 700; }
+  .form-success.error strong { color: var(--brick); }
   .form-success a { color: var(--brick); }
 
-  .aside { display:flex; flex-direction:column; gap: 18px; position: sticky; top: 20px; }
-  .card {
-    background: var(--cream); border: 1px solid rgba(29,26,21,0.1); border-radius: 16px;
-    padding: 24px 26px;
+  /* Aside */
+  .aside { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 20px; }
+  .card { background: var(--cream); border: 1px solid var(--ink); padding: 24px 26px; }
+  .card h3 {
+    font-family:'Fraunces', serif; font-weight: 600; font-size: 22px;
+    letter-spacing: -0.01em; margin: 0 0 6px;
   }
-  .card h3 { font-family:'Fraunces',serif; font-weight:600; font-size: 20px; margin: 0 0 4px; letter-spacing:-0.01em; }
-  .card .desc { font-size: 13px; color: var(--ink-soft); margin: 0 0 16px; line-height:1.5; }
-
-  .checklist { list-style:none; padding: 0; margin: 0; display:flex; flex-direction:column; gap: 10px; }
-  .checklist li { display:flex; gap: 10px; align-items:flex-start; font-size: 13.5px; line-height:1.45; color: var(--ink); }
-  .checklist li .tick {
-    width: 18px; height: 18px; flex-shrink:0; border-radius: 50%;
-    background: var(--brick); color: #fff; font-size: 12px; display:flex; align-items:center; justify-content:center; font-weight:600; margin-top: 1px;
+  .card .desc {
+    font-family:'Newsreader', serif; font-size: 13.5px; color: var(--ink);
+    line-height: 1.55; margin: 0 0 16px;
   }
-  .checklist li strong { font-weight:600; display:block; }
-  .checklist li span { color: var(--ink-soft); font-size: 12.5px; }
-
-  .timeline { list-style:none; padding: 0; margin: 0; }
-  .timeline li { display:grid; grid-template-columns: 80px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid rgba(29,26,21,0.1); }
-  .timeline li:last-child { border-bottom: none; }
-  .timeline .when { font-family:'IBM Plex Mono',monospace; font-size: 11px; color: var(--brick); letter-spacing: 0.1em; text-transform:uppercase; padding-top: 2px; }
-  .timeline .what strong { display:block; font-weight:600; font-size: 14px; margin-bottom: 2px; }
-  .timeline .what span { font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; }
-
   .card.dark { background: var(--ink); color: var(--cream); border-color: var(--ink); }
   .card.dark h3 { color: var(--cream); }
-  .card.dark .desc { color: rgba(248,244,234,0.72); }
+  .card.dark .desc { color: rgba(248,244,234,0.78); }
   .card.dark a { color: var(--ochre); }
 
-  .faq-sec { padding: 24px 44px 64px; }
-  .faq-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-  .faq { background: var(--cream); border: 1px solid rgba(29,26,21,0.1); border-radius: 14px; padding: 22px 26px; }
-  .faq h4 { font-family:'Fraunces',serif; font-weight:600; font-size: 19px; margin: 0 0 8px; letter-spacing:-0.01em; }
-  .faq p { font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); margin: 0; }
+  .checklist { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  .checklist li {
+    display: flex; gap: 12px; align-items: flex-start;
+    font-family:'Inter Tight', sans-serif; font-size: 13.5px; line-height: 1.45;
+  }
+  .checklist .tick {
+    flex-shrink: 0; width: 18px; height: 18px; background: var(--brick); color: #fff;
+    font-size: 11px; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; margin-top: 1px;
+  }
+  .checklist li strong { font-weight: 600; display: block; }
+  .checklist li span { color: var(--ink-soft); font-size: 12.5px; }
+
+  .timeline-mini { list-style: none; padding: 0; margin: 0; }
+  .timeline-mini li {
+    display: grid; grid-template-columns: 80px 1fr; gap: 14px;
+    padding: 12px 0; border-bottom: 1px solid rgba(29,26,21,0.2);
+  }
+  .timeline-mini li:last-child { border-bottom: none; }
+  .timeline-mini .when {
+    font-family:'IBM Plex Mono', monospace; font-size: 10.5px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--brick);
+    padding-top: 3px;
+  }
+  .timeline-mini strong {
+    display: block; font-family:'Inter Tight', sans-serif; font-weight: 600;
+    font-size: 13.5px; margin-bottom: 3px;
+  }
+  .timeline-mini span {
+    font-family:'Inter Tight', sans-serif; font-size: 12.5px;
+    color: var(--ink-soft); line-height: 1.5;
+  }
+
+  /* FAQ */
+  .faq-section { padding: 48px 48px 64px; background: var(--paper); border-bottom: 1px solid var(--ink); }
+  .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 2px solid var(--ink); border-left: 1px solid var(--ink); }
+  .faq { padding: 24px 28px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); background: var(--cream); }
+  .faq h4 {
+    font-family:'Fraunces', serif; font-weight: 600; font-size: 20px;
+    letter-spacing: -0.01em; margin: 0 0 8px;
+  }
+  .faq p {
+    font-family:'Newsreader', serif; font-size: 14.5px; line-height: 1.55;
+    color: var(--ink); margin: 0;
+  }
 
   @media (max-width: 980px) {
-    .submit-layout { grid-template-columns: 1fr; }
+    .submit-layout { padding: 28px 24px 40px; grid-template-columns: 1fr; gap: 28px; }
+    .form { padding: 24px 22px; }
+    .form h2 { font-size: 28px; }
     .aside { position: static; }
-    .field-row { grid-template-columns: 1fr; }
-    .check-grid { grid-template-columns: 1fr 1fr; }
+    .field-row, .check-grid { grid-template-columns: 1fr; }
+    .faq-section { padding: 36px 24px; }
     .faq-grid { grid-template-columns: 1fr; }
   }
 </style>
@@ -128,34 +185,44 @@
 
 <div class="page">
 
+  <div class="masthead">
+    <span>Vol. 01 &middot; No. 18 &middot; Saturday, May 23, 2026</span>
+    <span>Open submissions &middot; Free to list</span>
+    <span>Free &middot; Open Source</span>
+  </div>
+
   <nav class="nav">
-    <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
+    <div class="nav-left">
+      <a href="/" class="mark">civic<em>byte</em>.</a>
+      <span class="tag">Est. 2024 &middot; New York</span>
+    </div>
     <ul>
-      <li><a href="/">Home</a></li>
+      <li><a href="/">Front Page</a></li>
       <li><a href="/tools.html">Tools</a></li>
+      <li><a href="/story.html">The Story</a></li>
       <li><a href="/about.html">About</a></li>
-      <li><a href="/impact.html">Impact</a></li>
-      <li><a href="/brand.html">Brand</a></li>
-      <li><a href="https://github.com/civicbytedev">GitHub</a></li>
     </ul>
     <a href="/submit.html" class="cta active">Submit a tool</a>
   </nav>
 
   <section class="page-hero">
-    <span class="pill"><span class="pulse"></span> Open to submissions · Free to list</span>
+    <div class="kicker">&sect;01 &mdash; Submit</div>
     <h1>Built a civic tool? <em>Get it listed</em>.</h1>
-    <p class="lede">If your tool is free, open-source, and solves a real civic problem, we'll review it against our four standards and — if it clears — add it to the directory so communities can actually find it.</p>
+    <p class="lede">
+      If your tool is free, open-source, and solves a real civic problem, we'll review it
+      against our four standards and &mdash; if it clears &mdash; add it to the directory.
+    </p>
   </section>
 
   <div class="submit-layout">
 
     <form class="form" id="submit-form" novalidate>
-      <div class="k">Submission form</div>
+      <div class="kicker">Submission form</div>
       <h2>Tell us about your <em>tool</em>.</h2>
-      <p class="intro">Takes about 6 minutes. We'll respond within a week with a review decision or follow-up questions.</p>
+      <p class="intro">Takes about 6 minutes. We respond within a week with a review decision or follow-up questions.</p>
 
       <fieldset class="fieldset">
-        <legend>01 · The tool</legend>
+        <legend>01 &middot; The tool</legend>
         <div class="field">
           <label>Tool name <span class="req">*</span></label>
           <input type="text" name="toolName" placeholder="NYC Rent Stabilization Lookup" required>
@@ -173,20 +240,20 @@
         </div>
         <div class="field">
           <label>One-sentence description <span class="req">*</span></label>
-          <input type="text" name="shortDesc" placeholder="Search any NYC address to see its rent stabilization status across the last 15 years." required>
+          <input type="text" name="shortDesc" placeholder="Search any NYC address to see its rent stabilization status." required>
         </div>
         <div class="field">
           <label>Longer description</label>
-          <textarea name="longDesc" placeholder="What does it do? Who is it for? What data does it pull from? Anything you'd want a first-time visitor to understand."></textarea>
+          <textarea name="longDesc" placeholder="What does it do? Who is it for? What data does it pull from?"></textarea>
         </div>
       </fieldset>
 
       <fieldset class="fieldset">
-        <legend>02 · Category &amp; audience</legend>
+        <legend>02 &middot; Category &amp; audience</legend>
         <div class="field">
           <label>Primary category <span class="req">*</span></label>
           <select name="category" required>
-            <option value="" disabled selected>Choose one…</option>
+            <option value="" disabled selected>Choose one...</option>
             <option>Housing</option><option>Education</option><option>Municipal Data</option>
             <option>Social Services</option><option>Transit</option><option>Health</option>
             <option>Accountability</option><option>Other</option>
@@ -207,16 +274,16 @@
           </div>
         </div>
         <div class="field">
-          <label>Who is the tool for? Describe the user in one line.</label>
-          <input type="text" name="audience" placeholder="Renters signing a new lease in NYC who want to check their unit's legal rent history.">
+          <label>Who is the tool for? One line.</label>
+          <input type="text" name="audience" placeholder="Renters signing a new lease in NYC.">
         </div>
       </fieldset>
 
       <fieldset class="fieldset">
-        <legend>03 · Data &amp; upkeep</legend>
+        <legend>03 &middot; Data &amp; upkeep</legend>
         <div class="field">
           <label>Primary data sources <span class="req">*</span></label>
-          <textarea name="dataSources" placeholder="NYC Department of Housing Preservation & Development (HPD), NYC Open Data, NYS HCR…" required></textarea>
+          <textarea name="dataSources" placeholder="NYC Open Data, HPD, NYS HCR..." required></textarea>
           <span class="hint">List each dataset and where it comes from. Tools that don't cite sources get sent back.</span>
         </div>
         <div class="field-row">
@@ -238,7 +305,7 @@
       </fieldset>
 
       <fieldset class="fieldset">
-        <legend>04 · Submitter</legend>
+        <legend>04 &middot; Submitter</legend>
         <div class="field-row">
           <div class="field">
             <label>Your name <span class="req">*</span></label>
@@ -251,7 +318,7 @@
         </div>
         <div class="field">
           <label>Affiliation (optional)</label>
-          <input type="text" name="affiliation" placeholder="Bronx Science, CS Club · Code for NY · Independent">
+          <input type="text" name="affiliation" placeholder="Bronx Science CS Club &middot; Code for NY &middot; Independent">
         </div>
       </fieldset>
 
@@ -261,75 +328,75 @@
       </div>
 
       <div class="submit-row">
-        <span class="note">We'll reply from <strong>hello@civicbyte.dev</strong> within 5–7 business days.</span>
-        <button type="submit" class="btn btn-p">Submit for review →</button>
+        <span class="note">We reply from <strong>hello@civicbyte.dev</strong> within 5&ndash;7 business days.</span>
+        <button type="submit" class="btn-primary">Submit for review &rarr;</button>
       </div>
 
       <div class="form-success" id="form-success" role="status" aria-live="polite"></div>
     </form>
 
     <aside class="aside">
-
       <div class="card">
         <h3>Before you submit</h3>
         <p class="desc">Tools that clear review tend to have these in place. Takes 20 minutes to check.</p>
         <ul class="checklist">
-          <li><span class="tick">✓</span><div><strong>Public repository with open license</strong><span>MIT or Apache 2.0 is typical. GPL works too.</span></div></li>
-          <li><span class="tick">✓</span><div><strong>Data sources documented in the README</strong><span>Which datasets, from where, with a last-updated date.</span></div></li>
-          <li><span class="tick">✓</span><div><strong>Works on a phone</strong><span>Most users find us from a social post on mobile.</span></div></li>
-          <li><span class="tick">✓</span><div><strong>Plain-language interface</strong><span>No jargon unless the term is what the user is searching for.</span></div></li>
-          <li><span class="tick">✓</span><div><strong>No sign-ups or paywalls</strong><span>Tools are for communities, not leads lists.</span></div></li>
+          <li><span class="tick">&#10003;</span><div><strong>Public repository with open license</strong><span>MIT or Apache 2.0 is typical. GPL works too.</span></div></li>
+          <li><span class="tick">&#10003;</span><div><strong>Data sources documented in the README</strong><span>Which datasets, from where, with a last-updated date.</span></div></li>
+          <li><span class="tick">&#10003;</span><div><strong>Works on a phone</strong><span>Most users find us from a social post on mobile.</span></div></li>
+          <li><span class="tick">&#10003;</span><div><strong>Plain-language interface</strong><span>No jargon unless the term is what the user is searching for.</span></div></li>
+          <li><span class="tick">&#10003;</span><div><strong>No sign-ups or paywalls</strong><span>Tools are for communities, not leads lists.</span></div></li>
         </ul>
       </div>
 
       <div class="card">
         <h3>What happens next</h3>
-        <p class="desc">Every submission gets reviewed by a human — usually within a week.</p>
-        <ol class="timeline" style="padding:0;list-style:none">
-          <li><span class="when">Day 0</span><div class="what"><strong>You submit</strong><span>Confirmation email lands in your inbox within 5 minutes.</span></div></li>
-          <li><span class="when">Day 1–2</span><div class="what"><strong>First-pass review</strong><span>We check for open source, working URL, and data source citations.</span></div></li>
-          <li><span class="when">Day 3–5</span><div class="what"><strong>Deeper review</strong><span>Usability testing on a phone. A reviewer runs a real-ish query.</span></div></li>
-          <li><span class="when">Day 5–7</span><div class="what"><strong>Decision</strong><span>Listed, listed with notes, or sent back with specific feedback.</span></div></li>
+        <p class="desc">Every submission gets reviewed by a human &mdash; usually within a week.</p>
+        <ol class="timeline-mini">
+          <li><span class="when">Day 0</span><div><strong>You submit</strong><span>Confirmation email lands in your inbox within 5 minutes.</span></div></li>
+          <li><span class="when">Day 1&ndash;2</span><div><strong>First-pass review</strong><span>Open source, working URL, sources cited.</span></div></li>
+          <li><span class="when">Day 3&ndash;5</span><div><strong>Deeper review</strong><span>Usability on a phone. A reviewer runs a real query.</span></div></li>
+          <li><span class="when">Day 5&ndash;7</span><div><strong>Decision</strong><span>Listed, listed with notes, or sent back with feedback.</span></div></li>
         </ol>
       </div>
 
       <div class="card dark">
         <h3>Need help?</h3>
-        <p class="desc">Working on something but stuck on a data source, scope, or the "last 20%"? We can pair on it before you submit — just email us.</p>
-        <p style="font-family:'IBM Plex Mono',monospace; font-size:13px; margin:0;"><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev →</a></p>
+        <p class="desc">Stuck on a data source, scope, or the "last 20%"? Email us before you submit and we'll pair on it.</p>
+        <p style="font-family:'IBM Plex Mono',monospace; font-size:13px; margin:0;"><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev &rarr;</a></p>
       </div>
-
     </aside>
   </div>
 
-  <section class="faq-sec">
+  <section class="faq-section">
     <div class="sec-head">
-      <div class="l">
-        <div class="k">Common questions</div>
-        <h2>Things <em>people ask</em>.</h2>
-      </div>
+      <h2>Things <em>people ask</em>.</h2>
+      <span class="meta">&sect;02 &middot; FAQ</span>
     </div>
     <div class="faq-grid">
-      <div class="faq"><h4>Do I have to be a student?</h4><p>No. CivicByte is student-founded, but anyone building free, open-source civic tools can submit — developers, nonprofits, other students, community orgs.</p></div>
+      <div class="faq"><h4>Do I have to be a student?</h4><p>No. CivicByte is student-founded, but anyone building free, open-source civic tools can submit &mdash; developers, nonprofits, other students, community orgs.</p></div>
       <div class="faq"><h4>Does it have to be NYC?</h4><p>Not forever. NYC is where we started because it's where we live, but we actively list tools that serve other cities, states, or the whole country.</p></div>
-      <div class="faq"><h4>Can I submit a tool that isn't finished?</h4><p>If it's in beta and usable by a real person, yes. If it's a README and a Figma file, not yet — come back when it runs.</p></div>
+      <div class="faq"><h4>Can I submit a tool that isn't finished?</h4><p>If it's in beta and usable by a real person, yes. If it's a README and a Figma file, not yet &mdash; come back when it runs.</p></div>
       <div class="faq"><h4>What if my tool uses paid APIs?</h4><p>Users should never pay or sign up. If your infra cost is covered by you (or a grant), that's fine. If the user has to pay, it won't be listed.</p></div>
-      <div class="faq"><h4>What if I can't keep maintaining it?</h4><p>Tell us. We archive tools with a note — we don't silently delete them — and we might be able to hand maintenance to another contributor.</p></div>
+      <div class="faq"><h4>What if I can't keep maintaining it?</h4><p>Tell us. We archive tools with a note &mdash; we don't silently delete them &mdash; and we might be able to hand maintenance to another contributor.</p></div>
       <div class="faq"><h4>Is this a non-profit?</h4><p>We're operating as an independent project while we establish 501(c)(3) status. All tools are and will stay free regardless.</p></div>
     </div>
   </section>
 
   <footer>
-    <div class="fg">
+    <div class="foot-grid">
       <div>
-        <a href="/" class="mark"><span class="sq"></span> civicbyte</a>
-        <p>An open platform for free, community-facing civic tools built on public data.</p>
+        <a href="/" class="mark">civic<em>byte</em>.</a>
+        <p>An independent NYC civic-data project. Free, open-source tools built on public records. Released under MIT.</p>
       </div>
-      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
-      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">Our story</a></li></ul></div>
-      <div><h5>Connect</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/about.html">About</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/brand.html">Brand</a></li></ul></div>
+      <div><h5>Contact</h5><ul><li><a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
     </div>
-    <div class="col2"><span>© 2026 CivicByte · MIT License</span><span>Made in NYC · By students, for everyone</span></div>
+    <div class="colophon">
+      <span>&copy; 2026 CivicByte &middot; MIT License</span>
+      <span>Set in Fraunces &middot; Newsreader &middot; IBM Plex Mono</span>
+      <span>Printed on the open web</span>
+    </div>
   </footer>
 
 </div>
@@ -339,7 +406,6 @@
   const form = document.getElementById('submit-form');
   const okBox = document.getElementById('form-success');
   if (!form) return;
-
   function getValues() {
     const fd = new FormData(form);
     const out = {};
@@ -349,7 +415,6 @@
     }
     return out;
   }
-
   function validate(v) {
     const required = ['toolName','liveUrl','repoUrl','shortDesc','category','dataSources','submitterName','submitterEmail'];
     for (const k of required) if (!v[k] || String(v[k]).trim() === '') return 'Please fill in every required field — "' + k + '" is missing.';
@@ -359,7 +424,6 @@
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.submitterEmail)) return 'That email address doesn\'t look valid.';
     return null;
   }
-
   function compose(v) {
     const lines = [];
     lines.push('CivicByte tool submission');
@@ -390,38 +454,30 @@
     lines.push('Confirmed the four CivicByte standards: yes');
     return lines.join('\n');
   }
-
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const v = getValues();
     const err = validate(v);
     if (err) {
-      okBox.classList.add('shown');
-      okBox.style.background = '#fef2f0';
-      okBox.style.borderColor = 'rgba(184,67,43,0.3)';
-      okBox.innerHTML = '<strong style="color:var(--brick)">Hold on —</strong> ' + err;
+      okBox.className = 'form-success error shown';
+      okBox.innerHTML = '<strong>Hold on —</strong> ' + err;
       okBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       return;
     }
-    // Persist a local copy so the user can always retrieve their draft.
     try {
       const stored = JSON.parse(localStorage.getItem('cb_submissions') || '[]');
       stored.push({ ts: new Date().toISOString(), data: v });
       localStorage.setItem('cb_submissions', JSON.stringify(stored));
     } catch (e) {}
-    // Open the user's mail client pre-filled to hello@civicbyte.dev so the submission
-    // actually goes somewhere even before we wire up a backend.
     const body = compose(v);
     const subject = 'CivicByte tool submission · ' + v.toolName;
     const mailto = 'mailto:hello@civicbyte.dev?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    okBox.style.background = '#ecefd8';
-    okBox.style.borderColor = 'rgba(91,107,58,0.3)';
+    okBox.className = 'form-success shown';
     okBox.innerHTML =
       '<strong>Got it.</strong> Your mail client should now open with the submission addressed to ' +
       '<a href="mailto:hello@civicbyte.dev">hello@civicbyte.dev</a>. ' +
-      'If nothing happened, copy the details from the form and send them manually — we\'ll respond within a week. ' +
-      '<a href="' + mailto + '">Re-open mail client →</a>';
-    okBox.classList.add('shown');
+      'If nothing happened, copy the details from the form and send them manually &mdash; we will respond within a week. ' +
+      '<a href="' + mailto + '">Re-open mail client &rarr;</a>';
     okBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     window.location.href = mailto;
   });
