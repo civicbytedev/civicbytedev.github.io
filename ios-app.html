@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>iOS App — CivicByte</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="design-canvas.jsx"></script>
+
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #f0eee9; }
+  body { font-family: -apple-system, system-ui, sans-serif; }
+  #root { height: 100vh; }
+</style>
+</head>
+<body>
+
+<!-- Pixel-C icon sprite -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+  <symbol id="cb-icon" viewBox="0 0 64 64">
+    <rect x="0" y="0" width="64" height="64" rx="14" fill="#B33E16"/>
+    <rect x="7" y="6" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="20" y="6" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="33" y="6" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="46" y="6" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="7" y="19" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="7" y="32" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="7" y="45" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="7" y="48" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="20" y="48" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="33" y="48" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="46" y="48" width="11" height="11" rx="2" fill="#E8A14A"/>
+  </symbol>
+</svg>
+
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState } = React;
+
+// ── Editorial palette ───────────────────────────────────
+const P = {
+  paper: '#F4F1E9',
+  ink: '#14110D',
+  ink2: '#2A2620',
+  mute: '#6B6660',
+  faint: '#94908A',
+  rule:  'rgba(20,17,13,0.14)',
+  rule2: 'rgba(20,17,13,0.22)',
+  ember: '#B33E16',
+  emberSoft: 'rgba(179,62,22,0.10)',
+  serif: "'Newsreader', Georgia, serif",
+  sans:  "'Inter Tight', system-ui, sans-serif",
+  mono:  "'IBM Plex Mono', ui-monospace, monospace",
+};
+
+// ── Shared primitives ───────────────────────────────────
+function Masthead({ left = 'Vol. 01', right = 'May 22' }) {
+  return (
+    <div style={{
+      padding: '14px 22px 12px',
+      borderTop: `3px solid ${P.ink}`,
+      borderBottom: `1px solid ${P.rule}`,
+      display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'baseline',
+      gap: 12,
+      fontFamily: P.mono, fontSize: 9.5, letterSpacing: '0.16em',
+      textTransform: 'uppercase', color: P.mute,
+    }}>
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+        <span style={{ width: 5, height: 5, background: P.ember, display: 'inline-block', transform: 'translateY(0.5px)' }} />
+        {left}
+      </span>
+      <span style={{ fontFamily: P.serif, fontSize: 19, fontWeight: 500, letterSpacing: '-0.02em', textTransform: 'none', color: P.ink }}>
+        CivicByte<span style={{ color: P.ember }}>.</span>
+      </span>
+      <span style={{ textAlign: 'right' }}>{right}</span>
+    </div>
+  );
+}
+
+function BackBar({ label, right }) {
+  return (
+    <div style={{
+      padding: '14px 22px 12px',
+      borderTop: `3px solid ${P.ink}`,
+      borderBottom: `1px solid ${P.rule}`,
+      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      fontFamily: P.mono, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase',
+    }}>
+      <span style={{ color: P.ember, display: 'inline-flex', gap: 6, alignItems: 'baseline' }}>
+        <span style={{ fontSize: 12, transform: 'translateY(1px)' }}>←</span>
+        {label}
+      </span>
+      <span style={{ color: P.mute }}>{right || ''}</span>
+    </div>
+  );
+}
+
+function Dateline({ items }) {
+  return (
+    <div style={{
+      fontFamily: P.mono, fontSize: 9.5, letterSpacing: '0.16em',
+      textTransform: 'uppercase', color: P.mute,
+      display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'baseline',
+    }}>
+      {items.map((it, i) => (
+        <React.Fragment key={i}>
+          {i > 0 && <span style={{ color: P.rule2 }}>·</span>}
+          <span style={i === 0 ? { color: P.ember } : {}}>{it}</span>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+// ── Screen 1: Home ──────────────────────────────────────
+function ScreenHome() {
+  const tools = [
+    { n: '01', title: 'Building Report',     desc: 'HPD violations for any address.',         records: '1.1M addresses' },
+    { n: '02', title: 'Landlord Watch',      desc: 'A landlord\u2019s whole portfolio.',      records: '36k owners' },
+    { n: '03', title: 'School Budget',       desc: 'Where the per-pupil dollars go.',         records: '1,800 schools' },
+    { n: '04', title: 'Eviction Records',    desc: 'Marshal evictions, address by address.',  records: '100k records' },
+    { n: '05', title: '311 Lookup',          desc: 'Every complaint ever filed.',             records: '35M complaints' },
+  ];
+
+  return (
+    <div style={{
+      height: '100%', background: P.paper, color: P.ink,
+      fontFamily: P.sans, overflow: 'hidden',
+      display: 'flex', flexDirection: 'column',
+      paddingTop: 60,
+    }}>
+      <Masthead left="Vol. 01 · No. 17" right="May 22" />
+
+      {/* Hero */}
+      <div style={{ padding: '32px 22px 22px' }}>
+        <Dateline items={['Front Page', 'Edition for the five boroughs']} />
+        <h1 style={{
+          fontFamily: P.serif, fontWeight: 500,
+          fontSize: 36, lineHeight: 0.96, letterSpacing: '-0.026em',
+          margin: '14px 0 0', color: P.ink, textWrap: 'balance',
+        }}>
+          Public data,<br />made <em style={{ color: P.ember, fontWeight: 500 }}>usable</em>.
+        </h1>
+      </div>
+
+      {/* Index — numbered list */}
+      <div style={{ borderTop: `3px solid ${P.ink}`, margin: '8px 22px 0', paddingTop: 14 }}>
+        <div style={{
+          display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+          paddingBottom: 16, borderBottom: `1px solid ${P.rule}`,
+        }}>
+          <div>
+            <div style={{
+              fontFamily: P.mono, fontSize: 10, letterSpacing: '0.18em',
+              textTransform: 'uppercase', color: P.ember, marginBottom: 4,
+            }}>The Tools</div>
+            <div style={{
+              fontFamily: P.serif, fontWeight: 500, fontSize: 22,
+              letterSpacing: '-0.015em', lineHeight: 1.05, color: P.ink,
+            }}>Five tools, <em style={{ color: P.ember, fontWeight: 500, fontStyle: 'italic' }}>in the field.</em></div>
+          </div>
+          <div style={{
+            fontFamily: P.mono, fontSize: 10, letterSpacing: '0.14em',
+            color: P.mute, textTransform: 'uppercase',
+          }}><span style={{ color: P.ember, fontWeight: 500 }}>05</span> live</div>
+        </div>
+
+        {tools.map((t, i, arr) => (
+          <div key={t.n} style={{
+            display: 'grid', gridTemplateColumns: '30px 1fr 16px',
+            gap: 14, padding: '15px 0', alignItems: 'baseline',
+            borderBottom: i < arr.length - 1 ? `1px solid ${P.rule}` : 'none',
+          }}>
+            <span style={{ fontFamily: P.mono, fontSize: 10.5, letterSpacing: '0.12em', color: P.mute }}>{t.n}</span>
+            <div>
+              <div style={{ fontFamily: P.serif, fontWeight: 500, fontSize: 18, lineHeight: 1.18, letterSpacing: '-0.012em', color: P.ink }}>{t.title}</div>
+              <div style={{ fontFamily: P.sans, fontSize: 12.5, lineHeight: 1.4, color: P.mute, marginTop: 3 }}>
+                {t.desc} <span style={{ fontFamily: P.mono, fontSize: 10, letterSpacing: '0.08em', color: P.faint }}>· {t.records}</span>
+              </div>
+            </div>
+            <span style={{ fontFamily: P.mono, fontSize: 14, color: P.ember, textAlign: 'right' }}>→</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer slug */}
+      <div style={{
+        marginTop: 'auto',
+        padding: '18px 22px 24px',
+        borderTop: `1px solid ${P.rule}`,
+        display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+        fontFamily: P.mono, fontSize: 9.5, letterSpacing: '0.16em', textTransform: 'uppercase',
+        color: P.mute,
+      }}>
+        <span>About · Standards</span>
+        <span style={{ color: P.ember }}>Submit a tool →</span>
+      </div>
+    </div>
+  );
+}
+
+// ── Screen 2: Tool Select (intro) ───────────────────────
+function ScreenIntro() {
+  return (
+    <div style={{
+      height: '100%', background: P.paper, color: P.ink,
+      fontFamily: P.sans, overflow: 'hidden',
+      display: 'flex', flexDirection: 'column',
+      paddingTop: 60,
+    }}>
+      <BackBar label="Tools" right="01 of 05" />
+
+      {/* Hero — the tool's headline + dateline */}
+      <div style={{ padding: '28px 22px 22px' }}>
+        <Dateline items={['Tool · 01', 'Building Report', 'Housing']} />
+        <h1 style={{
+          fontFamily: P.serif, fontWeight: 500,
+          fontSize: 32, lineHeight: 0.98, letterSpacing: '-0.024em',
+          margin: '14px 0 0', color: P.ink, textWrap: 'balance',
+        }}>
+          What the city already knows <em style={{ color: P.ember, fontWeight: 500, fontStyle: 'italic' }}>about your building.</em>
+        </h1>
+      </div>
+
+      {/* Lede — editorial paragraph */}
+      <div style={{
+        margin: '0 22px',
+        paddingTop: 20,
+        borderTop: `1px solid ${P.rule}`,
+      }}>
+        <p style={{
+          fontFamily: P.serif, fontWeight: 400,
+          fontSize: 17, lineHeight: 1.5, color: P.ink2,
+          margin: 0, textWrap: 'pretty',
+        }}>
+          Enter any address in the five boroughs to pull every HPD maintenance violation on record — class A, B, or C, with the date filed, the unit, and the agency's note. Updated daily from the city's open-data feed.
+        </p>
+      </div>
+
+      {/* Spec rail — small editorial facts */}
+      <div style={{ margin: '20px 22px 0' }}>
+        {[
+          { k: 'Source',     v: 'NYC HPD violations dataset' },
+          { k: 'Refreshed',  v: 'Daily · 02:14 UTC' },
+          { k: 'Coverage',   v: '1.1M addresses · all 5 boroughs' },
+          { k: 'You\u2019ll need', v: 'A street address. Nothing else.' },
+        ].map((row, i) => (
+          <div key={i} style={{
+            display: 'grid', gridTemplateColumns: '92px 1fr',
+            gap: 16, padding: '12px 0',
+            borderBottom: `1px solid ${P.rule}`,
+            alignItems: 'baseline',
+          }}>
+            <span style={{ fontFamily: P.mono, fontSize: 9.5, letterSpacing: '0.16em', textTransform: 'uppercase', color: P.mute }}>{row.k}</span>
+            <span style={{ fontFamily: P.sans, fontSize: 14, color: P.ink, lineHeight: 1.4 }}>{row.v}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* The one CTA */}
+      <div style={{
+        marginTop: 'auto',
+        padding: '24px 22px 30px',
+        borderTop: `3px solid ${P.ink}`,
+        display: 'flex', flexDirection: 'column', gap: 14,
+      }}>
+        <div style={{
+          fontFamily: P.mono, fontSize: 9.5, letterSpacing: '0.18em',
+          textTransform: 'uppercase', color: P.ember,
+        }}>Ready</div>
+        <button style={{
+          background: 'transparent', border: 'none', padding: 0, cursor: 'pointer',
+          display: 'flex', alignItems: 'baseline', justifyContent: 'space-between',
+          fontFamily: P.serif, fontWeight: 500, fontSize: 24,
+          color: P.ink, letterSpacing: '-0.015em',
+          paddingBottom: 14, borderBottom: `1px solid ${P.ink}`,
+        }}>
+          <span>Open the tool</span>
+          <span style={{ fontFamily: P.mono, color: P.ember, fontSize: 20 }}>→</span>
+        </button>
+        <div style={{
+          fontFamily: P.mono, fontSize: 9.5, letterSpacing: '0.14em', color: P.mute,
+          textTransform: 'uppercase',
+        }}>Free · No login · No tracking</div>
+      </div>
+    </div>
+  );
+}
+
+// ── Screen 3: Tool Screen (results) ─────────────────────
+function ScreenTool() {
+  return (
+    <div style={{
+      height: '100%', background: P.paper, color: P.ink,
+      fontFamily: P.sans, overflow: 'hidden',
+      display: 'flex', flexDirection: 'column',
+      paddingTop: 60,
+    }}>
+      <BackBar label="Building Report" right="Tool · 01" />
+
+      {/* Search field — editorial input */}
+      <div style={{
+        padding: '20px 22px 18px',
+        borderBottom: `1px solid ${P.rule}`,
+      }}>
+        <div style={{
+          fontFamily: P.mono, fontSize: 9.5, letterSpacing: '0.16em',
+          textTransform: 'uppercase', color: P.mute, marginBottom: 8,
+        }}>Address</div>
+        <div style={{
+          display: 'flex', alignItems: 'baseline', justifyContent: 'space-between',
+          gap: 12, paddingBottom: 8, borderBottom: `1.5px solid ${P.ink}`,
+        }}>
+          <div style={{
+            fontFamily: P.serif, fontWeight: 500, fontSize: 19, lineHeight: 1.2,
+            letterSpacing: '-0.012em', color: P.ink, flex: 1, minWidth: 0,
+          }}>965 Longfellow Ave, Bronx
+            <span style={{ display: 'inline-block', width: 1.5, height: 18, background: P.ember, marginLeft: 2, transform: 'translateY(3px)' }} />
+          </div>
+          <span style={{ fontFamily: P.mono, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: P.ember }}>READ →</span>
+        </div>
+      </div>
+
+      {/* Results: dateline */}
+      <div style={{ padding: '16px 22px 0' }}>
+        <Dateline items={['The Readout', 'Refreshed today', '14 units']} />
+      </div>
+
+      {/* Two keystats */}
+      <div style={{ margin: '14px 22px 0', display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+        <div style={{
+          padding: '18px 16px 18px 0', borderBottom: `1px solid ${P.rule}`,
+          borderTop: `1px solid ${P.rule}`,
+        }}>
+          <div style={{ fontFamily: P.mono, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: P.mute, marginBottom: 8 }}>Open violations</div>
+          <div style={{ fontFamily: P.serif, fontWeight: 500, fontSize: 46, lineHeight: 1, letterSpacing: '-0.03em', color: P.ember }}>14</div>
+          <div style={{ fontFamily: P.mono, fontSize: 9.5, letterSpacing: '0.06em', color: P.mute, marginTop: 8 }}>
+            <b style={{ color: P.ink, fontWeight: 500 }}>6</b>&nbsp;C&nbsp;·&nbsp;<b style={{ color: P.ink, fontWeight: 500 }}>7</b>&nbsp;B&nbsp;·&nbsp;<b style={{ color: P.ink, fontWeight: 500 }}>1</b>&nbsp;A
+          </div>
+        </div>
+        <div style={{
+          padding: '18px 0 18px 16px',
+          borderBottom: `1px solid ${P.rule}`, borderTop: `1px solid ${P.rule}`,
+          borderLeft: `1px solid ${P.rule}`,
+        }}>
+          <div style={{ fontFamily: P.mono, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: P.mute, marginBottom: 8 }}>Registration</div>
+          <div style={{ fontFamily: P.sans, fontWeight: 500, fontSize: 20, letterSpacing: '-0.012em', color: P.ink }}>Valid</div>
+          <div style={{ fontFamily: P.mono, fontSize: 9.5, letterSpacing: '0.06em', color: P.mute, marginTop: 8 }}>Verified · 22 May</div>
+        </div>
+      </div>
+
+      {/* Violations table */}
+      <div style={{ margin: '16px 22px 0', flex: 1, minHeight: 0, overflow: 'hidden' }}>
+        <div style={{
+          fontFamily: P.mono, fontSize: 9, letterSpacing: '0.16em',
+          textTransform: 'uppercase', color: P.mute, paddingBottom: 8,
+          borderBottom: `1px solid ${P.rule2}`,
+          display: 'grid', gridTemplateColumns: '46px 22px 1fr', gap: 10,
+        }}>
+          <span>Date</span><span>Cls</span><span>Violation</span>
+        </div>
+        {[
+          { d: 'Jan 14', c: 'C', t: 'No heat or hot water — full building', ember: true },
+          { d: 'Dec 02', c: 'C', t: 'Lead paint — child under six', ember: true },
+          { d: 'Nov 18', c: 'B', t: 'Broken window frame, apt 4R' },
+          { d: 'Oct 05', c: 'B', t: 'Mice infestation, kitchen' },
+          { d: 'Sep 22', c: 'B', t: 'Defective ceiling plaster, apt 1A' },
+          { d: 'Aug 11', c: 'A', t: 'Peeling paint, common stair' },
+        ].map((row, i, arr) => (
+          <div key={i} style={{
+            display: 'grid', gridTemplateColumns: '46px 22px 1fr', gap: 10,
+            padding: '11px 0', alignItems: 'baseline',
+            borderBottom: i < arr.length - 1 ? `1px solid ${P.rule}` : 'none',
+          }}>
+            <span style={{ fontFamily: P.mono, fontSize: 10.5, letterSpacing: '0.04em', color: P.mute, textTransform: 'uppercase' }}>{row.d}</span>
+            <span style={{ fontFamily: P.mono, fontSize: 10.5, fontWeight: 500, letterSpacing: '0.12em', color: row.ember ? P.ember : P.ink }}>{row.c}</span>
+            <span style={{ fontFamily: P.serif, fontSize: 14, lineHeight: 1.35, color: P.ink }}>{row.t}</span>
+          </div>
+        ))}
+      </div>
+
+      <div style={{
+        padding: '14px 22px 24px',
+        borderTop: `1px solid ${P.rule}`,
+        display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+        fontFamily: P.mono, fontSize: 9.5, letterSpacing: '0.14em', textTransform: 'uppercase',
+        color: P.mute,
+      }}>
+        <span>Source · HPD</span>
+        <span style={{ color: P.ember }}>Share record →</span>
+      </div>
+    </div>
+  );
+}
+
+// ── App layout ──────────────────────────────────────────
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection
+        id="ios-app"
+        title="CivicByte · iOS app"
+        subtitle="Home → Tool select → Tool screen. Editorial system applied; native iOS flow."
+      >
+        <DCArtboard id="home" label="01 · Home" width={402} height={874}>
+          <IOSDevice width={402} height={874}>
+            <ScreenHome />
+          </IOSDevice>
+        </DCArtboard>
+        <DCArtboard id="intro" label="02 · Tool select" width={402} height={874}>
+          <IOSDevice width={402} height={874}>
+            <ScreenIntro />
+          </IOSDevice>
+        </DCArtboard>
+        <DCArtboard id="tool" label="03 · Tool screen" width={402} height={874}>
+          <IOSDevice width={402} height={874}>
+            <ScreenTool />
+          </IOSDevice>
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+
+</body>
+</html>
