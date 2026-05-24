@@ -139,6 +139,8 @@ a { color: inherit; text-decoration: none; }
 /* ── Hero (page-opening unit) ───────────── */
 .hero {
   padding: 36px 0 52px;
+}
+.hero:has(.hero-aside) {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 64px;
@@ -794,7 +796,8 @@ footer .colophon {
   .wordmark { text-align: left; font-size: 24px; }
   .secnav { flex-direction: column; align-items: flex-start; gap: 12px; }
   .secnav ul { flex-wrap: wrap; gap: 18px; }
-  .hero { padding: 28px 0 10px; grid-template-columns: 1fr; gap: 36px; }
+  .hero { padding: 28px 0 10px; }
+  .hero:has(.hero-aside) { grid-template-columns: 1fr; gap: 36px; }
   .hero h1 { font-size: clamp(40px, 9vw, 64px); }
   .hero-aside { display: none; }
   .section-head { grid-template-columns: 1fr; }
