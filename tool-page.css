@@ -427,3 +427,24 @@
   .stat-grid .s:last-child, .stat-grid .s:nth-last-child(2) { border-bottom: none; }
   .related { padding: 32px 24px; }
 }
+
+@media (max-width: 540px) {
+  .crumb { padding: 12px 16px 0; }
+  .tool-hero { padding: 16px 16px 24px; gap: 20px; }
+  .tool-hero h1 { font-size: 32px; }
+  .preview-wrap { padding: 0 16px 24px; }
+  .preview-frame .pf-body { padding: 18px 16px 20px; min-height: 0; }
+  .tool-section { padding: 24px 16px; }
+  .tool-section h2 { font-size: 24px; }
+  .related { padding: 24px 16px; }
+  /* Stat grid: single column so cells don't squeeze */
+  .stat-grid { grid-template-columns: 1fr; }
+  .stat-grid .s { border-right: none; border-bottom: 1px solid var(--ink); }
+  .stat-grid .s:nth-last-child(2) { border-bottom: 1px solid var(--ink); }
+  .stat-grid .s:last-child { border-bottom: none; }
+  /* Bar mini: stack label above bar so it doesn't overflow */
+  .bar-mini { flex-wrap: wrap; gap: 8px; }
+  .bar-mini .bm-label { width: 100%; }
+  .bar-mini .bm-bar { flex: 1 1 auto; }
+  .bar-mini .bm-n { width: auto; min-width: 50px; }
+}

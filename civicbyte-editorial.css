@@ -715,3 +715,27 @@ footer .colophon {
   .lookup { grid-template-columns: 1fr; gap: 12px; }
   .readout-grid { grid-template-columns: 1fr; gap: 28px; padding-top: 24px; }
 }
+
+/* ── Small-screen mobile (≤ 540 px) ───────────────────────────── */
+@media (max-width: 540px) {
+  /* Masthead: allow date spans to wrap on very narrow screens; hide tagline */
+  .masthead .l { flex-wrap: wrap; gap: 6px; }
+  .masthead .r { display: none; }
+
+  /* Dateline: wrap long tool-page datelines rather than overflow */
+  .dateline { flex-wrap: wrap; row-gap: 4px; }
+
+  /* Section nav: tighter spacing; hide submit CTA to reduce header height */
+  .secnav ul { gap: 14px; }
+  .secnav .right { display: none; }
+
+  /* Index list: slightly smaller title text for comfortable reading */
+  .ilist .ititle { font-size: 22px; }
+
+  /* Data tables: horizontal scroll instead of clipping (landlord/building reports) */
+  .tbl { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Footer: single column on phones */
+  footer .fwrap { grid-template-columns: 1fr; gap: 28px; }
+  footer .colophon { flex-direction: column; gap: 8px; }
+}
