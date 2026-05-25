@@ -1,25 +1,25 @@
 {
-  "updatedAt": "2026-05-24T23:09:09.334722+00:00",
+  "updatedAt": "2026-05-25T04:18:50.603217+00:00",
   "realtime": 0,
   "7day": {
-    "users": 2,
-    "views": 5,
-    "sessions": 4
+    "users": 3,
+    "views": 6,
+    "sessions": 5
   },
   "30day": {
-    "users": 31594,
-    "newUsers": 31943,
-    "views": 63713,
-    "sessions": 32079
+    "users": 28756,
+    "newUsers": 28948,
+    "views": 57676,
+    "sessions": 28715
   },
   "topPages": [
     {
       "label": "Home",
-      "count": 31465
+      "count": 28639
     },
     {
       "label": "NYC Building Checker",
-      "count": 31362
+      "count": 28561
     },
     {
       "label": "NYC School Budget Tracker",
@@ -27,55 +27,50 @@
     },
     {
       "label": "Tools",
-      "count": 7
+      "count": 6
     },
     {
       "label": "About",
-      "count": 4
+      "count": 3
     },
     {
       "label": "Impact",
-      "count": 4
+      "count": 3
     },
     {
-      "label": "NYC Landlord Watch",
-      "count": 2
+      "label": "Index V2",
+      "count": 1
     },
     {
       "label": "Submit a Tool",
-      "count": 2
+      "count": 1
     }
   ],
   "sources": [
     {
       "name": "Organic Video",
-      "count": 8587,
+      "count": 7797,
       "i": 0
     },
     {
-      "name": "Direct",
-      "count": 8005,
+      "name": "Organic Search",
+      "count": 7276,
       "i": 1
     },
     {
-      "name": "Organic Search",
-      "count": 7954,
+      "name": "Direct",
+      "count": 7226,
       "i": 2
     },
     {
       "name": "Referral",
-      "count": 7757,
+      "count": 6925,
       "i": 3
     },
     {
       "name": "Unassigned",
       "count": 5,
       "i": 4
-    },
-    {
-      "name": "Organic Social",
-      "count": 1,
-      "i": 5
     }
   ]
 }
