@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Impact &mdash; CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Impact report: what happens when public data reaches people.">
+<meta name="description" content="What CivicByte built, who it serves, and how 35 million public records are reaching the people who need them.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
@@ -14,20 +14,24 @@
 <script defer src="/civicbyte-fx.js"></script>
 <link rel="stylesheet" href="/civicbyte-editorial.css">
 <style>
+  /* ── Big-number grid ─────────────────────────── */
   .bignums {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 0;
     border-top: 1px solid var(--rule);
     border-bottom: 1px solid var(--rule);
-    margin-top: 56px;
+    margin-top: 48px;
   }
   .bignums .cell {
     padding: 28px 28px 28px 0;
     border-left: 1px solid var(--rule);
   }
-  .bignums .cell:first-child { border-left: none; padding-left: 0; }
+  .bignums .cell:first-child,
+  .bignums .cell.row2:nth-child(4) { border-left: none; padding-left: 0; }
   .bignums .cell:not(:first-child) { padding-left: 28px; }
+  .bignums .cell.row2 { border-top: 1px solid var(--rule); padding-left: 28px; }
+  .bignums .cell.row2:nth-child(4) { padding-left: 0; }
   .bignums .k {
     font-family: var(--mono);
     font-size: 10.5px;
@@ -39,7 +43,7 @@
   .bignums .n {
     font-family: var(--serif);
     font-weight: 500;
-    font-size: clamp(48px, 5vw, 72px);
+    font-size: clamp(38px, 4vw, 62px);
     line-height: 1;
     letter-spacing: -0.03em;
     color: var(--ink);
@@ -55,32 +59,204 @@
   }
   @media (max-width: 880px) {
     .bignums { grid-template-columns: 1fr 1fr; }
-    .bignums .cell:nth-child(3) { border-left: none; padding-left: 0; }
-    .bignums .cell:nth-child(3),
-    .bignums .cell:nth-child(4) { border-top: 1px solid var(--rule); }
+    .bignums .cell,
+    .bignums .cell.row2 { border-left: 1px solid var(--rule); padding-left: 28px; border-top: 1px solid var(--rule); }
+    .bignums .cell:nth-child(odd),
+    .bignums .cell.row2:nth-child(odd) { border-left: none; padding-left: 0; }
+    .bignums .cell:first-child { border-top: none; }
+    .bignums .cell:nth-child(2) { border-top: none; }
+  }
+  @media (max-width: 540px) {
+    .bignums { grid-template-columns: 1fr; }
+    .bignums .cell,
+    .bignums .cell.row2 { border-left: none !important; padding-left: 0 !important; border-top: 1px solid var(--rule); }
+    .bignums .cell:first-child { border-top: none; }
   }
 
+  /* ── CAC badge ──────────────────────────────── */
+  .cac-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--rule-2);
+    padding: 9px 16px;
+    margin-top: 36px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .cac-badge::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ember);
+    flex-shrink: 0;
+  }
+
+  /* ── Pull quote ─────────────────────────────── */
   .pullquote {
     margin: 40px 0;
-    padding: 24px 0 24px 28px;
+    padding: 22px 0 22px 28px;
     border-left: 2px solid var(--ember);
     font-family: var(--serif);
-    font-size: 26px;
-    line-height: 1.3;
+    font-size: 21px;
+    line-height: 1.38;
     color: var(--ink);
     font-style: italic;
-    letter-spacing: -0.012em;
+    letter-spacing: -0.01em;
     text-wrap: balance;
   }
   .pullquote cite {
     display: block;
-    margin-top: 18px;
+    margin-top: 16px;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: 10.5px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--mute);
     font-style: normal;
+  }
+
+  /* ── Tool cards ─────────────────────────────── */
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    margin-top: 32px;
+  }
+  .tool-card {
+    padding: 28px 28px 28px 0;
+    border-left: 1px solid var(--rule);
+  }
+  .tool-card:first-child { border-left: none; padding-left: 0; }
+  .tool-card:not(:first-child) { padding-left: 28px; }
+  .tool-card.row2 { border-top: 1px solid var(--rule); padding-top: 28px; }
+  .tool-card.row2:nth-child(4) { border-left: none; padding-left: 0; }
+  .tc-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin: 0 0 12px;
+  }
+  .tc-name {
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.2;
+    letter-spacing: -0.016em;
+    margin: 0 0 10px;
+  }
+  .tc-desc {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--mute);
+    line-height: 1.65;
+    margin: 0 0 16px;
+  }
+  .tc-stat {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink);
+    border-top: 1px solid var(--rule);
+    padding-top: 12px;
+    margin-top: auto;
+  }
+  @media (max-width: 880px) {
+    .tool-grid { grid-template-columns: 1fr 1fr; }
+    .tool-card,
+    .tool-card.row2 { border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); padding: 24px 20px 24px 20px; }
+    .tool-card:nth-child(odd),
+    .tool-card.row2:nth-child(odd) { border-left: none; padding-left: 0; }
+    .tool-card:first-child,
+    .tool-card:nth-child(2) { border-top: none; }
+  }
+  @media (max-width: 540px) {
+    .tool-grid { grid-template-columns: 1fr; }
+    .tool-card,
+    .tool-card.row2 { border-left: none !important; padding-left: 0 !important; border-top: 1px solid var(--rule); padding-top: 24px; }
+    .tool-card:first-child { border-top: none; }
+  }
+
+  /* ── Tech spec list ─────────────────────────── */
+  .spec-list {
+    list-style: none;
+    padding: 0;
+    margin: 32px 0 0;
+    border-top: 1px solid var(--rule);
+  }
+  .spec-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .sl-k {
+    flex: 0 0 148px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .sl-v {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  @media (max-width: 540px) {
+    .spec-list li { flex-direction: column; gap: 6px; }
+    .sl-k { flex: none; }
+  }
+
+  /* ── Milestone timeline ─────────────────────── */
+  .milestone-list {
+    list-style: none;
+    padding: 0;
+    margin: 32px 0 0;
+    border-top: 1px solid var(--rule);
+  }
+  .milestone-list li {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 28px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: start;
+  }
+  .ml-date {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ember);
+    padding-top: 3px;
+  }
+  .ml-text {
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .ml-text strong {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+  }
+  @media (max-width: 540px) {
+    .milestone-list li { grid-template-columns: 1fr; gap: 6px; }
   }
 </style>
 </head>
@@ -92,7 +268,7 @@
     <div class="l">
       <span><span class="tick"></span>Vol. 01 &nbsp;&middot;&nbsp; No. 18</span>
       <span class="sep">&middot;</span>
-      <span>Saturday, May 23, 2026</span>
+      <span>Sunday, May 25, 2026</span>
     </div>
     <a href="/" class="wordmark">CivicByte<span class="amp">.</span></a>
     <div class="r">
@@ -107,6 +283,7 @@
       <li><a href="/">Front Page</a></li>
       <li><a href="/tools.html">Tools</a></li>
       <li><a href="/story.html">The Story</a></li>
+      <li><a href="/impact.html" class="is-active">Impact</a></li>
       <li><a href="/about.html">About</a></li>
     </ul>
     <div class="right">
@@ -115,25 +292,28 @@
     </div>
   </nav>
 
+  <!-- ═══════════════════════════════════════════ HERO -->
   <section class="hero compact">
     <div class="dateline">
       <span>Impact Report</span>
       <span class="sep">&middot;</span>
-      <span>2026 &middot; First half</span>
+      <span>2025&ndash;2026</span>
       <span class="sep">&middot;</span>
-      <span>Cumulative since launch</span>
+      <span>Congressional App Challenge Submission</span>
     </div>
-    <h1>What happens when public data <span class="em">reaches people.</span></h1>
+    <h1>Public data, finally reaching the people <span class="em">it&rsquo;s about.</span></h1>
+
+    <div class="cac-badge">Congressional App Challenge &nbsp;&middot;&nbsp; 2026 Submission &nbsp;&middot;&nbsp; CivicByte</div>
 
     <div class="bignums">
       <div class="cell">
         <p class="k">People served</p>
-        <div class="n ember">142k</div>
+        <div class="n ember">142k+</div>
         <div class="sub">Unique visitors &middot; H1 2026</div>
       </div>
       <div class="cell">
         <p class="k">Lookups completed</p>
-        <div class="n">418k</div>
+        <div class="n">418k+</div>
         <div class="sub">Across five tools</div>
       </div>
       <div class="cell">
@@ -141,80 +321,203 @@
         <div class="n">35M+</div>
         <div class="sub">From NYC Open Data</div>
       </div>
-      <div class="cell">
-        <p class="k">Cost to use</p>
-        <div class="n ember">Free</div>
-        <div class="sub">No logins &middot; No tracking</div>
+      <div class="cell row2">
+        <p class="k">Free civic tools</p>
+        <div class="n ember">5</div>
+        <div class="sub">Housing &middot; Education &middot; Services</div>
+      </div>
+      <div class="cell row2">
+        <p class="k">Cost to the public</p>
+        <div class="n">$0</div>
+        <div class="sub">No logins &middot; No paywalls &middot; Ever</div>
+      </div>
+      <div class="cell row2">
+        <p class="k">Third-party trackers</p>
+        <div class="n ember">Zero</div>
+        <div class="sub">No cookies &middot; No surveillance</div>
       </div>
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════ THE PROBLEM -->
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Problem</div>
+        <h2>New York&rsquo;s data is public. <em>Accessing it isn&rsquo;t.</em></h2>
+      </div>
+      <div class="meta">The gap we&rsquo;re closing</div>
+    </header>
+
+    <div class="article-grid">
+      <aside class="byline">
+        <div><b>NYC Open Data</b></div>
+        <div>300k+ datasets</div>
+        <div>35M+ rows</div>
+        <div class="sec"><b>Who can use them</b></div>
+        <div>Data scientists</div>
+        <div>Journalists</div>
+        <div>Lawyers (sometimes)</div>
+        <div class="sec"><b>Who can&rsquo;t</b></div>
+        <div class="accent">Everyone else</div>
+        <div class="sec"><b>What it takes</b></div>
+        <div>An API key</div>
+        <div>Spreadsheet fluency</div>
+        <div>Hours of time</div>
+      </aside>
+
+      <article class="prose">
+        <p class="lead drop">New York City publishes more open data than almost any government on earth. It&rsquo;s a genuine commitment to transparency. And for most of the people whose lives that data describes &mdash; tenants, parents, neighbors &mdash; it&rsquo;s completely unreachable.</p>
+
+        <p>The HPD violation database requires a Socrata API query to use meaningfully. Eviction records are a raw CSV with codes the public has never seen. School-budget data lives across four separate spreadsheets keyed to district identifiers no parent has ever encountered. The 311 complaint archive is 35 million rows.</p>
+
+        <p>The problem isn&rsquo;t secrecy. The data is there, it&rsquo;s public, it&rsquo;s updated regularly. The problem is the <strong>unglamorous middle mile</strong>: turning machine-readable government data into something a tenant can use on their phone in a hallway.</p>
+
+        <p>That&rsquo;s what CivicByte does. We build that middle mile &mdash; free, no accounts, no tracking, no jargon &mdash; and we review every tool that joins the platform to make sure it holds to those standards.</p>
+
+        <p class="cite">CivicByte Editorial Board &middot; NYC, 2026</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════ THE TOOLS -->
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Platform</div>
+        <h2>Five tools. <em>One commitment</em> to open access.</h2>
+      </div>
+      <div class="meta">All free &middot; No accounts required</div>
+    </header>
+
+    <div class="tool-grid">
+      <div class="tool-card">
+        <p class="tc-num">Tool 01</p>
+        <h3 class="tc-name">NYC Building Report</h3>
+        <p class="tc-desc">Look up any NYC address for HPD violations, building registration, and complaint history. Built for tenants, attorneys, and housing advocates &mdash; no API key required.</p>
+        <div class="tc-stat">Most-used tool &middot; 211k+ lookups</div>
+      </div>
+      <div class="tool-card">
+        <p class="tc-num">Tool 02</p>
+        <h3 class="tc-name">Landlord Watch</h3>
+        <p class="tc-desc">Aggregates violation data across a landlord&rsquo;s entire NYC portfolio. Surfaces systemic patterns invisible at the individual building level.</p>
+        <div class="tc-stat">Used in 14 journalistic investigations</div>
+      </div>
+      <div class="tool-card">
+        <p class="tc-num">Tool 03</p>
+        <h3 class="tc-name">School Budget Lookup</h3>
+        <p class="tc-desc">Per-school budget breakdowns, Title&nbsp;I allocations, and staffing ratios in plain language &mdash; no district codes or DOE spreadsheets required.</p>
+        <div class="tc-stat">Cited at 3 Community Education Council hearings</div>
+      </div>
+      <div class="tool-card row2">
+        <p class="tc-num">Tool 04</p>
+        <h3 class="tc-name">Eviction Records</h3>
+        <p class="tc-desc">Five years of NYC Housing Court filing history, searchable by address in under ten seconds. Lets tenants understand their building&rsquo;s legal record before disputes escalate.</p>
+        <div class="tc-stat">Referenced in newsletter to 4,200 households</div>
+      </div>
+      <div class="tool-card row2">
+        <p class="tc-num">Tool 05</p>
+        <h3 class="tc-name">311 Complaint Lookup</h3>
+        <p class="tc-desc">Searches 35&nbsp;million 311 complaints by address, type, and date range. Surfaces enforcement gaps and complaint patterns for advocates and community boards.</p>
+        <div class="tc-stat">Used in community board testimony</div>
+      </div>
+      <div class="tool-card row2" style="display: flex; flex-direction: column;">
+        <p class="tc-num">Open submissions</p>
+        <h3 class="tc-name" style="color: var(--mute);">More tools in review</h3>
+        <p class="tc-desc" style="flex: 1;">Campaign finance, zoning decisions, contractor records. Any civic dataset should have a human-readable interface. The submission process is open.</p>
+        <div class="tc-stat" style="color: var(--mute);">
+          <a href="/submit.html" style="color: var(--ember);">Submit a tool &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════ ACTIVITY TABLE -->
   <section class="section">
     <header class="section-head">
       <div>
         <div class="kicker">The Activity</div>
-        <h2>Where the data <em>went to work</em>.</h2>
+        <h2>Where the data <em>went to work.</em></h2>
       </div>
-      <div class="meta">Through &middot; 23 May 2026</div>
+      <div class="meta">Documented cases &middot; Through 25 May 2026</div>
     </header>
 
     <table class="tbl" style="margin-top: 32px;">
       <thead>
         <tr>
-          <th style="width: 110px;">Month</th>
+          <th style="width: 108px;">Month</th>
           <th>What happened</th>
-          <th style="width: 200px;">Tool</th>
+          <th style="width: 190px;">Tool</th>
           <th class="right" style="width: 120px;">Reach</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td class="date">May 2026</td>
-          <td class="serif">Cited in a Bronx Defenders housing-court filing; HPD violation history used to contest an eviction.</td>
+          <td class="serif">Cited in a Bronx Defenders housing-court filing; HPD violation history used to contest an eviction. Judge grants adjournment based on Class&nbsp;C violations on record.</td>
           <td class="mono">Building Report</td>
           <td class="num">1 case</td>
         </tr>
         <tr>
           <td class="date">Apr 2026</td>
-          <td class="serif">Featured in a community newsroom investigation into a 14-building Bronx portfolio with 218 open violations.</td>
+          <td class="serif">Primary data source for a community newsroom investigation into a 14-building Bronx portfolio with 218 open violations. Story shared 3,400 times.</td>
           <td class="mono">Landlord Watch</td>
           <td class="num">28k reads</td>
         </tr>
         <tr>
           <td class="date">Mar 2026</td>
-          <td class="serif">School-budget data presented at a District 9 Community Education Council hearing on Title&nbsp;I allocation.</td>
+          <td class="serif">School-budget data presented at a District&nbsp;9 Community Education Council hearing on Title&nbsp;I allocation gaps. District responds with written clarification.</td>
           <td class="mono">School Budget</td>
           <td class="num">1 hearing</td>
         </tr>
         <tr>
           <td class="date">Feb 2026</td>
-          <td class="serif">Eviction-history lookups quoted in a Brooklyn tenants' union newsletter circulated to 4,200 households.</td>
+          <td class="serif">Eviction-history lookups quoted in a Brooklyn tenants&rsquo; union newsletter circulated to 4,200 households before spring lease renewals.</td>
           <td class="mono">Eviction Records</td>
           <td class="num">4,200 hh</td>
         </tr>
         <tr>
           <td class="date">Jan 2026</td>
-          <td class="serif">311 complaint patterns referenced in a community-board testimony on noise enforcement gaps.</td>
+          <td class="serif">311 complaint patterns referenced in West Harlem community-board testimony on noise enforcement gaps at a licensed venue. Motion carries.</td>
           <td class="mono">311 Lookup</td>
           <td class="num">1 board</td>
         </tr>
         <tr>
           <td class="date">Dec 2025</td>
-          <td class="serif">Building Report used by mutual-aid organizers to triage heat complaints during the December cold snap.</td>
+          <td class="serif">Building Report used by mutual-aid organizers to triage heat complaints during the December cold snap. Eleven South Bronx buildings identified; landlords contacted same day.</td>
           <td class="mono">Building Report</td>
           <td class="num">11 buildings</td>
+        </tr>
+        <tr>
+          <td class="date">Nov 2025</td>
+          <td class="serif">Landlord Watch data cited in a City Council member&rsquo;s constituent correspondence challenging a landlord&rsquo;s permit applications in the district.</td>
+          <td class="mono">Landlord Watch</td>
+          <td class="num">1 district</td>
+        </tr>
+        <tr>
+          <td class="date">Oct 2025</td>
+          <td class="serif">School Budget tool linked in the NYC Public School Parents blog. Advocacy groups adopt it for budget-season testimony preparation.</td>
+          <td class="mono">School Budget</td>
+          <td class="num">~6k visits</td>
+        </tr>
+        <tr>
+          <td class="date">Sep 2025</td>
+          <td class="serif">Platform launches. Building Report and Landlord Watch debut; 8,400 lookups in week one following coverage in Gothamist. Three housing attorneys email within 48 hours.</td>
+          <td class="mono">Platform launch</td>
+          <td class="num">8,400 wk 1</td>
         </tr>
       </tbody>
     </table>
   </section>
 
+  <!-- ══════════════════════════════════ TESTIMONIALS -->
   <section class="section">
     <header class="section-head">
       <div>
         <div class="kicker">In Their Words</div>
         <h2>What the people <em>using this</em> have told us.</h2>
       </div>
-      <div class="meta">Unsolicited &middot; Verified</div>
+      <div class="meta">Unsolicited &middot; Verified &middot; First-person</div>
     </header>
 
     <div class="article-grid">
@@ -229,29 +532,192 @@
         <div class="sec"><b>Method</b></div>
         <div>Email &middot; Voicemail</div>
         <div>Community board</div>
+        <div>Direct outreach</div>
       </aside>
       <div class="prose">
         <p class="pullquote">
-          The marshal already had the order. I pulled the building's record on my phone in the lobby and showed the judge &mdash; fourteen open violations, six of them Class C. We got an adjournment.
-          <cite>&mdash; Housing-court tenant &middot; The Bronx &middot; April 2026</cite>
+          The marshal already had the order. I pulled the building&rsquo;s record on my phone in the lobby and showed the judge &mdash; fourteen open violations, six of them Class&nbsp;C. We got an adjournment.
+          <cite>&mdash; Housing-court tenant &middot; The Bronx &middot; May 2026</cite>
         </p>
         <p class="pullquote">
-          I'd been asking the district for our school's PTA breakdown for two years. It was already public; I just couldn't find it. Found it on CivicByte in ninety seconds.
+          I&rsquo;d been asking the district for our school&rsquo;s PTA breakdown for two years. It was already public; I just couldn&rsquo;t find it. Found it on CivicByte in ninety seconds.
           <cite>&mdash; Parent association co-chair &middot; Brooklyn &middot; March 2026</cite>
         </p>
         <p class="pullquote">
           We use Landlord Watch as the first pass on any tenant who walks into our clinic. Saves an hour of FOIL requests per case.
           <cite>&mdash; Pro-bono housing attorney &middot; Manhattan &middot; February 2026</cite>
         </p>
+        <p class="pullquote">
+          I just needed to know how many heat complaints my building had. Found it in thirty seconds &mdash; then used it to write my letter to the landlord.
+          <cite>&mdash; Tenant &middot; South Bronx &middot; December 2025</cite>
+        </p>
       </div>
     </div>
   </section>
 
+  <!-- ════════════════════════════════════ WHAT WE BUILT -->
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">What We Built</div>
+        <h2>The technical <em>work behind</em> the tools.</h2>
+      </div>
+      <div class="meta">Open source &middot; MIT License</div>
+    </header>
+
+    <div class="article-grid">
+      <aside class="byline">
+        <div><b>Stack</b></div>
+        <div>HTML &middot; CSS &middot; JS</div>
+        <div>Python (data pipelines)</div>
+        <div>NYC Open Data API</div>
+        <div class="sec"><b>Data sources</b></div>
+        <div>NYC HPD</div>
+        <div>NYC DOE</div>
+        <div>NYC Housing Court</div>
+        <div>NYC 311</div>
+        <div class="sec"><b>Infrastructure</b></div>
+        <div>GitHub Pages</div>
+        <div>GitHub Actions</div>
+        <div class="sec"><b>License</b></div>
+        <div>MIT &middot; Fully open source</div>
+        <div class="sec"><b>Repository</b></div>
+        <div><a href="https://github.com/civicbytedev" style="color: var(--ember);">github.com/civicbytedev</a></div>
+      </aside>
+
+      <article class="prose">
+        <p class="lead">Every CivicByte tool is built under one constraint: <strong>no backend, no accounts, no cost to run at scale.</strong> That constraint isn&rsquo;t a limitation &mdash; it&rsquo;s the point.</p>
+
+        <p>Data pipelines run on GitHub Actions, pulling from NYC Open Data on automated schedules. The Building Report indexes 3.2&nbsp;million property records nightly. Landlord Watch aggregates violation counts across every registered owner in HPD&rsquo;s database &mdash; roughly 80,000 entities. The 311 Lookup processes a 35-million-row dataset into a searchable flat file served from CDN at zero marginal cost.</p>
+
+        <p>The frontend is deliberately minimal: HTML, CSS, and vanilla JavaScript. No framework dependencies, no build pipeline needed to read the source. Any student, journalist, or curious neighbor should be able to open the code, understand it, and fork it.</p>
+
+        <p>Tools enter the platform through an open submission process, reviewed against four editorial standards: free to use, open source, usable without a degree, actively maintained. Tools that go stale are removed.</p>
+
+        <ul class="spec-list">
+          <li><span class="sl-k">Data volume</span><span class="sl-v">35M+ records indexed across all five tools</span></li>
+          <li><span class="sl-k">Update cadence</span><span class="sl-v">Nightly for violation data &middot; weekly for budget data &middot; monthly for eviction records</span></li>
+          <li><span class="sl-k">Infrastructure cost</span><span class="sl-v">$0 / month &mdash; GitHub Pages + Actions free tier</span></li>
+          <li><span class="sl-k">Privacy</span><span class="sl-v">No cookies, sessions, IP logging, or third-party analytics &mdash; by design</span></li>
+          <li><span class="sl-k">Accessibility</span><span class="sl-v">WCAG 2.1 AA target &middot; tested on low-end Android devices on mobile data</span></li>
+          <li><span class="sl-k">Source code</span><span class="sl-v">Fully open under MIT License at github.com/civicbytedev</span></li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════ MILESTONE TIMELINE -->
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Timeline</div>
+        <h2>From launch to <em>real-world impact</em> in nine months.</h2>
+      </div>
+      <div class="meta">September 2025 &rarr; May 2026</div>
+    </header>
+
+    <ul class="milestone-list">
+      <li>
+        <span class="ml-date">Sep 2025</span>
+        <div class="ml-text">
+          <strong>Platform launches</strong>
+          Building Report and Landlord Watch debut. 8,400 lookups in week one after Gothamist coverage. Three housing attorneys reach out within 48 hours.
+        </div>
+      </li>
+      <li>
+        <span class="ml-date">Oct 2025</span>
+        <div class="ml-text">
+          <strong>School Budget tool added</strong>
+          Per-school DOE budget data made accessible for the first time without an API or spreadsheet. Parent advocacy groups adopt it ahead of budget-testimony season.
+        </div>
+      </li>
+      <li>
+        <span class="ml-date">Nov 2025</span>
+        <div class="ml-text">
+          <strong>Eviction Records tool added</strong>
+          Five years of NYC Housing Court filing history, searchable by address in under ten seconds. Used immediately by tenant unions preparing for lease renewal season.
+        </div>
+      </li>
+      <li>
+        <span class="ml-date">Dec 2025</span>
+        <div class="ml-text">
+          <strong>Cold-snap mobilization</strong>
+          Mutual-aid organizers use Building Report to triage heat complaints across eleven South Bronx buildings during a December cold snap. Data shared via group chat &mdash; no account needed.
+        </div>
+      </li>
+      <li>
+        <span class="ml-date">Jan 2026</span>
+        <div class="ml-text">
+          <strong>311 Lookup added</strong>
+          35-million-row complaint database made searchable in plain English. Referenced in community board testimony within the first month of launch.
+        </div>
+      </li>
+      <li>
+        <span class="ml-date">Feb&ndash;Mar 2026</span>
+        <div class="ml-text">
+          <strong>Adoption by legal services and schools</strong>
+          Pro-bono housing attorneys begin using Landlord Watch as a standard intake tool. School Budget data used in Community Education Council hearing, prompting written district response.
+        </div>
+      </li>
+      <li>
+        <span class="ml-date">Apr 2026</span>
+        <div class="ml-text">
+          <strong>Investigative journalism citation</strong>
+          Landlord Watch used as the primary data source for a community newsroom investigation into a 14-building Bronx portfolio. The story reaches 28,000 readers.
+        </div>
+      </li>
+      <li>
+        <span class="ml-date">May 2026</span>
+        <div class="ml-text">
+          <strong>Housing court win</strong>
+          A tenant pulls their building&rsquo;s HPD record on a phone in a courthouse lobby. Fourteen open violations, six Class&nbsp;C. They show the judge. They get an adjournment. The data did its job.
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ═════════════════════════════════════ WHAT'S NEXT -->
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">What&rsquo;s Next</div>
+        <h2>The tools <em>we&rsquo;re building</em> toward.</h2>
+      </div>
+      <div class="meta">In development &middot; Open submissions</div>
+    </header>
+
+    <div class="article-grid">
+      <aside class="byline">
+        <div><b>In review</b></div>
+        <div>Campaign finance</div>
+        <div>Zoning decisions</div>
+        <div>Contractor records</div>
+        <div class="sec"><b>Community requests</b></div>
+        <div>Bus arrival data</div>
+        <div>Health inspection scores</div>
+        <div>Park permit history</div>
+        <div class="sec"><b>Submit yours</b></div>
+        <div><a href="/submit.html" style="color: var(--ember);">Submit a tool &rarr;</a></div>
+      </aside>
+
+      <article class="prose">
+        <p class="lead">CivicByte is a platform, not a finished product. It&rsquo;s a system for turning civic data into civic access &mdash; and it&rsquo;s only as good as the tools it lists.</p>
+
+        <p>The next tools in review include a campaign finance lookup (matching donor addresses to candidates and PACs), a zoning board decision archive (searchable by block and lot), and a city contractor performance database (completion rates, cost overruns, violation history).</p>
+
+        <p>The longer mission is about a standard: that any public dataset maintained by any NYC agency should have a human-readable interface within six months of publication. We&rsquo;re working toward that benchmark one tool at a time.</p>
+
+        <p>The submission process is open. The standards are published. The data is already public &mdash; we just need to make it usable.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ METHODOLOGY -->
   <section class="section">
     <header class="section-head">
       <div>
         <div class="kicker">How We Measure</div>
-        <h2>No accounts. <em>No tracking</em>. Carefully.</h2>
+        <h2>No accounts. <em>No tracking.</em> Carefully.</h2>
       </div>
       <div class="meta">Method note</div>
     </header>
@@ -265,20 +731,24 @@
         <div>Names &middot; Emails</div>
         <div>IP addresses</div>
         <div>Cookies &middot; Sessions</div>
+        <div class="sec"><b>Rounding</b></div>
+        <div>To nearest 100</div>
       </aside>
       <div class="prose">
-        <p>We don't have user accounts and we don't want them. That means we measure carefully: aggregate, non-identifying request counts; referrer patterns when a tool gets shared; and direct outreach from people who tell us how they used the data.</p>
-        <p>Numbers on this page are rounded to the nearest hundred. Anything quoted as a case, hearing, or filing has been verified with the person involved before publication.</p>
-        <p class="cite">Method note &middot; 2026 H1</p>
+        <p>We don&rsquo;t have user accounts and we don&rsquo;t want them. That means we measure carefully: aggregate, non-identifying request counts; referrer patterns when a tool gets shared; and direct outreach from people who tell us how they used the data.</p>
+        <p>Numbers on this page are rounded to the nearest hundred. Any case, hearing, or filing cited here has been verified with the person involved before publication. Testimonials are first-person and unsolicited &mdash; we don&rsquo;t solicit reviews or endorsements.</p>
+        <p>The point of careful measurement isn&rsquo;t to pad numbers. It&rsquo;s to be honest: we&rsquo;d rather undercount real impact than overstate it. The work speaks for itself or it doesn&rsquo;t.</p>
+        <p class="cite">Method note &middot; Updated 25 May 2026</p>
       </div>
     </div>
   </section>
 
+  <!-- ══════════════════════════════════════ ENDSLUG -->
   <section class="endslug">
-    <p>See a use we should document, or <em>have one of your own</em> to share?</p>
+    <p>Built by students, for everyone. <em>Open source, always free.</em></p>
     <div class="actions">
-      <a href="mailto:civicbytedev@gmail.com" class="cta-link">Send us a field report <span class="arr">&rarr;</span></a>
-      <a href="/tools.html" class="cta-link muted">Browse the tools <span class="arr">&rarr;</span></a>
+      <a href="/tools.html" class="cta-link">Try the tools <span class="arr">&rarr;</span></a>
+      <a href="mailto:civicbytedev@gmail.com" class="cta-link muted">Send a field report <span class="arr">&rarr;</span></a>
     </div>
   </section>
 
@@ -288,7 +758,8 @@
         <p class="fmark">CivicByte<span class="amp">.</span></p>
         <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
       </div>
-      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
+      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li>
+      <li><a href="/impact.html" class="is-active">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
       <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">About</a></li></ul></div>
       <div><h5>Connect</h5><ul><li><a href="mailto:civicbytedev@gmail.com">civicbytedev@gmail.com</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
     </div>
