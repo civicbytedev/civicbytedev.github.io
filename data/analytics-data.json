@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-05-26T22:23:38.071007+00:00",
+  "updatedAt": "2026-05-27T00:13:16.535334+00:00",
   "realtime": 0,
   "7day": {
     "users": 4,
-    "views": 8,
-    "sessions": 7
+    "views": 9,
+    "sessions": 8
   },
   "30day": {
     "users": 25688,
     "newUsers": 25936,
-    "views": 51675,
+    "views": 51676,
     "sessions": 25891
   },
   "topPages": [
