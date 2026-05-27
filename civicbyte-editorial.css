@@ -7,6 +7,8 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+html { overflow-x: clip; }
+body { overflow-x: hidden; max-width: 100vw; }
 
 :root {
   --paper:      #F4F1E9;
@@ -68,17 +70,12 @@ a { color: inherit; text-decoration: none; }
   display: flex; align-items: baseline; gap: 14px;
   white-space: nowrap;
   min-width: 0;
+  overflow: hidden;
 }
 .masthead .l > span, .masthead .r > span { white-space: nowrap; }
 .masthead .r { justify-content: flex-end; }
 .masthead .sep { color: var(--rule-2); }
-.masthead .tick {
-  display: inline-block;
-  width: 6px; height: 6px;
-  background: var(--ember);
-  margin-right: 2px;
-  transform: translateY(1px);
-}
+.masthead .tick { display: none; }
 .wordmark {
   font-family: var(--serif);
   font-weight: 500;
@@ -809,4 +806,111 @@ footer .colophon {
   footer .fwrap { grid-template-columns: 1fr 1fr; }
   .lookup { grid-template-columns: 1fr; gap: 12px; }
   .readout-grid { grid-template-columns: 1fr; gap: 28px; padding-top: 24px; }
+}
+
+/* ── Phone-first refinements (≤ 600px) ──────── */
+@media (max-width: 600px) {
+
+  /* Masthead: strip to just the wordmark, left-aligned */
+  .masthead {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .masthead .l,
+  .masthead .r { display: none; }
+  .wordmark { text-align: left; font-size: 22px; }
+
+  /* Secnav: horizontal-scroll tab bar with 44 px touch targets */
+  .secnav {
+    flex-direction: row;
+    align-items: stretch;
+    padding: 0;
+    gap: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .secnav::-webkit-scrollbar { display: none; }
+  .secnav ul {
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+    gap: 0;
+  }
+  .secnav ul a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 14px;
+    white-space: nowrap;
+    font-size: 10.5px;
+  }
+  /* Pin active indicator to the bottom of the 44 px tap area */
+  .secnav ul a.is-active::after { bottom: 0; }
+  /* Hide "Built something?" on phones — no room */
+  .secnav .right { display: none; }
+
+  /* Dateline: wrap without orphaned dots */
+  .dateline {
+    flex-wrap: wrap;
+    gap: 0 8px;
+    row-gap: 2px;
+  }
+  .dateline .sep { display: none; }
+
+  /* Hero: tighter vertical rhythm */
+  .hero { padding: 20px 0 28px; }
+  .hero h1 { font-size: clamp(34px, 9.5vw, 52px); margin-top: 12px; }
+  .hero.compact h1 { font-size: clamp(30px, 8.5vw, 46px); }
+  .hero-foot { margin-top: 16px; padding-top: 14px; gap: 14px; }
+  .hero-foot .lede { font-size: 17px; max-width: none; }
+  .cta-link { font-size: 15px; }
+  .cta-sub { font-size: 10px; }
+
+  /* Section spacing */
+  .section { margin-top: 40px; }
+  .section-head h2 { font-size: clamp(26px, 7vw, 40px); }
+
+  /* Tool index list: tighter rows */
+  .ilist li a {
+    grid-template-columns: 28px 1fr;
+    gap: 12px;
+    padding: 18px 0;
+  }
+  .ilist .ititle { font-size: 20px; }
+  .ilist .idesc { font-size: 13.5px; }
+
+  /* Lookup form: generous tap area on submit */
+  .lookup { gap: 8px; padding: 12px 0; }
+  .lookup .input { font-size: 18px; }
+  .lookup .submit {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Footer: single column on phones */
+  footer { margin-top: 40px; }
+  footer .fwrap { grid-template-columns: 1fr; gap: 20px; }
+
+  /* Endslug: tighter */
+  .endslug { margin-top: 36px; padding: 14px 0 12px; }
+  .endslug p { max-width: none; }
+
+  /* Editorial prose: comfortable reading sizes */
+  .prose p { font-size: 17px; }
+  .prose p.lead { font-size: 21px; }
+  .prose blockquote { font-size: 18px; padding-left: 18px; }
+  .prose p.lead.drop::first-letter { font-size: 58px; }
+
+  /* Article grid gap */
+  .article-grid { gap: 12px; }
+
+  /* Data tables: horizontal scroll to prevent bleed */
+  .tbl { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Key stat numbers */
+  .keystat .n { font-size: 44px; }
+  .keystat .breakdown { grid-template-columns: repeat(2, auto); gap: 12px; }
 }
