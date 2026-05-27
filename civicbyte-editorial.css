@@ -7,6 +7,8 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+html { overflow-x: clip; }
+body { overflow-x: hidden; max-width: 100vw; }
 
 :root {
   --paper:      #F4F1E9;
@@ -68,17 +70,12 @@ a { color: inherit; text-decoration: none; }
   display: flex; align-items: baseline; gap: 14px;
   white-space: nowrap;
   min-width: 0;
+  overflow: hidden;
 }
 .masthead .l > span, .masthead .r > span { white-space: nowrap; }
 .masthead .r { justify-content: flex-end; }
 .masthead .sep { color: var(--rule-2); }
-.masthead .tick {
-  display: inline-block;
-  width: 6px; height: 6px;
-  background: var(--ember);
-  margin-right: 2px;
-  transform: translateY(1px);
-}
+.masthead .tick { display: none; }
 .wordmark {
   font-family: var(--serif);
   font-weight: 500;
