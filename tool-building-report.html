@@ -190,29 +190,46 @@ function $(id){return document.getElementById(id);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function show(state){['s-idle','s-loading','s-error','s-clean','s-results'].forEach(id => $(id).classList.toggle('on', id === state));}
 
+// Fallback: parse the typed address and match on housenumber + streetname.
+// Used only when GeoSearch can't resolve a BBL.
+async function searchByStreet(raw){
+  const parts = raw.replace(/,.*$/, '').trim();
+  const m = parts.match(/^(\d+[a-zA-Z]?)\s+(.+)$/);
+  if (!m) throw new Error('Could not parse address — try "226 W Tremont Ave, Bronx".');
+  const num = m[1];
+  const street = m[2].toUpperCase()
+    .replace(/\bSTREET\b/g,'ST').replace(/\bAVENUE\b/g,'AVE')
+    .replace(/\bBOULEVARD\b/g,'BLVD').replace(/\bDRIVE\b/g,'DR')
+    .replace(/\bPLACE\b/g,'PL').replace(/\bROAD\b/g,'RD')
+    .replace(/\bPARKWAY\b/g,'PKWY').replace(/\bTERRACE\b/g,'TER')
+    .replace(/\bCOURT\b/g,'CT').replace(/\bLANE\b/g,'LN')
+    .replace(/\bEAST\b/g,'E').replace(/\bWEST\b/g,'W')
+    .replace(/\bNORTH\b/g,'N').replace(/\bSOUTH\b/g,'S').trim();
+  const where = `housenumber='${num.replace(/'/g,"''")}' AND streetname='${street.replace(/'/g,"''")}'`;
+  const url = `${HPD_API}?$where=${encodeURIComponent(where)}&$limit=200&$order=inspectiondate DESC`;
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('API error ' + res.status);
+  return res.json();
+}
+
 async function runSearch(){
   const raw = $('addr').value.trim();
   if(!raw || raw.length < 4){ $('addr').focus(); return; }
   show('s-loading');
   try {
-    const parts = raw.replace(/,.*$/, '').trim();
-    const m = parts.match(/^(\d+[a-zA-Z]?)\s+(.+)$/);
-    if (!m) throw new Error('Could not parse address — try "226 W Tremont Ave, Bronx".');
-    const num = m[1];
-    const street = m[2].toUpperCase()
-      .replace(/\bSTREET\b/g,'ST').replace(/\bAVENUE\b/g,'AVE')
-      .replace(/\bBOULEVARD\b/g,'BLVD').replace(/\bDRIVE\b/g,'DR')
-      .replace(/\bPLACE\b/g,'PL').replace(/\bROAD\b/g,'RD')
-      .replace(/\bPARKWAY\b/g,'PKWY').replace(/\bTERRACE\b/g,'TER')
-      .replace(/\bCOURT\b/g,'CT').replace(/\bLANE\b/g,'LN')
-      .replace(/\bEAST\b/g,'E').replace(/\bWEST\b/g,'W')
-      .replace(/\bNORTH\b/g,'N').replace(/\bSOUTH\b/g,'S').trim();
-    const where = `housenumber='${num.replace(/'/g,"''")}' AND streetname='${street.replace(/'/g,"''")}'`;
-    const url = `${HPD_API}?$where=${encodeURIComponent(where)}&$limit=200&$order=inspectiondate DESC`;
-    const res = await fetch(url);
-    if(!res.ok) throw new Error('API error ' + res.status);
-    const data = await res.json();
-    if(data.length === 0){
+    let data = null, resolved = false;
+    // Preferred: resolve to a canonical BBL via GeoSearch, then query HPD by
+    // BBL — exact and immune to street-name spelling differences.
+    const geo = window.cbGeocode ? await window.cbGeocode(raw) : null;
+    if (geo && geo.bbl) {
+      const where = `bbl='${geo.bbl.replace(/'/g,"''")}'`;
+      const url = `${HPD_API}?$where=${encodeURIComponent(where)}&$limit=200&$order=inspectiondate DESC`;
+      const res = await fetch(url);
+      if (res.ok) { data = await res.json(); resolved = true; }
+    }
+    // Fallback only when GeoSearch couldn't resolve the address.
+    if (!resolved) data = await searchByStreet(raw);
+    if(!data || data.length === 0){
       $('clean-msg').textContent = `No HPD violations found for "${raw}". This may mean no violations on record, or the address wasn't matched. Try including the borough (Bronx, Brooklyn, Manhattan, Queens, Staten Island).`;
       show('s-clean');
       return;

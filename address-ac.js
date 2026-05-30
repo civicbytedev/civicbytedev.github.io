@@ -12,6 +12,37 @@
 (function () {
   'use strict';
 
+  /**
+   * cbGeocode — resolve a free-text NYC address to its canonical identifiers
+   * (BBL / BIN) via NYC GeoSearch. NYC Open Data stores street names in
+   * inconsistent formats, so matching on streetname text is unreliable;
+   * matching on BBL is exact. Returns null if the address can't be resolved.
+   */
+  window.cbGeocode = async function (text) {
+    try {
+      const res = await fetch(
+        'https://geosearch.planninglabs.nyc/v2/search' +
+        '?text=' + encodeURIComponent(text) + '&size=1'
+      );
+      if (!res.ok) return null;
+      const json = await res.json();
+      const f = json.features && json.features[0];
+      if (!f || !f.properties) return null;
+      const p = f.properties;
+      const pad = (p.addendum && p.addendum.pad) || {};
+      return {
+        label: p.label || text,
+        bbl: pad.bbl || null,
+        bin: pad.bin || null,
+        housenumber: p.housenumber || '',
+        street: p.street || '',
+        borough: p.borough || p.locality || ''
+      };
+    } catch (e) {
+      return null;
+    }
+  };
+
   window.cbAutocomplete = function (inputId, onSelect) {
     const input = document.getElementById(inputId);
     if (!input) return;

@@ -192,25 +192,42 @@ function show(state){['s-idle','s-loading','s-error','s-clean','s-results'].forE
 const ABBREVS = {'STREET':'ST','AVENUE':'AVE','BOULEVARD':'BLVD','DRIVE':'DR','PLACE':'PL','COURT':'CT','LANE':'LN','ROAD':'RD','TERRACE':'TER','PARKWAY':'PKY','NORTH':'N','SOUTH':'S','EAST':'E','WEST':'W'};
 function normalize(s){let u=s.toUpperCase().replace(/[.,#]/g,' ').replace(/\s+/g,' ').trim();Object.entries(ABBREVS).forEach(([l,sh])=>{u=u.replace(new RegExp('\\b'+l+'\\b','g'),sh);});return u;}
 
+// Fallback: fuzzy match on the eviction_address text. Used when GeoSearch
+// can't resolve a BBL, or the BBL query returns nothing.
+async function searchByStreet(raw){
+  const normalized = normalize(raw);
+  const words = normalized.split(' ').filter(w => w.length >= 2);
+  const safe = words.map(w => w.replace(/'/g, "''"));
+  const where = safe.map(w => `upper(eviction_address) like '%${w}%'`).join(' AND ');
+  let url = `${API}?$where=${encodeURIComponent(where)}&$limit=200`;
+  let res = await fetch(url);
+  if(!res.ok) throw new Error('API error ' + res.status);
+  let data = await res.json();
+  if(data.length === 0 && words.length > 2){
+    const shortWhere = safe.slice(0, 2).map(w => `upper(eviction_address) like '%${w}%'`).join(' AND ');
+    url = `${API}?$where=${encodeURIComponent(shortWhere)}&$limit=200`;
+    res = await fetch(url);
+    if(res.ok) data = await res.json();
+  }
+  return data;
+}
+
 async function runSearch(){
   const raw = $('addr').value.trim();
   if(!raw || raw.length < 3){ $('addr').focus(); return; }
   show('s-loading');
   try {
-    const normalized = normalize(raw);
-    const words = normalized.split(' ').filter(w => w.length >= 2);
-    const safe = words.map(w => w.replace(/'/g, "''"));
-    const where = safe.map(w => `upper(eviction_address) like '%${w}%'`).join(' AND ');
-    let url = `${API}?$where=${encodeURIComponent(where)}&$limit=200`;
-    let res = await fetch(url);
-    if(!res.ok) throw new Error('API error ' + res.status);
-    let data = await res.json();
-    if(data.length === 0 && words.length > 2){
-      const shortWhere = safe.slice(0, 2).map(w => `upper(eviction_address) like '%${w}%'`).join(' AND ');
-      url = `${API}?$where=${encodeURIComponent(shortWhere)}&$limit=200`;
-      res = await fetch(url);
-      if(res.ok) data = await res.json();
+    let data = null;
+    // Preferred: resolve to a canonical BBL via GeoSearch, then query by BBL.
+    const geo = window.cbGeocode ? await window.cbGeocode(raw) : null;
+    if (geo && geo.bbl) {
+      const where = `bbl='${geo.bbl.replace(/'/g,"''")}'`;
+      const url = `${API}?$where=${encodeURIComponent(where)}&$limit=200`;
+      const res = await fetch(url);
+      if (res.ok) data = await res.json();
     }
+    // Fall back to fuzzy address matching when BBL yields nothing.
+    if (!data || data.length === 0) data = await searchByStreet(raw);
     data.sort((a, b) => (b.executed_date || '').localeCompare(a.executed_date || ''));
     if(data.length === 0){
       $('clean-msg').textContent = `No executed evictions found for "${raw}". This is a good sign — no marshal carry-outs on record. Note: this dataset covers executed evictions only, not all court filings.`;
