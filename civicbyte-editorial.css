@@ -914,3 +914,21 @@ footer .colophon {
   .keystat .n { font-size: 44px; }
   .keystat .breakdown { grid-template-columns: repeat(2, auto); gap: 12px; }
 }
+
+/* ── Address autocomplete (used by /address-ac.js) ──────────────────── */
+.cb-ac-dd {
+  position: fixed; list-style: none; margin: 0; padding: 0;
+  background: var(--paper); border: 1px solid var(--ink); z-index: 1000;
+  max-height: 320px; overflow-y: auto; display: none;
+  box-shadow: 0 8px 24px -8px rgba(29,26,21,0.2);
+}
+.cb-ac-dd.open { display: block; }
+.cb-ac-item {
+  padding: 10px 14px; cursor: pointer;
+  border-bottom: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.cb-ac-item:last-child { border-bottom: none; }
+.cb-ac-item:hover, .cb-ac-item.active { background: var(--paper-2); }
+.cb-ac-main { font-family: var(--sans); font-size: 14px; color: var(--ink); }
+.cb-ac-sub { font-family: var(--mono); font-size: 11px; color: var(--mute); letter-spacing: 0.06em; }
