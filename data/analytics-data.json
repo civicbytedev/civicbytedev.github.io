@@ -1,25 +1,25 @@
 {
-  "updatedAt": "2026-05-30T23:03:29.560331+00:00",
+  "updatedAt": "2026-05-31T04:20:16.689315+00:00",
   "realtime": 0,
   "7day": {
-    "users": 5,
-    "views": 10,
-    "sessions": 9
+    "users": 4,
+    "views": 6,
+    "sessions": 6
   },
   "30day": {
-    "users": 13759,
-    "newUsers": 13924,
-    "views": 27759,
-    "sessions": 14094
+    "users": 10893,
+    "newUsers": 10911,
+    "views": 21760,
+    "sessions": 11075
   },
   "topPages": [
     {
       "label": "Home",
-      "count": 13684
+      "count": 10845
     },
     {
       "label": "NYC Building Checker",
-      "count": 13619
+      "count": 10814
     },
     {
       "label": "NYC School Budget Tracker",
@@ -45,22 +45,22 @@
   "sources": [
     {
       "name": "Organic Video",
-      "count": 3759,
+      "count": 2947,
       "i": 0
     },
     {
       "name": "Organic Search",
-      "count": 3572,
+      "count": 2762,
       "i": 1
     },
     {
       "name": "Direct",
-      "count": 3378,
+      "count": 2685,
       "i": 2
     },
     {
       "name": "Referral",
-      "count": 3342,
+      "count": 2565,
       "i": 3
     }
   ]
