@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>iOS Brand Book — CivicByte</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="civicbyte-editorial.css">
+
+<!-- React for the iOS frames -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="ios-frame.jsx"></script>
+
+<style>
+  /* ── Icon SVG (reused as the C mark, scales perfectly) ── */
+  .icon-svg {
+    display: block;
+    border-radius: 22.37%; /* iOS squircle approx — radius is 22.37% of width */
+  }
+
+  /* ── Icon hero ──────────────────────────── */
+  .icon-hero {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 80px;
+    padding: 56px 0 0;
+    align-items: start;
+  }
+  .icon-hero .show {
+    border: 1px solid var(--rule);
+    padding: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--paper-2);
+  }
+  .icon-hero .show .icon-svg {
+    width: 280px; height: 280px;
+    border-radius: 62.6px; /* 22.37% of 280 */
+    box-shadow: 0 24px 60px -20px rgba(20,17,13,0.32);
+  }
+  .icon-hero .specs {
+    padding-top: 4px;
+  }
+  .icon-hero .specs h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin: 0 0 24px;
+  }
+  .icon-hero .specs h3 em { font-style: italic; color: var(--ember); font-weight: 500; }
+  .icon-hero .specs p {
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 0 0 18px;
+    max-width: 38ch;
+  }
+  .icon-hero .specs p strong {
+    font-weight: 500;
+    color: var(--ink);
+    border-bottom: 2px solid var(--ember-soft);
+  }
+
+  /* ── Icon size grid ─────────────────────── */
+  .sizes {
+    margin-top: 56px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 32px 0;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 24px 16px;
+    align-items: end;
+  }
+  .sizes .cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .sizes .cell .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mute);
+    text-align: center;
+    line-height: 1.4;
+  }
+  .sizes .cell .label b {
+    display: block;
+    color: var(--ink);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .sizes .cell .icon-svg {
+    box-shadow: 0 4px 12px -4px rgba(20,17,13,0.16);
+  }
+
+  /* ── Type scale ─────────────────────────── */
+  .type-grid {
+    margin-top: 32px;
+    border-top: 1px solid var(--rule);
+  }
+  .type-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 200px;
+    gap: 40px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .type-row .name {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ember);
+  }
+  .type-row .name b {
+    display: block;
+    color: var(--ink);
+    font-weight: 500;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .type-row .sample {
+    color: var(--ink);
+  }
+  .type-row .specs {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--mute);
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  .ts-largetitle { font-family: var(--serif); font-weight: 500; font-size: 34px; line-height: 1.12; letter-spacing: -0.025em; }
+  .ts-largetitle em { font-style: italic; color: var(--ember); font-weight: 500; }
+  .ts-title1 { font-family: var(--serif); font-weight: 500; font-size: 22px; line-height: 1.18; letter-spacing: -0.015em; }
+  .ts-headline { font-family: var(--sans); font-weight: 600; font-size: 17px; line-height: 1.3; letter-spacing: -0.005em; }
+  .ts-body { font-family: var(--sans); font-weight: 400; font-size: 17px; line-height: 1.45; }
+  .ts-subhead { font-family: var(--sans); font-weight: 400; font-size: 15px; line-height: 1.4; color: var(--ink-2); }
+  .ts-footnote { font-family: var(--sans); font-weight: 500; font-size: 13px; line-height: 1.4; color: var(--mute); }
+  .ts-mono { font-family: var(--mono); font-weight: 500; font-size: 11px; line-height: 1.4; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ember); }
+
+  /* ── Color rules ───────────────────────── */
+  .modes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 32px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .modes .mode {
+    padding: 32px;
+  }
+  .modes .mode.light { background: var(--paper); border-right: 1px solid var(--rule); }
+  .modes .mode.dark { background: var(--ink); color: var(--paper); }
+  .modes .mode h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin: 0 0 20px;
+  }
+  .modes .mode.light h4 { color: var(--mute); }
+  .modes .mode.dark h4 { color: rgba(244,241,233,0.55); }
+  .modes .mode .head-sample {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 1.05;
+    letter-spacing: -0.022em;
+    margin: 0 0 24px;
+  }
+  .modes .mode.light .head-sample em,
+  .modes .mode.dark .head-sample em { font-style: italic; color: #C7522A; font-weight: 500; }
+  .modes .mode.light .head-sample em { color: var(--ember); }
+  .modes .mode .body-sample {
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0 0 24px;
+  }
+  .modes .mode.light .body-sample { color: var(--ink-2); }
+  .modes .mode.dark .body-sample { color: rgba(244,241,233,0.78); }
+  .modes .mode .swatchrow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .modes .mode .sw {
+    aspect-ratio: 1;
+    border-radius: 6px;
+  }
+  .modes .mode.light .sw.b1 { background: #F4F1E9; border: 1px solid var(--rule); }
+  .modes .mode.light .sw.b2 { background: #14110D; }
+  .modes .mode.light .sw.b3 { background: #6B6660; }
+  .modes .mode.light .sw.b4 { background: #B33E16; }
+  .modes .mode.dark .sw.b1 { background: #14110D; border: 1px solid rgba(244,241,233,0.18); }
+  .modes .mode.dark .sw.b2 { background: #F4F1E9; }
+  .modes .mode.dark .sw.b3 { background: #94908A; }
+  .modes .mode.dark .sw.b4 { background: #C7522A; }
+  .modes .mode .swatch-label {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .modes .mode.light .swatch-label { color: var(--mute); }
+  .modes .mode.dark .swatch-label { color: rgba(244,241,233,0.55); }
+
+  /* ── iOS screens — frame area ─────────── */
+  .screens {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    justify-items: center;
+    align-items: start;
+  }
+  .screen-block { display: flex; flex-direction: column; align-items: center; gap: 18px; max-width: 402px; }
+  .screen-cap {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mute);
+    text-align: center;
+  }
+  .screen-cap b { color: var(--ink); font-weight: 500; }
+
+  /* ── Responsive ───────────────────── */
+  @media (max-width: 980px) {
+    .icon-hero { grid-template-columns: 1fr; gap: 32px; }
+    .icon-hero .show { padding: 32px; }
+    .icon-hero .show .icon-svg { width: 200px; height: 200px; border-radius: 44.7px; }
+    .sizes { grid-template-columns: repeat(5, 1fr); }
+    .type-row { grid-template-columns: 1fr; gap: 8px; }
+    .type-row .specs { text-align: left; }
+    .modes { grid-template-columns: 1fr; }
+    .modes .mode.light { border-right: none; border-bottom: 1px solid var(--rule); }
+    .screens { grid-template-columns: 1fr; gap: 48px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Inline SVG sprite for the mark ─── -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+  <symbol id="cb-icon" viewBox="0 0 64 64">
+    <rect x="0" y="0" width="64" height="64" rx="14" fill="#B33E16"/>
+    <rect x="7" y="6" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="20" y="6" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="33" y="6" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="46" y="6" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="7" y="19" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="7" y="32" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="7" y="45" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="7" y="48" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="20" y="48" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="33" y="48" width="11" height="11" rx="2" fill="#F4F1E9"/>
+    <rect x="46" y="48" width="11" height="11" rx="2" fill="#E8A14A"/>
+  </symbol>
+</svg>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="l">
+      <span><span class="tick"></span>Vol. 01 &nbsp;·&nbsp; No. 17</span>
+      <span class="sep">·</span>
+      <span>Friday, May 22, 2026</span>
+    </div>
+    <a href="index.html" class="wordmark">CivicByte<span class="amp">.</span></a>
+    <div class="r">
+      <span>An independent NYC civic data project</span>
+      <span class="sep">·</span>
+      <span>Open source · MIT</span>
+    </div>
+  </header>
+
+  <nav class="secnav">
+    <ul>
+      <li><a href="index.html">Front Page</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="story.html">The Story</a></li>
+      <li><a href="about.html" class="is-active">About</a></li>
+    </ul>
+    <div class="right">
+      <span>Brand · iOS</span>
+      <a href="brand.html" class="open">Web brand →</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ────────────────────────── -->
+  <section class="hero compact">
+    <div class="dateline">
+      <span>The Brand · iOS</span>
+      <span class="sep">·</span>
+      <span>Edition 1.0 · For iPhone</span>
+      <span class="sep">·</span>
+      <span>The mark in your pocket</span>
+    </div>
+    <h1>One newspaper, <span class="em">in your pocket</span>.</h1>
+  </section>
+
+  <!-- ── THE ICON ────────────────────── -->
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The App Icon</div>
+        <h2>Four-by-five pixels. <em>Eleven white. One amber.</em></h2>
+      </div>
+      <div class="meta">Drawn at 1024 · Verified down to 29</div>
+    </header>
+
+    <div class="icon-hero">
+      <div class="show">
+        <svg class="icon-svg" width="280" height="280" viewBox="0 0 64 64"><use href="#cb-icon"/></svg>
+      </div>
+      <div class="specs">
+        <h3>The mark is the brand <em>at every scale</em>.</h3>
+        <p>The icon is a four-by-five pixel grid. Eleven warm-white cells form the stencil "C" — top row, left column, bottom row. <strong>The twelfth cell, bottom right, is the byte</strong> — set in amber, slightly off-rhythm. That single broken cell is the whole logic of the mark: the data that didn't make it into the right hands.</p>
+        <p>The ground is the terracotta ember, the same accent used everywhere else in the system. The corner radius is iOS-standard 22.37% of side length, so the squircle resolves cleanly at every size.</p>
+        <p>Draw the icon at 1024 px first. Verify it down to 29 px before shipping. If the byte cell vanishes at 29, the icon failed.</p>
+      </div>
+    </div>
+
+    <!-- All ten iOS sizes, at native dimensions -->
+    <div class="sizes">
+      <div class="cell">
+        <svg class="icon-svg" width="180" height="180" viewBox="0 0 64 64" style="border-radius: 40.27px;"><use href="#cb-icon"/></svg>
+        <div class="label"><b>180 pt</b>iPhone home<br>@3x</div>
+      </div>
+      <div class="cell">
+        <svg class="icon-svg" width="120" height="120" viewBox="0 0 64 64" style="border-radius: 26.84px;"><use href="#cb-icon"/></svg>
+        <div class="label"><b>120 pt</b>iPhone home<br>@2x</div>
+      </div>
+      <div class="cell">
+        <svg class="icon-svg" width="87" height="87" viewBox="0 0 64 64" style="border-radius: 19.46px;"><use href="#cb-icon"/></svg>
+        <div class="label"><b>87 pt</b>Settings<br>@3x</div>
+      </div>
+      <div class="cell">
+        <svg class="icon-svg" width="80" height="80" viewBox="0 0 64 64" style="border-radius: 17.9px;"><use href="#cb-icon"/></svg>
+        <div class="label"><b>80 pt</b>Spotlight<br>@2x</div>
+      </div>
+      <div class="cell">
+        <svg class="icon-svg" width="60" height="60" viewBox="0 0 64 64" style="border-radius: 13.42px;"><use href="#cb-icon"/></svg>
+        <div class="label"><b>60 pt</b>Notif.<br>@3x</div>
+      </div>
+      <div class="cell">
+        <svg class="icon-svg" width="58" height="58" viewBox="0 0 64 64" style="border-radius: 12.97px;"><use href="#cb-icon"/></svg>
+        <div class="label"><b>58 pt</b>Settings<br>@2x</div>
+      </div>
+      <div class="cell">
+        <svg class="icon-svg" width="40" height="40" viewBox="0 0 64 64" style="border-radius: 8.95px;"><use href="#cb-icon"/></svg>
+        <div class="label"><b>40 pt</b>Spotlight<br>@1x</div>
+      </div>
+      <div class="cell">
+        <svg class="icon-svg" width="29" height="29" viewBox="0 0 64 64" style="border-radius: 6.49px;"><use href="#cb-icon"/></svg>
+        <div class="label"><b>29 pt</b>Settings<br>@1x</div>
+      </div>
+      <div class="cell">
+        <svg class="icon-svg" width="76" height="76" viewBox="0 0 64 64" style="border-radius: 17px;"><use href="#cb-icon"/></svg>
+        <div class="label"><b>76 pt</b>iPad<br>@2x</div>
+      </div>
+      <div class="cell">
+        <svg class="icon-svg" width="167" height="167" viewBox="0 0 64 64" style="border-radius: 37.36px;"><use href="#cb-icon"/></svg>
+        <div class="label"><b>167 pt</b>iPad Pro<br>@2x</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TYPE SCALE ──────────────────── -->
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">The Type Scale</div>
+        <h2>Three families, <em>seven sizes</em>, sized for a phone.</h2>
+      </div>
+      <div class="meta">Adapts iOS Dynamic Type defaults</div>
+    </header>
+
+    <div class="type-grid">
+      <div class="type-row">
+        <div class="name"><b>Large title</b>Newsreader · Headlines</div>
+        <div class="sample ts-largetitle">Public data, <em>made usable</em>.</div>
+        <div class="specs">34 / 38 px<br>−0.025 em<br>Weight 500</div>
+      </div>
+      <div class="type-row">
+        <div class="name"><b>Title 1</b>Newsreader · Section heads</div>
+        <div class="sample ts-title1">A typeset record, not a dashboard.</div>
+        <div class="specs">22 / 26 px<br>−0.015 em<br>Weight 500</div>
+      </div>
+      <div class="type-row">
+        <div class="name"><b>Headline</b>Inter Tight · Row titles</div>
+        <div class="sample ts-headline">NYC Building Report</div>
+        <div class="specs">17 / 22 px<br>−0.005 em<br>Weight 600</div>
+      </div>
+      <div class="type-row">
+        <div class="name"><b>Body</b>Inter Tight · Default</div>
+        <div class="sample ts-body">Enter any address to pull HPD maintenance violations — class breakdown, registration, owner of record.</div>
+        <div class="specs">17 / 25 px<br>0 em<br>Weight 400</div>
+      </div>
+      <div class="type-row">
+        <div class="name"><b>Subhead</b>Inter Tight · Descriptions</div>
+        <div class="sample ts-subhead">Look up any landlord, school, address, or 311 complaint in the five boroughs. Updated daily.</div>
+        <div class="specs">15 / 21 px<br>0 em<br>Weight 400</div>
+      </div>
+      <div class="type-row">
+        <div class="name"><b>Footnote</b>Inter Tight · Captions</div>
+        <div class="sample ts-footnote">Source · NYC HPD violations dataset, refreshed daily.</div>
+        <div class="specs">13 / 18 px<br>0 em<br>Weight 500</div>
+      </div>
+      <div class="type-row">
+        <div class="name"><b>Mono label</b>IBM Plex Mono · Datelines</div>
+        <div class="sample ts-mono">Tool · 01 &nbsp; · &nbsp; Refreshed today</div>
+        <div class="specs">11 / 15 px<br>+0.16 em<br>Weight 500 · UPPER</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── COLOR USAGE ─────────────────── -->
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">Color Usage</div>
+        <h2>Two modes. <em>One rule</em>.</h2>
+      </div>
+      <div class="meta">Ember shifts +0.06 L in dark</div>
+    </header>
+
+    <div class="modes">
+      <div class="mode light">
+        <h4>Light · Default</h4>
+        <p class="head-sample">Public data,<br><em>made usable</em>.</p>
+        <p class="body-sample">Warm paper ground. Near-black ink type. Ember terracotta on the one italic accent word and the key number — nowhere else.</p>
+        <div class="swatchrow">
+          <div class="sw b1"></div>
+          <div class="sw b2"></div>
+          <div class="sw b3"></div>
+          <div class="sw b4"></div>
+        </div>
+        <div class="swatch-label">
+          <span>Paper<br>#F4F1E9</span>
+          <span>Ink<br>#14110D</span>
+          <span>Mute<br>#6B6660</span>
+          <span>Ember<br>#B33E16</span>
+        </div>
+      </div>
+      <div class="mode dark">
+        <h4>Dark · System</h4>
+        <p class="head-sample">Public data,<br><em>made usable</em>.</p>
+        <p class="body-sample">Ink ground replaces paper. Paper warm-white replaces ink. Ember lifts to #C7522A so contrast against the dark ground stays at WCAG AA. Same single-accent rule.</p>
+        <div class="swatchrow">
+          <div class="sw b1"></div>
+          <div class="sw b2"></div>
+          <div class="sw b3"></div>
+          <div class="sw b4"></div>
+        </div>
+        <div class="swatch-label">
+          <span>Ink-Bg<br>#14110D</span>
+          <span>Paper<br>#F4F1E9</span>
+          <span>Mute<br>#94908A</span>
+          <span>Ember<br>#C7522A</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SAMPLE SCREENS ─────────────── -->
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">Sample Screens</div>
+        <h2>The newspaper, <em>adapted</em>.</h2>
+      </div>
+      <div class="meta">iPhone · 402 × 874 · iOS 17+</div>
+    </header>
+
+    <div class="screens" id="screens-mount"></div>
+  </section>
+
+  <!-- ── COMPONENT RULES ─────────────── -->
+  <section class="section">
+    <header class="section-head">
+      <div>
+        <div class="kicker">Component Rules</div>
+        <h2>Five rules for <em>every screen</em>.</h2>
+      </div>
+      <div class="meta">Short list · This is all of it</div>
+    </header>
+
+    <ol class="ilist">
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">01</span>
+        <span class="ititle">Editorial masthead, not a chrome nav</span>
+        <span class="idesc">Every screen opens with a hairline-bordered masthead. Vol/No on the left, wordmark center, mode toggle right. The iOS large-title pattern is rebuilt with Newsreader at 34 px — no SF Pro, no tab bar nav, no rounded title cards.</span>
+        <span class="imeta"><span class="st">Rule</span></span>
+        <span class="iarr">·</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">02</span>
+        <span class="ititle">Lists are typeset, not carded</span>
+        <span class="idesc">No <code style="font-family: var(--mono); font-size: 13px; color: var(--ember);">UIGroupedTableView</code>. No rounded white cards with insets. Rows are separated by hairline rules, numbered in mono, with terracotta arrows at the right edge. Mirrors the web's <code style="font-family: var(--mono); font-size: 13px; color: var(--ember);">.ilist</code> exactly.</span>
+        <span class="imeta"><span class="st">Rule</span></span>
+        <span class="iarr">·</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">03</span>
+        <span class="ititle">Tap targets are 44 pt minimum, hairlines not buttons</span>
+        <span class="idesc">Apple's 44 pt floor is honored, but the visual treatment is a hairline-underlined text label with a terracotta arrow — never a filled iOS button. The web's <code style="font-family: var(--mono); font-size: 13px; color: var(--ember);">.cta-link</code> pattern.</span>
+        <span class="imeta"><span class="st">Rule</span></span>
+        <span class="iarr">·</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">04</span>
+        <span class="ititle">The five-place ember rule still holds</span>
+        <span class="idesc">Italic accent word · masthead tick · key keystat number · CTA arrows · pull-quote rules. Nothing else gets the terracotta. The iOS system blue is never used.</span>
+        <span class="imeta"><span class="st">Rule</span></span>
+        <span class="iarr">·</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">05</span>
+        <span class="ititle">Tables compress, they don't reshape</span>
+        <span class="idesc">A readout that runs four columns on web becomes two columns on iPhone — same typography, same hairlines, same ember accent on the key cell. Never break a readout into stacked accordion rows.</span>
+        <span class="imeta"><span class="st">Rule</span></span>
+        <span class="iarr">·</span>
+      </a></li>
+    </ol>
+  </section>
+
+  <!-- ── END SLUG ───────────────────── -->
+  <section class="endslug">
+    <p>That's the whole system on iOS. <em>The mark fits</em> — the rules don't change.</p>
+    <div class="actions">
+      <a href="brand.html" class="cta-link">Back to web brand <span class="arr">→</span></a>
+      <a href="tools.html" class="cta-link muted">See it in use on web <span class="arr">→</span></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fwrap">
+      <div>
+        <p class="fmark">CivicByte<span class="amp">.</span></p>
+        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
+      </div>
+      <div>
+        <h5>Browse</h5>
+        <ul>
+          <li><a href="tools.html">All tools</a></li>
+          <li><a href="story.html">The Story</a></li>
+          <li><a href="impact.html">Impact</a></li>
+          <li><a href="https://github.com/civicbytedev">GitHub</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contribute</h5>
+        <ul>
+          <li><a href="submit.html">Submit a tool</a></li>
+          <li><a href="about.html">Standards</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Brand</h5>
+        <ul>
+          <li><a href="brand.html">Web</a></li>
+          <li><a href="brand-ios.html">iOS</a></li>
+          <li><a href="#">Download kit</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="colophon">
+      <span>© 2026 CivicByte · MIT License</span>
+      <span>Set in Newsreader, Inter Tight &amp; IBM Plex Mono · Made in NYC</span>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ── iOS sample screens ─────────────── -->
+<script type="text/babel" data-presets="react">
+  const { useEffect } = React;
+
+  // Shared editorial palette in JS for inline styles
+  const P = {
+    paper: '#F4F1E9',
+    paperDark: '#14110D',
+    ink: '#14110D',
+    inkOnDark: '#F4F1E9',
+    mute: '#6B6660',
+    muteDark: '#94908A',
+    faint: '#94908A',
+    rule: 'rgba(20,17,13,0.14)',
+    rule2: 'rgba(20,17,13,0.22)',
+    ember: '#B33E16',
+    emberDark: '#C7522A',
+    serif: "'Newsreader', Georgia, serif",
+    sans: "'Inter Tight', system-ui, sans-serif",
+    mono: "'IBM Plex Mono', ui-monospace, monospace",
+  };
+
+  // Pixel-C mark, small, used inline
+  function Mark({ size = 22 }) {
+    return (
+      <svg width={size} height={size} viewBox="0 0 64 64" style={{ borderRadius: size * 0.2237, flexShrink: 0 }}>
+        <use href="#cb-icon" />
+      </svg>
+    );
+  }
+
+  // ── Screen 1: Front Page (Home) ─────────────────
+  function ScreenFrontPage() {
+    return (
+      <div style={{
+        height: '100%', background: P.paper, color: P.ink,
+        fontFamily: P.sans, overflow: 'hidden',
+        display: 'flex', flexDirection: 'column',
+        paddingTop: 60, /* clear status bar */
+      }}>
+        {/* Masthead */}
+        <div style={{
+          padding: '12px 20px 10px',
+          borderTop: `3px solid ${P.ink}`,
+          borderBottom: `1px solid ${P.rule}`,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          fontFamily: P.mono, fontSize: 9, letterSpacing: '0.16em',
+          textTransform: 'uppercase', color: P.mute,
+        }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ width: 5, height: 5, background: P.ember, display: 'inline-block', transform: 'translateY(0.5px)' }} />
+            Vol. 01
+          </span>
+          <span style={{ fontFamily: P.serif, fontSize: 18, fontWeight: 500, letterSpacing: '-0.02em', textTransform: 'none', color: P.ink }}>
+            CivicByte<span style={{ color: P.ember }}>.</span>
+          </span>
+          <span>May 22</span>
+        </div>
+
+        {/* Section nav */}
+        <div style={{
+          padding: '10px 20px',
+          borderBottom: `1px solid ${P.rule}`,
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          fontFamily: P.mono, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase',
+        }}>
+          <div style={{ display: 'flex', gap: 18 }}>
+            <span style={{ color: P.ember, position: 'relative' }}>
+              Front
+              <span style={{ position: 'absolute', left: 0, right: 0, bottom: -11, height: 2, background: P.ember }} />
+            </span>
+            <span style={{ color: P.ink }}>Tools</span>
+            <span style={{ color: P.ink }}>Story</span>
+            <span style={{ color: P.mute }}>About</span>
+          </div>
+          <span style={{ color: P.mute }}>⌕</span>
+        </div>
+
+        {/* Hero */}
+        <div style={{ padding: '32px 20px 24px' }}>
+          <div style={{
+            fontFamily: P.mono, fontSize: 10, letterSpacing: '0.16em',
+            textTransform: 'uppercase', color: P.mute, marginBottom: 16,
+          }}>
+            The Front Page <span style={{ color: P.rule2 }}>·</span> Edition for the five boroughs
+          </div>
+          <h1 style={{
+            fontFamily: P.serif, fontWeight: 500,
+            fontSize: 38, lineHeight: 0.96, letterSpacing: '-0.026em',
+            margin: 0, color: P.ink, textWrap: 'balance',
+          }}>
+            Public data,<br />made <em style={{ color: P.ember, fontWeight: 500 }}>usable</em>.
+          </h1>
+        </div>
+
+        {/* Index — numbered list */}
+        <div style={{
+          borderTop: `3px solid ${P.ink}`,
+          margin: '8px 20px 0',
+          paddingTop: 14,
+        }}>
+          <div style={{
+            fontFamily: P.mono, fontSize: 10, letterSpacing: '0.18em',
+            textTransform: 'uppercase', color: P.ember, marginBottom: 6,
+          }}>The Index</div>
+          <div style={{
+            fontFamily: P.serif, fontWeight: 500, fontSize: 22,
+            letterSpacing: '-0.015em', lineHeight: 1.1, color: P.ink,
+            marginBottom: 16,
+          }}>Five tools, <em style={{ color: P.ember, fontWeight: 500 }}>in the field.</em></div>
+
+          {[
+            { n: '01', t: 'NYC Building Report', d: 'HPD violations for any address.' },
+            { n: '02', t: 'NYC Landlord Watch', d: 'A landlord\u2019s whole portfolio.' },
+            { n: '03', t: 'School Budget Tracker', d: 'Where the per-pupil dollars go.' },
+            { n: '04', t: 'NYC Eviction Records', d: 'Marshal evictions, address by address.' },
+            { n: '05', t: 'NYC 311 Lookup', d: 'Every complaint ever filed.' },
+          ].map((row, i, arr) => (
+            <div key={i} style={{
+              display: 'grid', gridTemplateColumns: '28px 1fr 16px',
+              gap: 14, padding: '14px 0', alignItems: 'baseline',
+              borderBottom: i < arr.length - 1 ? `1px solid ${P.rule}` : 'none',
+            }}>
+              <span style={{ fontFamily: P.mono, fontSize: 10, letterSpacing: '0.12em', color: P.mute }}>{row.n}</span>
+              <div>
+                <div style={{ fontFamily: P.serif, fontWeight: 500, fontSize: 17, lineHeight: 1.2, letterSpacing: '-0.01em', color: P.ink }}>{row.t}</div>
+                <div style={{ fontFamily: P.sans, fontSize: 12.5, lineHeight: 1.4, color: P.mute, marginTop: 3 }}>{row.d}</div>
+              </div>
+              <span style={{ fontFamily: P.mono, fontSize: 13, color: P.ember, textAlign: 'right' }}>→</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // ── Screen 2: Building Report Readout ───────────
+  function ScreenReadout() {
+    return (
+      <div style={{
+        height: '100%', background: P.paper, color: P.ink,
+        fontFamily: P.sans, overflow: 'hidden',
+        display: 'flex', flexDirection: 'column',
+        paddingTop: 60,
+      }}>
+        {/* Back nav */}
+        <div style={{
+          padding: '12px 20px 10px',
+          borderTop: `3px solid ${P.ink}`,
+          borderBottom: `1px solid ${P.rule}`,
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          fontFamily: P.mono, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase',
+        }}>
+          <span style={{ color: P.ember }}>← Front</span>
+          <span style={{ fontFamily: P.serif, fontSize: 16, fontWeight: 500, letterSpacing: '-0.02em', textTransform: 'none', color: P.ink }}>
+            CivicByte<span style={{ color: P.ember }}>.</span>
+          </span>
+          <span style={{ color: P.mute }}>⤴</span>
+        </div>
+
+        {/* Hero */}
+        <div style={{ padding: '24px 20px 18px' }}>
+          <div style={{
+            fontFamily: P.mono, fontSize: 9.5, letterSpacing: '0.16em',
+            textTransform: 'uppercase', color: P.mute, marginBottom: 14,
+            display: 'flex', flexWrap: 'wrap', gap: 8,
+          }}>
+            <span>Tool · 01</span>
+            <span style={{ color: P.rule2 }}>·</span>
+            <span>Building Report</span>
+            <span style={{ color: P.rule2 }}>·</span>
+            <span>Source · HPD</span>
+          </div>
+          <h1 style={{
+            fontFamily: P.serif, fontWeight: 500,
+            fontSize: 27, lineHeight: 1.0, letterSpacing: '-0.022em',
+            margin: 0, color: P.ink,
+          }}>
+            What the city knows <em style={{ color: P.ember, fontWeight: 500 }}>about your building</em>.
+          </h1>
+        </div>
+
+        {/* Lookup */}
+        <div style={{
+          margin: '8px 20px 0',
+          padding: '14px 0', borderTop: `1px solid ${P.rule}`, borderBottom: `1px solid ${P.rule}`,
+          display: 'flex', alignItems: 'baseline', gap: 12, justifyContent: 'space-between',
+        }}>
+          <div>
+            <div style={{ fontFamily: P.mono, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: P.mute, marginBottom: 4 }}>Address</div>
+            <div style={{ fontFamily: P.serif, fontWeight: 500, fontSize: 16, lineHeight: 1.15, letterSpacing: '-0.01em', color: P.ink }}>965 Longfellow Ave, Bronx</div>
+          </div>
+          <span style={{ fontFamily: P.mono, fontSize: 10, letterSpacing: '0.14em', color: P.ember }}>EDIT</span>
+        </div>
+
+        {/* Keystats */}
+        <div style={{ margin: '0 20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0 }}>
+          <div style={{ padding: '20px 0 18px', borderBottom: `1px solid ${P.rule}`, paddingRight: 16 }}>
+            <div style={{ fontFamily: P.mono, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: P.mute, marginBottom: 8 }}>Open violations</div>
+            <div style={{ fontFamily: P.serif, fontWeight: 500, fontSize: 44, lineHeight: 1, letterSpacing: '-0.03em', color: P.ember }}>14</div>
+            <div style={{ fontFamily: P.mono, fontSize: 10, letterSpacing: '0.06em', color: P.mute, marginTop: 6 }}><b style={{ color: P.ink, fontWeight: 500 }}>6</b> C&nbsp;·&nbsp;<b style={{ color: P.ink, fontWeight: 500 }}>7</b> B&nbsp;·&nbsp;<b style={{ color: P.ink, fontWeight: 500 }}>1</b> A</div>
+          </div>
+          <div style={{ padding: '20px 0 18px', borderBottom: `1px solid ${P.rule}`, borderLeft: `1px solid ${P.rule}`, paddingLeft: 16 }}>
+            <div style={{ fontFamily: P.mono, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: P.mute, marginBottom: 8 }}>Registration</div>
+            <div style={{ fontFamily: P.sans, fontWeight: 500, fontSize: 19, letterSpacing: '-0.01em', color: P.ink }}>Valid</div>
+            <div style={{ fontFamily: P.mono, fontSize: 10, letterSpacing: '0.06em', color: P.mute, marginTop: 6 }}>Last · 22 May</div>
+          </div>
+        </div>
+
+        {/* Violations table */}
+        <div style={{ margin: '14px 20px 0' }}>
+          <div style={{
+            fontFamily: P.mono, fontSize: 9, letterSpacing: '0.16em',
+            textTransform: 'uppercase', color: P.mute, paddingBottom: 8,
+            borderBottom: `1px solid ${P.rule2}`,
+            display: 'grid', gridTemplateColumns: '46px 22px 1fr', gap: 10,
+          }}>
+            <span>Date</span><span>Cls</span><span>Violation</span>
+          </div>
+          {[
+            { d: 'Jan 14', c: 'C', t: 'No heat or hot water — full building', ember: true },
+            { d: 'Dec 02', c: 'C', t: 'Lead paint — child under six', ember: true },
+            { d: 'Nov 18', c: 'B', t: 'Broken window frame, apt 4R' },
+            { d: 'Oct 05', c: 'B', t: 'Mice infestation, kitchen' },
+          ].map((row, i, arr) => (
+            <div key={i} style={{
+              display: 'grid', gridTemplateColumns: '46px 22px 1fr', gap: 10,
+              padding: '12px 0', alignItems: 'baseline',
+              borderBottom: i < arr.length - 1 ? `1px solid ${P.rule}` : 'none',
+            }}>
+              <span style={{ fontFamily: P.mono, fontSize: 10.5, letterSpacing: '0.04em', color: P.mute, textTransform: 'uppercase' }}>{row.d}</span>
+              <span style={{ fontFamily: P.mono, fontSize: 10.5, fontWeight: 500, letterSpacing: '0.12em', color: row.ember ? P.ember : P.ink }}>{row.c}</span>
+              <span style={{ fontFamily: P.serif, fontSize: 14, lineHeight: 1.3, color: P.ink }}>{row.t}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // ── Mount ─────────────────────────────
+  function Screens() {
+    return (
+      <>
+        <div className="screen-block">
+          <IOSDevice width={340} height={736}>
+            <ScreenFrontPage />
+          </IOSDevice>
+          <div className="screen-cap"><b>Front Page</b><br />Front Page · Index of tools</div>
+        </div>
+        <div className="screen-block">
+          <IOSDevice width={340} height={736}>
+            <ScreenReadout />
+          </IOSDevice>
+          <div className="screen-cap"><b>The Readout</b><br />Tool · 01 · Building Report</div>
+        </div>
+      </>
+    );
+  }
+
+  const root = ReactDOM.createRoot(document.getElementById('screens-mount'));
+  root.render(<Screens />);
+</script>
+
+</body>
+</html>
