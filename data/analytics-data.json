@@ -1,16 +1,16 @@
 {
-  "updatedAt": "2026-06-07T05:26:19.076463+00:00",
+  "updatedAt": "2026-06-07T09:23:09.644131+00:00",
   "realtime": 0,
   "7day": {
-    "users": 2,
-    "views": 3,
-    "sessions": 2
+    "users": 3,
+    "views": 32,
+    "sessions": 3
   },
   "30day": {
-    "users": 13,
-    "newUsers": 9,
-    "views": 30,
-    "sessions": 21
+    "users": 14,
+    "newUsers": 10,
+    "views": 59,
+    "sessions": 22
   },
   "topPages": [
     {
@@ -19,7 +19,7 @@
     },
     {
       "label": "Home",
-      "count": 3
+      "count": 4
     },
     {
       "label": "About",
@@ -41,7 +41,7 @@
   "sources": [
     {
       "name": "Direct",
-      "count": 17,
+      "count": 18,
       "i": 0
     },
     {
@@ -53,6 +53,11 @@
       "name": "Organic Search",
       "count": 1,
       "i": 2
+    },
+    {
+      "name": "Unassigned",
+      "count": 1,
+      "i": 3
     }
   ]
 }
