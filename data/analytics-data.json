@@ -1,16 +1,16 @@
 {
-  "updatedAt": "2026-06-08T00:14:54.673745+00:00",
+  "updatedAt": "2026-06-08T05:55:50.630197+00:00",
   "realtime": 0,
   "7day": {
-    "users": 3,
-    "views": 35,
-    "sessions": 3
+    "users": 4,
+    "views": 386,
+    "sessions": 4
   },
   "30day": {
     "users": 14,
     "newUsers": 10,
-    "views": 62,
-    "sessions": 22
+    "views": 409,
+    "sessions": 19
   },
   "topPages": [
     {
@@ -23,18 +23,26 @@
     },
     {
       "label": "About",
-      "count": 1
+      "count": 2
     },
     {
       "label": "Impact",
-      "count": 1
+      "count": 2
     },
     {
       "label": "Submit a Tool",
-      "count": 1
+      "count": 2
     },
     {
       "label": "Tools",
+      "count": 2
+    },
+    {
+      "label": "Index",
+      "count": 1
+    },
+    {
+      "label": "Index V2",
       "count": 1
     }
   ],
@@ -45,19 +53,14 @@
       "i": 0
     },
     {
-      "name": "Referral",
-      "count": 3,
+      "name": "Unassigned",
+      "count": 2,
       "i": 1
     },
     {
-      "name": "Organic Search",
+      "name": "Referral",
       "count": 1,
       "i": 2
-    },
-    {
-      "name": "Unassigned",
-      "count": 1,
-      "i": 3
     }
   ]
 }
