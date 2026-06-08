@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-06-08T11:10:36.070617+00:00",
+  "updatedAt": "2026-06-08T16:03:35.388508+00:00",
   "realtime": 0,
   "7day": {
     "users": 4,
-    "views": 386,
+    "views": 405,
     "sessions": 4
   },
   "30day": {
     "users": 14,
     "newUsers": 10,
-    "views": 409,
+    "views": 428,
     "sessions": 19
   },
   "topPages": [
@@ -53,14 +53,9 @@
       "i": 0
     },
     {
-      "name": "Unassigned",
-      "count": 2,
-      "i": 1
-    },
-    {
       "name": "Referral",
       "count": 1,
-      "i": 2
+      "i": 1
     }
   ]
 }
