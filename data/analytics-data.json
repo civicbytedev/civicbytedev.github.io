@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-10T12:26:51.699895+00:00",
+  "updatedAt": "2026-06-10T16:38:28.472424+00:00",
   "realtime": 0,
   "7day": {
     "users": 5,
@@ -8,7 +8,7 @@
   },
   "30day": {
     "users": 11,
-    "newUsers": 9,
+    "newUsers": 10,
     "views": 418,
     "sessions": 16
   },
