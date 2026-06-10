@@ -1,16 +1,16 @@
 {
-  "updatedAt": "2026-06-10T04:13:07.121640+00:00",
+  "updatedAt": "2026-06-10T08:53:11.169944+00:00",
   "realtime": 0,
   "7day": {
-    "users": 4,
-    "views": 405,
-    "sessions": 4
+    "users": 5,
+    "views": 406,
+    "sessions": 5
   },
   "30day": {
     "users": 11,
     "newUsers": 9,
-    "views": 417,
-    "sessions": 15
+    "views": 418,
+    "sessions": 16
   },
   "topPages": [
     {
@@ -49,8 +49,13 @@
   "sources": [
     {
       "name": "Direct",
-      "count": 15,
+      "count": 16,
       "i": 0
+    },
+    {
+      "name": "Unassigned",
+      "count": 1,
+      "i": 1
     }
   ]
 }
