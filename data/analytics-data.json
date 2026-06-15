@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-06-15T11:20:11.348235+00:00",
-  "realtime": 1,
+  "updatedAt": "2026-06-15T17:21:15.692119+00:00",
+  "realtime": 0,
   "7day": {
     "users": 3,
-    "views": 36,
+    "views": 54,
     "sessions": 3
   },
   "30day": {
     "users": 12,
-    "newUsers": 13,
-    "views": 452,
+    "newUsers": 14,
+    "views": 470,
     "sessions": 17
   },
   "topPages": [
@@ -23,26 +23,26 @@
     },
     {
       "label": "About",
-      "count": 1
+      "count": 2
+    },
+    {
+      "label": "Index",
+      "count": 2
+    },
+    {
+      "label": "Index V2",
+      "count": 2
+    },
+    {
+      "label": "Submit a Tool",
+      "count": 2
     },
     {
       "label": "Impact",
       "count": 1
     },
     {
-      "label": "Index",
-      "count": 1
-    },
-    {
-      "label": "Index V2",
-      "count": 1
-    },
-    {
       "label": "NYC 311 Complaints",
-      "count": 1
-    },
-    {
-      "label": "NYC Building Checker",
       "count": 1
     }
   ],
@@ -51,6 +51,11 @@
       "name": "Direct",
       "count": 17,
       "i": 0
+    },
+    {
+      "name": "Unassigned",
+      "count": 1,
+      "i": 1
     }
   ]
 }
