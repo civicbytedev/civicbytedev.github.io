@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin.html
+Disallow: /analytics.html
+Disallow: /login.html
 
 Sitemap: https://civicbyte.dev/sitemap.xml
