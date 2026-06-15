@@ -1,16 +1,16 @@
 {
-  "updatedAt": "2026-06-15T04:59:42.292511+00:00",
-  "realtime": 0,
+  "updatedAt": "2026-06-15T11:20:11.348235+00:00",
+  "realtime": 1,
   "7day": {
-    "users": 2,
-    "views": 35,
-    "sessions": 2
+    "users": 3,
+    "views": 36,
+    "sessions": 3
   },
   "30day": {
-    "users": 11,
-    "newUsers": 12,
-    "views": 451,
-    "sessions": 16
+    "users": 12,
+    "newUsers": 13,
+    "views": 452,
+    "sessions": 17
   },
   "topPages": [
     {
@@ -19,7 +19,7 @@
     },
     {
       "label": "Home",
-      "count": 3
+      "count": 4
     },
     {
       "label": "About",
@@ -49,7 +49,7 @@
   "sources": [
     {
       "name": "Direct",
-      "count": 16,
+      "count": 17,
       "i": 0
     }
   ]
