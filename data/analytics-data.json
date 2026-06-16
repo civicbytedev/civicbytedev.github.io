@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-06-16T10:19:15.026012+00:00",
+  "updatedAt": "2026-06-16T16:00:40.369332+00:00",
   "realtime": 0,
   "7day": {
     "users": 3,
-    "views": 54,
+    "views": 55,
     "sessions": 3
   },
   "30day": {
     "users": 12,
     "newUsers": 14,
-    "views": 470,
+    "views": 471,
     "sessions": 17
   },
   "topPages": [
@@ -51,11 +51,6 @@
       "name": "Direct",
       "count": 17,
       "i": 0
-    },
-    {
-      "name": "Unassigned",
-      "count": 1,
-      "i": 1
     }
   ]
 }
