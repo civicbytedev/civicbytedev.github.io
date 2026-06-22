@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-22T00:16:31.886401+00:00",
+  "updatedAt": "2026-06-22T06:32:48.823981+00:00",
   "realtime": 0,
   "7day": {
     "users": 1,
@@ -8,9 +8,9 @@
   },
   "30day": {
     "users": 12,
-    "newUsers": 14,
-    "views": 471,
-    "sessions": 17
+    "newUsers": 13,
+    "views": 470,
+    "sessions": 16
   },
   "topPages": [
     {
@@ -49,7 +49,7 @@
   "sources": [
     {
       "name": "Direct",
-      "count": 17,
+      "count": 16,
       "i": 0
     }
   ]
