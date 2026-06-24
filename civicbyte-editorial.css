@@ -932,3 +932,22 @@ footer .colophon {
 .cb-ac-item:hover, .cb-ac-item.active { background: var(--paper-2); }
 .cb-ac-main { font-family: var(--sans); font-size: 14px; color: var(--ink); }
 .cb-ac-sub { font-family: var(--mono); font-size: 11px; color: var(--mute); letter-spacing: 0.06em; }
+
+/* Reduced motion — drop reveals and ambient transitions */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    transition-duration: 0.001s !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+}
+
+/* Skip link — visible only on keyboard focus */
+.skip-link {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--ink); color: var(--paper);
+  font-family: var(--mono); font-size: 13px;
+  padding: 10px 16px; z-index: 999;
+}
+.skip-link:focus { left: 0; }
