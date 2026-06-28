@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-28T00:07:06.456501+00:00",
+  "updatedAt": "2026-06-28T05:20:14.900160+00:00",
   "realtime": 0,
   "7day": {
     "users": 0,
@@ -7,18 +7,18 @@
     "sessions": 0
   },
   "30day": {
-    "users": 9,
-    "newUsers": 11,
-    "views": 462,
-    "sessions": 9
+    "users": 8,
+    "newUsers": 10,
+    "views": 461,
+    "sessions": 8
   },
   "topPages": [
     {
-      "label": "NYC School Budget Tracker",
-      "count": 5
+      "label": "Home",
+      "count": 4
     },
     {
-      "label": "Home",
+      "label": "NYC School Budget Tracker",
       "count": 4
     },
     {
@@ -49,7 +49,7 @@
   "sources": [
     {
       "name": "Direct",
-      "count": 9,
+      "count": 8,
       "i": 0
     }
   ]
