@@ -7,12 +7,12 @@
 <meta name="description" content="Impact report: what happens when public data reaches people.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
-<meta name="theme-color" content="#B33E16">
+<meta name="theme-color" content="#141311">
 <script defer src="/civicbyte-fx.js"></script>
-<link rel="stylesheet" href="/civicbyte-editorial.css">
+<link rel="stylesheet" href="/civicbyte-minimal.css">
 <style>
   .bignums {
     display: grid;
@@ -103,32 +103,19 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="page">
 
-  <header class="masthead">
-    <div class="l">
-      <span><span class="tick"></span>Vol. 01 &nbsp;&middot;&nbsp; No. 20</span>
-      <span class="sep">&middot;</span>
-      <span>Wednesday, June 10, 2026</span>
-    </div>
-    <a href="/" class="wordmark">CivicByte<span class="amp">.</span></a>
-    <div class="r">
-      <span>An independent NYC civic data project</span>
-      <span class="sep">&middot;</span>
-      <span>Open source &middot; MIT</span>
-    </div>
+  <header class="topnav">
+    <nav class="tn-inner" aria-label="Primary">
+      <div class="tn-links tn-l">
+        <a href="/tools.html">Tools</a>
+        <a href="/story.html">Story</a>
+      </div>
+      <a href="/" class="tn-mark">CivicByte</a>
+      <div class="tn-links tn-r">
+        <a href="/impact.html" class="is-active">Impact</a>
+        <a href="/about.html">About</a>
+      </div>
+    </nav>
   </header>
-
-  <nav class="secnav">
-    <ul>
-      <li><a href="/">Front Page</a></li>
-      <li><a href="/tools.html">Tools</a></li>
-      <li><a href="/story.html">The Story</a></li>
-      <li><a href="/about.html">About</a></li>
-    </ul>
-    <div class="right">
-      <span>Built something?</span>
-      <a href="/submit.html" class="open">Submit a tool &rarr;</a>
-    </div>
-  </nav>
 
   <section id="main" class="hero compact">
     <div class="dateline">
@@ -297,19 +284,18 @@
     </div>
   </section>
 
-  <footer>
-    <div class="fwrap">
-      <div>
-        <p class="fmark">CivicByte<span class="amp">.</span></p>
-        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
+  <footer class="site-foot">
+    <div class="sf-inner">
+      <a href="/" class="sf-mark">CivicByte</a>
+      <div class="sf-links">
+        <a href="/tools.html">Tools</a>
+        <a href="/impact.html">Impact</a>
+        <a href="/story.html">Story</a>
+        <a href="/submit.html">Submit a tool</a>
+        <a href="https://github.com/civicbytedev">GitHub</a>
+        <a href="/privacy.html">Privacy</a>
       </div>
-      <div><h5>Browse</h5><ul><li><a href="/tools.html">All tools</a></li><li><a href="/story.html">The Story</a></li><li><a href="/impact.html">Impact</a></li><li><a href="https://github.com/civicbytedev">GitHub</a></li></ul></div>
-      <div><h5>Contribute</h5><ul><li><a href="/submit.html">Submit a tool</a></li><li><a href="/about.html">Standards</a></li><li><a href="/about.html">About</a></li></ul></div>
-      <div><h5>Connect</h5><ul><li><a href="mailto:civicbytedev@gmail.com">civicbytedev@gmail.com</a></li><li><a href="/brand.html">Brand</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
-    </div>
-    <div class="colophon">
-      <span>&copy; 2026 CivicByte &middot; MIT License</span>
-      <span>Set in Newsreader, Inter Tight &amp; IBM Plex Mono &middot; Made in NYC</span>
+      <span class="sf-note">&copy; 2026 CivicByte &middot; Free &amp; open source &middot; Made in NYC</span>
     </div>
   </footer>
 
