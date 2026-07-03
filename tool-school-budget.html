@@ -12,6 +12,7 @@
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
 <meta name="theme-color" content="#141311">
 <script defer src="/civicbyte-fx.js"></script>
+<script src="/address-ac.js"></script>
 <link rel="stylesheet" href="/civicbyte-minimal.css">
 <style>
   .demo-note { padding: 14px 0 14px 20px; border-left: 2px solid var(--ember); margin-top: 14px; font-family: var(--serif); font-size: 15.5px; line-height: 1.5; color: var(--ink); max-width: 60ch; }
@@ -263,6 +264,13 @@ function rebindSuggest(){
 document.addEventListener('DOMContentLoaded', () => {
   $('sch-form').addEventListener('submit', e => { e.preventDefault(); run(); });
   rebindSuggest();
+  if (window.cbLocalPicker) {
+    cbLocalPicker('sch', [
+      { value: 'PS 321 William Penn',      label: 'PS 321 William Penn',      sub: 'District 15 · Park Slope · K–5' },
+      { value: 'PS 188 The Island School', label: 'PS 188 The Island School', sub: 'District 1 · Lower East Side · K–8' },
+      { value: 'Stuyvesant High School',   label: 'Stuyvesant High School',   sub: 'District 2 · Battery Park · 9–12' }
+    ], () => run());
+  }
 });
 </script>
 </body>
