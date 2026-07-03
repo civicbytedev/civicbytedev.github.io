@@ -12,6 +12,7 @@
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
 <meta name="theme-color" content="#141311">
 <script defer src="/civicbyte-fx.js"></script>
+<script src="/address-ac.js"></script>
 <link rel="stylesheet" href="/civicbyte-minimal.css">
 <style>
   .demo-note { padding: 14px 0 14px 20px; border-left: 2px solid var(--ember); margin-top: 14px; font-family: var(--serif); font-size: 15.5px; line-height: 1.5; color: var(--ink); max-width: 60ch; }
@@ -278,6 +279,13 @@ function rebindSuggest(){
 document.addEventListener('DOMContentLoaded', () => {
   $('ll-form').addEventListener('submit', e => { e.preventDefault(); run(); });
   rebindSuggest();
+  if (window.cbLocalPicker) {
+    cbLocalPicker('ll', [
+      { value: 'Longfellow Realty LLC', label: 'Longfellow Realty LLC', sub: '14 buildings · 218 open violations · Bronx' },
+      { value: 'Parkchester Holdings',  label: 'Parkchester Holdings',  sub: '12 buildings · 248 open violations · Bronx' },
+      { value: 'Sunset Park Co-op',     label: 'Sunset Park Co-op',     sub: '3 buildings · 14 open violations · Brooklyn' }
+    ], () => run());
+  }
 });
 </script>
 </body>
