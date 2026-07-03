@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>NYC Landlord Watch &mdash; CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Search any NYC landlord or LLC to see portfolio size, violation history, and risk score.">
+<meta name="description" content="Search any NYC landlord or LLC to see portfolio size and violation history, live from HPD.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -15,28 +15,33 @@
 <script src="/address-ac.js"></script>
 <link rel="stylesheet" href="/civicbyte-minimal.css">
 <style>
-  .demo-note { padding: 14px 0 14px 20px; border-left: 2px solid var(--ember); margin-top: 14px; font-family: var(--serif); font-size: 15.5px; line-height: 1.5; color: var(--ink); max-width: 60ch; }
-  .demo-note b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); font-weight: 500; display: block; margin-bottom: 6px; }
-  .state-none, .state-results { display: none; }
-  .state-none.on, .state-results.on { display: block; }
-  .state-none { padding: 28px 0; border-left: 2px solid var(--rule-2); padding-left: 28px; font-family: var(--serif); font-size: 19px; line-height: 1.4; color: var(--ink); max-width: 56ch; }
-  .state-none b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); display: block; margin-bottom: 8px; font-weight: 500; }
-  .state-none a { color: var(--ember); cursor: pointer; }
-  .suggest { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--mute); margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--rule); }
-  .suggest a { color: var(--ember); cursor: pointer; }
+  .state-idle, .state-loading, .state-error, .state-clean, .state-results { display: none; }
+  .state-idle.on, .state-loading.on, .state-error.on, .state-clean.on, .state-results.on { display: block; }
+  .state-idle { padding: 48px 0; font-family: var(--serif); font-size: 19px; color: var(--mute); max-width: 56ch; }
+  .state-loading { padding: 48px 0; text-align: center; }
+  .spinner { display: inline-block; width: 22px; height: 22px; border: 2px solid var(--rule-2); border-top-color: var(--ember); border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .state-loading .txt { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); vertical-align: middle; }
+  .state-error { padding: 28px 0; border-left: 2px solid var(--ember); padding-left: 28px; font-family: var(--serif); }
+  .state-error b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); display: block; margin-bottom: 8px; font-weight: 500; }
+  .state-clean { padding: 28px 0; border-left: 2px solid var(--rule-2); padding-left: 28px; }
+  .state-clean b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); display: block; margin-bottom: 8px; font-weight: 500; }
+  .state-clean p { font-family: var(--serif); font-size: 19px; line-height: 1.4; color: var(--ink); margin: 0; max-width: 56ch; }
+  .scope-note { padding: 14px 0 14px 20px; border-left: 2px solid var(--rule-2); margin-top: 14px; font-family: var(--serif); font-size: 15px; line-height: 1.5; color: var(--ink-2); max-width: 60ch; }
+  .scope-note b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); font-weight: 500; display: block; margin-bottom: 6px; }
 </style>
 <link rel="canonical" href="https://civicbyte.dev/tool-landlord-watch.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="CivicByte">
 <meta property="og:title" content="NYC Landlord Watch — CivicByte">
-<meta property="og:description" content="Search any NYC landlord or LLC to see portfolio size, violation history, and risk score.">
+<meta property="og:description" content="Search any NYC landlord or LLC to see portfolio size and violation history, live from HPD.">
 <meta property="og:url" content="https://civicbyte.dev/tool-landlord-watch.html">
 <meta property="og:image" content="https://civicbyte.dev/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="NYC Landlord Watch — CivicByte">
-<meta name="twitter:description" content="Search any NYC landlord or LLC to see portfolio size, violation history, and risk score.">
+<meta name="twitter:description" content="Search any NYC landlord or LLC to see portfolio size and violation history, live from HPD.">
 <meta name="twitter:image" content="https://civicbyte.dev/og.png">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"NYC Landlord Watch","url":"https://civicbyte.dev/tool-landlord-watch.html","description":"Landlord and LLC violation history across NYC","applicationCategory":"Government & civic data","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"creator":{"@type":"Organization","name":"CivicByte","url":"https://civicbyte.dev/"}}
@@ -74,17 +79,12 @@
 
     <form class="lookup" id="ll-form">
       <label class="label" for="ll">Search</label>
-      <input id="ll" class="input" type="text" placeholder="Landlord or LLC name &mdash; e.g. Longfellow Realty LLC" autocomplete="off" />
+      <input id="ll" class="input" type="text" placeholder="Registered corporate or owner name &mdash; e.g. Stellar Management" autocomplete="off" />
       <button type="submit" class="submit">Pull the file <span class="arr">&rarr;</span></button>
     </form>
-    <div class="demo-note">
-      <b>Demo mode</b>
-      Resolving LLCs back to their parent landlords needs an ACRIS-deed ingestion pipeline we're still building. While it lands, this tool returns sample portfolios for three known landlords. Live HPD-only ingest goes in next.
-    </div>
-    <div class="suggest">
-      Demo set: <a data-q="Longfellow Realty LLC">Longfellow Realty LLC</a> &middot;
-      <a data-q="Parkchester Holdings">Parkchester Holdings</a> &middot;
-      <a data-q="Sunset Park Co-op">Sunset Park Co-op</a>
+    <div class="scope-note">
+      <b>Scope</b>
+      Portfolios are reconstructed live from HPD's own registration filings &mdash; not deed records, so a landlord hiding behind unrelated shell LLCs won't fully surface. Search the <em>exact</em> name printed on a building's HPD registration (often an LLC, not a person). Full ACRIS deed-graph resolution is a future build.
     </div>
   </section>
 
@@ -94,15 +94,25 @@
         <div class="kicker">The Readout</div>
         <h2>One landlord, <em>their whole record</em>.</h2>
       </div>
-      <div class="meta">Sample data &middot; demo mode</div>
+      <div class="meta" id="refreshed">Pulled live from NYC Open Data</div>
     </header>
 
-    <div class="state-none on" id="s-none">
-      <b>Demo set</b>
-      Type a landlord above and hit <strong>Pull the file</strong>. Demo mode currently knows three landlords:
-      <a data-q="Longfellow Realty LLC">Longfellow Realty LLC</a>,
-      <a data-q="Parkchester Holdings">Parkchester Holdings</a>, and
-      <a data-q="Sunset Park Co-op">Sunset Park Co-op</a>.
+    <div class="state-idle on" id="s-idle">
+      Search a registered corporate or owner name above to pull every building HPD has on file under it, with open violations by class.
+    </div>
+
+    <div class="state-loading" id="s-loading">
+      <span class="spinner"></span><span class="txt">Resolving registrations&hellip;</span>
+    </div>
+
+    <div class="state-error" id="s-error">
+      <b>Couldn't load</b>
+      <span id="err-msg" style="font-family: var(--serif); font-size: 19px; line-height: 1.45;"></span>
+    </div>
+
+    <div class="state-clean" id="s-clean">
+      <b>No match on file</b>
+      <p id="clean-msg"></p>
     </div>
 
     <div class="state-results" id="s-results">
@@ -124,15 +134,15 @@
           </div>
 
           <div class="keystat">
-            <p class="k">CivicByte risk index</p>
+            <p class="k">Avg. open violations / building</p>
             <div class="n ember" id="r-risk">&mdash;</div>
             <div class="sub" id="r-risksub"></div>
           </div>
 
           <div class="keystat last">
             <p class="k">Source</p>
-            <div class="n small">HPD &middot; ACRIS</div>
-            <div class="sub">Demo data &middot; ingestion in build</div>
+            <div class="n small">HPD &middot; live</div>
+            <div class="sub" id="r-srcsub">Registration Contacts + Multiple Dwelling Registrations</div>
           </div>
         </aside>
 
@@ -141,7 +151,6 @@
             <thead>
               <tr>
                 <th>Building</th>
-                <th class="right" style="width: 80px;">Units</th>
                 <th class="right" style="width: 88px;">Open V.</th>
                 <th class="right" style="width: 76px;">Class C</th>
                 <th class="right" style="width: 84px;">Flagged</th>
@@ -151,7 +160,7 @@
           </table>
 
           <div class="readout-foot">
-            <span class="source">Source &middot; <b>HPD violations + registrations</b> &middot; sample portfolios &middot; ACRIS deed-graph ingestion in build</span>
+            <span class="source">Source &middot; <b>HPD registrations + violations</b> &middot; live from NYC Open Data</span>
             <a href="https://data.cityofnewyork.us/Housing-Development/Registration-Contacts/feu5-w2e2" class="cta-link muted" target="_blank" rel="noopener">View HPD dataset <span class="arr">&rarr;</span></a>
           </div>
         </div>
@@ -185,107 +194,160 @@
 </div>
 
 <script>
-const LANDLORDS = {
-  "longfellow realty llc": {
-    name: "Longfellow Realty LLC", regsub: "Registered · Delaware · 2019",
-    props: 14, pbreak: [["11","Bronx"],["2","Brooklyn"],["1","Queens"]],
-    violations: 218, vbreak: [["54","Class C"],["121","Class B"],["43","Class A"]],
-    risk: "94", risksub: "High &middot; Top 3% citywide",
-    rows: [
-      ["965 Longfellow Ave, Bronx", 14, 14, 6, true],
-      ["2103 Crotona Pkwy, Bronx", 22, 31, 9, true],
-      ["847 Hoe Ave, Bronx", 18, 26, 7, true],
-      ["410 E 156th St, Bronx", 12, 19, 4, true],
-      ["1224 Faile St, Bronx", 9, 7, 1, false],
-      ["312 Stockton St, Brooklyn", 8, 5, 0, false],
-      ["+ 8 more", 183, 116, 27, null]
-    ]
-  },
-  "parkchester holdings": {
-    name: "Parkchester Holdings", regsub: "Registered · NY · 2014",
-    props: 12, pbreak: [["12","Bronx"]],
-    violations: 248, vbreak: [["41","Class C"],["134","Class B"],["73","Class A"]],
-    risk: "78", risksub: "Medium &middot; Top 12% citywide",
-    rows: [
-      ["1745 Unionport Rd, Bronx", 48, 62, 14, true],
-      ["2021 Westchester Ave, Bronx", 36, 44, 9, true],
-      ["1590 Metropolitan Ave, Bronx", 28, 28, 6, false],
-      ["+ 9 more", 312, 114, 12, null]
-    ]
-  },
-  "sunset park co-op": {
-    name: "Sunset Park Co-op", regsub: "Co-op &middot; Brooklyn &middot; 2008",
-    props: 3, pbreak: [["3","Brooklyn"]],
-    violations: 14, vbreak: [["0","Class C"],["5","Class B"],["9","Class A"]],
-    risk: "12", risksub: "Low &middot; Below borough average",
-    rows: [
-      ["5510 5th Ave, Brooklyn", 22, 6, 0, false],
-      ["448 49th St, Brooklyn", 18, 5, 0, false],
-      ["612 46th St, Brooklyn", 14, 3, 0, false]
-    ]
-  }
-};
+// Live portfolio reconstruction from HPD's own filings — three chained
+// Socrata queries, no backend. This resolves *registered* ownership only:
+// a landlord layering shell LLCs to obscure control won't fully surface
+// without ACRIS deed-graph resolution (a future build).
+const CONTACTS_API = 'https://data.cityofnewyork.us/resource/feu5-w2e2.json';
+const REG_API      = 'https://data.cityofnewyork.us/resource/tesw-yqqr.json';
+const VIOL_API     = 'https://data.cityofnewyork.us/resource/wvxf-dwi5.json';
+const BOROUGH_NAME = { '1':'Manhattan', '2':'Bronx', '3':'Brooklyn', '4':'Queens', '5':'Staten Island' };
+const MAX_BUILDINGS = 40;   // cap portfolio size fetched, to keep queries bounded
+
 function $(id){return document.getElementById(id);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function show(state){['s-none','s-results'].forEach(id => $(id).classList.toggle('on', id === state));}
+function show(state){['s-idle','s-loading','s-error','s-clean','s-results'].forEach(id => $(id).classList.toggle('on', id === state));}
+function titleCase(s){ return String(s||'').toLowerCase().replace(/\b\w/g, c => c.toUpperCase()); }
 
-function run(){
-  const raw = $('ll').value.trim();
-  if(!raw){ $('ll').focus(); return; }
-  const q = raw.toLowerCase();
-  const data = LANDLORDS[q] || LANDLORDS[Object.keys(LANDLORDS).find(k => q && (k.includes(q) || k.includes(q.split(' ')[0])))] || null;
-  if(!data){
-    $('s-none').innerHTML = '<b>Not in the demo set</b>"' + esc(raw) + '" — demo mode currently knows three landlords: <a data-q="Longfellow Realty LLC">Longfellow Realty LLC</a>, <a data-q="Parkchester Holdings">Parkchester Holdings</a>, and <a data-q="Sunset Park Co-op">Sunset Park Co-op</a>. Real ACRIS-graph ingestion is in build.';
-    rebindSuggest();
-    show('s-none');
-    return;
-  }
-  $('r-name').innerHTML = esc(data.name) + `<span class="borough">${data.regsub}</span>`;
-  $('r-props').innerHTML = `${data.props} <span style="font-size: 22px; letter-spacing: 0; font-family: var(--sans); font-weight: 500;">buildings</span>`;
-  $('r-pbreak').innerHTML = data.pbreak.map(p => `<span><b>${p[0]}</b> ${esc(p[1])}</span>`).join('');
-  $('r-violations').textContent = data.violations;
-  $('r-vbreak').innerHTML = data.vbreak.map(v => `<span><b>${v[0]}</b> ${esc(v[1])}</span>`).join('');
-  $('r-risk').innerHTML = `${data.risk}<span style="font-family: var(--mono); font-size: 18px; color: var(--mute); letter-spacing: 0.06em;"> / 100</span>`;
-  $('r-risksub').innerHTML = data.risksub;
-  $('r-rows').innerHTML = data.rows.map(r => {
-    const flagged = r[4] === true;
-    const isMore = r[4] === null;
-    if (isMore) {
-      return `<tr>
-        <td class="mono" style="color: var(--mute);">${esc(r[0])}</td>
-        <td class="num" style="color: var(--mute);">${r[1]}</td>
-        <td class="num" style="color: var(--mute);">${r[2]}</td>
-        <td class="num" style="color: var(--mute);">${r[3]}</td>
-        <td class="mono right" style="color: var(--mute);">&middot;</td>
-      </tr>`;
+async function findRegistrationIds(q){
+  const safe = q.replace(/'/g, "''");
+  // Primary: corporate/LLC name match — the tool's main use case.
+  let url = `${CONTACTS_API}?$select=distinct registrationid,corporationname` +
+    `&$where=${encodeURIComponent(`upper(corporationname) like upper('%${safe}%')`)}&$limit=200`;
+  let res = await fetch(url);
+  if (!res.ok) throw new Error('HPD registration lookup failed (' + res.status + ')');
+  let rows = await res.json();
+  let matchedName = rows[0] && rows[0].corporationname;
+
+  // Fallback: individual owner/officer name match.
+  if (!rows.length) {
+    url = `${CONTACTS_API}?$select=distinct registrationid,firstname,lastname` +
+      `&$where=${encodeURIComponent(`upper(firstname || ' ' || lastname) like upper('%${safe}%')`)}&$limit=200`;
+    res = await fetch(url);
+    if (res.ok) {
+      rows = await res.json();
+      if (rows.length) matchedName = [rows[0].firstname, rows[0].lastname].filter(Boolean).join(' ');
     }
-    return `<tr>
-      <td class="serif">${esc(r[0])}</td>
-      <td class="num">${r[1]}</td>
-      <td class="num"><span style="color: ${flagged ? 'var(--ember)' : 'var(--ink)'}; font-weight: 500;">${r[2]}</span></td>
-      <td class="num">${r[3]}</td>
-      <td class="mono right" style="color: ${flagged ? 'var(--ember)' : 'var(--mute)'};">${flagged ? '●' : '·'}</td>
-    </tr>`;
-  }).join('');
-  show('s-results');
+  }
+  const ids = [...new Set(rows.map(r => r.registrationid).filter(Boolean))];
+  return { ids, matchedName };
 }
 
-function rebindSuggest(){
-  document.querySelectorAll('[data-q]').forEach(a => {
-    a.addEventListener('click', e => { e.preventDefault(); $('ll').value = a.dataset.q; run(); }, { once: false });
+async function fetchBuildings(ids){
+  if (!ids.length) return [];
+  const where = `registrationid in(${ids.map(id => `'${id}'`).join(',')})`;
+  const url = `${REG_API}?$where=${encodeURIComponent(where)}&$limit=500`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('HPD building registration lookup failed (' + res.status + ')');
+  const rows = await res.json();
+  return rows.map(r => {
+    const bbl = r.bbl || (r.boroid && r.block && r.lot
+      ? r.boroid + String(r.block).padStart(5,'0') + String(r.lot).padStart(4,'0')
+      : null);
+    return {
+      bbl,
+      registrationid: r.registrationid,
+      addr: [r.housenumber, r.streetname].filter(Boolean).join(' '),
+      boro: BOROUGH_NAME[r.boroid] || r.boro || ''
+    };
+  }).filter(b => b.bbl && b.addr);
+}
+
+async function fetchViolationCounts(bbls){
+  if (!bbls.length) return {};
+  const where = `bbl in(${bbls.map(b => `'${b}'`).join(',')})`;
+  const url = `${VIOL_API}?$select=bbl,class,currentstatus&$where=${encodeURIComponent(where)}&$limit=10000`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('HPD violation lookup failed (' + res.status + ')');
+  const rows = await res.json();
+  const byBbl = {};
+  for (const r of rows) {
+    const open = (r.currentstatus || '').toLowerCase().includes('open');
+    if (!open) continue;
+    const cls = (r.class || '').toUpperCase();
+    if (!byBbl[r.bbl]) byBbl[r.bbl] = { total: 0, A: 0, B: 0, C: 0 };
+    byBbl[r.bbl].total++;
+    if (cls === 'A' || cls === 'B' || cls === 'C') byBbl[r.bbl][cls]++;
+  }
+  return byBbl;
+}
+
+async function run(){
+  const raw = $('ll').value.trim();
+  if (!raw || raw.length < 3) { $('ll').focus(); return; }
+  show('s-loading');
+  try {
+    const { ids, matchedName } = await findRegistrationIds(raw);
+    if (!ids.length) {
+      $('clean-msg').textContent = `No HPD registration found matching "${raw}". Try the exact corporate/LLC name printed on the building's HPD registration sign — partial words work, but spelling has to match what's on file.`;
+      show('s-clean');
+      return;
+    }
+
+    let buildings = await fetchBuildings(ids);
+    // Dedupe by BBL — a building can carry more than one registrationid over time.
+    const seen = new Set();
+    buildings = buildings.filter(b => seen.has(b.bbl) ? false : (seen.add(b.bbl), true));
+    const shown = buildings.slice(0, MAX_BUILDINGS);
+    const extra = buildings.length - shown.length;
+
+    const violByBbl = await fetchViolationCounts(shown.map(b => b.bbl));
+
+    render(matchedName || raw, buildings, shown, extra, violByBbl);
+  } catch (err) {
+    $('err-msg').textContent = err.message;
+    show('s-error');
+  }
+}
+
+function render(name, allBuildings, shown, extra, violByBbl){
+  $('r-name').innerHTML = esc(titleCase(name)) +
+    `<span class="borough">${allBuildings.length} registered building${allBuildings.length === 1 ? '' : 's'} on file</span>`;
+  $('r-props').innerHTML = `${allBuildings.length} <span style="font-size: 22px; letter-spacing: 0; font-family: var(--sans); font-weight: 500;">buildings</span>`;
+
+  const byBoro = {};
+  allBuildings.forEach(b => { byBoro[b.boro || 'Unknown'] = (byBoro[b.boro || 'Unknown'] || 0) + 1; });
+  $('r-pbreak').innerHTML = Object.entries(byBoro)
+    .sort((a,b) => b[1]-a[1])
+    .map(([boro,n]) => `<span><b>${n}</b> ${esc(boro)}</span>`).join('');
+
+  let totalOpen = 0, totA = 0, totB = 0, totC = 0;
+  shown.forEach(b => {
+    const v = violByBbl[b.bbl];
+    if (!v) return;
+    totalOpen += v.total; totA += v.A; totB += v.B; totC += v.C;
   });
+  $('r-violations').textContent = totalOpen.toLocaleString();
+  $('r-vbreak').innerHTML = `<span><b>${totC}</b> Class C</span><span><b>${totB}</b> Class B</span><span><b>${totA}</b> Class A</span>`;
+  $('r-risk').innerHTML = shown.length ? (totalOpen / shown.length).toFixed(1) : '&mdash;';
+  $('r-risksub').textContent = extra > 0
+    ? `Based on the first ${shown.length} buildings shown; ${extra} more on file but not queried`
+    : `Across ${shown.length} building${shown.length === 1 ? '' : 's'}`;
+  $('r-rows').innerHTML = shown.map(b => {
+    const v = violByBbl[b.bbl] || { total: 0, C: 0 };
+    const flagged = v.total > 0;
+    return `<tr>
+      <td class="serif">${esc(b.addr)}${b.boro ? `, ${esc(b.boro)}` : ''}</td>
+      <td class="num"><span style="color: ${flagged ? 'var(--ember)' : 'var(--ink)'}; font-weight: 500;">${v.total}</span></td>
+      <td class="num">${v.C}</td>
+      <td class="mono right" style="color: ${flagged ? 'var(--ember)' : 'var(--mute)'};">${flagged ? '●' : '·'}</td>
+    </tr>`;
+  }).join('') + (extra > 0 ? `<tr>
+      <td class="mono" style="color: var(--mute);">+ ${extra} more registered building${extra === 1 ? '' : 's'} (not queried)</td>
+      <td class="num" style="color: var(--mute);">&middot;</td>
+      <td class="num" style="color: var(--mute);">&middot;</td>
+      <td class="mono right" style="color: var(--mute);">&middot;</td>
+    </tr>` : '');
+
+  $('refreshed').textContent = 'Refreshed · just now · live from NYC Open Data';
+  show('s-results');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   $('ll-form').addEventListener('submit', e => { e.preventDefault(); run(); });
-  rebindSuggest();
-  if (window.cbLocalPicker) {
-    cbLocalPicker('ll', [
-      { value: 'Longfellow Realty LLC', label: 'Longfellow Realty LLC', sub: '14 buildings · 218 open violations · Bronx' },
-      { value: 'Parkchester Holdings',  label: 'Parkchester Holdings',  sub: '12 buildings · 248 open violations · Bronx' },
-      { value: 'Sunset Park Co-op',     label: 'Sunset Park Co-op',     sub: '3 buildings · 14 open violations · Brooklyn' }
-    ], () => run());
-  }
+  const params = new URLSearchParams(location.search);
+  const q = params.get('q');
+  if (q) { $('ll').value = q; run(); }
 });
 </script>
 </body>
