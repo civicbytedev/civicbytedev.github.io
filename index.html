@@ -2,29 +2,31 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>CivicByte — Free NYC Civic Tools</title>
+<title>CivicByte — Know Your City</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="An independent NYC civic-data project. Free, open-source tools that turn public records into things tenants, parents, and organizers can actually use.">
+<meta name="description" content="Public records, made usable. Free NYC civic tools that turn open data into answers — building violations, landlords, school budgets, evictions, 311 complaints.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/cb-icon-light.svg">
-<meta name="theme-color" content="#B33E16">
+<meta name="theme-color" content="#0B0E14">
 <script defer src="/civicbyte-fx.js"></script>
-<link rel="stylesheet" href="/civicbyte-editorial.css">
+<script defer src="/city-skyline.js"></script>
+<script src="/address-ac.js"></script>
+<link rel="stylesheet" href="/civicbyte-minimal.css">
 <link rel="canonical" href="https://civicbyte.dev/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="CivicByte">
-<meta property="og:title" content="CivicByte — Free NYC Civic Tools">
-<meta property="og:description" content="An independent NYC civic-data project. Free, open-source tools that turn public records into things tenants, parents, and organizers can actually use.">
+<meta property="og:title" content="CivicByte — Know Your City">
+<meta property="og:description" content="Public records, made usable. Free NYC civic tools that turn open data into answers.">
 <meta property="og:url" content="https://civicbyte.dev/">
 <meta property="og:image" content="https://civicbyte.dev/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="CivicByte — Free NYC Civic Tools">
-<meta name="twitter:description" content="An independent NYC civic-data project. Free, open-source tools that turn public records into things tenants, parents, and organizers can actually use.">
+<meta name="twitter:title" content="CivicByte — Know Your City">
+<meta name="twitter:description" content="Public records, made usable. Free NYC civic tools that turn open data into answers.">
 <meta name="twitter:image" content="https://civicbyte.dev/og.png">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"CivicByte","url":"https://civicbyte.dev/","description":"Free, open-source civic tools built on NYC public data.","publisher":{"@type":"Organization","name":"CivicByte","url":"https://civicbyte.dev/","email":"civicbytedev@gmail.com","sameAs":["https://github.com/civicbytedev"]}}
@@ -32,192 +34,115 @@
 </head>
 <body>
 
+<a class="skip-link" href="#tools">Skip to content</a>
 
-<a class="skip-link" href="#main">Skip to content</a>
-<div class="page">
+<!-- HERO — animated night skyline -->
+<section class="home-hero">
+  <canvas id="skyline" class="hh-canvas" aria-hidden="true"></canvas>
+  <div class="hh-veil" aria-hidden="true"></div>
 
-  <header class="masthead">
-    <div class="l">
-      <span><span class="tick"></span>Vol. 01 &nbsp;&middot;&nbsp; No. 20</span>
-      <span class="sep">&middot;</span>
-      <span>Wednesday, June 10, 2026</span>
-    </div>
-    <a href="/" class="wordmark">CivicByte<span class="amp">.</span></a>
-    <div class="r">
-      <span>An independent NYC civic data project</span>
-      <span class="sep">&middot;</span>
-      <span>Open source &middot; MIT</span>
-    </div>
+  <header class="topnav on-dark">
+    <nav class="tn-inner" aria-label="Primary">
+      <div class="tn-links tn-l">
+        <a href="/tools.html">Tools</a>
+        <a href="/story.html">Story</a>
+      </div>
+      <a href="/" class="tn-mark">CivicByte</a>
+      <div class="tn-links tn-r">
+        <a href="/impact.html">Impact</a>
+        <a href="/about.html">About</a>
+      </div>
+    </nav>
   </header>
 
-  <nav class="secnav">
-    <ul>
-      <li><a href="/" class="is-active">Front Page</a></li>
-      <li><a href="/tools.html">Tools</a></li>
-      <li><a href="/story.html">The Story</a></li>
-      <li><a href="/about.html">About</a></li>
-    </ul>
-    <div class="right">
-      <span>Built something?</span>
-      <a href="/submit.html" class="open">Submit a tool &rarr;</a>
+  <div class="hh-center">
+    <p class="hh-kicker">An independent NYC civic-data project</p>
+    <h1 class="hh-title">Know your<br>city</h1>
+    <p class="hh-sub">Public records, made usable. Free for every New Yorker.</p>
+  </div>
+
+  <form class="hh-search" id="hero-search" action="/tool-building-report.html" method="get">
+    <div class="wrap">
+      <div class="hh-field">
+        <label for="hero-addr">Your address</label>
+        <input id="hero-addr" name="q" type="text" placeholder="e.g. 1840 Grand Concourse, Bronx" autocomplete="off">
+      </div>
+      <button type="submit">See the record</button>
     </div>
-  </nav>
+  </form>
 
-  <section id="main" class="hero">
-    <div class="hero-body">
-      <div class="dateline">
-        <span>The Front Page</span>
-        <span class="sep">&middot;</span>
-        <span>Edition for the five boroughs</span>
-      </div>
-      <h1>Public data,<br>made <span class="em">usable</span>.</h1>
+  <a href="#tools" class="hh-cue" aria-label="Scroll to the tools">
+    <span class="cue-label">The tools</span>
+    <span class="cue-arrow" aria-hidden="true">&darr;</span>
+  </a>
+</section>
 
-      <div class="hero-foot">
-        <p class="lede">
-          The records your city already publishes &mdash; turned into tools a tenant, a parent, or a grandmother can actually use. Free. No logins. No spreadsheets.
-        </p>
-        <div class="cta-col">
-          <a href="/tools.html" class="cta-link">Browse the tools <span class="arr">&rarr;</span></a>
-          <span class="cta-sub">Five live &middot; One in development</span>
-        </div>
-      </div>
+<!-- TOOLS -->
+<section id="tools" class="home-tools">
+  <div class="page">
+    <p class="kicker">Five tools &middot; one question each</p>
+    <h2 class="ht-title">What does the city know <em>about where you live?</em></h2>
+
+    <div class="tool-grid">
+      <a href="/tool-building-report.html" class="tool-card">
+        <span class="tc-name">Building Report</span>
+        <span class="tc-q">Violations &amp; permits</span>
+        <span class="tc-n">1.1M addresses</span>
+      </a>
+      <a href="/tool-landlord-watch.html" class="tool-card">
+        <span class="tc-name">Landlord Watch</span>
+        <span class="tc-q">Who owns your building</span>
+        <span class="tc-n">36K owners</span>
+      </a>
+      <a href="/tool-school-budget.html" class="tool-card">
+        <span class="tc-name">School Budgets</span>
+        <span class="tc-q">Where the money goes</span>
+        <span class="tc-n">1,800 schools</span>
+      </a>
+      <a href="/tool-eviction-records.html" class="tool-card">
+        <span class="tc-name">Eviction Records</span>
+        <span class="tc-q">Before you sign</span>
+        <span class="tc-n">100K records</span>
+      </a>
+      <a href="/tool-311-lookup.html" class="tool-card">
+        <span class="tc-name">311 Lookup</span>
+        <span class="tc-q">Every complaint filed</span>
+        <span class="tc-n">35M complaints</span>
+      </a>
     </div>
 
-    <div class="hero-aside">
-      <div class="ledger">
-        <div class="ledger-head">
-          <span class="lh-label"><span class="ledger-tick"></span>Live records</span>
-          <span>NYC Open Data</span>
-        </div>
-        <div class="ledger-rows">
-          <a href="/tool-building-report.html" class="ledger-row">
-            <span class="lr-num">01</span>
-            <span class="lr-label">HPD building addresses</span>
-            <span class="lr-val">1.1M</span>
-          </a>
-          <a href="/tool-landlord-watch.html" class="ledger-row">
-            <span class="lr-num">02</span>
-            <span class="lr-label">Landlords &amp; LLCs tracked</span>
-            <span class="lr-val">36K</span>
-          </a>
-          <a href="/tool-school-budget.html" class="ledger-row">
-            <span class="lr-num">03</span>
-            <span class="lr-label">NYC public schools</span>
-            <span class="lr-val">1,800</span>
-          </a>
-          <a href="/tool-eviction-records.html" class="ledger-row">
-            <span class="lr-num">04</span>
-            <span class="lr-label">Eviction records</span>
-            <span class="lr-val">100K</span>
-          </a>
-          <a href="/tool-311-lookup.html" class="ledger-row">
-            <span class="lr-num">05</span>
-            <span class="lr-label">311 complaints filed</span>
-            <span class="lr-val">35M</span>
-          </a>
-        </div>
-        <div class="ledger-foot">
-          <span>Source: NYC Open Data</span>
-          <span>Updated daily &middot; Five boroughs</span>
-        </div>
-      </div>
+    <p class="founder-note">Built by a high-school student at a kitchen table in the Bronx. Free, open source, no logins &mdash; every record pulled live from NYC Open Data.</p>
+    <a href="/story.html" class="cta-link">Read the story <span class="arr">&rarr;</span></a>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="sf-inner">
+    <a href="/" class="sf-mark">CivicByte</a>
+    <div class="sf-links">
+      <a href="/tools.html">Tools</a>
+      <a href="/impact.html">Impact</a>
+      <a href="/story.html">Story</a>
+      <a href="/submit.html">Submit a tool</a>
+      <a href="https://github.com/civicbytedev">GitHub</a>
+      <a href="/privacy.html">Privacy</a>
     </div>
-  </section>
+    <span class="sf-note">&copy; 2026 CivicByte &middot; Free &amp; open source &middot; Made in NYC</span>
+  </div>
+</footer>
 
-  <section class="section">
-    <header class="section-head">
-      <div>
-        <div class="kicker">The Index</div>
-        <h2>Five tools, <em>in the field.</em></h2>
-      </div>
-      <div class="meta"><b>06</b> &middot; Listings, this edition</div>
-    </header>
-
-    <ol class="ilist">
-      <li><a href="/tool-building-report.html">
-        <span class="inum">01</span>
-        <span class="ititle">NYC Building Report</span>
-        <span class="idesc">Enter any address to pull HPD violations &mdash; class breakdown, registration, owner. Updated daily from NYC Open Data.</span>
-        <span class="imeta"><span class="st">Live</span><span class="records">1.1M addresses</span></span>
-        <span class="iarr">&rarr;</span>
-      </a></li>
-      <li><a href="/tool-landlord-watch.html">
-        <span class="inum">02</span>
-        <span class="ititle">NYC Landlord Watch</span>
-        <span class="idesc">Search any landlord or LLC to see violation history, portfolio size, and risk score across every property they own.</span>
-        <span class="imeta"><span class="st">Live</span><span class="records">36k owners</span></span>
-        <span class="iarr">&rarr;</span>
-      </a></li>
-      <li><a href="/tool-school-budget.html">
-        <span class="inum">03</span>
-        <span class="ititle">NYC School Budget Tracker</span>
-        <span class="idesc">Per-pupil spending, Title I funding, and PTA contributions across 1,800+ public schools.</span>
-        <span class="imeta"><span class="st">Live</span><span class="records">1,800 schools</span></span>
-        <span class="iarr">&rarr;</span>
-      </a></li>
-      <li><a href="/tool-eviction-records.html">
-        <span class="inum">04</span>
-        <span class="ititle">NYC Eviction Records</span>
-        <span class="idesc">Look up executed marshal evictions for any address across all five boroughs. Know before you sign.</span>
-        <span class="imeta"><span class="st">Live</span><span class="records">100k records</span></span>
-        <span class="iarr">&rarr;</span>
-      </a></li>
-      <li><a href="/tool-311-lookup.html">
-        <span class="inum">05</span>
-        <span class="ititle">NYC 311 Complaint Lookup</span>
-        <span class="idesc">Every 311 request filed at an address &mdash; noise, heat, pests, plumbing &mdash; with agency assignments and resolutions.</span>
-        <span class="imeta"><span class="st">Live</span><span class="records">35M complaints</span></span>
-        <span class="iarr">&rarr;</span>
-      </a></li>
-      <li><a href="/tools.html">
-        <span class="inum">06</span>
-        <span class="ititle">Community Resource Finder</span>
-        <span class="idesc">Searchable directory of free and low-cost services &mdash; food pantries, legal aid, after-school &mdash; indexed by neighborhood.</span>
-        <span class="imeta"><span class="st dev">In dev</span><span class="records">Q3 2026</span></span>
-        <span class="iarr">&rarr;</span>
-      </a></li>
-    </ol>
-  </section>
-
-  <footer>
-    <div class="fwrap">
-      <div>
-        <p class="fmark">CivicByte<span class="amp">.</span></p>
-        <p>An open platform for free, community-facing civic tools built on public data. NYC-founded, open source under MIT.</p>
-      </div>
-      <div>
-        <h5>Browse</h5>
-        <ul>
-          <li><a href="/tools.html">All tools</a></li>
-          <li><a href="/story.html">The Story</a></li>
-          <li><a href="/impact.html">Impact</a></li>
-          <li><a href="https://github.com/civicbytedev">GitHub</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>Contribute</h5>
-        <ul>
-          <li><a href="/submit.html">Submit a tool</a></li>
-          <li><a href="/about.html">Standards</a></li>
-          <li><a href="/about.html">About</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>Contact</h5>
-        <ul>
-          <li><a href="mailto:civicbytedev@gmail.com">civicbytedev@gmail.com</a></li>
-          <li><a href="/privacy.html">Privacy</a></li>
-          <li><a href="https://github.com/civicbytedev">Release notes</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="colophon">
-      <span>&copy; 2026 CivicByte &middot; MIT License</span>
-      <span>Set in Newsreader, Inter Tight &amp; IBM Plex Mono &middot; Made in NYC</span>
-    </div>
-  </footer>
-
-</div>
-
+<script>
+(function(){
+  var form = document.getElementById('hero-search');
+  var input = document.getElementById('hero-addr');
+  if (!form || !input) return;
+  form.addEventListener('submit', function(e){
+    if (!input.value.trim()) { e.preventDefault(); input.focus(); }
+  });
+  if (window.cbAutocomplete) {
+    cbAutocomplete('hero-addr', function(){ form.submit(); });
+  }
+})();
+</script>
 </body>
 </html>
