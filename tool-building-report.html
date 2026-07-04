@@ -99,7 +99,7 @@
     </header>
 
     <div class="state-idle on" id="s-idle">
-      Enter an NYC address above to pull the building's full HPD violation record &mdash; class breakdown, registration, owner.
+      Enter an NYC address above to pull the building's HPD violation record &mdash; open and closed counts, class breakdown, and the most recent inspections.
     </div>
 
     <div class="state-loading" id="s-loading">
@@ -195,26 +195,52 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 function show(state){['s-idle','s-loading','s-error','s-clean','s-results'].forEach(id => $(id).classList.toggle('on', id === state));}
 
 // Fallback: parse the typed address and match on housenumber + streetname.
-// Used only when GeoSearch can't resolve a BBL.
+// Used only when GeoSearch can't resolve a BBL. HPD stores street names
+// fully spelled out ("WEST TREMONT AVENUE"), so expand common abbreviations:
+// leading directionals and a trailing street type only, to avoid mangling
+// names like "St Marks Pl".
+function expandStreet(s){
+  const words = s.toUpperCase().replace(/\./g,'').trim().split(/\s+/);
+  const DIR  = { N:'NORTH', S:'SOUTH', E:'EAST', W:'WEST' };
+  const TYPE = { ST:'STREET', AVE:'AVENUE', BLVD:'BOULEVARD', DR:'DRIVE',
+                 PL:'PLACE', RD:'ROAD', PKWY:'PARKWAY', PKY:'PARKWAY',
+                 TER:'TERRACE', CT:'COURT', LN:'LANE' };
+  if (words.length > 1 && DIR[words[0]]) words[0] = DIR[words[0]];
+  const last = words.length - 1;
+  if (last > 0 && TYPE[words[last]]) words[last] = TYPE[words[last]];
+  return words.join(' ');
+}
 async function searchByStreet(raw){
   const parts = raw.replace(/,.*$/, '').trim();
   const m = parts.match(/^(\d+[a-zA-Z]?)\s+(.+)$/);
   if (!m) throw new Error('Could not parse address — try "226 W Tremont Ave, Bronx".');
   const num = m[1];
-  const street = m[2].toUpperCase()
-    .replace(/\bSTREET\b/g,'ST').replace(/\bAVENUE\b/g,'AVE')
-    .replace(/\bBOULEVARD\b/g,'BLVD').replace(/\bDRIVE\b/g,'DR')
-    .replace(/\bPLACE\b/g,'PL').replace(/\bROAD\b/g,'RD')
-    .replace(/\bPARKWAY\b/g,'PKWY').replace(/\bTERRACE\b/g,'TER')
-    .replace(/\bCOURT\b/g,'CT').replace(/\bLANE\b/g,'LN')
-    .replace(/\bEAST\b/g,'E').replace(/\bWEST\b/g,'W')
-    .replace(/\bNORTH\b/g,'N').replace(/\bSOUTH\b/g,'S').trim();
+  const street = expandStreet(m[2]);
   const where = `housenumber='${num.replace(/'/g,"''")}' AND streetname='${street.replace(/'/g,"''")}'`;
   const url = `${HPD_API}?$where=${encodeURIComponent(where)}&$limit=200&$order=inspectiondate DESC`;
   const res = await fetch(url);
   if(!res.ok) throw new Error('API error ' + res.status);
+  lastWhere = where;
   return res.json();
 }
+
+// True totals for buildings with more than 200 violations: the row fetch is
+// capped at $limit=200, so ask Socrata to count instead of trusting length.
+async function fetchTrueCounts(where){
+  try {
+    const [t, o] = await Promise.all([
+      fetch(`${HPD_API}?$select=count(violationid)&$where=${encodeURIComponent(where)}`),
+      fetch(`${HPD_API}?$select=count(violationid)&$where=${encodeURIComponent(where + " AND violationstatus='Open'")}`)
+    ]);
+    if (!t.ok || !o.ok) return null;
+    const tj = await t.json(), oj = await o.json();
+    return {
+      total: +(((tj[0]||{}).count_violationid) || 0),
+      open:  +(((oj[0]||{}).count_violationid) || 0)
+    };
+  } catch (e) { return null; }
+}
+let lastWhere = null;
 
 async function runSearch(){
   const raw = $('addr').value.trim();
@@ -229,7 +255,7 @@ async function runSearch(){
       const where = `bbl='${geo.bbl.replace(/'/g,"''")}'`;
       const url = `${HPD_API}?$where=${encodeURIComponent(where)}&$limit=200&$order=inspectiondate DESC`;
       const res = await fetch(url);
-      if (res.ok) { data = await res.json(); resolved = true; }
+      if (res.ok) { data = await res.json(); resolved = true; lastWhere = where; }
     }
     // Fallback only when GeoSearch couldn't resolve the address.
     if (!resolved) data = await searchByStreet(raw);
@@ -238,33 +264,43 @@ async function runSearch(){
       show('s-clean');
       return;
     }
-    render(raw, data);
+    // If the 200-row fetch is full, the building likely has more on file —
+    // pull exact totals so the stat tiles never under-report.
+    const counts = (data.length === 200 && lastWhere) ? await fetchTrueCounts(lastWhere) : null;
+    render(raw, data, counts);
   } catch (err) {
     $('err-msg').textContent = err.message;
     show('s-error');
   }
 }
 
-function render(query, data){
-  const open = data.filter(r => (r.currentstatus || '').toLowerCase().includes('open'));
+function render(query, data, counts){
+  // violationstatus is HPD's canonical Open/Close flag; currentstatus is a
+  // granular workflow status ("NOV SENT OUT", …) that can't be string-matched.
+  const isOpen = r => (r.violationstatus || '').toLowerCase() === 'open';
+  const open = data.filter(isOpen);
   const c = open.filter(r => (r.class||'').toLowerCase()==='c').length;
   const b = open.filter(r => (r.class||'').toLowerCase()==='b').length;
   const a = open.filter(r => (r.class||'').toLowerCase()==='a').length;
   const d = data[0];
   const street = [d.housenumber, d.streetname].filter(Boolean).join(' ');
-  const boro = d.borough ? d.borough.charAt(0) + d.borough.slice(1).toLowerCase() : '';
-  $('r-addr').innerHTML = esc(street) + (boro ? `<span class="borough">${esc(boro)}, NY${d.zip ? ' ' + esc(d.zip) : ''}</span>` : '');
-  $('r-open').textContent = open.length;
-  $('r-breakdown').innerHTML = `<span><b>${c}</b> Class C</span><span><b>${b}</b> Class B</span><span><b>${a}</b> Class A</span>`;
-  $('r-total').innerHTML = `${data.length.toLocaleString()} <span style="font-size: 22px; letter-spacing: 0; font-family: var(--sans); font-weight: 500;">records</span>`;
-  $('r-totalsub').textContent = open.length === 0 ? 'All closed' : `${open.length} open, ${data.length - open.length} closed`;
+  const boro = d.boro ? d.boro.charAt(0) + d.boro.slice(1).toLowerCase() : '';
+  $('r-addr').innerHTML = esc(street) + (boro ? `<span class="borough">${esc(boro)}, NY${d.postcode ? ' ' + esc(d.postcode) : ''}</span>` : '');
+  const openTotal  = counts ? counts.open  : open.length;
+  const grandTotal = counts ? counts.total : data.length;
+  $('r-open').textContent = openTotal.toLocaleString();
+  $('r-breakdown').innerHTML = `<span><b>${c}</b> Class C</span><span><b>${b}</b> Class B</span><span><b>${a}</b> Class A</span>` +
+    (counts ? `<span>latest 200</span>` : '');
+  $('r-total').innerHTML = `${grandTotal.toLocaleString()} <span style="font-size: 22px; letter-spacing: 0; font-family: var(--sans); font-weight: 500;">records</span>`;
+  $('r-totalsub').textContent = openTotal === 0 ? 'All closed' :
+    `${openTotal.toLocaleString()} open, ${(grandTotal - openTotal).toLocaleString()} closed` + (counts ? ' · table shows latest 200' : '');
   const rows = data.slice(0, 18);
   const SEV = { c: 'sev c', b: 'sev', a: 'sev', i: 'sev' };
   $('r-rows').innerHTML = rows.map(r => {
     const cls = (r.class || '').toLowerCase();
-    const status = (r.currentstatus || '').toLowerCase().includes('open') ? 'Open' : 'Closed';
-    const date = r.inspectiondate ? new Date(r.inspectiondate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—';
-    const desc = (r.novdescription || r.violationdescription || r.maintenancecode || '').toString().slice(0, 140);
+    const status = isOpen(r) ? 'Open' : 'Closed';
+    const date = r.inspectiondate ? new Date(r.inspectiondate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+    const desc = (r.novdescription || '').toString().slice(0, 140);
     return `<tr>
       <td class="date">${esc(date)}</td>
       <td><span class="${SEV[cls] || 'sev'}">${esc((r.class || '?').toUpperCase())}</span></td>
