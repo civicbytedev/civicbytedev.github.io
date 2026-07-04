@@ -211,18 +211,25 @@ function titleCase(s){ return String(s||'').toLowerCase().replace(/\b\w/g, c => 
 
 async function findRegistrationIds(q){
   const safe = q.replace(/'/g, "''");
-  // Primary: corporate/LLC name match — the tool's main use case.
-  let url = `${CONTACTS_API}?$select=distinct registrationid,corporationname` +
-    `&$where=${encodeURIComponent(`upper(corporationname) like upper('%${safe}%')`)}&$limit=200`;
+  // Primary: corporate-owner name match — the tool's main use case. Restricted
+  // to ownership contact types so managing agents don't surface as "owners".
+  const corpWhere = `type='CorporateOwner' AND upper(corporationname) like upper('%${safe}%')`;
+  let url = `${CONTACTS_API}?$select=registrationid,corporationname` +
+    `&$where=${encodeURIComponent(corpWhere)}` +
+    `&$group=registrationid,corporationname&$limit=200`;
   let res = await fetch(url);
   if (!res.ok) throw new Error('HPD registration lookup failed (' + res.status + ')');
   let rows = await res.json();
   let matchedName = rows[0] && rows[0].corporationname;
 
-  // Fallback: individual owner/officer name match.
+  // Fallback: individual owner/officer name match. coalesce() because a null
+  // firstname or lastname would otherwise null out the whole concatenation.
   if (!rows.length) {
-    url = `${CONTACTS_API}?$select=distinct registrationid,firstname,lastname` +
-      `&$where=${encodeURIComponent(`upper(firstname || ' ' || lastname) like upper('%${safe}%')`)}&$limit=200`;
+    const personWhere = `type in('IndividualOwner','HeadOfficer','JointOwner','Officer')` +
+      ` AND upper(coalesce(firstname,'') || ' ' || coalesce(lastname,'')) like upper('%${safe}%')`;
+    url = `${CONTACTS_API}?$select=registrationid,firstname,lastname` +
+      `&$where=${encodeURIComponent(personWhere)}` +
+      `&$group=registrationid,firstname,lastname&$limit=200`;
     res = await fetch(url);
     if (res.ok) {
       rows = await res.json();
@@ -255,15 +262,15 @@ async function fetchBuildings(ids){
 
 async function fetchViolationCounts(bbls){
   if (!bbls.length) return {};
-  const where = `bbl in(${bbls.map(b => `'${b}'`).join(',')})`;
-  const url = `${VIOL_API}?$select=bbl,class,currentstatus&$where=${encodeURIComponent(where)}&$limit=10000`;
+  // violationstatus is HPD's canonical Open/Close flag — filtering server-side
+  // keeps the response small and never miscounts granular currentstatus values.
+  const where = `bbl in(${bbls.map(b => `'${b}'`).join(',')}) AND violationstatus='Open'`;
+  const url = `${VIOL_API}?$select=bbl,class&$where=${encodeURIComponent(where)}&$limit=10000`;
   const res = await fetch(url);
   if (!res.ok) throw new Error('HPD violation lookup failed (' + res.status + ')');
   const rows = await res.json();
   const byBbl = {};
   for (const r of rows) {
-    const open = (r.currentstatus || '').toLowerCase().includes('open');
-    if (!open) continue;
     const cls = (r.class || '').toUpperCase();
     if (!byBbl[r.bbl]) byBbl[r.bbl] = { total: 0, A: 0, B: 0, C: 0 };
     byBbl[r.bbl].total++;
