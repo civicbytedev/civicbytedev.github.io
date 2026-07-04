@@ -350,8 +350,29 @@ function render(name, allBuildings, shown, extra, violByBbl){
   show('s-results');
 }
 
+// Type-ahead over HPD-registered corporate/owner names — the same dataset
+// and match logic the search itself uses, so every suggestion resolves to a
+// real portfolio. Distinct names, capped small to keep each keystroke cheap.
+async function suggestNames(q){
+  const safe = q.replace(/'/g, "''");
+  const where = `type='CorporateOwner' AND upper(corporationname) like upper('%${safe}%')`;
+  const url = `${CONTACTS_API}?$select=corporationname` +
+    `&$where=${encodeURIComponent(where)}` +
+    `&$group=corporationname&$order=corporationname&$limit=8`;
+  const res = await fetch(url);
+  if (!res.ok) return [];
+  const rows = await res.json();
+  return rows.map(r => r.corporationname).filter(Boolean).map(name => {
+    const t = titleCase(name);
+    return { full: t, main: t, sub: 'HPD-registered owner' };
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   $('ll-form').addEventListener('submit', e => { e.preventDefault(); run(); });
+  if (window.cbAutocomplete) {
+    cbAutocomplete('ll', () => run(), { source: suggestNames, ariaLabel: 'Landlord name suggestions' });
+  }
   const params = new URLSearchParams(location.search);
   const q = params.get('q');
   if (q) { $('ll').value = q; run(); }
