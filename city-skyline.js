@@ -185,10 +185,17 @@
 
   let rafId = null;
   let start = null;
+  let lastDraw = 0;
+  // Cap the redraw to ~30fps. The twinkle/drift reads the same at 30 as at
+  // 60/120, but halving the per-frame canvas work keeps the main thread free
+  // so scrolling past the hero stays smooth.
+  const FRAME_MS = 1000 / 30;
   function loop(now) {
+    rafId = requestAnimationFrame(loop);
+    if (now - lastDraw < FRAME_MS) return;
+    lastDraw = now;
     if (!start) start = now;
     draw((now - start) / 1000);
-    rafId = requestAnimationFrame(loop);
   }
   function play() {
     if (running || reduceMotion) return;
