@@ -158,16 +158,33 @@
     });
 
     /* ── Fetch suggestions ────────────────────────────── */
+    // Try /autocomplete first, then fall back to /search. NYC GeoSearch is a
+    // custom PAD-only Pelias instance; passing a "layers" filter it doesn't
+    // recognise yields an empty/error response, so we send only "text" — the
+    // form shown in the official docs. /search is the same endpoint the tools
+    // geocode against, so it is a reliable backstop if /autocomplete is empty.
+    async function fetchFeatures(q) {
+      const endpoints = ['autocomplete', 'search'];
+      for (var i = 0; i < endpoints.length; i++) {
+        try {
+          const res = await fetch(
+            'https://geosearch.planninglabs.nyc/v2/' + endpoints[i] +
+            '?size=7&text=' + encodeURIComponent(q)
+          );
+          if (!res.ok) continue;
+          const json = await res.json();
+          const feats = (json.features || [])
+            .filter(function (f) { return f.properties && f.properties.label; });
+          if (feats.length) return feats;
+        } catch (e) { /* try the next endpoint */ }
+      }
+      return [];
+    }
+
     async function suggest(q) {
       try {
-        const res = await fetch(
-          'https://geosearch.planninglabs.nyc/v2/autocomplete' +
-          '?text=' + encodeURIComponent(q) +
-          '&size=7&layers=address'
-        );
-        const json = await res.json();
-        suggs = (json.features || [])
-          .filter(function (f) { return f.properties && f.properties.label; })
+        const feats = await fetchFeatures(q);
+        suggs = feats
           .map(function (f) {
             // Strip ", USA" and trailing ", NY" so labels stay concise
             var lbl = f.properties.label
