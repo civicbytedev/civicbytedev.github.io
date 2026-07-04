@@ -12,6 +12,23 @@
 (function () {
   'use strict';
 
+  /* Vertically place a fixed-position dropdown against its anchor rect:
+     below when there's room, above when there isn't, and never taller
+     than the space available. Shared by both pickers below. */
+  function cbPlaceDropdown(dd, r) {
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    const gap = 6, margin = 10;
+    const spaceBelow = vh - r.bottom;
+    const spaceAbove = r.top;
+    const flipUp = spaceBelow < 180 && spaceAbove > spaceBelow;
+    const room = Math.max(120, (flipUp ? spaceAbove : spaceBelow) - gap - margin);
+    dd.style.maxHeight = Math.min(320, room) + 'px';
+    // offsetHeight is the real rendered box (border included, capped by
+    // max-height) — use it so the flipped-up list sits flush above the field.
+    if (flipUp) dd.style.top = Math.max(margin, r.top - dd.offsetHeight - gap) + 'px';
+    else        dd.style.top = (r.bottom + gap) + 'px';
+  }
+
   /**
    * cbGeocode — resolve a free-text NYC address to its canonical identifiers
    * (BBL / BIN) via NYC GeoSearch. NYC Open Data stores street names in
@@ -59,12 +76,16 @@
     let timer, suggs = [], activeIdx = -1;
 
     /* ── Position helper ───────────────────────────────── */
+    /* Opens downward by default, but flips above the field when there
+       isn't room below (e.g. the home hero, where the search sits low
+       in the viewport). Height is capped to the space available so the
+       list scrolls internally instead of running off-screen. */
     function reposition() {
       const anchor = wrap || input;
       const r = anchor.getBoundingClientRect();
-      dd.style.top   = (r.bottom + 6) + 'px';
       dd.style.left  = r.left + 'px';
       dd.style.width = r.width + 'px';
+      cbPlaceDropdown(dd, r);
     }
 
     /* ── Hide / clear ──────────────────────────────────── */
@@ -162,7 +183,6 @@
 
         if (!suggs.length) { hide(); return; }
 
-        reposition();
         dd.innerHTML = suggs.map(function (s, i) {
           return '<li class="cb-ac-item" role="option" data-i="' + i + '">' +
             '<span class="cb-ac-main">' + esc(s.main) + '</span>' +
@@ -170,6 +190,7 @@
             '</li>';
         }).join('');
         dd.classList.add('open');
+        reposition();   // measure & place after content is in the DOM
 
         dd.querySelectorAll('.cb-ac-item').forEach(function (el) {
           el.addEventListener('mousedown', function (e) {
@@ -217,9 +238,9 @@
 
     function reposition() {
       const r = input.getBoundingClientRect();
-      dd.style.top   = (r.bottom + 6) + 'px';
       dd.style.left  = r.left + 'px';
       dd.style.width = r.width + 'px';
+      cbPlaceDropdown(dd, r);
     }
 
     function hide() {
@@ -259,7 +280,6 @@
           .toLowerCase().indexOf(q) !== -1;
       });
       if (!shown.length) { hide(); return; }
-      reposition();
       dd.innerHTML = shown.map(function (it, i) {
         return '<li class="cb-ac-item" role="option" data-i="' + i + '">' +
           '<span class="cb-ac-main">' + esc(it.label) + '</span>' +
@@ -267,6 +287,7 @@
           '</li>';
       }).join('');
       dd.classList.add('open');
+      reposition();   // measure & place after content is in the DOM
       input.setAttribute('aria-expanded', 'true');
       activeIdx = -1;
       dd.querySelectorAll('.cb-ac-item').forEach(function (el) {
