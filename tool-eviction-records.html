@@ -73,7 +73,7 @@
       <span class="sep">&middot;</span>
       <span>NYC Eviction Records</span>
       <span class="sep">&middot;</span>
-      <span>Source &middot; DOI marshal evictions, weekly</span>
+      <span>Source &middot; DOI marshal evictions, daily</span>
     </div>
     <h1>Know a building's <span class="em">eviction history</span> &mdash; before you sign.</h1>
 
@@ -93,7 +93,7 @@
     <header class="section-head">
       <div>
         <div class="kicker">The Readout</div>
-        <h2>Every executed eviction, <em>since 2017</em>.</h2>
+        <h2>Executed marshal evictions, <em>since 2017</em>.</h2>
       </div>
       <div class="meta" id="refreshed">Pulled live from NYC Open Data</div>
     </header>
@@ -137,7 +137,7 @@
           <div class="keystat last">
             <p class="k">Source</p>
             <div class="n small">DOI &middot; NYC Open Data</div>
-            <div class="sub">Dataset 6z8x-wfk4 &middot; weekly</div>
+            <div class="sub">Dataset 6z8x-wfk4 &middot; daily</div>
           </div>
         </aside>
 
@@ -155,7 +155,7 @@
           </table>
 
           <div class="readout-foot">
-            <span class="source">Source &middot; <b>DOI executed marshal evictions</b> &middot; updated weekly from NYC Open Data</span>
+            <span class="source">Source &middot; <b>DOI executed marshal evictions</b> &middot; updated daily from NYC Open Data</span>
             <a href="https://data.cityofnewyork.us/City-Government/Evictions/6z8x-wfk4" class="cta-link muted" target="_blank" rel="noopener">View dataset <span class="arr">&rarr;</span></a>
           </div>
         </div>
@@ -196,20 +196,24 @@ function show(state){['s-idle','s-loading','s-error','s-clean','s-results'].forE
 const ABBREVS = {'STREET':'ST','AVENUE':'AVE','BOULEVARD':'BLVD','DRIVE':'DR','PLACE':'PL','COURT':'CT','LANE':'LN','ROAD':'RD','TERRACE':'TER','PARKWAY':'PKY','NORTH':'N','SOUTH':'S','EAST':'E','WEST':'W'};
 function normalize(s){let u=s.toUpperCase().replace(/[.,#]/g,' ').replace(/\s+/g,' ').trim();Object.entries(ABBREVS).forEach(([l,sh])=>{u=u.replace(new RegExp('\\b'+l+'\\b','g'),sh);});return u;}
 
+// The dataset added pending/scheduled cases in 2024; this tool reports
+// executed evictions, so every query filters to rows with an executed_date.
+const EXECUTED = "executed_date IS NOT NULL";
+
 // Fallback: fuzzy match on the eviction_address text. Used when GeoSearch
 // can't resolve a BBL, or the BBL query returns nothing.
 async function searchByStreet(raw){
   const normalized = normalize(raw);
   const words = normalized.split(' ').filter(w => w.length >= 2);
   const safe = words.map(w => w.replace(/'/g, "''"));
-  const where = safe.map(w => `upper(eviction_address) like '%${w}%'`).join(' AND ');
-  let url = `${API}?$where=${encodeURIComponent(where)}&$limit=200`;
+  const where = safe.map(w => `upper(eviction_address) like '%${w}%'`).join(' AND ') + ` AND ${EXECUTED}`;
+  let url = `${API}?$where=${encodeURIComponent(where)}&$limit=200&$order=executed_date DESC`;
   let res = await fetch(url);
   if(!res.ok) throw new Error('API error ' + res.status);
   let data = await res.json();
   if(data.length === 0 && words.length > 2){
-    const shortWhere = safe.slice(0, 2).map(w => `upper(eviction_address) like '%${w}%'`).join(' AND ');
-    url = `${API}?$where=${encodeURIComponent(shortWhere)}&$limit=200`;
+    const shortWhere = safe.slice(0, 2).map(w => `upper(eviction_address) like '%${w}%'`).join(' AND ') + ` AND ${EXECUTED}`;
+    url = `${API}?$where=${encodeURIComponent(shortWhere)}&$limit=200&$order=executed_date DESC`;
     res = await fetch(url);
     if(res.ok) data = await res.json();
   }
@@ -225,8 +229,8 @@ async function runSearch(){
     // Preferred: resolve to a canonical BBL via GeoSearch, then query by BBL.
     const geo = window.cbGeocode ? await window.cbGeocode(raw) : null;
     if (geo && geo.bbl) {
-      const where = `bbl='${geo.bbl.replace(/'/g,"''")}'`;
-      const url = `${API}?$where=${encodeURIComponent(where)}&$limit=200`;
+      const where = `bbl='${geo.bbl.replace(/'/g,"''")}' AND ${EXECUTED}`;
+      const url = `${API}?$where=${encodeURIComponent(where)}&$limit=200&$order=executed_date DESC`;
       const res = await fetch(url);
       if (res.ok) data = await res.json();
     }
@@ -234,7 +238,7 @@ async function runSearch(){
     if (!data || data.length === 0) data = await searchByStreet(raw);
     data.sort((a, b) => (b.executed_date || '').localeCompare(a.executed_date || ''));
     if(data.length === 0){
-      $('clean-msg').textContent = `No executed evictions found for "${raw}". This is a good sign — no marshal carry-outs on record. Note: this dataset covers executed evictions only, not all court filings.`;
+      $('clean-msg').textContent = `No executed evictions found for "${raw}". This is a good sign — no marshal carry-outs on record. Note: this covers marshal evictions actually carried out, not pending cases or housing-court filings.`;
       show('s-clean');
       return;
     }
@@ -252,15 +256,12 @@ function render(query, data){
   $('r-addr').innerHTML = esc(street) + (boro ? `<span class="borough">${esc(boro)}</span>` : '');
   const res = data.filter(r => (r.residential_commercial_ind || '').toLowerCase().includes('residential')).length;
   const commercial = data.length - res;
-  const recent = data.filter(r => {
-    if(!r.executed_date) return false;
-    const y = parseInt(r.executed_date.slice(0, 4));
-    return y >= new Date().getFullYear() - 1;
-  }).length;
+  const cutoff = new Date(Date.now() - 365 * 24 * 3600 * 1000).toISOString().slice(0, 10);
+  const recent = data.filter(r => r.executed_date && r.executed_date.slice(0, 10) >= cutoff).length;
   $('r-total').textContent = data.length.toLocaleString();
   $('r-breakdown').innerHTML = `<span><b>${res}</b> residential</span>` + (commercial ? `<span><b>${commercial}</b> commercial</span>` : '');
   $('r-recent').textContent = recent;
-  $('r-recentsub').textContent = recent === 0 ? 'None in last year' : `Out of ${data.length} since 2017`;
+  $('r-recentsub').textContent = recent === 0 ? 'None in the last 12 months' : `Out of ${data.length} since 2017`;
   const rows = data.slice(0, 18);
   $('r-rows').innerHTML = rows.map(r => {
     const date = r.executed_date ? new Date(r.executed_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';

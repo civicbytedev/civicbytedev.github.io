@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>NYC 311 Complaint Lookup &mdash; CivicByte</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Every 311 service request filed at an NYC address — live from NYC Open Data.">
+<meta name="description" content="Every 311 service request filed at an NYC address since 2010 — live from NYC Open Data.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -34,14 +34,14 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="CivicByte">
 <meta property="og:title" content="NYC 311 Complaint Lookup — CivicByte">
-<meta property="og:description" content="Every 311 service request filed at an NYC address — live from NYC Open Data.">
+<meta property="og:description" content="Every 311 service request filed at an NYC address since 2010 — live from NYC Open Data.">
 <meta property="og:url" content="https://civicbyte.dev/tool-311-lookup.html">
 <meta property="og:image" content="https://civicbyte.dev/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="NYC 311 Complaint Lookup — CivicByte">
-<meta name="twitter:description" content="Every 311 service request filed at an NYC address — live from NYC Open Data.">
+<meta name="twitter:description" content="Every 311 service request filed at an NYC address since 2010 — live from NYC Open Data.">
 <meta name="twitter:image" content="https://civicbyte.dev/og.png">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"NYC 311 Complaint Lookup","url":"https://civicbyte.dev/tool-311-lookup.html","description":"311 request history for any NYC address","applicationCategory":"Government & civic data","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"creator":{"@type":"Organization","name":"CivicByte","url":"https://civicbyte.dev/"}}
@@ -75,7 +75,7 @@
       <span class="sep">&middot;</span>
       <span>Source &middot; 311 service requests, daily</span>
     </div>
-    <h1>Every 311 call <span class="em">ever filed</span> at an address.</h1>
+    <h1>Every 311 call <span class="em">since 2010</span> at an address.</h1>
 
     <form class="lookup" id="addr-form">
       <label class="label" for="addr">Lookup</label>
@@ -99,7 +99,7 @@
     </header>
 
     <div class="state-idle on" id="s-idle">
-      Enter an NYC address above to pull every 311 service request ever filed there &mdash; heat, noise, pests, plumbing, sanitation, with agency and resolution.
+      Enter an NYC address above to pull every 311 service request filed there since 2010 &mdash; heat, noise, pests, plumbing, sanitation, with agency and current status.
     </div>
 
     <div class="state-loading" id="s-loading">
@@ -143,7 +143,7 @@
           <div class="keystat last">
             <p class="k">Source</p>
             <div class="n small">311 &middot; NYC Open Data</div>
-            <div class="sub">Dataset erm2-nwe9 &middot; live</div>
+            <div class="sub">Datasets erm2-nwe9 + 76ig-c548 &middot; live</div>
           </div>
         </aside>
 
@@ -162,7 +162,7 @@
 
           <div class="readout-foot">
             <span class="source">Source &middot; <b>NYC 311 service requests</b> &middot; updated daily from NYC Open Data</span>
-            <a href="https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9" class="cta-link muted" target="_blank" rel="noopener">View dataset <span class="arr">&rarr;</span></a>
+            <a href="https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2020-to-Present/erm2-nwe9" class="cta-link muted" target="_blank" rel="noopener">View dataset <span class="arr">&rarr;</span></a>
           </div>
         </div>
       </div>
@@ -195,27 +195,54 @@
 </div>
 
 <script>
-const API = 'https://data.cityofnewyork.us/resource/erm2-nwe9.json';
+// NYC split the 311 data in late 2025: erm2-nwe9 now covers 2020–present,
+// with 2010–2019 archived under 76ig-c548 (same schema). Query both so the
+// tool genuinely covers 2010–present.
+const API      = 'https://data.cityofnewyork.us/resource/erm2-nwe9.json';
+const API_HIST = 'https://data.cityofnewyork.us/resource/76ig-c548.json';
 function $(id){return document.getElementById(id);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function show(state){['s-idle','s-loading','s-error','s-clean','s-results'].forEach(id => $(id).classList.toggle('on', id === state));}
 
+async function fetchBoth(where){
+  const grab = api => fetch(`${api}?$where=${encodeURIComponent(where)}&$limit=200&$order=created_date DESC`)
+    .then(r => r.ok ? r.json() : []).catch(() => []);
+  const [now, hist] = await Promise.all([grab(API), grab(API_HIST)]);
+  return now.concat(hist).sort((a, b) => (b.created_date || '').localeCompare(a.created_date || ''));
+}
+
+// True total across both datasets — the row fetches cap at 200 each, so ask
+// Socrata to count rather than presenting a truncated length as the total.
+async function trueTotal(where){
+  const cnt = api => fetch(`${api}?$select=count(unique_key)&$where=${encodeURIComponent(where)}`)
+    .then(r => r.ok ? r.json() : [{}])
+    .then(j => +(((j[0]||{}).count_unique_key) || 0)).catch(() => 0);
+  const [a, b] = await Promise.all([cnt(API), cnt(API_HIST)]);
+  return a + b;
+}
+
 // Fallback: parse the typed address and match on incident_address.
-// Used only when GeoSearch can't resolve a BBL.
-async function searchByStreet(raw){
+// Used only when GeoSearch can't resolve a BBL. 311 stores street names
+// fully spelled out ("1465 WASHINGTON AVENUE"), so expand abbreviations:
+// leading directionals and a trailing street type only.
+function expandStreet(s){
+  const words = s.toUpperCase().replace(/\./g,'').trim().split(/\s+/);
+  const DIR  = { N:'NORTH', S:'SOUTH', E:'EAST', W:'WEST' };
+  const TYPE = { ST:'STREET', AVE:'AVENUE', BLVD:'BOULEVARD', DR:'DRIVE',
+                 PL:'PLACE', RD:'ROAD', PKWY:'PARKWAY', PKY:'PARKWAY',
+                 TER:'TERRACE', CT:'COURT', LN:'LANE' };
+  if (words.length > 1 && DIR[words[0]]) words[0] = DIR[words[0]];
+  const last = words.length - 1;
+  if (last > 0 && TYPE[words[last]]) words[last] = TYPE[words[last]];
+  return words.join(' ');
+}
+function streetWhere(raw){
   const parts = raw.replace(/,.*$/, '').trim();
   const m = parts.match(/^(\d+[a-zA-Z]?)\s+(.+)$/);
   if(!m) throw new Error('Could not parse address — try "1465 Washington Ave, Bronx".');
   const num = m[1];
-  const street = m[2].toUpperCase()
-    .replace(/\bSTREET\b/g,'ST').replace(/\bAVENUE\b/g,'AVE').replace(/\bBOULEVARD\b/g,'BLVD')
-    .replace(/\bDRIVE\b/g,'DR').replace(/\bPLACE\b/g,'PL').replace(/\bROAD\b/g,'RD')
-    .replace(/\bEAST\b/g,'E').replace(/\bWEST\b/g,'W').replace(/\bNORTH\b/g,'N').replace(/\bSOUTH\b/g,'S').trim();
-  const where = `incident_address='${num.replace(/'/g,"''")} ${street.replace(/'/g,"''")}'`;
-  const url = `${API}?$where=${encodeURIComponent(where)}&$limit=200&$order=created_date DESC`;
-  const res = await fetch(url);
-  if(!res.ok) throw new Error('API error ' + res.status);
-  return res.json();
+  const street = expandStreet(m[2]);
+  return `incident_address='${num.replace(/'/g,"''")} ${street.replace(/'/g,"''")}'`;
 }
 
 async function runSearch(){
@@ -223,51 +250,61 @@ async function runSearch(){
   if(!raw || raw.length < 4){ $('addr').focus(); return; }
   show('s-loading');
   try {
-    let data = null, resolved = false;
-    // Preferred: resolve to a canonical BBL via GeoSearch, then query 311 by BBL.
+    let data = null, where = null;
+    // Preferred: resolve to a canonical BBL via GeoSearch, then query by BBL.
     const geo = window.cbGeocode ? await window.cbGeocode(raw) : null;
     if (geo && geo.bbl) {
-      const where = `bbl='${geo.bbl.replace(/'/g,"''")}'`;
-      const url = `${API}?$where=${encodeURIComponent(where)}&$limit=200&$order=created_date DESC`;
-      const res = await fetch(url);
-      if (res.ok) { data = await res.json(); resolved = true; }
+      where = `bbl='${geo.bbl.replace(/'/g,"''")}'`;
+      data = await fetchBoth(where);
     }
     // Fallback only when GeoSearch couldn't resolve the address.
-    if (!resolved) data = await searchByStreet(raw);
+    if (!data || data.length === 0) {
+      where = streetWhere(raw);
+      data = await fetchBoth(where);
+    }
     if(!data || data.length === 0){
       $('clean-msg').textContent = `No 311 records found for "${raw}". Try including the borough, or check the address spelling.`;
       show('s-clean');
       return;
     }
-    render(raw, data);
+    // Exact total only needed when a 200-row fetch came back full.
+    const total = data.length >= 200 ? Math.max(await trueTotal(where), data.length) : data.length;
+    render(raw, data, total);
   } catch (err) {
     $('err-msg').textContent = err.message;
     show('s-error');
   }
 }
 
-function render(query, data){
+function render(query, data, total){
   const d = data[0];
   const street = d.incident_address || query;
   const boro = d.borough && d.borough !== 'Unspecified' ? d.borough.charAt(0) + d.borough.slice(1).toLowerCase() : '';
   $('r-addr').innerHTML = esc(street) + (boro ? `<span class="borough">${esc(boro)}</span>` : '');
-  const open = data.filter(r => (r.status || '').toLowerCase() === 'open').length;
+  // 311 uses several in-flight statuses (In Progress, Pending, Assigned…) —
+  // anything not yet Closed counts as open here.
+  const stillOpen = r => { const s = (r.status || '').toLowerCase(); return s && s !== 'closed'; };
+  const open = data.filter(stillOpen).length;
+  const capped = total > data.length;
   const typeCounts = {};
   data.forEach(r => { const t = r.complaint_type || 'Other'; typeCounts[t] = (typeCounts[t] || 0) + 1; });
   const topTypes = Object.entries(typeCounts).sort((a,b) => b[1]-a[1]).slice(0, 3);
-  $('r-total').textContent = data.length.toLocaleString();
-  const breakdown = topTypes.slice(0, 3).map(([t, n]) => `<span><b>${n}</b> ${esc(t.split(' ')[0])}</span>`).join('');
+  $('r-total').textContent = total.toLocaleString();
+  const breakdown = topTypes.slice(0, 3).map(([t, n]) => `<span><b>${n}</b> ${esc(t.split(' ')[0])}</span>`).join('')
+    + (capped ? `<span>latest ${data.length}</span>` : '');
   $('r-breakdown').innerHTML = breakdown;
   $('r-open').textContent = open;
-  $('r-opensub').textContent = open === 0 ? 'All closed' : `Out of ${data.length.toLocaleString()} total`;
+  $('r-opensub').textContent = open === 0
+    ? (capped ? `None among latest ${data.length}` : 'All closed')
+    : (capped ? `Among latest ${data.length} of ${total.toLocaleString()}` : `Out of ${total.toLocaleString()} total`);
   $('r-top').textContent = topTypes[0] ? topTypes[0][0] : '—';
-  $('r-topsub').textContent = topTypes[0] ? `${topTypes[0][1]} of ${data.length}` : '';
+  $('r-topsub').textContent = topTypes[0] ? `${topTypes[0][1]} of ${capped ? 'latest ' + data.length : data.length}` : '';
   const rows = data.slice(0, 18);
   $('r-rows').innerHTML = rows.map(r => {
-    const date = r.created_date ? new Date(r.created_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—';
+    const date = r.created_date ? new Date(r.created_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
     const desc = r.complaint_type + (r.descriptor && r.descriptor !== r.complaint_type ? ` — ${r.descriptor}` : '');
     const status = (r.status || '—');
-    const isOpen = status.toLowerCase() === 'open';
+    const isOpen = stillOpen(r);
     return `<tr>
       <td class="date">${esc(date)}</td>
       <td class="serif">${esc(desc.slice(0, 140))}</td>
