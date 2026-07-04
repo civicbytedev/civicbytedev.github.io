@@ -60,9 +60,20 @@
     }
   };
 
-  window.cbAutocomplete = function (inputId, onSelect) {
+  /* cbAutocomplete — remote type-ahead dropdown.
+   *
+   *   cbAutocomplete('addr', onSelectFn)                 → NYC address search
+   *   cbAutocomplete('ll', onSelectFn, { source, ariaLabel })
+   *
+   * opts.source(q) is an async function returning an array of
+   * { full, main, sub } suggestions; when omitted it defaults to NYC
+   * GeoSearch address lookup. This lets non-address tools (e.g. Landlord
+   * Watch, which searches HPD-registered owner names) reuse the exact same
+   * dropdown, keyboard nav, and flip-up placement. */
+  window.cbAutocomplete = function (inputId, onSelect, opts) {
     const input = document.getElementById(inputId);
     if (!input) return;
+    opts = opts || {};
 
     const wrap = input.closest('.mock-search');
 
@@ -70,7 +81,7 @@
     const dd = document.createElement('ul');
     dd.className = 'cb-ac-dd';
     dd.setAttribute('role', 'listbox');
-    dd.setAttribute('aria-label', 'Address suggestions');
+    dd.setAttribute('aria-label', opts.ariaLabel || 'Address suggestions');
     document.body.appendChild(dd);
 
     let timer, suggs = [], activeIdx = -1;
@@ -181,23 +192,27 @@
       return [];
     }
 
+    // Default source: NYC GeoSearch address suggestions.
+    async function addressSource(q) {
+      const feats = await fetchFeatures(q);
+      return feats.map(function (f) {
+        // Strip ", USA" and trailing ", NY" so labels stay concise
+        var lbl = f.properties.label
+          .replace(/, USA$/, '')
+          .replace(/, NY$/, '');
+        var ci = lbl.indexOf(',');
+        return {
+          full: lbl,
+          main: ci > 0 ? lbl.slice(0, ci) : lbl,
+          sub:  ci > 0 ? lbl.slice(ci + 2) : ''
+        };
+      });
+    }
+    const source = typeof opts.source === 'function' ? opts.source : addressSource;
+
     async function suggest(q) {
       try {
-        const feats = await fetchFeatures(q);
-        suggs = feats
-          .map(function (f) {
-            // Strip ", USA" and trailing ", NY" so labels stay concise
-            var lbl = f.properties.label
-              .replace(/, USA$/, '')
-              .replace(/, NY$/, '');
-            var ci = lbl.indexOf(',');
-            return {
-              full: lbl,
-              main: ci > 0 ? lbl.slice(0, ci) : lbl,
-              sub:  ci > 0 ? lbl.slice(ci + 2) : ''
-            };
-          });
-
+        suggs = (await source(q)) || [];
         if (!suggs.length) { hide(); return; }
 
         dd.innerHTML = suggs.map(function (s, i) {
