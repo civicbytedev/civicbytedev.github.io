@@ -70,24 +70,29 @@
         () => { el.style.animation = 'none'; }, { once: true });
     });
 
+    // Cache the hero height so the scroll handler never forces a synchronous
+    // layout (reading offsetHeight per scroll tick is a classic jank source).
+    let heroH = hero.offsetHeight || 1;
+    window.addEventListener('resize', () => { heroH = hero.offsetHeight || 1; });
+
     let ticking = false;
     function onScroll() {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
-        const h = hero.offsetHeight || 1;
-        const y = Math.min(Math.max(window.scrollY, 0), h);
-        const p = y / h;
+        const y = Math.min(Math.max(window.scrollY, 0), heroH);
+        const p = y / heroH;
+        // translate3d keeps each element on its own compositor layer.
         if (center) {
-          center.style.transform = 'translateY(' + (y * 0.30) + 'px)';
+          center.style.transform = 'translate3d(0,' + Math.round(y * 0.30) + 'px,0)';
           center.style.opacity = String(Math.max(0, 1 - p * 1.5));
         }
         if (search) {
-          search.style.transform = 'translateY(' + (y * 0.18) + 'px)';
+          search.style.transform = 'translate3d(0,' + Math.round(y * 0.18) + 'px,0)';
           search.style.opacity = String(Math.max(0, 1 - p * 1.8));
         }
         if (canvas) {
-          canvas.style.transform = 'translateY(' + (y * 0.22) + 'px)';
+          canvas.style.transform = 'translate3d(0,' + Math.round(y * 0.22) + 'px,0)';
         }
         if (cue) {
           cue.style.opacity = String(Math.max(0, 1 - p * 3));
