@@ -145,21 +145,31 @@ def main():
                 return row.get(c)
         return None
 
-    schools, year = [], None
+    # The table carries several report years — keep only the newest.
+    years = {str(col(r, "YEAR") or "").strip() for r in rows}
+    latest = max(y for y in years if y.isdigit())
+    print("years present:", sorted(years), "-> using", latest)
+
+    schools, year, seen_beds = [], latest, set()
     for r in rows:
+        if str(col(r, "YEAR") or "").strip() != latest:
+            continue
         beds = str(col(r, "ENTITY_CD") or "").strip()
         if not beds.startswith(NYC_PREFIXES) or len(beds) != 12:
             continue
         if beds.endswith("0000"):   # district/county aggregate rows
             continue
+        if beds in seen_beds:
+            continue
+        seen_beds.add(beds)
         nm = (col(r, "ENTITY_NAME") or "").strip()
         if not nm:
             continue
-        year = col(r, "YEAR") or year
         total = to_num(col(r, "FED_STATE_LOCAL_EXP"))
         enroll = to_num(col(r, "PUPIL_COUNT_TOT"))
         entry = {
             "beds": beds,
+            "instid": str(col(r, "INSTITUTION_ID") or "").strip() or None,
             "dbn": derive_dbn(beds),
             "name": nm,
             "enroll": enroll,
@@ -184,7 +194,7 @@ def main():
     out = {
         "source": f"NYSED School Report Card ({name})",
         "source_url": "https://data.nysed.gov/downloads.php",
-        "year": year,
+        "year": int(year),
         "count": len(schools),
         "schools": schools,
     }
