@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-08T00:01:46.442363+00:00",
+  "updatedAt": "2026-07-08T04:17:58.303558+00:00",
   "realtime": 0,
   "7day": {
     "users": 0,
@@ -7,49 +7,41 @@
     "sessions": 0
   },
   "30day": {
-    "users": 5,
-    "newUsers": 7,
-    "views": 457,
-    "sessions": 5
+    "users": 3,
+    "newUsers": 4,
+    "views": 55,
+    "sessions": 3
   },
   "topPages": [
     {
       "label": "Home",
-      "count": 4
+      "count": 2
     },
     {
       "label": "About",
-      "count": 2
+      "count": 1
     },
     {
       "label": "Index",
-      "count": 2
+      "count": 1
     },
     {
       "label": "Index V2",
-      "count": 2
+      "count": 1
+    },
+    {
+      "label": "NYC School Budget Tracker",
+      "count": 1
     },
     {
       "label": "Submit a Tool",
-      "count": 2
-    },
-    {
-      "label": "Impact",
-      "count": 1
-    },
-    {
-      "label": "NYC 311 Complaints",
-      "count": 1
-    },
-    {
-      "label": "NYC Building Checker",
       "count": 1
     }
   ],
   "sources": [
     {
       "name": "Direct",
-      "count": 5,
+      "count": 3,
       "i": 0
     }
   ]
