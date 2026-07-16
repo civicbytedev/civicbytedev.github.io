@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-16T03:11:56.380719+00:00",
+  "updatedAt": "2026-07-16T06:22:42.519243+00:00",
   "realtime": 0,
   "7day": {
     "users": 0,
@@ -7,38 +7,11 @@
     "sessions": 0
   },
   "30day": {
-    "users": 1,
-    "newUsers": 2,
-    "views": 20,
-    "sessions": 1
+    "users": 0,
+    "newUsers": 0,
+    "views": 0,
+    "sessions": 0
   },
-  "topPages": [
-    {
-      "label": "Home",
-      "count": 1
-    },
-    {
-      "label": "About",
-      "count": 1
-    },
-    {
-      "label": "Index",
-      "count": 1
-    },
-    {
-      "label": "Index V2",
-      "count": 1
-    },
-    {
-      "label": "Submit a Tool",
-      "count": 1
-    }
-  ],
-  "sources": [
-    {
-      "name": "Direct",
-      "count": 1,
-      "i": 0
-    }
-  ]
+  "topPages": [],
+  "sources": []
 }
