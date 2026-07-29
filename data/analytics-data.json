@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-29T10:43:36.673946+00:00",
+  "updatedAt": "2026-07-29T13:03:35.310510+00:00",
   "realtime": 0,
   "7day": {
     "users": 1,
@@ -23,11 +23,6 @@
       "name": "Direct",
       "count": 2,
       "i": 0
-    },
-    {
-      "name": "Unassigned",
-      "count": 1,
-      "i": 1
     }
   ]
 }
