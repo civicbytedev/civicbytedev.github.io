@@ -800,7 +800,7 @@ a { color: inherit; text-decoration: none; }
   box-shadow: 0 10px 30px -10px rgba(0,0,0,0.55);
 }
 
-/* Apple-style App Store badge under the hero CTA */
+/* Apple-style "Download on iOS" pill under the hero CTA */
 .hh-store {
   position: relative;
   z-index: 2;
@@ -812,39 +812,28 @@ a { color: inherit; text-decoration: none; }
 .ios-badge {
   display: inline-flex;
   align-items: center;
-  gap: 11px;
-  min-height: 52px;
-  padding: 8px 20px 8px 15px;
-  color: #FFFFFF;
-  background: #000000;
-  border: 1px solid rgba(255,255,255,0.32);
-  border-radius: 13px;
-  transition: border-color .2s, background .2s,
+  gap: 9px;
+  padding: 13px 26px 13px 22px;
+  color: #0B0E14;
+  background: #FFFFFF;
+  border-radius: 999px;
+  transition: background .2s,
               transform .25s var(--ease), box-shadow .25s var(--ease);
 }
 .ios-badge:hover {
-  background: #0A0A0A;
-  border-color: rgba(255,255,255,0.65);
+  background: #F2EFE9;
   transform: translateY(-2px);
   box-shadow: 0 12px 32px -12px rgba(0,0,0,0.7);
 }
-.ios-badge .ib-logo { width: 21px; height: 25px; flex: none; }
-.ios-badge .ib-text {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
+/* The apple glyph rides slightly high in its box — nudge for optical center. */
+.ios-badge .ib-logo { width: 15px; height: 18px; flex: none; margin-top: -2px; }
+.ios-badge .ib-label {
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', var(--sans);
-  line-height: 1.2;
-}
-.ios-badge .ib-small {
-  font-size: 10.5px;
-  letter-spacing: 0.03em;
-  color: rgba(255,255,255,0.92);
-}
-.ios-badge .ib-large {
-  font-size: 19px;
+  font-size: 15px;
   font-weight: 500;
   letter-spacing: 0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .hh-cue {
