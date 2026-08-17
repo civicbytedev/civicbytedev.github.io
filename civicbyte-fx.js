@@ -60,12 +60,13 @@
 
     const center = hero.querySelector('.hh-center');
     const search = hero.querySelector('.hh-search');
+    const store  = hero.querySelector('.hh-store');
     const canvas = hero.querySelector('.hh-canvas');
     const cue    = hero.querySelector('.hh-cue');
 
     // The entry animations fill forwards, which would override inline
     // transforms — drop each one once it has played.
-    [center, search, cue].forEach(el => {
+    [center, search, store, cue].forEach(el => {
       if (el) el.addEventListener('animationend',
         () => { el.style.animation = 'none'; }, { once: true });
     });
@@ -90,6 +91,10 @@
         if (search) {
           search.style.transform = 'translate3d(0,' + Math.round(y * 0.18) + 'px,0)';
           search.style.opacity = String(Math.max(0, 1 - p * 1.8));
+        }
+        if (store) {
+          store.style.transform = 'translate3d(0,' + Math.round(y * 0.18) + 'px,0)';
+          store.style.opacity = String(Math.max(0, 1 - p * 1.8));
         }
         if (canvas) {
           canvas.style.transform = 'translate3d(0,' + Math.round(y * 0.22) + 'px,0)';

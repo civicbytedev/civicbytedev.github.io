@@ -681,7 +681,7 @@ a { color: inherit; text-decoration: none; }
   display: block;
   will-change: transform;
 }
-.hh-center, .hh-search { will-change: transform, opacity; }
+.hh-center, .hh-search, .hh-store { will-change: transform, opacity; }
 .hh-veil {
   position: absolute;
   inset: 0;
@@ -745,7 +745,7 @@ a { color: inherit; text-decoration: none; }
   z-index: 2;
   display: flex;
   justify-content: center;
-  padding: 0 24px clamp(78px, 11vh, 110px);
+  padding: 0 24px;
   animation: cb-rise 1.3s var(--ease) .6s both;
 }
 .hh-search .wrap {
@@ -798,6 +798,53 @@ a { color: inherit; text-decoration: none; }
   background: #FFFFFF;
   transform: translateY(-2px);
   box-shadow: 0 10px 30px -10px rgba(0,0,0,0.55);
+}
+
+/* Apple-style App Store badge under the hero CTA */
+.hh-store {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding: clamp(24px, 4vh, 36px) 24px clamp(78px, 11vh, 110px);
+  animation: cb-rise 1.3s var(--ease) .75s both;
+}
+.ios-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 52px;
+  padding: 8px 20px 8px 15px;
+  color: #FFFFFF;
+  background: #000000;
+  border: 1px solid rgba(255,255,255,0.32);
+  border-radius: 13px;
+  transition: border-color .2s, background .2s,
+              transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.ios-badge:hover {
+  background: #0A0A0A;
+  border-color: rgba(255,255,255,0.65);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px -12px rgba(0,0,0,0.7);
+}
+.ios-badge .ib-logo { width: 21px; height: 25px; flex: none; }
+.ios-badge .ib-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', var(--sans);
+  line-height: 1.2;
+}
+.ios-badge .ib-small {
+  font-size: 10.5px;
+  letter-spacing: 0.03em;
+  color: rgba(255,255,255,0.92);
+}
+.ios-badge .ib-large {
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .hh-cue {
@@ -1005,6 +1052,7 @@ html.cb-js .founder-note[data-reveal].in { filter: blur(0); }
 
   .hh-search .wrap { gap: 14px; }
   .hh-search button { width: 100%; padding: 15px 20px; }
+  .hh-store { padding-top: 20px; }
   .hh-cue { display: none; }
 
   .prose p { font-size: 17px; }
