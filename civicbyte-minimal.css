@@ -745,8 +745,8 @@ a { color: inherit; text-decoration: none; }
   z-index: 2;
   display: flex;
   justify-content: center;
-  padding: 0 24px;
-  animation: cb-rise 1.3s var(--ease) .6s both;
+  padding: 0 24px clamp(78px, 11vh, 110px);
+  animation: cb-rise 1.3s var(--ease) .75s both;
 }
 .hh-search .wrap {
   display: flex;
@@ -800,14 +800,14 @@ a { color: inherit; text-decoration: none; }
   box-shadow: 0 10px 30px -10px rgba(0,0,0,0.55);
 }
 
-/* Apple-style "Download on iOS" pill under the hero CTA */
+/* Apple-style "Download on iOS" pill — sits between the hero copy and the search */
 .hh-store {
   position: relative;
   z-index: 2;
   display: flex;
   justify-content: center;
-  padding: clamp(24px, 4vh, 36px) 24px clamp(78px, 11vh, 110px);
-  animation: cb-rise 1.3s var(--ease) .75s both;
+  padding: 0 24px clamp(26px, 4vh, 38px);
+  animation: cb-rise 1.3s var(--ease) .6s both;
 }
 .ios-badge {
   display: inline-flex;
@@ -1041,7 +1041,7 @@ html.cb-js .founder-note[data-reveal].in { filter: blur(0); }
 
   .hh-search .wrap { gap: 14px; }
   .hh-search button { width: 100%; padding: 15px 20px; }
-  .hh-store { padding-top: 20px; }
+  .hh-store { padding-bottom: 20px; }
   .hh-cue { display: none; }
 
   .prose p { font-size: 17px; }
