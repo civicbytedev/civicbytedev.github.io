@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Documentation &mdash; CivicByte</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="How CivicByte works: every dataset behind the tools, refresh cadence, coverage limits, data retention, and accessibility.">
+<meta name="author" content="Harry Honigburger">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/cb-icon-light.svg">
+<meta name="theme-color" content="#141311">
+<script defer src="/civicbyte-fx.js"></script>
+<link rel="stylesheet" href="/civicbyte-minimal.css">
+<link rel="canonical" href="https://civicbyte.dev/docs.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="CivicByte">
+<meta property="og:title" content="Documentation — CivicByte">
+<meta property="og:description" content="Every dataset behind the tools, refresh cadence, coverage limits, data retention, and accessibility.">
+<meta property="og:url" content="https://civicbyte.dev/docs.html">
+<meta property="og:image" content="https://civicbyte.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="CivicByte — public records, made usable.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Documentation — CivicByte">
+<meta name="twitter:description" content="Every dataset behind the tools, refresh cadence, coverage limits, data retention, and accessibility.">
+<meta name="twitter:image" content="https://civicbyte.dev/og.png">
+<style>
+  .doc-toc { display: flex; flex-wrap: wrap; gap: 8px 26px; margin-top: 40px;
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .doc-toc a { color: var(--mute); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 2px; }
+  .doc-toc a:hover { color: var(--ember); border-bottom-color: var(--ember); }
+  .tbl td.wrap { white-space: normal; }
+  .limits { list-style: none; padding: 0; margin: 22px 0 0; }
+  .limits li { position: relative; padding: 0 0 0 26px; margin-bottom: 15px;
+    font-family: var(--serif); font-size: 18px; line-height: 1.5; color: var(--ink); }
+  .limits li::before { content: "\2014"; position: absolute; left: 0; color: var(--ember); }
+  .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+</style>
+</head>
+<body>
+
+
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page">
+
+  <header class="topnav">
+    <nav class="tn-inner" aria-label="Primary">
+      <div class="tn-links tn-l">
+        <a href="/tools.html">Tools</a>
+        <a href="/story.html">Story</a>
+      </div>
+      <a href="/" class="tn-mark">CivicByte</a>
+      <div class="tn-links tn-r">
+        <a href="/impact.html">Impact</a>
+        <a href="/about.html">About</a>
+      </div>
+    </nav>
+  </header>
+
+  <section id="main" class="hero compact">
+    <div class="dateline">
+      <span>Documentation</span>
+      <span class="sep">&middot;</span>
+      <span>Data &middot; Privacy &middot; Accessibility</span>
+      <span class="sep">&middot;</span>
+      <span>Last updated &middot; 31 August 2026</span>
+    </div>
+    <h1>How this actually <span class="em">works.</span></h1>
+
+    <nav class="doc-toc" aria-label="On this page">
+      <a href="#sources">01 &nbsp;Data sources</a>
+      <a href="#pipeline">02 &nbsp;How a lookup runs</a>
+      <a href="#retention">03 &nbsp;Retention</a>
+      <a href="#accessibility">04 &nbsp;Accessibility</a>
+      <a href="#limits">05 &nbsp;Limits &amp; corrections</a>
+    </nav>
+  </section>
+
+  <section class="section" id="sources">
+    <header class="section-head">
+      <div>
+        <div class="kicker">01 &middot; Data Sources</div>
+        <h2>Every dataset, <em>named and dated</em>.</h2>
+      </div>
+      <div class="meta">Nothing here is CivicByte's own data</div>
+    </header>
+
+    <div class="scroll-x">
+      <table class="tbl" style="margin-top: 32px; min-width: 720px;">
+        <thead>
+          <tr>
+            <th style="width: 168px;">Tool</th>
+            <th style="width: 210px;">Dataset &amp; ID</th>
+            <th>Coverage</th>
+            <th class="right" style="width: 132px;">Refresh</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="serif">Building Report</td>
+            <td class="mono">HPD Housing Maintenance Code Violations &middot; <b>wvxf-dwi5</b></td>
+            <td class="serif wrap">Violations issued by HPD against residential buildings. Queried live by BBL. Class A/B/C severity and open/closed status come from the city's own <span class="mono">violationstatus</span> field.</td>
+            <td class="num">Daily, at the source</td>
+          </tr>
+          <tr>
+            <td class="serif">Landlord Watch</td>
+            <td class="mono">HPD Registration Contacts &middot; <b>feu5-w2e2</b><br>HPD Registrations &middot; <b>tesw-yqqr</b></td>
+            <td class="serif wrap">Owners, head officers and agents who registered a building with HPD, joined to the buildings under that registration. Only buildings legally required to register appear &mdash; roughly 170,000 citywide.</td>
+            <td class="num">Ongoing, at the source</td>
+          </tr>
+          <tr>
+            <td class="serif">School Budgets</td>
+            <td class="mono">NYSED ESSA school-level expenditure report (SRC) &middot; <b>SRC2025</b></td>
+            <td class="serif wrap">Per-school reported spending &mdash; total, per-pupil, and the federal vs. state &amp; local split &mdash; for 1,871 NYC schools, school year 2024&ndash;25. NYSED publishes this once a year as an Access database, not an API.</td>
+            <td class="num">Annual release<br>checked monthly</td>
+          </tr>
+          <tr>
+            <td class="serif">Eviction Records</td>
+            <td class="mono">DOI Evictions &middot; <b>6z8x-wfk4</b></td>
+            <td class="serif wrap">Marshal evictions <b>actually executed</b>, 2017 to present. Every query filters to rows with an <span class="mono">executed_date</span>, so scheduled and pending cases are deliberately excluded.</td>
+            <td class="num">Daily, at the source</td>
+          </tr>
+          <tr>
+            <td class="serif">311 Lookup</td>
+            <td class="mono">311 Service Requests 2020&ndash;present &middot; <b>erm2-nwe9</b><br>311 archive 2010&ndash;2019 &middot; <b>76ig-c548</b></td>
+            <td class="serif wrap">NYC split the 311 data in late 2025. Both datasets are queried together so an address returns its full record since 2010, not just the recent slice.</td>
+            <td class="num">Daily, at the source</td>
+          </tr>
+          <tr>
+            <td class="serif">All address tools</td>
+            <td class="mono">NYC Planning GeoSearch</td>
+            <td class="serif wrap">Turns a typed address into a canonical BBL (borough-block-lot) so lookups match the city's own key rather than a spelling of a street name.</td>
+            <td class="num">Live</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="readout-foot" style="margin-top: 26px;">
+      <span class="source">Every dataset above is published by <b>NYC Open Data</b> or <b>NYSED</b> &middot; CivicByte adds no records of its own</span>
+      <a href="https://data.cityofnewyork.us/" class="cta-link muted" target="_blank" rel="noopener">NYC Open Data <span class="arr">&rarr;</span></a>
+    </div>
+  </section>
+
+  <section class="section" id="pipeline">
+    <header class="section-head">
+      <div>
+        <div class="kicker">02 &middot; How A Lookup Runs</div>
+        <h2>Your browser asks <em>the city directly</em>.</h2>
+      </div>
+      <div class="meta">There is no CivicByte server</div>
+    </header>
+
+    <ol class="ilist">
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">01</span>
+        <span class="ititle">The page loads as static files</span>
+        <span class="idesc">Every page on this site is plain HTML, CSS and JavaScript served by GitHub Pages. There is no application server, no database, and no backend that could receive a search even in principle.</span>
+        <span class="imeta"><span class="st">Step</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">02</span>
+        <span class="ititle">Your address is resolved to a BBL</span>
+        <span class="idesc">Your browser calls NYC Planning's GeoSearch to turn what you typed into the city's canonical parcel identifier. If GeoSearch can't resolve it, the tool falls back to matching the street name text &mdash; and says so rather than reporting a false all-clear.</span>
+        <span class="imeta"><span class="st">Step</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">03</span>
+        <span class="ititle">The records are fetched from NYC Open Data</span>
+        <span class="idesc">Your browser queries the Socrata API for the relevant dataset. The request goes from your device to the city. It does not pass through CivicByte, because there is nothing in the middle to pass through.</span>
+        <span class="imeta"><span class="st">Step</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">04</span>
+        <span class="ititle">Totals are counted, not estimated</span>
+        <span class="idesc">Result tables cap at 200 rows for speed. When a building has more than that, the tool issues a separate <span class="mono">count()</span> query so the headline numbers reflect the true total and the table is labelled as showing the latest 200.</span>
+        <span class="imeta"><span class="st">Step</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+      <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
+        <span class="inum">05</span>
+        <span class="ititle">School budgets never leave the page</span>
+        <span class="idesc">NYSED publishes no API, so a scheduled job downloads their annual Access database, reduces it to a single JSON file in this repository, and the tool searches that file in your browser. That lookup makes no network request at all.</span>
+        <span class="imeta"><span class="st">Step</span></span>
+        <span class="iarr">&middot;</span>
+      </a></li>
+    </ol>
+  </section>
+
+  <section class="section" id="retention">
+    <header class="section-head">
+      <div>
+        <div class="kicker">03 &middot; Retention</div>
+        <h2>What is kept, and <em>for how long</em>.</h2>
+      </div>
+      <div class="meta">Short list, on purpose</div>
+    </header>
+
+    <div class="article-grid">
+      <aside class="byline">
+        <div><b>Retained</b></div>
+        <div>Aggregate page-view counts</div>
+        <div>Email you choose to send</div>
+        <div class="sec"><b>Never collected</b></div>
+        <div>Your searches</div>
+        <div>Addresses you type</div>
+        <div>Names &middot; accounts &middot; profiles</div>
+        <div>Precise location</div>
+        <div class="sec"><b>Full policy</b></div>
+        <div><a href="/privacy.html" style="color: var(--ember);">Privacy note &rarr;</a></div>
+      </aside>
+      <div class="prose">
+        <p><b>Searches: retained for zero seconds.</b> Addresses and school names you type are used to build a query in your browser and are then discarded when the page is closed. They are never transmitted to CivicByte, so there is no log to keep, subpoena, or leak.</p>
+        <p><b>Traffic measurement: aggregate only.</b> The site counts page views through a standard analytics service so I can see which tools get used. It records no identity and is never joined to a search. The hourly job that reads those totals writes only summary numbers &mdash; views, sessions, and which pages were popular &mdash; into a public file in this repository.</p>
+        <p><b>Email: kept until it's resolved.</b> Messages sent to the address below live in an ordinary mailbox. The submission form doesn't post anywhere &mdash; it opens your own mail client with the text pre-filled, and your browser keeps a draft on your device that is never sent to me.</p>
+        <p><b>Third-party requests.</b> Loading a page requests fonts from Google Fonts and, on the tool pages, data from NYC Open Data and NYC Planning. Those parties see the request your browser makes to them, under their own policies.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="accessibility">
+    <header class="section-head">
+      <div>
+        <div class="kicker">04 &middot; Accessibility</div>
+        <h2>Built to be <em>read by anyone</em>.</h2>
+      </div>
+      <div class="meta">Target &middot; WCAG 2.1 AA</div>
+    </header>
+
+    <div class="article-grid">
+      <aside class="byline">
+        <div><b>Implemented</b></div>
+        <div>Skip-to-content link</div>
+        <div>Semantic landmarks</div>
+        <div>Labelled form controls</div>
+        <div>Live-region result updates</div>
+        <div>Reduced-motion support</div>
+        <div>Full keyboard operation</div>
+        <div class="sec"><b>Report a barrier</b></div>
+        <div><a href="mailto:harry@civicbyte.dev" style="color: var(--ember);">harry@civicbyte.dev</a></div>
+      </aside>
+      <div class="prose">
+        <p>The target is <b>WCAG 2.1 Level AA</b>. This is a self-assessment, not a third-party audit, and it is written to be checked rather than taken on faith.</p>
+        <p><b>What is in place.</b> Every page opens with a skip-to-content link and uses real landmarks &mdash; one <span class="mono">h1</span>, a labelled <span class="mono">nav</span>, headings in order. Every input has a programmatic label. Tool results render into <span class="mono">aria-live</span> regions, so a screen reader announces a result instead of leaving the user to hunt for it. Pages are fully operable by keyboard, and no page traps focus. Wide tables scroll in their own container rather than forcing the page sideways. Text uses relative units and reflows to a 390&nbsp;px viewport with no horizontal scrolling.</p>
+        <p><b>Motion.</b> The scroll animations and the animated skyline are decorative. When your system asks for reduced motion, every reveal resolves immediately and the hero parallax is disabled &mdash; the content is identical either way. Content is never hidden behind an animation that must play first: printing a page shows everything.</p>
+        <p><b>Known gaps, stated plainly.</b> Colour contrast has not been machine-verified on every surface, particularly muted metadata text on the cream background. No audit with a screen reader by a daily screen-reader user has happened yet. The animated skyline on the homepage is <span class="mono">aria-hidden</span> and decorative, but it is heavy on very old devices.</p>
+        <p>If any part of this site blocks you, email me and I will fix it. That is a commitment with a person attached to it, not a form.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="limits">
+    <header class="section-head">
+      <div>
+        <div class="kicker">05 &middot; Limits &amp; Corrections</div>
+        <h2>What these tools <em>cannot</em> tell you.</h2>
+      </div>
+      <div class="meta">Read before relying on a result</div>
+    </header>
+
+    <div class="article-grid">
+      <aside class="byline">
+        <div><b>Not legal advice</b></div>
+        <div>These are public records,<br>not a legal opinion</div>
+        <div class="sec"><b>Found an error?</b></div>
+        <div><a href="mailto:harry@civicbyte.dev" style="color: var(--ember);">harry@civicbyte.dev</a></div>
+        <div class="sec"><b>Source</b></div>
+        <div><a href="https://github.com/civicbytedev/civicbytedev.github.io" style="color: var(--ember);" target="_blank" rel="noopener">Read the code &rarr;</a></div>
+      </aside>
+      <div class="prose">
+        <ul class="limits">
+          <li><b>A clean result is not proof of a clean building.</b> It means the city has no matching record in that dataset. Violations go unreported, complaints go unfiled, and addresses occasionally fail to match.</li>
+          <li><b>Eviction records show executed marshal evictions only.</b> A building with no results may still have active housing-court cases, pending warrants, or informal displacement &mdash; none of which appear in this dataset.</li>
+          <li><b>Landlord Watch finds registered names, not true ownership.</b> HPD registration reflects what an owner filed. Portfolios held across several LLCs will not group themselves under one search.</li>
+          <li><b>School spending is what NYSED reported</b> for the year shown, on their definitions. It is not a live budget and lags the current school year.</li>
+          <li><b>Address matching can miss.</b> When GeoSearch cannot resolve an address the tools fall back to text matching, which is less exact. Including the borough materially improves the match.</li>
+          <li><b>If the city's API fails, the tools say so.</b> An outage or rate limit shows an error &mdash; never an empty result dressed up as good news.</li>
+        </ul>
+        <p style="margin-top: 28px;">If a record here contradicts a document in your hand, the city's record is the one to challenge, and the dataset link on each tool page is where to start. Tell me and I will look at whether the tool read it wrong.</p>
+        <p class="cite">Harry Honigburger &middot; NYC, 2026</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="endslug">
+    <p>Read the privacy note, or <em>check the code</em> yourself.</p>
+    <div class="actions">
+      <a href="/privacy.html" class="cta-link">Privacy note <span class="arr">&rarr;</span></a>
+      <a href="https://github.com/civicbytedev/civicbytedev.github.io" class="cta-link muted" target="_blank" rel="noopener">Source on GitHub <span class="arr">&rarr;</span></a>
+    </div>
+  </section>
+
+  <footer class="site-foot">
+    <div class="sf-inner">
+      <a href="/" class="sf-mark">CivicByte</a>
+      <div class="sf-links">
+        <a href="/tools.html">Tools</a>
+        <a href="/impact.html">Impact</a>
+        <a href="/story.html">Story</a>
+        <a href="/docs.html">Documentation</a>
+        <a href="/submit.html">Submit a tool</a>
+        <a href="https://github.com/civicbytedev">GitHub</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+      <span class="sf-note">&copy; 2026 CivicByte &middot; Free &amp; open source &middot; Made in NYC</span>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

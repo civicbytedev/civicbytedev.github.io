@@ -178,6 +178,7 @@
         <a href="/tools.html">Tools</a>
         <a href="/impact.html">Impact</a>
         <a href="/story.html">Story</a>
+        <a href="/docs.html">Documentation</a>
         <a href="/submit.html">Submit a tool</a>
         <a href="https://github.com/civicbytedev">GitHub</a>
         <a href="/privacy.html">Privacy</a>
@@ -202,7 +203,19 @@ const EXECUTED = "executed_date IS NOT NULL";
 
 // Fallback: fuzzy match on the eviction_address text. Used when GeoSearch
 // can't resolve a BBL, or the BBL query returns nothing.
+//
+// Guard first: a LIKE query built from unparseable input ("asdf", "!!!!")
+// returns zero rows, which the caller would render as the reassuring "no
+// evictions on record" state. For a tool people read before signing a lease,
+// silently turning "we couldn't read that" into "you're clear" is the wrong
+// direction to fail, so require a house number and a street name.
+function assertLooksLikeAddress(raw){
+  if (!/^\s*\d+[a-zA-Z]?\s+[a-zA-Z0-9]/.test(raw)) {
+    throw new Error('Could not read that as an NYC address \u2014 try a house number and street, e.g. "1465 Washington Ave, Bronx".');
+  }
+}
 async function searchByStreet(raw){
+  assertLooksLikeAddress(raw);
   const normalized = normalize(raw);
   const words = normalized.split(' ').filter(w => w.length >= 2);
   const safe = words.map(w => w.replace(/'/g, "''"));
@@ -234,8 +247,17 @@ async function runSearch(){
       const res = await fetch(url);
       if (res.ok) data = await res.json();
     }
-    // Fall back to fuzzy address matching when BBL yields nothing.
-    if (!data || data.length === 0) data = await searchByStreet(raw);
+    // Fall back to fuzzy address matching when BBL yields nothing. A BBL hit
+    // that legitimately returned no rows is already the answer, so don't let
+    // the fallback's stricter parse check turn it into an error.
+    if (!data || data.length === 0) {
+      try {
+        const alt = await searchByStreet(raw);
+        if (alt.length || !data) data = alt;
+      } catch (parseErr) {
+        if (!data) throw parseErr;
+      }
+    }
     data.sort((a, b) => (b.executed_date || '').localeCompare(a.executed_date || ''));
     if(data.length === 0){
       $('clean-msg').textContent = `No executed evictions found for "${raw}". This is a good sign — no marshal carry-outs on record. Note: this covers marshal evictions actually carried out, not pending cases or housing-court filings.`;

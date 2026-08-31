@@ -196,26 +196,26 @@
         <div class="sec"><b>What clears review</b></div>
         <div>Tools that match the four standards</div>
         <div class="sec"><b>Stuck?</b></div>
-        <div><a href="mailto:civicbytedev@gmail.com" style="color: var(--ember);">civicbytedev@gmail.com</a></div>
+        <div><a href="mailto:harry@civicbyte.dev" style="color: var(--ember);">harry@civicbyte.dev</a></div>
       </aside>
 
       <div class="form">
         <div class="field">
-          <label>Tool name <span class="req">*</span></label>
-          <input type="text" name="name" placeholder="NYC Permit Tracker" required />
+          <label for="f-name">Tool name <span class="req">*</span></label>
+          <input type="text" name="name" id="f-name" placeholder="NYC Permit Tracker" required />
         </div>
         <div class="field">
-          <label>One-line problem statement <span class="req">*</span></label>
-          <input type="text" name="problem" placeholder="Tenants can't tell whether construction work in their building is permitted." required />
+          <label for="f-problem">One-line problem statement <span class="req">*</span></label>
+          <input type="text" name="problem" id="f-problem" placeholder="Tenants can't tell whether construction work in their building is permitted." required />
           <span class="hint">Who has the problem? What does the tool let them do that they couldn't before?</span>
         </div>
         <div class="field">
-          <label>Live URL <span class="req">*</span></label>
-          <input type="url" name="live" placeholder="https://example.dev/permit-tracker" required />
+          <label for="f-live">Live URL <span class="req">*</span></label>
+          <input type="url" name="live" id="f-live" placeholder="https://example.dev/permit-tracker" required />
         </div>
         <div class="field">
-          <label>Source repository <span class="req">*</span></label>
-          <input type="url" name="repo" placeholder="https://github.com/your-org/your-tool" required />
+          <label for="f-repo">Source repository <span class="req">*</span></label>
+          <input type="url" name="repo" id="f-repo" placeholder="https://github.com/your-org/your-tool" required />
           <span class="hint">Public repo, OSI-approved license, README present.</span>
         </div>
         <div class="field">
@@ -230,17 +230,17 @@
           </div>
         </div>
         <div class="field">
-          <label>Data sources <span class="req">*</span></label>
-          <textarea name="data" placeholder="NYC DOB permit dataset, NYC Open Data — updated daily." required></textarea>
+          <label for="f-data">Data sources <span class="req">*</span></label>
+          <textarea id="f-data" name="data" placeholder="NYC DOB permit dataset, NYC Open Data — updated daily." required></textarea>
           <span class="hint">Name each dataset. Link if possible. Note the refresh schedule.</span>
         </div>
         <div class="field">
-          <label>How is it maintained?</label>
-          <textarea name="upkeep" placeholder="Cron job pulls fresh data each morning. Issues monitored daily. One human on call."></textarea>
+          <label for="f-upkeep">How is it maintained?</label>
+          <textarea id="f-upkeep" name="upkeep" placeholder="Cron job pulls fresh data each morning. Issues monitored daily. One human on call."></textarea>
         </div>
         <div class="field">
-          <label>Your name &amp; email <span class="req">*</span></label>
-          <input type="text" name="contact" placeholder="Maya Castillo · maya@example.org" required />
+          <label for="f-contact">Your name &amp; email <span class="req">*</span></label>
+          <input type="text" name="contact" id="f-contact" placeholder="Maya Castillo · maya@example.org" required />
         </div>
 
         <div class="form-actions">
@@ -256,7 +256,7 @@
     <header class="section-head">
       <div>
         <div class="kicker">What Happens Next</div>
-        <h2>One human. <em>One week.</em></h2>
+        <h2>One person. <em>One week.</em></h2>
       </div>
       <div class="meta">Review process</div>
     </header>
@@ -265,14 +265,14 @@
       <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
         <span class="inum">01</span>
         <span class="ititle">A person reads it</span>
-        <span class="idesc">Every submission is read end-to-end by a member of the editorial board. No keyword filters, no auto-replies, no triage queues you can't see.</span>
+        <span class="idesc">Every submission is read end to end by me &mdash; there is only me. No keyword filters, no auto-replies, no triage queues you can't see.</span>
         <span class="imeta"><span class="st">Day 1&ndash;2</span></span>
         <span class="iarr">&middot;</span>
       </a></li>
       <li><a href="#" style="cursor: default;" onclick="event.preventDefault();">
         <span class="inum">02</span>
         <span class="ititle">We try the tool</span>
-        <span class="idesc">On a real device, with a real address or query. Timed against the four standards. Notes filed back if anything blocks a non-technical user.</span>
+        <span class="idesc">On a real device, with a real address or query. Timed against the four standards. Notes sent back if anything blocks a non-technical user.</span>
         <span class="imeta"><span class="st">Day 3&ndash;5</span></span>
         <span class="iarr">&middot;</span>
       </a></li>
@@ -289,7 +289,7 @@
   <section class="endslug">
     <p>Stuck on the last 20%? <em>Email us</em> before you submit.</p>
     <div class="actions">
-      <a href="mailto:civicbytedev@gmail.com" class="cta-link">civicbytedev@gmail.com <span class="arr">&rarr;</span></a>
+      <a href="mailto:harry@civicbyte.dev" class="cta-link">harry@civicbyte.dev <span class="arr">&rarr;</span></a>
       <a href="/about.html" class="cta-link muted">Read the four standards <span class="arr">&rarr;</span></a>
     </div>
   </section>
@@ -301,6 +301,7 @@
         <a href="/tools.html">Tools</a>
         <a href="/impact.html">Impact</a>
         <a href="/story.html">Story</a>
+        <a href="/docs.html">Documentation</a>
         <a href="/submit.html">Submit a tool</a>
         <a href="https://github.com/civicbytedev">GitHub</a>
         <a href="/privacy.html">Privacy</a>
@@ -360,9 +361,9 @@
       'Submitted by: ' + d.contact,
     ].join('\n');
     const subject = 'CivicByte tool submission · ' + d.name;
-    const mailto = 'mailto:civicbytedev@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines);
+    const mailto = 'mailto:harry@civicbyte.dev?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines);
     fb.className = 'form-feedback ok shown';
-    fb.innerHTML = 'Your mail client should open with the submission addressed to <a href="mailto:civicbytedev@gmail.com">civicbytedev@gmail.com</a>. If nothing happens, <a href="' + mailto + '">re-open it here</a> — we aim to respond within a week.';
+    fb.innerHTML = 'Your mail client should open with the submission addressed to <a href="mailto:harry@civicbyte.dev">harry@civicbyte.dev</a>. If nothing happens, <a href="' + mailto + '">re-open it here</a> — we aim to respond within a week.';
     fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     window.location.href = mailto;
   });
