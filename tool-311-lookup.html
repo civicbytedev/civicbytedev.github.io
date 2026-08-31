@@ -184,6 +184,7 @@
         <a href="/tools.html">Tools</a>
         <a href="/impact.html">Impact</a>
         <a href="/story.html">Story</a>
+        <a href="/docs.html">Documentation</a>
         <a href="/submit.html">Submit a tool</a>
         <a href="https://github.com/civicbytedev">GitHub</a>
         <a href="/privacy.html">Privacy</a>
@@ -204,11 +205,24 @@ function $(id){return document.getElementById(id);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function show(state){['s-idle','s-loading','s-error','s-clean','s-results'].forEach(id => $(id).classList.toggle('on', id === state));}
 
+// A failed dataset must never look like an empty one: reporting "no 311
+// records" when the API actually returned 429/500 would tell a tenant their
+// building is clean when we simply couldn't ask. Each fetch reports success
+// or failure, and if BOTH datasets fail we throw so the error state shows.
 async function fetchBoth(where){
   const grab = api => fetch(`${api}?$where=${encodeURIComponent(where)}&$limit=200&$order=created_date DESC`)
-    .then(r => r.ok ? r.json() : []).catch(() => []);
+    .then(r => r.ok ? r.json().then(rows => ({ ok: true, rows }))
+                    : { ok: false, status: r.status })
+    .catch(() => ({ ok: false, status: 0 }));
   const [now, hist] = await Promise.all([grab(API), grab(API_HIST)]);
-  return now.concat(hist).sort((a, b) => (b.created_date || '').localeCompare(a.created_date || ''));
+  if (!now.ok && !hist.ok) {
+    const st = now.status || hist.status;
+    throw new Error(st ? 'NYC Open Data returned an error (' + st + '). Try again in a moment.'
+                       : "Couldn't reach NYC Open Data. Check your connection and try again.");
+  }
+  const rows = (now.ok ? now.rows : []).concat(hist.ok ? hist.rows : []);
+  rows.partial = !now.ok || !hist.ok;
+  return rows.sort((a, b) => (b.created_date || '').localeCompare(a.created_date || ''));
 }
 
 // True total across both datasets — the row fetches cap at 200 each, so ask
@@ -257,10 +271,17 @@ async function runSearch(){
       where = `bbl='${geo.bbl.replace(/'/g,"''")}'`;
       data = await fetchBoth(where);
     }
-    // Fallback only when GeoSearch couldn't resolve the address.
+    // Fallback only when GeoSearch couldn't resolve the address. Once a BBL
+    // lookup has succeeded its empty result is the real answer, so a parse
+    // failure here must not overwrite it with a spurious error.
     if (!data || data.length === 0) {
-      where = streetWhere(raw);
-      data = await fetchBoth(where);
+      try {
+        const sw = streetWhere(raw);
+        const alt = await fetchBoth(sw);
+        if (alt.length || !data) { where = sw; data = alt; }
+      } catch (parseErr) {
+        if (!data) throw parseErr;
+      }
     }
     if(!data || data.length === 0){
       $('clean-msg').textContent = `No 311 records found for "${raw}". Try including the borough, or check the address spelling.`;
