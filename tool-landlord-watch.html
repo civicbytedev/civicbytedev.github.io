@@ -46,6 +46,28 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"NYC Landlord Watch","url":"https://civicbyte.dev/tool-landlord-watch.html","description":"Landlord and LLC violation history across NYC","applicationCategory":"Government & civic data","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"creator":{"@type":"Organization","name":"CivicByte","url":"https://civicbyte.dev/"}}
 </script>
+<style>
+  .scorecard { border-top: 1px solid var(--rule); padding-top: 22px; margin-top: 4px; }
+  .scorecard .k {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--mute); margin: 0 0 12px;
+  }
+  .grade-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .grade {
+    font-family: var(--serif); font-weight: 500; font-size: 64px; line-height: 0.9;
+    letter-spacing: -0.03em; font-feature-settings: "tnum" 1; color: var(--ink);
+  }
+  .grade.g-a { color: #3F6B4A; }
+  .grade.g-b { color: #6E6636; }
+  .grade.g-c, .grade.g-d, .grade.g-f { color: var(--ember); }
+  .grade-meta { font-family: var(--mono); font-size: 11px; line-height: 1.55; color: var(--mute); }
+  .grade-meta b { color: var(--ink); font-weight: 500; }
+  .score-method {
+    margin-top: 14px; font-family: var(--mono); font-size: 10.5px; line-height: 1.65;
+    color: var(--mute); border-left: 2px solid var(--rule); padding-left: 12px;
+  }
+  .score-method a { color: var(--ember); }
+</style>
 </head>
 <body>
 
@@ -120,6 +142,15 @@
         <aside class="address-block">
           <p class="alabel">Landlord of record</p>
           <p class="address" id="r-name"></p>
+
+          <div class="scorecard">
+            <p class="k">Condition score</p>
+            <div class="grade-row">
+              <span class="grade" id="r-grade">&mdash;</span>
+              <span class="grade-meta" id="r-gradesub"></span>
+            </div>
+            <p class="score-method" id="r-method"></p>
+          </div>
 
           <div class="keystat">
             <p class="k">Portfolio size</p>
@@ -280,6 +311,50 @@ async function fetchViolationCounts(bbls){
   return byBbl;
 }
 
+// ── Condition score ──────────────────────────────────────────────
+// A portfolio-level read on open HPD violations, weighted by HPD's OWN
+// severity classes: A is non-hazardous, B hazardous, C immediately
+// hazardous (no heat, no hot water, lead, vermin). Weighting C far above
+// A is the whole point — ten peeling-paint notices are not one broken
+// boiler in January.
+//
+// The counts are the city's. The weights and the letter bands below are
+// CivicByte's, published here so anyone can disagree with them and
+// recompute from the same records. Deliberately NOT normalised by unit
+// count: HPD registrations carry no reliable unit figure, so a 200-unit
+// building and a 6-unit building count the same. That favours small
+// landlords and penalises large ones — stated on the page, not hidden.
+const SEV_WEIGHT = { A: 1, B: 2, C: 5 };
+const GRADE_BANDS = [
+  { max:  2, g: 'A', label: 'Few open violations' },
+  { max:  8, g: 'B', label: 'Below-average violation load' },
+  { max: 20, g: 'C', label: 'Elevated violation load' },
+  { max: 45, g: 'D', label: 'High violation load' },
+  { max: Infinity, g: 'F', label: 'Severe violation load' }
+];
+
+function conditionScore(shown, violByBbl){
+  if (!shown.length) return null;
+  let points = 0, open = 0, classC = 0, cBuildings = 0;
+  for (const b of shown) {
+    const v = violByBbl[b.bbl];
+    if (!v) continue;
+    points += v.A * SEV_WEIGHT.A + v.B * SEV_WEIGHT.B + v.C * SEV_WEIGHT.C;
+    open   += v.total;
+    classC += v.C;
+    if (v.C > 0) cBuildings++;
+  }
+  const index = points / shown.length;
+  if (open === 0) {
+    return { grade: 'A+', cls: 'g-a', index: 0, points: 0, classC: 0, cBuildings: 0,
+             label: 'No open violations on file', buildings: shown.length };
+  }
+  const band = GRADE_BANDS.find(b => index < b.max);
+  return { grade: band.g, cls: 'g-' + band.g.toLowerCase(),
+           index, points, classC, cBuildings,
+           label: band.label, buildings: shown.length };
+}
+
 async function run(){
   const raw = $('ll').value.trim();
   if (!raw || raw.length < 3) { $('ll').focus(); return; }
@@ -325,13 +400,46 @@ function render(name, allBuildings, shown, extra, violByBbl){
     if (!v) return;
     totalOpen += v.total; totA += v.A; totB += v.B; totC += v.C;
   });
+  const score = conditionScore(shown, violByBbl);
+  if (score) {
+    $('r-grade').textContent = score.grade;
+    $('r-grade').className = 'grade ' + score.cls;
+    // A letter grade must never read as reassurance while immediately
+    // hazardous conditions are open, so Class C is stated in the grade block
+    // itself rather than left to the breakdown further down.
+    const cNote = score.classC > 0
+      ? `<br><b style="color: var(--ember);">${score.classC.toLocaleString()} open Class C</b> ` +
+        `(immediately hazardous) across ${score.cBuildings} building${score.cBuildings === 1 ? '' : 's'}`
+      : '';
+    $('r-gradesub').innerHTML =
+      `<b>${score.label}</b><br>${score.index.toFixed(1)} weighted open violations per building` +
+      `<br>${score.points.toLocaleString()} points across ${score.buildings} building${score.buildings === 1 ? '' : 's'}` +
+      cNote;
+    $('r-method').innerHTML =
+      'Open violations weighted by HPD severity class &mdash; ' +
+      'A&times;1, B&times;2, C&times;5 &mdash; divided by buildings queried' +
+      (extra > 0 ? `, which here is the ${shown.length} shown, not all ${allBuildings.length} on file` : '') +
+      '. Not adjusted for building size. ' +
+      '<a href="/docs.html#limits">How to read this &rarr;</a>';
+  } else {
+    $('r-grade').innerHTML = '&mdash;';
+    $('r-grade').className = 'grade';
+    $('r-gradesub').textContent = '';
+    $('r-method').textContent = '';
+  }
+
   $('r-violations').textContent = totalOpen.toLocaleString();
   $('r-vbreak').innerHTML = `<span><b>${totC}</b> Class C</span><span><b>${totB}</b> Class B</span><span><b>${totA}</b> Class A</span>`;
   $('r-risk').innerHTML = shown.length ? (totalOpen / shown.length).toFixed(1) : '&mdash;';
   $('r-risksub').textContent = extra > 0
     ? `Based on the first ${shown.length} buildings shown; ${extra} more on file but not queried`
     : `Across ${shown.length} building${shown.length === 1 ? '' : 's'}`;
-  $('r-rows').innerHTML = shown.map(b => {
+  const weight = b => {
+    const v = violByBbl[b.bbl];
+    return v ? v.A * SEV_WEIGHT.A + v.B * SEV_WEIGHT.B + v.C * SEV_WEIGHT.C : 0;
+  };
+  const ranked = shown.slice().sort((x, y) => weight(y) - weight(x));
+  $('r-rows').innerHTML = ranked.map(b => {
     const v = violByBbl[b.bbl] || { total: 0, C: 0 };
     const flagged = v.total > 0;
     return `<tr>

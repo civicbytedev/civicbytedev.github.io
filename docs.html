@@ -279,11 +279,25 @@
           <li><b>A clean result is not proof of a clean building.</b> It means the city has no matching record in that dataset. Violations go unreported, complaints go unfiled, and addresses occasionally fail to match.</li>
           <li><b>Eviction records show executed marshal evictions only.</b> A building with no results may still have active housing-court cases, pending warrants, or informal displacement &mdash; none of which appear in this dataset.</li>
           <li><b>Landlord Watch finds registered names, not true ownership.</b> HPD registration reflects what an owner filed. Portfolios held across several LLCs will not group themselves under one search.</li>
+          <li><b>The condition score is a reading of open violations, not a verdict on a landlord.</b> It is an average, so one severely distressed building can drag down a portfolio of well-kept ones &mdash; and the reverse. The building table is sorted worst-first so you can see which it is. The method is below; the counts underneath it are the city's.</li>
           <li><b>School spending is what NYSED reported</b> for the year shown, on their definitions. It is not a live budget and lags the current school year.</li>
           <li><b>Address matching can miss.</b> When GeoSearch cannot resolve an address the tools fall back to text matching, which is less exact. Including the borough materially improves the match.</li>
           <li><b>If the city's API fails, the tools say so.</b> An outage or rate limit shows an error &mdash; never an empty result dressed up as good news.</li>
         </ul>
-        <p style="margin-top: 28px;">If a record here contradicts a document in your hand, the city's record is the one to challenge, and the dataset link on each tool page is where to start. Tell me and I will look at whether the tool read it wrong.</p>
+        <p style="margin-top: 28px;"><b>How the condition score is calculated.</b> Every open HPD violation in the portfolio is weighted by HPD's own severity class &mdash; <span class="mono">A&times;1</span> (non-hazardous), <span class="mono">B&times;2</span> (hazardous), <span class="mono">C&times;5</span> (immediately hazardous: no heat, no hot water, lead, vermin). The weighted total is divided by the number of buildings queried, and the result falls in a band:</p>
+
+        <ul class="limits" style="margin-top: 18px;">
+          <li><span class="mono">0</span> &mdash; <b>A+</b>, no open violations on file</li>
+          <li><span class="mono">under 2</span> &mdash; <b>A</b>, few open violations</li>
+          <li><span class="mono">2 to 8</span> &mdash; <b>B</b>, below-average violation load</li>
+          <li><span class="mono">8 to 20</span> &mdash; <b>C</b>, elevated violation load</li>
+          <li><span class="mono">20 to 45</span> &mdash; <b>D</b>, high violation load</li>
+          <li><span class="mono">45 and above</span> &mdash; <b>F</b>, severe violation load</li>
+        </ul>
+
+        <p style="margin-top: 22px;">Two things about that are worth saying plainly. <b>The weights and the bands are mine, not the city's</b> &mdash; HPD publishes the violations and their classes, and nothing else here. They are written down so you can disagree with them and recompute from the same records. And <b>the score is not adjusted for building size</b>, because HPD's registration data carries no reliable unit count; a 200-unit building and a six-unit building count the same, which flatters small landlords and penalises large ones. Any open Class C violations are shown in the score block regardless of the letter, because a grade should never read as reassurance while an immediately hazardous condition is open.</p>
+
+        <p style="margin-top: 22px;">If a record here contradicts a document in your hand, the city's record is the one to challenge, and the dataset link on each tool page is where to start. Tell me and I will look at whether the tool read it wrong.</p>
         <p class="cite">Harry Honig &middot; NYC, 2026</p>
       </div>
     </div>
