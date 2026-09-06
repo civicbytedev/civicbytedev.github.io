@@ -57,9 +57,13 @@
     font-family: var(--serif); font-weight: 500; font-size: 64px; line-height: 0.9;
     letter-spacing: -0.03em; font-feature-settings: "tnum" 1; color: var(--ink);
   }
-  .grade.g-a { color: #3F6B4A; }
-  .grade.g-b { color: #6E6636; }
-  .grade.g-c, .grade.g-d, .grade.g-f { color: var(--ember); }
+  .grade.g-high { color: #3F6B4A; }
+  .grade.g-mid  { color: #6E6636; }
+  .grade.g-low  { color: var(--ember); }
+  .grade-denom {
+    font-family: var(--sans); font-weight: 500; font-size: 22px;
+    letter-spacing: 0; color: var(--mute); margin-left: 2px;
+  }
   .grade-meta { font-family: var(--mono); font-size: 11px; line-height: 1.55; color: var(--mute); }
   .grade-meta b { color: var(--ink); font-weight: 500; }
   .score-method {
@@ -318,20 +322,34 @@ async function fetchViolationCounts(bbls){
 // A is the whole point — ten peeling-paint notices are not one broken
 // boiler in January.
 //
-// The counts are the city's. The weights and the letter bands below are
+// The counts are the city's. The weights and the score curve below are
 // CivicByte's, published here so anyone can disagree with them and
 // recompute from the same records. Deliberately NOT normalised by unit
 // count: HPD registrations carry no reliable unit figure, so a 200-unit
 // building and a 6-unit building count the same. That favours small
 // landlords and penalises large ones — stated on the page, not hidden.
 const SEV_WEIGHT = { A: 1, B: 2, C: 5 };
-const GRADE_BANDS = [
-  { max:  2, g: 'A', label: 'Few open violations' },
-  { max:  8, g: 'B', label: 'Below-average violation load' },
-  { max: 20, g: 'C', label: 'Elevated violation load' },
-  { max: 45, g: 'D', label: 'High violation load' },
-  { max: Infinity, g: 'F', label: 'Severe violation load' }
+
+// Weighted-violations-per-building maps to a 0-10 score, 10 being clean.
+// Anchor points, linearly interpolated between, so two landlords in the
+// same rough condition still separate instead of collapsing onto one
+// bucket. Above the last anchor the score is clamped at 0.
+const SCORE_CURVE = [[0, 10], [2, 9], [8, 7], [20, 5], [45, 3], [150, 0]];
+const SCORE_LABELS = [
+  { min: 9, label: 'Few open violations' },
+  { min: 7, label: 'Below-average violation load' },
+  { min: 5, label: 'Elevated violation load' },
+  { min: 3, label: 'High violation load' },
+  { min: -Infinity, label: 'Severe violation load' }
 ];
+
+function scoreFromIndex(index){
+  for (let i = 0; i < SCORE_CURVE.length - 1; i++) {
+    const [x0, y0] = SCORE_CURVE[i], [x1, y1] = SCORE_CURVE[i + 1];
+    if (index <= x1) return y0 + (index - x0) / (x1 - x0) * (y1 - y0);
+  }
+  return 0;
+}
 
 function conditionScore(shown, violByBbl){
   if (!shown.length) return null;
@@ -346,13 +364,15 @@ function conditionScore(shown, violByBbl){
   }
   const index = points / shown.length;
   if (open === 0) {
-    return { grade: 'A+', cls: 'g-a', index: 0, points: 0, classC: 0, cBuildings: 0,
-             label: 'No open violations on file', buildings: shown.length };
+    return { score: 10, index: 0, points: 0, classC: 0, cBuildings: 0,
+             cls: 'g-high', label: 'No open violations on file',
+             buildings: shown.length };
   }
-  const band = GRADE_BANDS.find(b => index < b.max);
-  return { grade: band.g, cls: 'g-' + band.g.toLowerCase(),
-           index, points, classC, cBuildings,
-           label: band.label, buildings: shown.length };
+  const score = Math.max(0, Math.min(10, scoreFromIndex(index)));
+  const cls = score >= 9 ? 'g-high' : score >= 7 ? 'g-mid' : 'g-low';
+  return { score, index, points, classC, cBuildings, cls,
+           label: SCORE_LABELS.find(l => score >= l.min).label,
+           buildings: shown.length };
 }
 
 async function run(){
@@ -402,9 +422,13 @@ function render(name, allBuildings, shown, extra, violByBbl){
   });
   const score = conditionScore(shown, violByBbl);
   if (score) {
-    $('r-grade').textContent = score.grade;
+    // A whole 10 is reserved for a portfolio with nothing open; anything
+    // carrying violations rounds down so it can never display as perfect.
+    const shownScore = score.score === 10 ? '10' :
+      (Math.floor(score.score * 10) / 10).toFixed(1);
+    $('r-grade').innerHTML = esc(shownScore) + '<span class="grade-denom">/10</span>';
     $('r-grade').className = 'grade ' + score.cls;
-    // A letter grade must never read as reassurance while immediately
+    // A score must never read as reassurance while immediately
     // hazardous conditions are open, so Class C is stated in the grade block
     // itself rather than left to the breakdown further down.
     const cNote = score.classC > 0
@@ -416,8 +440,8 @@ function render(name, allBuildings, shown, extra, violByBbl){
       `<br>${score.points.toLocaleString()} points across ${score.buildings} building${score.buildings === 1 ? '' : 's'}` +
       cNote;
     $('r-method').innerHTML =
-      'Open violations weighted by HPD severity class &mdash; ' +
-      'A&times;1, B&times;2, C&times;5 &mdash; divided by buildings queried' +
+      'Scored out of 10, higher is better. Open violations weighted by HPD ' +
+      'severity class &mdash; A&times;1, B&times;2, C&times;5 &mdash; divided by buildings queried' +
       (extra > 0 ? `, which here is the ${shown.length} shown, not all ${allBuildings.length} on file` : '') +
       '. Not adjusted for building size. ' +
       '<a href="/docs.html#limits">How to read this &rarr;</a>';
