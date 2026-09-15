@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-09-15T04:18:24.114959+00:00",
+  "updatedAt": "2026-09-15T09:53:06.168002+00:00",
   "realtime": 0,
   "7day": {
     "users": 1,
-    "views": 0,
+    "views": 1,
     "sessions": 1
   },
   "30day": {
     "users": 1,
-    "newUsers": 0,
-    "views": 1,
+    "newUsers": 1,
+    "views": 2,
     "sessions": 2
   },
   "topPages": [
@@ -25,9 +25,14 @@
       "i": 0
     },
     {
-      "name": "Unassigned",
+      "name": "Organic Search",
       "count": 1,
       "i": 1
+    },
+    {
+      "name": "Unassigned",
+      "count": 1,
+      "i": 2
     }
   ]
 }
