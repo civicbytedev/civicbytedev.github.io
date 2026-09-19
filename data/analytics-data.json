@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-19T00:01:54.954612+00:00",
+  "updatedAt": "2026-09-19T05:36:08.185363+00:00",
   "realtime": 0,
   "7day": {
     "users": 2,
@@ -9,8 +9,8 @@
   "30day": {
     "users": 2,
     "newUsers": 2,
-    "views": 3,
-    "sessions": 3
+    "views": 2,
+    "sessions": 2
   },
   "topPages": [
     {
@@ -23,11 +23,6 @@
       "name": "Organic Search",
       "count": 2,
       "i": 0
-    },
-    {
-      "name": "Direct",
-      "count": 1,
-      "i": 1
     }
   ]
 }
