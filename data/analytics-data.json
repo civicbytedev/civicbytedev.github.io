@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-09-20T23:59:40.290445+00:00",
+  "updatedAt": "2026-09-21T04:45:58.844478+00:00",
   "realtime": 0,
   "7day": {
     "users": 4,
-    "views": 3,
+    "views": 4,
     "sessions": 4
   },
   "30day": {
     "users": 4,
-    "newUsers": 3,
-    "views": 3,
+    "newUsers": 4,
+    "views": 4,
     "sessions": 4
   },
   "topPages": [
@@ -21,7 +21,7 @@
   "sources": [
     {
       "name": "Organic Search",
-      "count": 3,
+      "count": 4,
       "i": 0
     },
     {
