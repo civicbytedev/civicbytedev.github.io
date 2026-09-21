@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-21T10:32:51.139549+00:00",
+  "updatedAt": "2026-09-21T16:54:37.886698+00:00",
   "realtime": 0,
   "7day": {
     "users": 4,
@@ -23,11 +23,6 @@
       "name": "Organic Search",
       "count": 4,
       "i": 0
-    },
-    {
-      "name": "Unassigned",
-      "count": 2,
-      "i": 1
     }
   ]
 }
