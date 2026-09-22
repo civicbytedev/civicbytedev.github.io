@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-09-21T23:57:42.316468+00:00",
+  "updatedAt": "2026-09-22T04:39:59.384585+00:00",
   "realtime": 0,
   "7day": {
-    "users": 5,
-    "views": 6,
-    "sessions": 5
+    "users": 4,
+    "views": 5,
+    "sessions": 4
   },
   "30day": {
     "users": 5,
@@ -28,6 +28,11 @@
       "name": "Direct",
       "count": 1,
       "i": 1
+    },
+    {
+      "name": "Unassigned",
+      "count": 1,
+      "i": 2
     }
   ]
 }
