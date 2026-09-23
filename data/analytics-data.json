@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T11:10:33.773992+00:00",
+  "updatedAt": "2026-09-23T16:32:12.521400+00:00",
   "realtime": 0,
   "7day": {
     "users": 5,
@@ -21,18 +21,13 @@
   "sources": [
     {
       "name": "Organic Search",
-      "count": 4,
+      "count": 5,
       "i": 0
-    },
-    {
-      "name": "Cross-network",
-      "count": 1,
-      "i": 1
     },
     {
       "name": "Direct",
       "count": 1,
-      "i": 2
+      "i": 1
     }
   ]
 }
