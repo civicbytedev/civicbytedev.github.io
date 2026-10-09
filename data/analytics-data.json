@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-10-09T01:52:41.324282+00:00",
+  "updatedAt": "2026-10-09T08:44:40.085901+00:00",
   "realtime": 0,
   "7day": {
-    "users": 10,
-    "views": 13,
-    "sessions": 11
+    "users": 4,
+    "views": 6,
+    "sessions": 4
   },
   "30day": {
     "users": 18,
@@ -21,23 +21,13 @@
   "sources": [
     {
       "name": "Organic Search",
-      "count": 11,
+      "count": 13,
       "i": 0
     },
     {
       "name": "Direct",
       "count": 7,
       "i": 1
-    },
-    {
-      "name": "Unassigned",
-      "count": 2,
-      "i": 2
-    },
-    {
-      "name": "Cross-network",
-      "count": 1,
-      "i": 3
     }
   ]
 }
