@@ -1,27 +1,27 @@
 {
-  "updatedAt": "2026-10-14T01:00:38.276687+00:00",
+  "updatedAt": "2026-10-14T07:19:31.529377+00:00",
   "realtime": 0,
   "7day": {
-    "users": 3,
-    "views": 4,
-    "sessions": 3
+    "users": 4,
+    "views": 5,
+    "sessions": 4
   },
   "30day": {
-    "users": 19,
-    "newUsers": 19,
-    "views": 26,
-    "sessions": 21
+    "users": 20,
+    "newUsers": 20,
+    "views": 27,
+    "sessions": 22
   },
   "topPages": [
     {
       "label": "NYC School Budget Tracker",
-      "count": 19
+      "count": 20
     }
   ],
   "sources": [
     {
       "name": "Organic Search",
-      "count": 14,
+      "count": 15,
       "i": 0
     },
     {
